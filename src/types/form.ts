@@ -12,5 +12,5 @@ export type SignInField = AuthField & {
 };
 
 export type SignUpField = AuthField & {
-  id: "first_name" | "last_name" | "email" | "password" | "confirm_password";
+  id: "firstName" | "lastName" | "email" | "password" | "confirmPassword";
 };

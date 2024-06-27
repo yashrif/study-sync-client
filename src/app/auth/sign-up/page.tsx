@@ -2,9 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
+import _ from "lodash";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import studySync from "@/api/studySync";
+import { register } from "@/assets/data/api/endpoints";
 import {
   actionButton,
   fields,
@@ -24,10 +27,10 @@ import Link from "next/link";
 
 const formSchema = z
   .object({
-    first_name: z.string().min(1, {
+    firstName: z.string().min(1, {
       message: "First name is required.",
     }),
-    last_name: z.string().min(1, {
+    lastName: z.string().min(1, {
       message: "Last name is required.",
     }),
     email: z
@@ -41,10 +44,10 @@ const formSchema = z
     password: z.string().min(8, {
       message: "Password must be at least 8 characters.",
     }),
-    confirm_password: z.string(),
+    confirmPassword: z.string(),
   })
   .superRefine((data, context) => {
-    if (data.password !== data.confirm_password) {
+    if (data.password !== data.confirmPassword) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["confirm_password"],
@@ -71,11 +74,19 @@ const SignUp = () => {
     defaultValues: {},
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values, form.formState.errors);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const filterValues = _.omit(values, ["confirmPassword"]);
+
+    try {
+      const response = await studySync.post(
+        register,
+        JSON.stringify(filterValues)
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   console.log(form.formState.errors);
 

@@ -2,9 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
+import _ from "lodash";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import studySync from "@/api/studySync";
+import { authenticate } from "@/assets/data/api/endpoints";
 import {
   actionButton,
   actions,
@@ -13,18 +17,17 @@ import {
   titles,
 } from "@/assets/data/auth/sign-in";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
+import { setTokens } from "@/utils/auth";
 
 const formSchema = z.object({
   email: z
@@ -44,16 +47,29 @@ const formSchema = z.object({
 const SignIn = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      remember: false,
+    },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values, form.formState.errors);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const filterValues = _.omit(values, ["remember"]);
 
-  console.log(form.formState.errors);
+    try {
+      const response = await studySync.post(
+        authenticate,
+        JSON.stringify(filterValues)
+      );
+      console.log(response);
+
+      const { access_token, refresh_token } = response.data;
+      setTokens(access_token, refresh_token);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      // set loading to false
+    }
+  };
 
   const MotionFormItem = motion(FormItem);
 
@@ -82,9 +98,6 @@ const SignIn = () => {
                         {...field}
                       />
                     </FormControl>
-                    {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                     <FormMessage />
                   </MotionFormItem>
                 )}
