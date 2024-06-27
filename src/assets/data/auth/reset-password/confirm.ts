@@ -38,4 +38,4 @@ export const errors = {
   "no-match": "Passwords do not match",
 };
 
-export const button = { title: "Reset Password", href: routes.login };
+export const button = { title: "Reset Password", href: routes.signIn };

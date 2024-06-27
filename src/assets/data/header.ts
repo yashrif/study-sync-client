@@ -2,7 +2,7 @@ import { routes } from "./routes";
 
 export const button = {
   login: {
-    href: routes.login,
+    href: routes.signIn,
     title: "Login",
   },
   dashboard: {

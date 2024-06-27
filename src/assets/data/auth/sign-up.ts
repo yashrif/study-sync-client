@@ -1,4 +1,5 @@
 import { SignUpField } from "@/types";
+import { links } from "../routes";
 
 export const titles = "Create Account";
 
@@ -44,3 +45,8 @@ export const fields: SignUpField[] = [
 ];
 
 export const actionButton = "Create Account";
+
+export const redirect = {
+  title: "Already have an account?",
+  link: links.signIn,
+};

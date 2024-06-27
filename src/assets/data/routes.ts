@@ -1,18 +1,16 @@
-import { Link } from "@allTypes";
-
-export const path = {
+export const paths = {
   home: "/",
   benefits: "benefits",
   features: "features",
   howItWorks: "how-it-works",
   auth: "auth",
   signUp: "sign-up",
-  login: "login",
+  signIn: "sign-in",
   resetPassword: "reset-password",
   initiate: "initiate",
   confirm: "confirm",
   verify: "verify",
-  logout: "logout",
+  signOut: "Sign out",
   changePassword: "change-password",
   profile: "profile",
   dashboard: "dashboard",
@@ -34,12 +32,12 @@ export const pathTitles = {
   howItWorks: "How it Works",
   auth: "Auth",
   signUp: "Sign Up",
-  login: "Login",
+  signIn: "Sign in",
   resetPassword: "Reset Password",
   initiate: "Initiate",
   confirm: "Confirm",
   verify: "Verify",
-  logout: "Logout",
+  signOut: "Sign out",
   changePassword: "Change Password",
   profile: "Profile",
   dashboard: "Dashboard",
@@ -55,38 +53,38 @@ export const pathTitles = {
 
 /* ---------------------------------- Paths --------------------------------- */
 
-const authPath = `${path.home}${path.auth}`;
-const resetPasswordPath = `${authPath}/${path.resetPassword}`;
-const changePasswordPath = `${authPath}/${path.changePassword}`;
-const dashboardPath = `${path.home}${path.dashboard}`;
-const users = `${dashboardPath}/${path.users}`;
+const authPath = `${paths.home}${paths.auth}`;
+const resetPasswordPath = `${authPath}/${paths.resetPassword}`;
+const changePasswordPath = `${authPath}/${paths.changePassword}`;
+const dashboardPath = `${paths.home}${paths.dashboard}`;
+const users = `${dashboardPath}/${paths.users}`;
 
 /* ----------------------------------- End ---------------------------------- */
 
 export const routes = {
-  home: path.home,
-  benefits: `#${path.benefits}`,
-  features: `#${path.features}`,
-  howItWorks: `#${path.howItWorks}`,
+  home: paths.home,
+  benefits: `#${paths.benefits}`,
+  features: `#${paths.features}`,
+  howItWorks: `#${paths.howItWorks}`,
   auth: authPath,
-  signUp: `${authPath}/${path.signUp}`,
-  login: `${authPath}/${path.login}`,
+  signUp: `${authPath}/${paths.signUp}`,
+  signIn: `${authPath}/${paths.signIn}`,
   resetPassword: resetPasswordPath,
-  initiateReset: `${resetPasswordPath}/${path.initiate}`,
-  confirmReset: `${resetPasswordPath}/${path.confirm}`,
-  initiateChange: `${changePasswordPath}/${path.initiate}`,
-  confirmChange: `${changePasswordPath}/${path.confirm}`,
-  verify: `${resetPasswordPath}/${path.verify}`,
-  logout: `${authPath}/${path.logout}`,
-  profile: `${path.home}${path.profile}`,
+  initiateReset: `${resetPasswordPath}/${paths.initiate}`,
+  confirmReset: `${resetPasswordPath}/${paths.confirm}`,
+  initiateChange: `${changePasswordPath}/${paths.initiate}`,
+  confirmChange: `${changePasswordPath}/${paths.confirm}`,
+  verify: `${resetPasswordPath}/${paths.verify}`,
+  signOut: `${authPath}/${paths.signOut}`,
+  profile: `${paths.home}${paths.profile}`,
   dashboard: dashboardPath,
   overview: dashboardPath,
-  contact: `${path.home}/${path.contact}`,
-  faq: `${path.home}/${path.faq}`,
-  support: `${path.home}/${path.support}`,
-  terms: `${path.home}/${path.terms}`,
-  privacy: `${path.home}/${path.privacy}`,
-  cookies: `${path.home}/${path.cookies}`,
+  contact: `${paths.home}/${paths.contact}`,
+  faq: `${paths.home}/${paths.faq}`,
+  support: `${paths.home}/${paths.support}`,
+  terms: `${paths.home}/${paths.terms}`,
+  privacy: `${paths.home}/${paths.privacy}`,
+  cookies: `${paths.home}/${paths.cookies}`,
 };
 
 export const links = {
@@ -96,7 +94,7 @@ export const links = {
   howItWorks: { title: pathTitles.howItWorks, href: routes.howItWorks },
   auth: { title: pathTitles.auth, href: routes.auth },
   signUp: { title: pathTitles.signUp, href: routes.signUp },
-  login: { title: pathTitles.login, href: routes.login },
+  signIn: { title: pathTitles.signIn, href: routes.signIn },
   resetPassword: {
     title: pathTitles.resetPassword,
     href: routes.resetPassword,
@@ -104,7 +102,7 @@ export const links = {
   initiate: { title: pathTitles.initiate, href: routes.initiateReset },
   confirm: { title: pathTitles.confirm, href: routes.confirmReset },
   verify: { title: pathTitles.verify, href: routes.verify },
-  logout: { title: pathTitles.logout, href: routes.logout },
+  signOut: { title: pathTitles.signOut, href: routes.signOut },
   initiateChange: {
     title: pathTitles.changePassword,
     href: routes.initiateChange,

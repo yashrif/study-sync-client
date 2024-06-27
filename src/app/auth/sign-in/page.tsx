@@ -7,65 +7,41 @@ import { z } from "zod";
 
 import {
   actionButton,
+  actions,
   fields,
   redirect,
   titles,
-} from "@/assets/data/auth/sign-up";
+} from "@/assets/data/auth/sign-in";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 
-const formSchema = z
-  .object({
-    first_name: z.string().min(1, {
-      message: "First name is required.",
+const formSchema = z.object({
+  email: z
+    .string()
+    .email({
+      message: "Invalid email!",
+    })
+    .min(1, {
+      message: "Email is required.",
     }),
-    last_name: z.string().min(1, {
-      message: "Last name is required.",
-    }),
-    email: z
-      .string()
-      .email({
-        message: "Invalid email!",
-      })
-      .min(1, {
-        message: "Email is required.",
-      }),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-    }),
-    confirm_password: z.string(),
-  })
-  .superRefine((data, context) => {
-    if (data.password !== data.confirm_password) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["confirm_password"],
-        message: "Passwords do not match.",
-      });
-    }
-  });
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+  remember: z.boolean(),
+});
 
-const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
-  if (
-    issue.code === z.ZodIssueCode.custom &&
-    issue.path[0] === "confirm_password"
-  ) {
-    return { message: issue.message || `An error occurred.` };
-  }
-  return { message: ctx.defaultError };
-};
-
-z.setErrorMap(customErrorMap);
-
-const SignUp = () => {
+const SignIn = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
@@ -90,7 +66,7 @@ const SignUp = () => {
           className="flex flex-col gap-12"
           layout
         >
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             {fields.map((formField) => (
               <FormField
                 key={formField.id}
@@ -114,6 +90,33 @@ const SignUp = () => {
                 )}
               />
             ))}
+
+            <div className="flex gap-16 items-center justify-between">
+              <FormField
+                control={form.control}
+                name="remember"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row gap-2 items-center">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="border-2 border-text data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-primary"
+                      />
+                    </FormControl>
+                    <FormLabel className="text-base font-medium !m-0">
+                      {actions.remember.title}
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+              <Link
+                href={actions.forgot.href}
+                className="anchor text-accent hover:text-secondary transition-colors duration-300"
+              >
+                {actions.forgot.title}
+              </Link>
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <Button
@@ -139,4 +142,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
