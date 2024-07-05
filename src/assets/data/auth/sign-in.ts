@@ -27,7 +27,9 @@ export const actions = {
 
 export const actionButton = "Sign In";
 
-export const redirect = {
+export const noAccount = {
   title: "Don't have an account?",
   link: links.signUp,
 };
+
+export const redirect = routes.dashboard;

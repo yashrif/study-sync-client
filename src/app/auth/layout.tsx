@@ -13,7 +13,7 @@ const AuthLayout: React.FC<
   }>
 > = ({ children }) => {
   return (
-    <div className="w-full h-screen flex justify-center items-center p-12">
+    <div className="w-full h-screen flex justify-center items-center p-12 bg-background">
       <div className="relative max-w-[1000px] w-full min-h-[600px] rounded-lg overflow-hidden bg-auth-bg bg-cover object-cover bg-center grid grid-cols-[1fr,4fr] shadow-[12px_12px_16px_rgba(0,0,0,0.25)]">
         <Link href={routes.home} className="absolute top-12 left-12 no-underline">
           <Logo className="h-auto w-40 z-10 fill-accent" />

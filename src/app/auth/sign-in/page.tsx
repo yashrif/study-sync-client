@@ -4,19 +4,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import _ from "lodash";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import studySync from "@/api/studySync";
-import { authenticate } from "@/assets/data/api/endpoints";
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api/";
 import {
   actionButton,
   actions,
   fields,
+  noAccount,
   redirect,
   titles,
 } from "@/assets/data/auth/sign-in";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/SubmitButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -28,6 +30,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { setTokens } from "@/utils/auth";
+import { useRouter } from "next/navigation";
+import { Status } from "@/types/status";
 
 const formSchema = z.object({
   email: z
@@ -38,13 +42,17 @@ const formSchema = z.object({
     .min(1, {
       message: "Email is required.",
     }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+  password: z.string().min(1, {
+    message: "Password is required.",
   }),
   remember: z.boolean(),
 });
 
 const SignIn = () => {
+  const { replace } = useRouter();
+
+  const [status, setStatus] = useState<Status>(Status.IDLE);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,20 +62,27 @@ const SignIn = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const filterValues = _.omit(values, ["remember"]);
+    setStatus(Status.PENDING);
 
     try {
-      const response = await studySync.post(
-        authenticate,
+      const response = await studySyncDB.post(
+        dbEndpoints.authenticate,
         JSON.stringify(filterValues)
       );
       console.log(response);
 
+      setStatus(response.status === 200 ? Status.SUCCESS : Status.ERROR);
       const { access_token, refresh_token } = response.data;
       setTokens(access_token, refresh_token);
     } catch (err) {
       console.log(err);
+      setStatus(Status.ERROR);
     } finally {
-      // set loading to false
+      setTimeout(() => {
+        if (status === Status.SUCCESS) {
+          // replace(redirect);
+        }
+      }, 2500);
     }
   };
 
@@ -132,20 +147,21 @@ const SignIn = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <Button
+            <SubmitButton
               type={"submit"}
               size={"lg"}
+              status={status}
               className="group col-span-2 bg-text hover:bg-secondary text-accent hover:text-white"
             >
               {actionButton}
-            </Button>
+            </SubmitButton>
             <div className="flex gap-2 items-center justify-center">
-              <p className="text-medium font-medium">{redirect.title}</p>
+              <p className="text-medium font-medium">{noAccount.title}</p>
               <Link
-                href={redirect.link.href}
+                href={noAccount.link.href}
                 className="anchor text-accent hover:text-secondary transition-colors duration-300"
               >
-                {redirect.link.title}
+                {noAccount.link.title}
               </Link>
             </div>
           </div>

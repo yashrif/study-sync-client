@@ -1,0 +1,9 @@
+export enum Status {
+  IDLE,
+  PENDING,
+  SUCCESS,
+  ERROR,
+  NOTFOUND,
+  UNAUTHORIZED,
+  FORBIDDEN,
+}

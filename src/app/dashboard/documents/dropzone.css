@@ -1,0 +1,76 @@
+/* the text color of the drop label*/
+.filepond--drop-label {
+  @apply text-text-200 font-medium font-primary tracking-[0.15px] h-32;
+}
+
+/* underline color for "Browse" button */
+.filepond--label-action {
+  @apply no-underline text-secondary border-b border-secondary;
+}
+
+/* the background color of the filepond drop area */
+.filepond--panel-root {
+  @apply bg-accent-300 border-none;
+}
+
+/* the border radius of the drop area */
+.filepond--panel-root {
+  @apply rounded-md;
+}
+
+/* the border radius of the file item */
+.filepond--item-panel {
+  @apply rounded-lg;
+}
+
+/* the background color of the file and file panel (used when dropping an image) */
+.filepond--item-panel {
+  @apply bg-[#555];
+}
+
+/* the background color of the drop circle */
+.filepond--drip-blob {
+  @apply bg-[#999];
+}
+
+/* the background color of the black action buttons */
+.filepond--file-action-button {
+  @apply bg-black/50;
+}
+
+/* the icon color of the black action buttons */
+.filepond--file-action-button {
+  @apply text-text-300;
+}
+
+/* the text color of the file status and info labels */
+.filepond--file {
+  @apply text-text-300;
+}
+
+/* error state color */
+[data-filepond-item-state*="error"] .filepond--item-panel,
+[data-filepond-item-state*="invalid"] .filepond--item-panel {
+  @apply bg-destructive;
+}
+
+[data-filepond-item-state="processing-complete"] .filepond--item-panel {
+  @apply bg-success;
+}
+
+.filepond--credits {
+  @apply hidden;
+}
+
+/* ---------------------------------- grid ---------------------------------- */
+@media (min-width: 30em) {
+  .filepond--item {
+    width: calc(33.33% - 0.5em);
+  }
+}
+
+@media (min-width: 50em) {
+  .filepond--item {
+    width: calc(24.99% - 0.5em);
+  }
+}

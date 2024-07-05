@@ -21,13 +21,14 @@
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
       "@components/*": ["./src/components/*"],
-      "@icons": ["./src/components/Icons.tsx"],
+      "@icons": ["./src/components/icons/"],
       "@lib/*": ["./src/lib/*"],
       "@utils/*": ["./src/utils/*"],
       "@context/*": ["./src/context/*"],
       "@constants/*": ["./src/constants/*"],
       "@allTypes": ["./src/types/"],
-      "@hooks": ["./src/hooks/*"]
+      "@hooks/*": ["./src/hooks/*"],
+      "@lotties/*": ["./src/lotties/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

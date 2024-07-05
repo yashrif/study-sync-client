@@ -1,28 +1,29 @@
 export const paths = {
   home: "/",
-  benefits: "benefits",
-  features: "features",
-  howItWorks: "how-it-works",
-  auth: "auth",
-  signUp: "sign-up",
-  signIn: "sign-in",
-  resetPassword: "reset-password",
-  initiate: "initiate",
-  confirm: "confirm",
-  verify: "verify",
-  signOut: "Sign out",
-  changePassword: "change-password",
-  profile: "profile",
-  dashboard: "dashboard",
-  overview: "overview",
-  users: "users",
-  new: "new",
-  contact: "contact",
-  faq: "faq",
-  support: "support",
-  terms: "terms",
-  privacy: "privacy",
-  cookies: "cookies",
+  benefits: "/benefits",
+  features: "/features",
+  howItWorks: "/how-it-works",
+  auth: "/auth",
+  signUp: "/sign-up",
+  signIn: "/sign-in",
+  resetPassword: "/reset-password",
+  initiate: "/initiate",
+  confirm: "/confirm",
+  verify: "/verify",
+  changePassword: "/change-password",
+  profile: "/profile",
+  dashboard: "/dashboard",
+  overview: "/overview",
+  users: "/users",
+  new: "/new",
+  contact: "/contact",
+  faq: "/faq",
+  support: "/support",
+  terms: "/terms",
+  privacy: "/privacy",
+  cookies: "/cookies",
+  settings: "/settings",
+  documents: "/documents",
 };
 
 export const pathTitles = {
@@ -49,15 +50,17 @@ export const pathTitles = {
   terms: "Terms & Conditions",
   privacy: "Privacy Policy",
   cookies: "Cookies",
+  settings: "Settings",
+  documents: "Documents",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
 
-const authPath = `${paths.home}${paths.auth}`;
-const resetPasswordPath = `${authPath}/${paths.resetPassword}`;
-const changePasswordPath = `${authPath}/${paths.changePassword}`;
-const dashboardPath = `${paths.home}${paths.dashboard}`;
-const users = `${dashboardPath}/${paths.users}`;
+const authPath = `${paths.auth}`;
+const resetPasswordPath = `${authPath}${paths.resetPassword}`;
+const changePasswordPath = `${authPath}${paths.changePassword}`;
+const dashboardPath = `${paths.dashboard}`;
+const users = `${dashboardPath}${paths.users}`;
 
 /* ----------------------------------- End ---------------------------------- */
 
@@ -67,24 +70,27 @@ export const routes = {
   features: `#${paths.features}`,
   howItWorks: `#${paths.howItWorks}`,
   auth: authPath,
-  signUp: `${authPath}/${paths.signUp}`,
-  signIn: `${authPath}/${paths.signIn}`,
+  signUp: `${authPath}${paths.signUp}`,
+  signIn: `${authPath}${paths.signIn}`,
   resetPassword: resetPasswordPath,
-  initiateReset: `${resetPasswordPath}/${paths.initiate}`,
-  confirmReset: `${resetPasswordPath}/${paths.confirm}`,
-  initiateChange: `${changePasswordPath}/${paths.initiate}`,
-  confirmChange: `${changePasswordPath}/${paths.confirm}`,
-  verify: `${resetPasswordPath}/${paths.verify}`,
-  signOut: `${authPath}/${paths.signOut}`,
-  profile: `${paths.home}${paths.profile}`,
-  dashboard: dashboardPath,
-  overview: dashboardPath,
-  contact: `${paths.home}/${paths.contact}`,
-  faq: `${paths.home}/${paths.faq}`,
-  support: `${paths.home}/${paths.support}`,
-  terms: `${paths.home}/${paths.terms}`,
-  privacy: `${paths.home}/${paths.privacy}`,
-  cookies: `${paths.home}/${paths.cookies}`,
+  initiateReset: `${resetPasswordPath}${paths.initiate}`,
+  confirmReset: `${resetPasswordPath}${paths.confirm}`,
+  initiateChange: `${changePasswordPath}${paths.initiate}`,
+  confirmChange: `${changePasswordPath}${paths.confirm}`,
+  verify: `${resetPasswordPath}${paths.verify}`,
+  profile: `${paths.profile}`,
+  contact: `${paths.contact}`,
+  faq: `${paths.faq}`,
+  support: `${paths.support}`,
+  terms: `${paths.terms}`,
+  privacy: `${paths.privacy}`,
+  cookies: `${paths.cookies}`,
+  dashboard: {
+    default: dashboardPath,
+    home: dashboardPath,
+    settings: `${dashboardPath}${paths.settings}`,
+    documents: `${dashboardPath}${paths.documents}`,
+  },
 };
 
 export const links = {
@@ -102,7 +108,6 @@ export const links = {
   initiate: { title: pathTitles.initiate, href: routes.initiateReset },
   confirm: { title: pathTitles.confirm, href: routes.confirmReset },
   verify: { title: pathTitles.verify, href: routes.verify },
-  signOut: { title: pathTitles.signOut, href: routes.signOut },
   initiateChange: {
     title: pathTitles.changePassword,
     href: routes.initiateChange,
@@ -112,12 +117,19 @@ export const links = {
     href: routes.confirmChange,
   },
   profile: { title: pathTitles.profile, href: routes.profile },
-  dashboard: { title: pathTitles.dashboard, href: routes.dashboard },
-  overview: { title: pathTitles.overview, href: routes.overview },
   contact: { title: pathTitles.const, href: routes.contact },
   faq: { title: pathTitles.faq, href: routes.faq },
   support: { title: pathTitles.support, href: routes.support },
   terms: { title: pathTitles.terms, href: routes.terms },
   privacy: { title: pathTitles.privacy, href: routes.privacy },
   cookies: { title: pathTitles.cookies, href: routes.cookies },
+  dashboard: {
+    default: { title: pathTitles.dashboard, href: routes.dashboard.default },
+    home: { title: pathTitles.home, href: routes.dashboard.home },
+    settings: { title: pathTitles.settings, href: routes.dashboard.settings },
+    documents: {
+      title: pathTitles.documents,
+      href: routes.dashboard.documents,
+    },
+  },
 };

@@ -27,11 +27,11 @@ const Benefits: React.FC = () => {
                 key={`${index}-icon`}
                 className="h-full grid grid-cols-1 grid-rows-[max(44px),1fr]"
               >
-                <div className="h-[44px] w-[44px] rounded-full border-2 border-dotted flex justify-center items-center">
+                <div className="h-[44px] w-[44px] rounded-full border-2 border-dotted border-primary flex justify-center items-center">
                   <Icon className="h-6 w-6 text-primary stroke-[3]" />
                 </div>
                 <div className="h-full flex justify-center">
-                  <div className="w-1 h-full border-l-2 border-dotted"></div>
+                  <div className="w-1 h-full border-l-2 border-dotted border-primary"></div>
                 </div>
               </div>
               <div key={`${index}-list`} className="mb-12 last:mb-0">

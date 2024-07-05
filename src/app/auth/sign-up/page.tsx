@@ -6,8 +6,8 @@ import _ from "lodash";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import studySync from "@/api/studySync";
-import { register } from "@/assets/data/api/endpoints";
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
 import {
   actionButton,
   fields,
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Roles } from "@/types/role";
 
 const formSchema = z
   .object({
@@ -75,11 +76,14 @@ const SignUp = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const filterValues = _.omit(values, ["confirmPassword"]);
+    const filterValues = {
+      ..._.omit(values, ["confirmPassword"]),
+      role: Roles.USER,
+    };
 
     try {
-      const response = await studySync.post(
-        register,
+      const response = await studySyncDB.post(
+        dbEndpoints.register,
         JSON.stringify(filterValues)
       );
       console.log(response);
@@ -87,8 +91,6 @@ const SignUp = () => {
       console.log(err);
     }
   };
-
-  console.log(form.formState.errors);
 
   const MotionFormItem = motion(FormItem);
 
