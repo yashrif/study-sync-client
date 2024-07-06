@@ -5,12 +5,12 @@ const REFRESH_TOKEN_KEY = "refreshToken";
 
 export const setTokens = (authToken: string, refreshToken: string): void => {
   Cookies.set(TOKEN_KEY, authToken, {
-    expires: 1,
+    expires: 7, // 7 days
     secure: true,
     sameSite: "strict",
   });
   Cookies.set(REFRESH_TOKEN_KEY, refreshToken, {
-    expires: 30,
+    expires: 30, // 30 days
     secure: true,
     sameSite: "strict",
   });

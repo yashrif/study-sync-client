@@ -8,7 +8,7 @@ import {
 import { IconLink } from "@allTypes";
 import { links, pathTitles } from "../routes";
 
-export const navLinks: IconLink[][] = [
+export const sidebarLinks: IconLink[][] = [
   [
     {
       ...links.dashboard.home,

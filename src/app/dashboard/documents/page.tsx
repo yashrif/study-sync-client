@@ -1,5 +1,17 @@
 import { home } from "@/assets/data/dashboard/documents";
 import CreateDocument from "./Create";
+import Navbar from "./Navbar";
+import { DataTable } from "./DataTable";
+import { Payment, columns } from "./Columns";
+
+const data = [
+  {
+    id: "728ed52f",
+    amount: 100,
+    status: "pending",
+    email: "m@example.com",
+  },
+];
 
 const Documents: React.FC = () => {
   return (
@@ -10,7 +22,11 @@ const Documents: React.FC = () => {
           {home.description}
         </p>
       </div>
-      <CreateDocument />
+      <div className="pt-8 flex flex-col gap-8">
+        <Navbar />
+        {/* <CreateDocument /> */}
+        <DataTable columns={columns} data={data} />
+      </div>
     </div>
   );
 };
