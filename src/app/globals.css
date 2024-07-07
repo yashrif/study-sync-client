@@ -41,6 +41,9 @@
     --primary-300: 0 0% 100%;
     --primary-800: 267.5 33.33% 28.24%;
 
+    --secondary-200: 87.91 34.13% 50.59%;
+    --secondary-300: 87.76 33.33% 39.41%;
+
     --background-200: 273.33 20% 91.18%;
     --background-300: 0 0% 100%;
 
@@ -234,7 +237,7 @@
   select.no-autofill-style:-webkit-autofill:hover,
   select.no-autofill-style:-webkit-autofill:focus {
     border: auto;
-    -webkit-text-fill-color: hsl(var(--secondary));
+    -webkit-text-fill-color: hsl(var(--secondary-300));
     -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255, 0) inset;
     transition: background-color 5000s ease-in-out 0s;
   }

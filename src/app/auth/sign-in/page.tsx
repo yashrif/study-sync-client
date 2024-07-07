@@ -151,7 +151,7 @@ const SignIn = () => {
               type={"submit"}
               size={"lg"}
               status={status}
-              className="group col-span-2 bg-text hover:bg-secondary text-accent hover:text-white"
+              className="group col-span-2 bg-text hover:bg-primary text-accent hover:text-white"
             >
               {actionButton}
             </SubmitButton>

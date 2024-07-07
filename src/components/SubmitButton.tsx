@@ -22,7 +22,7 @@ const content = (status: Status, content: React.ReactNode) => {
     case Status.IDLE:
       return content;
     case Status.PENDING:
-      return <Spinner height={56} width={56} />;
+      return <Spinner className="size-6" />;
     case Status.SUCCESS:
       return <CheckmarkAnimated />;
     case Status.ERROR:

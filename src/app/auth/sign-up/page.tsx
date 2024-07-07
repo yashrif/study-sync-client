@@ -119,9 +119,6 @@ const SignUp = () => {
                         {...field}
                       />
                     </FormControl>
-                    {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                     <FormMessage />
                   </MotionFormItem>
                 )}
