@@ -5,7 +5,7 @@ import {
   Actions,
   Checkbox,
   ColumnHeader,
-} from "@/components/table/ColumnControls";
+} from "@/components/table/ColumnTools";
 import { UploadSimple } from "@/types/upload";
 
 const columnHeaders = columnConfig.columns.map((column) =>

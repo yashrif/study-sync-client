@@ -31,30 +31,33 @@ const Dropzone: React.FC<Props> = ({
   const [files, setFiles] = useState<FilePondFile[]>([]);
   return (
     <Suspense fallback={<Spinner />}>
-      <FilePond
-        files={files.map((file) => file.file)}
-        onupdatefiles={setFiles}
-        allowReorder={true}
-        allowMultiple={true}
-        labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
-        styleButtonRemoveItemPosition="right"
-        server={{
-          process: {
-            url: uploadEndpoint,
-            onload: (data) => {
-              if (uploadEndpointDb && onFileUpload)
-                onFileUpload({
-                  data: data,
-                  url: uploadEndpointDb,
-                });
+      <div className="relative w-full h-full overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center bg-auth-bg rounded-md"></div>
+        <FilePond
+          files={files.map((file) => file.file)}
+          onupdatefiles={setFiles}
+          allowReorder={true}
+          allowMultiple={true}
+          labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+          styleButtonRemoveItemPosition="right"
+          server={{
+            process: {
+              url: uploadEndpoint,
+              onload: (data) => {
+                if (uploadEndpointDb && onFileUpload)
+                  onFileUpload({
+                    data: data,
+                    url: uploadEndpointDb,
+                  });
 
-              return data;
+                return data;
+              },
             },
-          },
-        }}
-        name={name}
-        className={className}
-      />
+          }}
+          name={name}
+          className={`bg-white bg-opacity-[0.8] backdrop-blur-lg backdrop-saturate-[180%] ${className}`}
+        />
+      </div>
     </Suspense>
   );
 };

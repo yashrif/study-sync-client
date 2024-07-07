@@ -11,8 +11,8 @@ import NavLink from "./NavLink";
 
 const SideBar: React.FC = () => {
   return (
-    <div className=" max-w-52 w-full h-full">
-      <div className=" w-full h-full bg-white bg-opacity-85 backdrop-blur-xl backdrop-saturate-[180%]">
+    <div className="max-w-52 w-full h-full">
+      <div className="w-full h-full bg-white bg-opacity-[0.85] backdrop-blur-xl backdrop-saturate-[180%]">
         <div className="h-full flex flex-col items-start gap-12 px-6 py-8">
           <Link href={routes.home}>
             <Logo className="h-8 w-auto" />
