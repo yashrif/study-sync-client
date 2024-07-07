@@ -5,12 +5,12 @@
 
 /* underline color for "Browse" button */
 .filepond--label-action {
-  @apply no-underline text-secondary border-b border-secondary;
+  @apply no-underline text-text-400 border-b border-text-400;
 }
 
 /* the background color of the filepond drop area */
 .filepond--panel-root {
-  @apply bg-accent-300 border-none;
+  @apply bg-transparent border-accent border-2;
 }
 
 /* the border radius of the drop area */

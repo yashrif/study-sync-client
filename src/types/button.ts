@@ -1,3 +1,5 @@
+import { Icon } from "@allTypes";
+
 export type ButtonVariant =
   | "default"
   | "outline"
@@ -17,9 +19,17 @@ export type ButtonSize =
   | null
   | undefined;
 
-export type Button = {
+export type ButtonLink = {
   title: string;
   href: string;
   variant: ButtonVariant;
   className?: string;
+};
+
+export type Button = {
+  title: string;
+  Icon?: Icon;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  onClick?: () => void;
 };

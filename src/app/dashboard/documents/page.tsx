@@ -1,19 +1,36 @@
-import { home } from "@/assets/data/dashboard/documents";
-import CreateDocument from "./Create";
-import Navbar from "./Navbar";
-import { DataTable } from "./DataTable";
-import { Payment, columns } from "./Columns";
+"use client";
 
-const data = [
-  {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
-  },
-];
+import { Suspense, useEffect, useState } from "react";
+
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
+import { home, search } from "@/assets/data/dashboard/documents";
+import Spinner from "@/components/Spinner";
+import { Status } from "@/types/status";
+import { UploadSimple } from "@/types/upload";
+import DataTable from "../../../components/table";
+import { columns } from "./Columns";
+
+const getUploadList = async () =>
+  (await studySyncDB.get(dbEndpoints.uploads)).data;
 
 const Documents: React.FC = () => {
+  const [uploads, setUploads] = useState<UploadSimple[]>([]);
+  const [status, setStatus] = useState<Status>(Status.PENDING);
+
+  useEffect(() => {
+    try {
+      getUploadList().then((data) => {
+        setUploads(data);
+        setStatus(Status.SUCCESS);
+      });
+    } catch (e) {
+      setStatus(Status.ERROR);
+    } finally {
+      setStatus(Status.IDLE);
+    }
+  }, []);
+
   return (
     <div className="divide-y-2 flex flex-col">
       <div className="flex flex-col gap-2 mb-4">
@@ -22,11 +39,15 @@ const Documents: React.FC = () => {
           {home.description}
         </p>
       </div>
-      <div className="pt-8 flex flex-col gap-8">
-        <Navbar />
-        {/* <CreateDocument /> */}
-        <DataTable columns={columns} data={data} />
-      </div>
+      <Suspense fallback={<Spinner />}>
+        <DataTable
+          columns={columns}
+          data={uploads}
+          loading={status === Status.PENDING}
+          search={search}
+          uploadEndpointDb={dbEndpoints.uploads}
+        />
+      </Suspense>
     </div>
   );
 };

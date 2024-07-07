@@ -27,7 +27,9 @@ export function DataTableViewOptions<TData>({
           variant={navbarButtons.view.variant}
           size={navbarButtons.view.size}
         >
-          <navbarButtons.view.Icon className="mr-2 h-4 w-4" />
+          {navbarButtons.view.Icon && (
+            <navbarButtons.view.Icon className="mr-2 h-4 w-4" />
+          )}
           {navbarButtons.view.title}
         </Button>
       </DropdownMenuTrigger>

@@ -1,21 +1,12 @@
+import error from "@lotties/error.json";
 import _ from "lodash";
 import * as React from "react";
 import Lottie from "react-lottie";
 
 import { Status } from "@/types/status";
 import { CheckmarkAnimated } from "@icons";
-import spinner from "@lotties/spinner.json";
-import error from "@lotties/error.json";
+import Spinner from "./Spinner";
 import { Button, ButtonProps, buttonVariants } from "./ui/button";
-
-const spinnerAnimation = {
-  loop: true,
-  autoplay: true,
-  animationData: spinner,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-};
 
 const errorAnimation = {
   loop: true,
@@ -31,7 +22,7 @@ const content = (status: Status, content: React.ReactNode) => {
     case Status.IDLE:
       return content;
     case Status.PENDING:
-      return <Lottie options={spinnerAnimation} height={56} width={56} />;
+      return <Spinner height={56} width={56} />;
     case Status.SUCCESS:
       return <CheckmarkAnimated />;
     case Status.ERROR:

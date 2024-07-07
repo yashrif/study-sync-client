@@ -8,14 +8,26 @@ import "filepond/dist/filepond.min.css";
 import { Suspense, useState } from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 
-import studySyncDB from "@/api/studySyncDB";
-import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
 import Spinner from "@/components/Spinner";
 import "./dropzone.css";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-const Dropzone: React.FC = () => {
+type Props = {
+  name: string;
+  uploadEndpoint: string;
+  uploadEndpointDb: string | undefined;
+  onFileUpload?: ({ data, url }: { data: string; url: string }) => void;
+  className?: string;
+};
+
+const Dropzone: React.FC<Props> = ({
+  name,
+  uploadEndpoint,
+  uploadEndpointDb = undefined,
+  onFileUpload,
+  className,
+}) => {
   const [files, setFiles] = useState<FilePondFile[]>([]);
   return (
     <Suspense fallback={<Spinner />}>
@@ -28,27 +40,20 @@ const Dropzone: React.FC = () => {
         styleButtonRemoveItemPosition="right"
         server={{
           process: {
-            url: `${serverEndpoints.api}${serverEndpoints.uploads}`,
+            url: uploadEndpoint,
             onload: (data) => {
-              try {
-                const store = async () =>
-                  studySyncDB
-                    .post(dbEndpoints.uploads, JSON.stringify(JSON.parse(data).data))
-                    .then((res) => res.data);
-
-                const response = store();
-
-                console.log(response);
-              } catch (e) {
-                console.log(e);
-              }
+              if (uploadEndpointDb && onFileUpload)
+                onFileUpload({
+                  data: data,
+                  url: uploadEndpointDb,
+                });
 
               return data;
             },
           },
         }}
-        name="in_file"
-
+        name={name}
+        className={className}
       />
     </Suspense>
   );

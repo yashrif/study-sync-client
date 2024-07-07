@@ -18,7 +18,7 @@
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 0 0% 52.94%;
 
     --accent: 275.56 31.03% 82.94%;
     --accent-foreground: 0 0% 29.02%;
@@ -237,6 +237,27 @@
     -webkit-text-fill-color: hsl(var(--secondary));
     -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255, 0) inset;
     transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* -------------------------------- scrollbar ------------------------------- */
+  ::-webkit-scrollbar {
+    @apply w-[15.5px];
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply rounded-[10px] shadow-[inset_0_0_10px_10px_transparent] border-[3.5px] border-solid border-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-[#747474]/80 hover:shadow-[#747474] border-[3.5px] border-solid border-transparent transition-colors duration-300;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

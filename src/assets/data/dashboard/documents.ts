@@ -1,12 +1,12 @@
-import { MixerVertical } from "@/components/icons";
-import { ButtonSize, ButtonVariant } from "@/types";
-import { Icon } from "@allTypes";
 import {
-  IconAdjustments,
   IconArrowsSort,
   IconFolderPlus,
+  IconTrash,
   IconUpload,
 } from "@tabler/icons-react";
+
+import { Button, Column } from "@allTypes";
+import { MixerVertical } from "@icons";
 
 export const home = {
   title: "Hello, Yashrif",
@@ -18,18 +18,12 @@ export const create = {
   description: "Drag and drop your files here to start uploading.",
 };
 
-type NavbarButtonType = {
-  title: string;
-  Icon: Icon;
-  variant: ButtonVariant;
-  size: ButtonSize;
-};
-
 export const navbarButtons: {
-  upload: NavbarButtonType;
-  addFolder: NavbarButtonType;
-  sort: NavbarButtonType;
-  view: NavbarButtonType;
+  upload: Button;
+  addFolder: Button;
+  sort: Button;
+  view: Button;
+  delete: Button;
 } = {
   upload: {
     title: "Upload",
@@ -55,4 +49,54 @@ export const navbarButtons: {
     variant: "outline",
     size: "sm",
   },
+  delete: {
+    title: "Delete",
+    Icon: IconTrash,
+    variant: "destructive",
+    size: "sm",
+  },
+};
+
+export const search = {
+  key: "name",
+  placeholder: "Search by name",
+};
+
+export const columnConfig: {
+  columns: Column[];
+  actions: Button[];
+} = {
+  columns: [
+    {
+      accessorKey: "name",
+      title: "Name",
+      formatter: (name) => {
+        return name as string;
+      },
+    },
+    {
+      accessorKey: "type",
+      title: "Type",
+      formatter: (type) => {
+        return type as string;
+      },
+    },
+    {
+      accessorKey: "createDate",
+      title: "Create Date",
+      formatter: (date) => {
+        return new Date(date).toLocaleDateString();
+      },
+    },
+  ],
+  actions: [
+    {
+      title: "View",
+      onClick: () => console.log("View"),
+    },
+    {
+      title: "Delete",
+      onClick: () => console.log("Delete"),
+    },
+  ],
 };
