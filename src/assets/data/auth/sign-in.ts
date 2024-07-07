@@ -1,7 +1,7 @@
 import { SignInField } from "@/types";
 import { links, routes } from "../routes";
 
-export const titles = "Sign into Your Account";
+export const title = "Sign into Your Account";
 
 export const fields: SignInField[] = [
   {
@@ -10,6 +10,7 @@ export const fields: SignInField[] = [
     placeholder: "user@mail.com",
     id: "email",
     required: true,
+    className:'col-span-2'
   },
   {
     label: "Password",
@@ -17,12 +18,24 @@ export const fields: SignInField[] = [
     placeholder: "********",
     id: "password",
     required: true,
+    className:'col-span-2'
   },
 ];
 
+export const additionalFields: {
+  remember: SignInField;
+} = {
+  remember: {
+    label: "Remember Me",
+    id: "remember",
+    type: "checkbox",
+    placeholder: "",
+    required: false,
+  },
+};
+
 export const actions = {
   forgot: { title: "Forgot Password?", href: routes.resetPassword },
-  remember: { title: "Remember Me", href: "#" },
 };
 
 export const actionButton = "Sign In";
@@ -32,4 +45,4 @@ export const noAccount = {
   link: links.signUp,
 };
 
-export const redirect = routes.dashboard;
+export const redirect = routes.dashboard.home;

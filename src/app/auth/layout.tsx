@@ -28,7 +28,7 @@ const AuthLayout: React.FC<
             {greetings}
           </p>
         </>
-        <div className="relative w-full min-h-[600px] h-full bg-transparent backdrop-blur-xl backdrop-saturate-[180%] grid grid-cols-[1fr,4fr] shadow-[12px_12px_16px_rgba(0,0,0,0.25)]">
+        <div className="relative w-full min-h-[650px] max-h-[650px] h-full bg-transparent backdrop-blur-xl backdrop-saturate-[180%] grid grid-cols-[1fr,4fr] shadow-[12px_12px_16px_rgba(0,0,0,0.25)]">
           <div></div>
           <div className="relative h-full flex justify-end">
             <AuthCurve className="absolute w-full h-auto right-0 fill-white/50 backdrop-blur-xl backdrop-saturate-[180%]" />
