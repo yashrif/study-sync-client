@@ -1,5 +1,6 @@
 import { IconDots } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 
 import { Checkbox as CheckboxComponent } from "@/components/ui/checkbox";
 import { Column } from "@/types";
@@ -11,8 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "./Header";
 import { Button } from "../ui/button";
+import { DataTableColumnHeader } from "./Header";
 
 export const Checkbox = <T extends object>(): ColumnDef<T> => ({
   id: "select",
@@ -92,10 +93,21 @@ export const ColumnHeader = <T extends object>({
     <DataTableColumnHeader column={column} title={columnInfo.title} />
   ),
   cell: ({ row }) => {
-    return columnInfo.formatter
+    const cell = columnInfo.formatter
       ? columnInfo.formatter(
           (row.original as Record<string, any>)[columnInfo.accessorKey]
         )
       : (row.original as Record<string, any>)[columnInfo.accessorKey];
+
+    return columnInfo.linkKey ? (
+      <Link
+        href={(row.original as Record<string, any>)[columnInfo.linkKey]}
+        className="anchor-sm"
+      >
+        {cell}
+      </Link>
+    ) : (
+      cell
+    );
   },
 });

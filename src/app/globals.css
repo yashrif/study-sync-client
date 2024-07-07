@@ -180,11 +180,15 @@
 
   /* ---------------------------------- links --------------------------------- */
   .anchor {
-    @apply flex items-center gap-2 capitalize text-sm md:text-base font-medium text-primary hover:text-primary/70 w-max transition duration-300;
+    @apply capitalize text-sm md:text-base font-medium text-primary hover:text-primary/70 w-max transition duration-300;
+  }
+
+  .anchor-sm {
+    @apply capitalize text-sm font-medium underline underline-offset-[5px] text-primary hover:text-secondary w-max transition duration-300;
   }
 
   .anchor-lg {
-    @apply flex items-center gap-2 capitalize text-base md:text-lg font-medium underline underline-offset-8 leading-[23px] text-primary hover:text-secondary w-max transition duration-300;
+    @apply capitalize text-base md:text-lg font-medium underline underline-offset-8 leading-[23px] text-primary hover:text-secondary w-max transition duration-300;
   }
 
   /* ----------------------------- general classes ---------------------------- */
