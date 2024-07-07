@@ -1,3 +1,7 @@
+.filepond--root {
+  @apply mb-0;
+}
+
 /* the text color of the drop label*/
 .filepond--drop-label {
   @apply text-text-200 font-medium font-primary tracking-[0.15px] h-32;
@@ -10,7 +14,7 @@
 
 /* the background color of the filepond drop area */
 .filepond--panel-root {
-  @apply bg-transparent border-accent border-2;
+  @apply bg-transparent;
 }
 
 /* the border radius of the drop area */

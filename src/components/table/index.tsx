@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { useTable } from "@/hooks/useTable";
 import Spinner from "../Spinner";
-import Controls from "./Controls";
+import Controls from "./ControlBar";
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];

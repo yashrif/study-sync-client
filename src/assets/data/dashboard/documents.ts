@@ -73,6 +73,7 @@ export const columnConfig: {
       formatter: (name) => {
         return name as string;
       },
+      linkKey: "id",
     },
     {
       accessorKey: "type",
