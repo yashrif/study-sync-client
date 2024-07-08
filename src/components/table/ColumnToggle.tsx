@@ -3,7 +3,7 @@
 import { DropdownMenuTrigger } from "@components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 
-import { navbarButtons } from "@/assets/data/dashboard/documents";
+import { navbarButtons } from "@/assets/data/dashboard/uploads";
 import { Button } from "@components/ui/button";
 import {
   DropdownMenu,

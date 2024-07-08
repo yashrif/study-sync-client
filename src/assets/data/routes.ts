@@ -23,7 +23,8 @@ export const paths = {
   privacy: "/privacy",
   cookies: "/cookies",
   settings: "/settings",
-  documents: "/documents",
+  uploads: "/uploads",
+  qna: "/qna",
 };
 
 export const pathTitles = {
@@ -51,7 +52,8 @@ export const pathTitles = {
   privacy: "Privacy Policy",
   cookies: "Cookies",
   settings: "Settings",
-  documents: "Documents",
+  uploads: "Uploads",
+  qna: "Q&A",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -89,7 +91,8 @@ export const routes = {
     default: dashboardPath,
     home: dashboardPath,
     settings: `${dashboardPath}${paths.settings}`,
-    documents: `${dashboardPath}${paths.documents}`,
+    uploads: `${dashboardPath}${paths.uploads}`,
+    qna: `${dashboardPath}${paths.qna}`,
   },
 };
 
@@ -127,9 +130,10 @@ export const links = {
     default: { title: pathTitles.dashboard, href: routes.dashboard.default },
     home: { title: pathTitles.home, href: routes.dashboard.home },
     settings: { title: pathTitles.settings, href: routes.dashboard.settings },
-    documents: {
-      title: pathTitles.documents,
-      href: routes.dashboard.documents,
+    uploads: {
+      title: pathTitles.uploads,
+      href: routes.dashboard.uploads,
     },
+    qna: { title: pathTitles.qna, href: routes.dashboard.qna },
   },
 };

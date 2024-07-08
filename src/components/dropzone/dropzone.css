@@ -14,7 +14,7 @@
 
 /* the background color of the filepond drop area */
 .filepond--panel-root {
-  @apply bg-transparent;
+  @apply bg-transparent border-[3px] border-accent/70;
 }
 
 /* the border radius of the drop area */
@@ -75,6 +75,6 @@
 
 @media (min-width: 50em) {
   .filepond--item {
-    width: calc(24.99% - 0.5em);
+    width: calc(50% - 0.5em);
   }
 }

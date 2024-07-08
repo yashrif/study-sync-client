@@ -136,6 +136,10 @@
     @apply font-bold font-secondary text-[30px] leading-[1.2] -tracking-[0.5px];
   }
 
+  .heading-tertiary {
+    @apply font-bold font-secondary text-2xl leading-[1.2] -tracking-[0.5px];
+  }
+
   .heading-section {
     @apply font-medium font-secondary text-[16px] text-text-400 text-center tracking-[0.75px] uppercase;
   }
@@ -146,6 +150,10 @@
 
   h2 {
     @apply heading-secondary;
+  }
+
+  h3 {
+    @apply heading-tertiary;
   }
 
   h4 {
@@ -175,6 +183,10 @@
 
   .text-footer {
     @apply text-small text-text-200 leading-[1];
+  }
+
+  .text-description {
+    @apply text-medium text-text-200 tracking-[0.2px];
   }
 
   p {

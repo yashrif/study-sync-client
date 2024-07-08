@@ -1,14 +1,13 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
-import { useState } from "react";
 
-import { navbarButtons } from "@/assets/data/dashboard/documents";
+import { navbarButtons } from "@/assets/data/dashboard/uploads";
 import { DataTableViewOptions } from "@/components/table/ColumnToggle";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { IconSearch } from "@tabler/icons-react";
-import AddFile from "./AddFile";
+import ControlButton from "./ControlButton";
+import UploadController from "./UploadController";
 
 interface Props<TData, TValue> {
   table: Table<TData>;
@@ -24,47 +23,23 @@ const Controls = <TData, TValue>({
   uploadEndpointDb: url,
   search,
 }: Props<TData, TValue>) => {
-  const [isDropzoneOpen, setIsDropzoneOpen] = useState(false);
-
   return (
     <div className="flex gap-16 items-center justify-between">
-      <AddFile
-        uploadEndpointDb={url}
-        isOpen={isDropzoneOpen}
-        setIsOpen={setIsDropzoneOpen}
-      />
       <div className="flex gap-3 items-center">
-        {[
-          {
-            ...navbarButtons.upload,
-            show: true,
-            onClick: () => {
-              setIsDropzoneOpen(!isDropzoneOpen);
-            },
-          },
-          {
-            ...navbarButtons.addFolder,
-            show: true,
-          },
-          {
-            ...navbarButtons.delete,
-            show: table.getFilteredSelectedRowModel().rows.length > 0,
-          },
-        ].map((button, index) => (
-          <Button
-            key={index}
-            variant={button.variant}
-            size={button.size}
-            className="flex items-center gap-1.5"
-            style={{
-              visibility: button.show ? "visible" : "hidden",
-            }}
-            onClick={button.onClick ? button.onClick : () => {}}
-          >
-            {button.Icon && <button.Icon className="h-4 w-auto" />}
-            {button.title}
-          </Button>
-        ))}
+        <UploadController uploadEndpointDb={url} />
+        <ControlButton
+          title={navbarButtons.addFolder.title}
+          Icon={navbarButtons.addFolder.Icon}
+          variant={navbarButtons.addFolder.variant}
+          size={navbarButtons.addFolder.size}
+        />
+        <ControlButton
+          title={navbarButtons.delete.title}
+          Icon={navbarButtons.delete.Icon}
+          variant={navbarButtons.delete.variant}
+          size={navbarButtons.delete.size}
+          show={table.getFilteredSelectedRowModel().rows.length > 0}
+        />
       </div>
       <div className="flex gap-3 items-center">
         <div className="flex items-center">

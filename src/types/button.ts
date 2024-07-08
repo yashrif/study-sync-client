@@ -32,4 +32,5 @@ export type Button = {
   variant?: ButtonVariant;
   size?: ButtonSize;
   onClick?: () => void;
+  className?: string;
 };

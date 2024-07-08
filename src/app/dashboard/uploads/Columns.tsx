@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { columnConfig } from "@/assets/data/dashboard/documents";
+import { columnConfig } from "@/assets/data/dashboard/uploads";
 import {
   Actions,
   Checkbox,

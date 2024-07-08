@@ -1,6 +1,6 @@
 import studySyncDB from "@/api/studySyncDB";
 import { serverEndpoints } from "@/assets/data/api";
-import { create } from "@/assets/data/dashboard/documents";
+import { create } from "@/assets/data/dashboard/uploads";
 import {
   Dialog,
   DialogContent,
@@ -43,7 +43,7 @@ const AddFile: React.FC<Props> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-[800px]">
+      <DialogContent className="max-w-[700px]">
         <DialogHeader className="flex flex-col gap-2">
           <DialogTitle>{create.title}</DialogTitle>
           <DialogDescription />

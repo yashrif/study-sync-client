@@ -1,8 +1,9 @@
 import {
-  IconFileDescription,
+  IconFileUpload,
   IconHome,
   IconLogout2,
-  IconSettings,
+  IconMessages,
+  IconSettings
 } from "@tabler/icons-react";
 
 import { IconLink } from "@allTypes";
@@ -15,8 +16,12 @@ export const sidebarLinks: IconLink[][] = [
       Icon: IconHome,
     },
     {
-      ...links.dashboard.documents,
-      Icon: IconFileDescription,
+      ...links.dashboard.uploads,
+      Icon: IconFileUpload,
+    },
+    {
+      ...links.dashboard.qna,
+      Icon: IconMessages,
     },
   ],
   [

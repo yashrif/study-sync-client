@@ -1,21 +1,24 @@
 import {
   IconArrowsSort,
   IconFolderPlus,
+  IconMessages,
   IconTrash,
   IconUpload,
 } from "@tabler/icons-react";
 
-import { Button, Column } from "@allTypes";
+import { Button, Column, IconList } from "@allTypes";
 import { MixerVertical } from "@icons";
 
-export const home = {
-  title: "Hello, Yashrif",
-  description: "Manage all your documents here!",
+export const home: IconList = {
+  title: "Q&A",
+  Icon: IconMessages,
+  description: "Generate and manage all your Q&A here!",
 };
 
 export const create = {
-  title: "Add your documents",
-  description: "Drag and drop your files here to start uploading.",
+  title: "Generate Q&A from documents",
+  description:
+    "Select or upload documents to generate Q&A from! Uploaded documents will be saved in the library which can be accessed later.",
 };
 
 export const navbarButtons: {

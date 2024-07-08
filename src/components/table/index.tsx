@@ -24,6 +24,7 @@ type DataTableProps<TData, TValue> = {
     key: string;
     placeholder: string;
   };
+  className?: string;
 };
 
 const DataTable = <TData, TValue>({
@@ -32,6 +33,7 @@ const DataTable = <TData, TValue>({
   uploadEndpointDb,
   loading = false,
   search,
+  className,
 }: DataTableProps<TData, TValue>) => {
   const { table } = useTable({
     data,
@@ -39,7 +41,7 @@ const DataTable = <TData, TValue>({
   });
 
   return (
-    <div className="pt-8 flex flex-col gap-8">
+    <div className={`flex flex-col gap-8 ${className}`}>
       <Controls
         table={table}
         search={search}
