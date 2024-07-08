@@ -1,7 +1,7 @@
 import { SignUpField } from "@/types";
-import { links } from "../routes";
+import { links, routes } from "../routes";
 
-export const titles = "Create Account";
+export const title = "Create Account";
 
 export const fields: SignUpField[] = [
   {
@@ -46,7 +46,9 @@ export const fields: SignUpField[] = [
 
 export const actionButton = "Create Account";
 
-export const redirect = {
+export const hasAccount = {
   title: "Already have an account?",
   link: links.signIn,
 };
+
+export const redirect = routes.dashboard.home;

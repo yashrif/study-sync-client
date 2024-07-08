@@ -7,7 +7,7 @@ type Props = {
 
 const Spinner: React.FC<Props> = ({ className }) => {
   return (
-    <IconLoader2 className={`animate-spin h-6 w-6 text-primary ${className}`} />
+    <IconLoader2 className={`animate-spin size-6 text-primary ${className}`} />
   );
 };
 
