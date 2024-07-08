@@ -1,12 +1,19 @@
 import {
   IconArrowsSort,
+  IconFile,
+  IconFileTypeDocx,
+  IconFileTypeJpg,
+  IconFileTypePdf,
+  IconFileTypePng,
+  IconFileTypePpt,
   IconFolderPlus,
   IconMessages,
   IconTrash,
   IconUpload,
 } from "@tabler/icons-react";
 
-import { Button, Column, IconList } from "@allTypes";
+import { FileTypes } from "@/types/upload";
+import { Button, Column, Icon } from "@allTypes";
 import { MixerVertical } from "@icons";
 
 export const home: IconList = {
@@ -77,6 +84,7 @@ export const columnConfig: {
         return name as string;
       },
       linkKey: "id",
+      iconKey: "type",
     },
     {
       accessorKey: "type",
@@ -103,4 +111,23 @@ export const columnConfig: {
       onClick: () => console.log("Delete"),
     },
   ],
+};
+
+export const fileIcons = (type: FileTypes) => {
+  switch (type) {
+    case FileTypes.PDF:
+      return IconFileTypePdf;
+    case FileTypes.JPG:
+      return IconFileTypeJpg;
+    case FileTypes.JPEG:
+      return IconFileTypeJpg;
+    case FileTypes.PNG:
+      return IconFileTypePng;
+    case FileTypes.DOC:
+      return IconFileTypeDocx;
+    case FileTypes.PPT:
+      return IconFileTypePpt;
+    default:
+      return IconFile;
+  }
 };

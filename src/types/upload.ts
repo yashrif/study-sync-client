@@ -1,6 +1,6 @@
-export enum UploadFormat {
+export enum FileTypes {
   PDF = "application/pdf",
-  JPE = "image/jpe",
+  JPG = "image/jpg",
   JPEG = "image/jpeg",
   PNG = "image/png",
   DOC = "application/msword",
@@ -10,6 +10,6 @@ export enum UploadFormat {
 export type UploadSimple = {
   id: string;
   name: string;
-  type: UploadFormat;
+  type: FileTypes;
   createDate: Date | string;
 };
