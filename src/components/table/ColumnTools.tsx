@@ -2,8 +2,10 @@ import { IconDots } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
+import { fileIcons } from "@/assets/data/dashboard/documents";
 import { Checkbox as CheckboxComponent } from "@/components/ui/checkbox";
 import { Column } from "@/types";
+import { FileTypes } from "@/types/upload";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -99,7 +101,7 @@ export const ColumnHeader = <T extends object>({
         )
       : (row.original as Record<string, any>)[columnInfo.accessorKey];
 
-    return columnInfo.linkKey ? (
+    const linkCell = columnInfo.linkKey ? (
       <Link
         href={(row.original as Record<string, any>)[columnInfo.linkKey]}
         className="anchor-sm"
@@ -108,6 +110,21 @@ export const ColumnHeader = <T extends object>({
       </Link>
     ) : (
       cell
+    );
+
+    if (!columnInfo.iconKey) return cell;
+
+    const iconKey = (row.original as Record<string, any>)[columnInfo?.iconKey];
+
+    const Icon = fileIcons(iconKey as FileTypes);
+
+    return columnInfo.iconKey ? (
+      <div className="flex items-center space-x-1">
+        <Icon className="h-4 w-4 text-primary" />
+        {linkCell}
+      </div>
+    ) : (
+      linkCell
     );
   },
 });

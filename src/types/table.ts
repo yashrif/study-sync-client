@@ -3,4 +3,5 @@ export type Column = {
   title: string;
   formatter?: (data: string | Date | number) => string | number;
   linkKey?: string;
+  iconKey?: string;
 };
