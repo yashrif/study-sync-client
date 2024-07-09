@@ -10,7 +10,7 @@ export const fields: SignInField[] = [
     placeholder: "user@mail.com",
     id: "email",
     required: true,
-    className:'col-span-2'
+    className: "col-span-2",
   },
   {
     label: "Password",
@@ -18,7 +18,7 @@ export const fields: SignInField[] = [
     placeholder: "********",
     id: "password",
     required: true,
-    className:'col-span-2'
+    className: "col-span-2",
   },
 ];
 

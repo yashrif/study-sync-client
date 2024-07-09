@@ -3,7 +3,7 @@ import {
   IconHome,
   IconLogout2,
   IconMessages,
-  IconSettings
+  IconSettings,
 } from "@tabler/icons-react";
 
 import { IconLink } from "@allTypes";

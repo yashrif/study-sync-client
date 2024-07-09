@@ -30,7 +30,7 @@ const inputVariants = cva(
       variant: "default",
       dimension: "default",
     },
-  }
+  },
 );
 
 const iconVariants = cva(
@@ -46,7 +46,7 @@ const iconVariants = cva(
     defaultVariants: {
       dimension: "default",
     },
-  }
+  },
 );
 
 export interface InputProps
@@ -68,7 +68,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       iconStyle,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div className="relative">
@@ -80,7 +80,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               variant,
               spacing: dimension,
               className: `${className}`,
-            })
+            }),
           )}
           ref={ref}
           {...props}
@@ -92,7 +92,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 Input.displayName = "Input";
 

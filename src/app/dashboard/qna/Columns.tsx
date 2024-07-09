@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { columnConfig } from "@/assets/data/dashboard/uploads";
+import { columnConfig } from "@/assets/data/dashboard/qna";
 import {
   Actions,
   Checkbox,
@@ -17,7 +17,4 @@ export const columns: ColumnDef<UploadSimple>[] = [
     ...Checkbox(),
   },
   ...columnHeaders,
-  {
-    ...Actions<UploadSimple>({ actions: columnConfig.actions, copyId: true }),
-  },
 ];

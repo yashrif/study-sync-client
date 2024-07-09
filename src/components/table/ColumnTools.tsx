@@ -2,7 +2,7 @@ import { IconDots } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-import { fileIcons } from "@/assets/data/dashboard/documents";
+import { fileIcons } from "@/assets/data/dashboard/file";
 import { Checkbox as CheckboxComponent } from "@/components/ui/checkbox";
 import { Column } from "@/types";
 import { FileTypes } from "@/types/upload";
@@ -97,7 +97,7 @@ export const ColumnHeader = <T extends object>({
   cell: ({ row }) => {
     const cell = columnInfo.formatter
       ? columnInfo.formatter(
-          (row.original as Record<string, any>)[columnInfo.accessorKey]
+          (row.original as Record<string, any>)[columnInfo.accessorKey],
         )
       : (row.original as Record<string, any>)[columnInfo.accessorKey];
 

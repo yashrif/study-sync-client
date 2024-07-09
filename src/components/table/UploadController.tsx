@@ -1,24 +1,32 @@
 import { useState } from "react";
 
-import { navbarButtons } from "@/assets/data/dashboard/uploads";
+import { controlBar } from "@/assets/data/dashboard/controlBar";
+import { ButtonVariant } from "@/types";
 import AddFile from "./AddFile";
 import ControlButton from "./ControlButton";
 
 type Props = {
   uploadEndpointDb: string | undefined;
+  style?: React.CSSProperties;
+  variant?: ButtonVariant;
 };
 
-const UploadController: React.FC<Props> = ({ uploadEndpointDb: url }) => {
+const UploadController: React.FC<Props> = ({
+  uploadEndpointDb: url,
+  style,
+  variant = controlBar.upload.variant,
+}) => {
   const [isDropzoneOpen, setIsDropzoneOpen] = useState(false);
 
   return (
     <>
       <ControlButton
-        title={navbarButtons.upload.title}
-        Icon={navbarButtons.upload.Icon}
-        variant={navbarButtons.upload.variant}
-        size={navbarButtons.upload.size}
+        title={controlBar.upload.title}
+        Icon={controlBar.upload.Icon}
+        variant={variant}
+        size={controlBar.upload.size}
         onClick={() => setIsDropzoneOpen(!isDropzoneOpen)}
+        style={style}
       />
 
       <AddFile

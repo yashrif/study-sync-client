@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { Suspense } from "react";
 
 import ProgressBar from "@/components/ProgressBar";
 import "./globals.css";
 
-const roboto = Roboto({
+const inter = Inter({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
-  variable: "--font-roboto",
+  variable: "--font-inter",
 });
 const satoshi = localFont({
   src: [
@@ -54,7 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${roboto.variable} ${satoshi.variable}`}>
+      <body className={`${inter.variable} ${satoshi.variable}`}>
         <div className="flex flex-col min-h-screen overflow-hidden">
           <Suspense>
             <ProgressBar />

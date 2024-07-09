@@ -26,7 +26,7 @@ const Uploads: React.FC = () => {
           columns={columns}
           data={uploads}
           loading={status === Status.PENDING}
-          search={search}
+          search={search.key}
           uploadEndpointDb={dbEndpoints.uploads}
           className="pt-8"
         />

@@ -186,7 +186,7 @@
   }
 
   .text-description {
-    @apply text-medium text-text-200 tracking-[0.2px];
+    @apply text-medium text-text-200;
   }
 
   p {

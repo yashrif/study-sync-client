@@ -9,6 +9,7 @@ export enum FileTypes {
 
 export type UploadSimple = {
   id: string;
+  title: string;
   name: string;
   type: FileTypes;
   createDate: Date | string;
