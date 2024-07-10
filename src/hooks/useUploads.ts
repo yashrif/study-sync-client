@@ -4,7 +4,9 @@ import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { Status, UploadSimple } from "@allTypes";
 
-export const useUploads = () => {
+export const useUploads = (
+  dependencies: (string | number | boolean)[] = []
+) => {
   const [uploads, setUploads] = useState<UploadSimple[]>([]);
   const [status, setStatus] = useState<Status>(Status.PENDING);
 
@@ -20,7 +22,12 @@ export const useUploads = () => {
     } finally {
       setStatus(Status.IDLE);
     }
-  }, [setStatus, setUploads]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setStatus, setUploads, ...dependencies]);
 
-  return { uploads, status };
+  const getUploads = () => {
+    return { uploads, status };
+  };
+
+  return { getUploads };
 };

@@ -1,4 +1,5 @@
 import {
+  IconAdjustmentsHorizontal,
   IconArrowsSort,
   IconFolderPlus,
   IconSearch,
@@ -6,7 +7,6 @@ import {
   IconUpload,
 } from "@tabler/icons-react";
 
-import { MixerVertical } from "@/components/icons";
 import { Button } from "@/types";
 
 export const controlBar: {
@@ -37,7 +37,7 @@ export const controlBar: {
   },
   view: {
     title: "View",
-    Icon: MixerVertical,
+    Icon: IconAdjustmentsHorizontal,
     variant: "outline",
     size: "sm",
   },

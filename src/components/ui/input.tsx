@@ -3,7 +3,7 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { Icon } from "@/types";
+import { Icon, InputSizes } from "@/types";
 
 const inputVariants = cva(
   "flex w-full font-medium placeholder:font-normal focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-color duration-300",
@@ -30,11 +30,11 @@ const inputVariants = cva(
       variant: "default",
       dimension: "default",
     },
-  },
+  }
 );
 
 const iconVariants = cva(
-  "absolute w-auto text-primary cursor-pointer hover:scale-110 transition-all duration-300",
+  "absolute w-auto stroke-[2.5px] text-primary cursor-pointer hover:scale-110 transition-all duration-300",
   {
     variants: {
       dimension: {
@@ -46,13 +46,13 @@ const iconVariants = cva(
     defaultVariants: {
       dimension: "default",
     },
-  },
+  }
 );
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   variant?: "default" | "underline";
-  dimension?: "default" | "sm" | "lg";
+  dimension?: InputSizes;
   Icon?: Icon;
   iconStyle?: string;
 }
@@ -68,7 +68,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       iconStyle,
       ...props
     },
-    ref,
+    ref
   ) => {
     return (
       <div className="relative">
@@ -80,7 +80,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               variant,
               spacing: dimension,
               className: `${className}`,
-            }),
+            })
           )}
           ref={ref}
           {...props}
@@ -92,7 +92,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  },
+  }
 );
 Input.displayName = "Input";
 

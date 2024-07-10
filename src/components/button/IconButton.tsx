@@ -7,12 +7,14 @@ type Props = {
   style?: CSSProperties;
 };
 
-const ControlButton: React.FC<Props & ButtonType> = ({
+const IconButton: React.FC<Props & ButtonType> = ({
   variant,
   size,
   show = true,
   style,
   Icon,
+  className,
+  iconClassName,
   title,
   onClick,
   ...rest
@@ -21,7 +23,7 @@ const ControlButton: React.FC<Props & ButtonType> = ({
     <Button
       variant={variant}
       size={size}
-      className="flex items-center gap-1.5"
+      className={`${className}`}
       style={{
         visibility: show ? "visible" : "hidden",
         ...style,
@@ -29,10 +31,12 @@ const ControlButton: React.FC<Props & ButtonType> = ({
       onClick={onClick ? onClick : () => {}}
       {...rest}
     >
-      {Icon && <Icon className="h-4 w-auto" />}
-      {title}
+      {Icon && (
+        <Icon className={`h-4 w-auto stroke-[2.5px] ${iconClassName}`} />
+      )}
+      {title && <span>{title}</span>}
     </Button>
   );
 };
 
-export default ControlButton;
+export default IconButton;

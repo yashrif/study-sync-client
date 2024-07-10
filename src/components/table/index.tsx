@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTable } from "@/hooks/useTable";
-import { TTableControls } from "@/types";
+import { TableControls, TTableControl } from "@/types";
 import Spinner from "../Spinner";
 import ControlBar from "./ControlBar";
 
@@ -23,7 +23,7 @@ type DataTableProps<TData, TValue> = {
   uploadEndpointDb: string | undefined;
   searchKey: string;
   showPagination?: boolean;
-  controlsConfig?: TTableControls;
+  controlsConfig?: { [key in TableControls]?: TTableControl };
   className?: string;
   classNameControls?: string;
 };
@@ -90,7 +90,10 @@ const DataTable = <TData, TValue>({
                     className="group border-none"
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="pb-0 group-last:pb-4">
+                      <TableCell
+                        key={cell.id}
+                        className="pb-0 pt-2.5 group-last:pb-4"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

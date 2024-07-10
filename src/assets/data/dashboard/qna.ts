@@ -1,6 +1,7 @@
 import { IconMessages } from "@tabler/icons-react";
 
 import { Button, Column, IconList } from "@allTypes";
+import { fileTypeIcons } from "./file";
 
 export const home: IconList = {
   title: "Q&A",
@@ -15,8 +16,8 @@ export const create = {
 };
 
 export const search = {
-  key: "name",
-  placeholder: "Search by name",
+  key: "title",
+  placeholder: "Search by title",
 };
 
 export const columnConfig: {
@@ -25,13 +26,42 @@ export const columnConfig: {
 } = {
   columns: [
     {
-      accessorKey: "name",
-      title: "Name",
-      formatter: (name) => {
-        return name as string;
+      accessorKey: "title",
+      title: "Document",
+      formatter: (title) => {
+        return title as string;
       },
       linkKey: "id",
-      iconKey: "type",
+      className: "text-base no-underline font-semibold",
+    },
+    {
+      accessorKey: "name",
+      title: "Name",
+      formatter: (type) => {
+        return type as string;
+      },
+      Icon(props) {
+        return fileTypeIcons({
+          key: "type",
+          value: props.value,
+        });
+      },
+      className: "text-text-200",
+    },
+    {
+      accessorKey: "createDate",
+      title: "Create Date",
+      formatter: (date) => {
+        return new Date(date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+      },
+      Icon(props) {
+        return fileTypeIcons(props);
+      },
+      className: "text-text-200",
     },
   ],
   actions: [

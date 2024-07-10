@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        primary: ["var(--font-inter)", "sans-serif"],
+        primary: ["var(--font-rubik)", "sans-serif"],
         secondary: ["var(--font-satoshi)", "sans-serif"],
       },
       colors: {

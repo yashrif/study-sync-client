@@ -1,6 +1,7 @@
 import { IconFileUpload } from "@tabler/icons-react";
 
 import { Button, Column, IconList } from "@allTypes";
+import { fileTypeIcons } from "./file";
 
 export const home: IconList = {
   title: "Uploads",
@@ -30,7 +31,12 @@ export const columnConfig: {
         return title as string;
       },
       linkKey: "id",
-      iconKey: "type",
+      Icon(props) {
+        return fileTypeIcons({
+          key: "type",
+          value: props.value,
+        });
+      },
     },
     {
       accessorKey: "type",

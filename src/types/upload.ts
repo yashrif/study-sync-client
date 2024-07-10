@@ -14,3 +14,8 @@ export type UploadSimple = {
   type: FileTypes;
   createDate: Date | string;
 };
+
+export type FileIcon = {
+  key: keyof UploadSimple;
+  value: UploadSimple;
+};

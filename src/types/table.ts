@@ -1,11 +1,18 @@
-import { ButtonVariant } from "@allTypes";
+import {
+  ButtonSize,
+  ButtonVariant,
+  FileIcon,
+  Icon,
+  UploadSimple,
+} from "@allTypes";
 
 export type Column = {
-  accessorKey: string;
+  accessorKey: keyof UploadSimple;
   title: string;
   formatter?: (data: string | Date | number) => string | number;
   linkKey?: string;
-  iconKey?: string;
+  Icon?: (props: FileIcon) => Icon;
+  className?: string;
 };
 
 export enum TableControls {
@@ -16,12 +23,12 @@ export enum TableControls {
   View = "View",
 }
 
-export type TTableControls = {
-  [key in TableControls]?: {
-    show?: boolean;
-    order?: number;
-    className?: string;
-    variant?: ButtonVariant;
-    title?: string;
-  };
+export type TTableControl = {
+  show?: boolean;
+  order?: number;
+  className?: string;
+  variant?: ButtonVariant;
+  title?: string;
+  Icon?: Icon;
+  size?: ButtonSize;
 };

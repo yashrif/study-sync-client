@@ -12,7 +12,7 @@ import PageHeader from "../components/PageHeader";
 import { columns } from "./Columns";
 
 const Uploads: React.FC = () => {
-  const { uploads, status } = useUploads();
+  const { uploads, status } = useUploads().getUploads();
 
   return (
     <div className="divide-y-2 flex flex-col">
@@ -26,7 +26,7 @@ const Uploads: React.FC = () => {
           columns={columns}
           data={uploads}
           loading={status === Status.PENDING}
-          search={search.key}
+          searchKey={search.key}
           uploadEndpointDb={dbEndpoints.uploads}
           className="pt-8"
         />

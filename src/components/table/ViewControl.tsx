@@ -4,7 +4,7 @@ import { DropdownMenuTrigger } from "@components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 
 import { controlBar } from "@/assets/data/dashboard/controlBar";
-import { Button } from "@components/ui/button";
+import { TTableControl } from "@/types";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,28 +12,35 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@components/ui/dropdown-menu";
+import IconButton from "../button/IconButton";
 
-type DataTableViewOptionsProps<TData> = {
+type Props<TData> = {
   table: Table<TData>;
   style?: React.CSSProperties;
-};
+} & TTableControl;
 
-export function DataTableViewOptions<TData>({
+function ViewControl<TData>({
   table,
   style,
-}: DataTableViewOptionsProps<TData>) {
+  order,
+  title,
+  Icon,
+  variant,
+  size,
+  ...rest
+}: Props<TData>) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild style={{ ...style }}>
-        <Button
-          variant={controlBar.view.variant}
-          size={controlBar.view.size}
-        >
-          {controlBar.view.Icon && (
-            <controlBar.view.Icon className="mr-2 h-4 w-4" />
-          )}
-          {controlBar.view.title}
-        </Button>
+      <DropdownMenuTrigger asChild style={{ ...style, order }} {...rest}>
+        <IconButton
+          title={title || controlBar.view.title}
+          Icon={Icon || controlBar.view.Icon}
+          variant={variant || controlBar.view.variant}
+          size={size || controlBar.view.size}
+          show={table.getFilteredSelectedRowModel().rows.length > 0}
+          style={{ ...style, order }}
+          {...rest}
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
@@ -42,7 +49,7 @@ export function DataTableViewOptions<TData>({
           .getAllColumns()
           .filter(
             (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanHide(),
+              typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
             return (
@@ -60,3 +67,5 @@ export function DataTableViewOptions<TData>({
     </DropdownMenu>
   );
 }
+
+export default ViewControl;

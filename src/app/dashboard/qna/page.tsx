@@ -1,6 +1,5 @@
-import React from "react";
-import PageHeader from "../components/PageHeader";
 import { create, home } from "@/assets/data/dashboard/qna";
+import PageHeader from "../components/PageHeader";
 import FileList from "./FileList";
 
 const page = () => {
@@ -11,14 +10,16 @@ const page = () => {
         description={home.description}
         Icon={home.Icon}
       />
-      <div className="pt-8 flex flex-col gap-8">
+      <div className="pt-8 flex flex-col">
         <div className="flex flex-col gap-4 mb-4">
           <h2>{create.title}</h2>
           <p className="text-medium text-text-200 max-w-prose">
             {create.description}
           </p>
         </div>
-        <FileList />
+        <div className="grid grid-cols-[max(700px),1fr] items-start gap-x-24 gap-y-16">
+          <FileList />
+        </div>
       </div>
     </div>
   );

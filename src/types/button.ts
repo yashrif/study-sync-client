@@ -33,4 +33,6 @@ export type Button = {
   size?: ButtonSize;
   onClick?: () => void;
   className?: string;
+  iconClassName?: string;
+  disabled?: boolean;
 };
