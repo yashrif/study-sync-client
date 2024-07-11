@@ -1,6 +1,6 @@
 import { IconMessages } from "@tabler/icons-react";
 
-import { Button, Column, IconList } from "@allTypes";
+import { Column, ColumnConfig, IconList } from "@allTypes";
 import { fileTypeIcons } from "./file";
 
 export const home: IconList = {
@@ -20,10 +20,24 @@ export const search = {
   placeholder: "Search by title",
 };
 
-export const columnConfig: {
-  columns: Column[];
-  actions: Button[];
-} = {
+export const isIndexedData: Column = {
+  accessorKey: "isIndexed",
+  title: "Indexing Status",
+  formatter: (isIndexed) => {
+    return isIndexed ? "Indexed" : "Not Indexed";
+  },
+  Icon(props) {
+    return fileTypeIcons(props);
+  },
+  className(props) {
+    return `${props ? "text-success" : "text-destructive"}`;
+  },
+  iconClassName(props) {
+    return props ? "text-success" : "text-destructive";
+  },
+};
+
+export const columnConfig: ColumnConfig = {
   columns: [
     {
       accessorKey: "title",
@@ -32,7 +46,9 @@ export const columnConfig: {
         return title as string;
       },
       linkKey: "id",
-      className: "text-base no-underline font-semibold",
+      className() {
+        return "text-base no-underline font-semibold";
+      },
     },
     {
       accessorKey: "name",
@@ -46,13 +62,12 @@ export const columnConfig: {
           value: props.value,
         });
       },
-      className: "text-text-200",
     },
     {
       accessorKey: "createDate",
       title: "Create Date",
       formatter: (date) => {
-        return new Date(date).toLocaleDateString("en-US", {
+        return new Date(date as string).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
@@ -61,7 +76,6 @@ export const columnConfig: {
       Icon(props) {
         return fileTypeIcons(props);
       },
-      className: "text-text-200",
     },
   ],
   actions: [

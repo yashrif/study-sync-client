@@ -107,7 +107,17 @@ export const ColumnHeader = ({
         {cell}
       </Link>
     ) : (
-      <span className={columnInfo.className}>{cell}</span>
+      <span
+        className={
+          (columnInfo.className &&
+            columnInfo.className(
+              (row.original as Record<string, any>)[columnInfo.accessorKey]
+            )) ||
+          "text-text-200"
+        }
+      >
+        {cell}
+      </span>
     );
 
     if (!columnInfo.Icon) return linkCell;
@@ -119,8 +129,18 @@ export const ColumnHeader = ({
 
     return (
       <div className="flex items-center space-x-1">
-        <Icon className={`h-4 w-auto text-text-200 ${columnInfo.className}`} />
+        <Icon
+          className={`h-4 w-auto ${
+            (columnInfo.iconClassName &&
+              columnInfo.iconClassName(
+                (row.original as Record<string, any>)[columnInfo.accessorKey]
+              )) ||
+            "text-text-200"
+          }`}
+        />
         {linkCell}
+        {columnInfo.additionalElement &&
+          columnInfo.additionalElement(row.original)}
       </div>
     );
   },

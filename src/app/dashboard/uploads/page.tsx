@@ -6,13 +6,13 @@ import { dbEndpoints } from "@/assets/data/api";
 import { home, search } from "@/assets/data/dashboard/uploads";
 import Spinner from "@/components/Spinner";
 import { Status } from "@/types";
-import { useUploads } from "@hooks/useUploads";
+import { useGetUploads } from "@hooks/useUploads";
 import DataTable from "../../../components/table";
 import PageHeader from "../components/PageHeader";
 import { columns } from "./Columns";
 
 const Uploads: React.FC = () => {
-  const { uploads, status } = useUploads().getUploads();
+  const { data: uploads, status } = useGetUploads().getUploads();
 
   return (
     <div className="divide-y-2 flex flex-col">

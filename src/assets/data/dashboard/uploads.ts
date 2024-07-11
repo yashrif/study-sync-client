@@ -37,6 +37,9 @@ export const columnConfig: {
           value: props.value,
         });
       },
+      iconClassName() {
+        return "text-primary";
+      },
     },
     {
       accessorKey: "type",
@@ -49,7 +52,7 @@ export const columnConfig: {
       accessorKey: "createDate",
       title: "Create Date",
       formatter: (date) => {
-        return new Date(date).toLocaleDateString();
+        return new Date(date as string).toLocaleDateString();
       },
     },
   ],

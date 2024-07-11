@@ -8,3 +8,4 @@ export const uploads = `/uploadFile`;
 
 const generate = "/generate";
 export const qna = `${generate}/qna`;
+export const indxFile = `/indexFile`;

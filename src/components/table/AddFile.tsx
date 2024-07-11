@@ -19,12 +19,10 @@ const onFileUpload = ({ data, url }: UploadDataProps) => {
   try {
     const store = async () =>
       studySyncDB
-        .post(url, JSON.stringify(JSON.parse(data).data))
+        .post(url, JSON.stringify(JSON.parse(data)))
         .then((res) => res.data);
 
     const response = store();
-
-    console.log(response);
   } catch (e) {
     console.log(e);
   }

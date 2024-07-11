@@ -1,6 +1,7 @@
 import { FileIcon, FileTypes } from "@/types";
 import {
   IconCalendarEvent,
+  IconDatabaseCog,
   IconFile,
   IconFileFilled,
   IconFileInfo,
@@ -38,6 +39,8 @@ export const fileTypeIcons = (props: FileIcon) => {
         return IconFileFilled;
       case "createDate":
         return IconCalendarEvent;
+      case "isIndexed":
+        return IconDatabaseCog;
       default:
         return IconFileInfo;
     }

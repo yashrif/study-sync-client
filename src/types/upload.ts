@@ -13,9 +13,23 @@ export type UploadSimple = {
   name: string;
   type: FileTypes;
   createDate: Date | string;
+  isIndexed: boolean;
 };
+
+export type Upload = UploadSimple;
 
 export type FileIcon = {
   key: keyof UploadSimple;
   value: UploadSimple;
+};
+
+/* --------------------------------- Server --------------------------------- */
+
+export type FileIndexServer = {
+  fileId: string;
+  fileTypeName: string;
+};
+
+export type GenerateQnaServer = FileIndexServer & {
+  isIndexed: boolean;
 };

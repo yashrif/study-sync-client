@@ -1,6 +1,7 @@
+import { CSSProperties } from "react";
+
 import { Button as ButtonType } from "@/types";
 import { Button } from "../ui/button";
-import { HTMLAttributes, CSSProperties } from "react";
 
 type Props = {
   show?: boolean;

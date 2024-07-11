@@ -1,4 +1,5 @@
 import {
+  Button,
   ButtonSize,
   ButtonVariant,
   FileIcon,
@@ -9,10 +10,12 @@ import {
 export type Column = {
   accessorKey: keyof UploadSimple;
   title: string;
-  formatter?: (data: string | Date | number) => string | number;
+  formatter?: (data: string | Date | number | boolean) => string | number;
   linkKey?: string;
   Icon?: (props: FileIcon) => Icon;
-  className?: string;
+  className?: (props: boolean) => string;
+  iconClassName?: (props: boolean) => string;
+  additionalElement?: (props: UploadSimple) => JSX.Element | null;
 };
 
 export enum TableControls {
@@ -31,4 +34,9 @@ export type TTableControl = {
   title?: string;
   Icon?: Icon;
   size?: ButtonSize;
+};
+
+export type ColumnConfig = {
+  columns: Column[];
+  actions: Button[];
 };

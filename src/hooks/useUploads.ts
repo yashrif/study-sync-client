@@ -4,9 +4,10 @@ import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { Status, UploadSimple } from "@allTypes";
 
-export const useUploads = (
+export const useGetUploads = (
   dependencies: (string | number | boolean)[] = []
 ) => {
+  console.log("useGetUploads", dependencies);
   const [uploads, setUploads] = useState<UploadSimple[]>([]);
   const [status, setStatus] = useState<Status>(Status.PENDING);
 
@@ -17,7 +18,6 @@ export const useUploads = (
         setStatus(Status.SUCCESS);
       });
     } catch (e) {
-      setUploads([]);
       setStatus(Status.ERROR);
     } finally {
       setStatus(Status.IDLE);
@@ -26,7 +26,7 @@ export const useUploads = (
   }, [setStatus, setUploads, ...dependencies]);
 
   const getUploads = () => {
-    return { uploads, status };
+    return { data: uploads, status };
   };
 
   return { getUploads };

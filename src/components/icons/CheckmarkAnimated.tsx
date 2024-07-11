@@ -8,38 +8,34 @@ type Props = {
   className?: string;
 };
 
-export const CheckmarkAnimated: React.FC<Props> = ({
-  stroke = "hsl(var(--primary))",
-  className = "",
-}) => {
+export const CheckmarkAnimated: React.FC<Props> = ({ stroke, className }) => {
   return (
     <Suspense fallback={null}>
       <Icon
         variants={[drawVariantsCircle, drawVariantsCheckmark]}
         className={className}
-        stroke={stroke}
       />
     </Suspense>
   );
 };
 
-type PropsType = {
-  stroke?: string;
+type Icon = {
   variants: Variants[];
-  className: string;
+  stroke?: string;
+  className?: string;
 };
 
-const Icon: React.FC<PropsType> = ({ stroke, variants, className }) => {
+const Icon: React.FC<Icon> = ({ variants, stroke, className }) => {
   return (
     <motion.svg
-      width={"auto"}
+      width={24}
       height={24}
       viewBox="0 0 38 36"
       fill="none"
-      stroke={stroke}
       strokeWidth={3}
-      className={className}
+      stroke={stroke || "hsl(var(--success))"}
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
       initial="hidden"
       whileInView="visible"
     >

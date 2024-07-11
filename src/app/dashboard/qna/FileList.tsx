@@ -3,8 +3,7 @@
 import { flexRender } from "@tanstack/react-table";
 import { Suspense, useState } from "react";
 
-import studySyncAI from "@/api/studySyncAI";
-import { aiEndpoints, dbEndpoints } from "@/assets/data/api";
+import { dbEndpoints } from "@/assets/data/api";
 import { search } from "@/assets/data/dashboard/qna";
 import IconButton from "@/components/button/IconButton";
 import {
@@ -16,26 +15,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTable } from "@/hooks/useTable";
-import { useUploads } from "@/hooks/useUploads";
+import { useGetUploads } from "@/hooks/useUploads";
 import { Status, TableControls } from "@/types";
 import Spinner from "@components/Spinner";
 import ControlBar from "@components/table/ControlBar";
 import { IconArrowRight } from "@tabler/icons-react";
 import { columns } from "./Columns";
 
-const generateQna = async (data: string[]) => {
-  return (await studySyncAI.post(aiEndpoints.qna, data)).data;
-};
-
 const FileLIst = () => {
   const [uploadStatus, setUploadStatus] = useState<Status>(Status.IDLE);
-  const { uploads, status } = useUploads([uploadStatus]).getUploads();
+  const [indexInfo, setIndexInfo] = useState<{
+    id: string | undefined;
+    status: Status;
+  }>({ id: undefined, status: Status.IDLE });
+  const { data: uploads, status } = useGetUploads([
+    uploadStatus,
+    indexInfo.status === Status.IDLE,
+  ]).getUploads();
   const { table } = useTable({
     data: uploads,
-    columns,
+    columns: columns(indexInfo, setIndexInfo),
   });
-
-  console.log(uploadStatus);
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center">
@@ -86,7 +86,7 @@ const FileLIst = () => {
                   <TableBody>
                     {status === Status.PENDING ? (
                       <TableRow>
-                        <TableCell colSpan={columns.length} className="h-24">
+                        <TableCell colSpan={2} className="h-24">
                           <Spinner className="mx-auto" />
                         </TableCell>
                       </TableRow>
@@ -162,11 +162,16 @@ const FileLIst = () => {
           table && table.getFilteredSelectedRowModel().rows.length === 0
         }
         onClick={async () => {
-          const data = table
-            .getFilteredSelectedRowModel()
-            .rows.map((row) => row.original.id);
-          const qna = await generateQna(data);
-          console.log(qna);
+          // try {
+          //   const files: UploadSimple[] = table
+          //     .getFilteredSelectedRowModel()
+          //     .rows.map((row) => row.original);
+          // } catch (e) {
+          //   console.log(e);
+          //   setIndexStatus(Status.ERROR);
+          // } finally {
+          //   if (indexStatus !== Status.IDLE) setIndexStatus(Status.IDLE);
+          // }
         }}
       />
     </div>
