@@ -4,6 +4,8 @@ export * from "./icon";
 export * from "./input";
 export * from "./link";
 export * from "./list";
+export * from "./qna";
+export * from "./role";
 export * from "./status";
 export * from "./table";
 export * from "./upload";

@@ -1,5 +1,5 @@
+import { IconRefresh } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Dispatch, SetStateAction } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
 import studySyncServer from "@/api/studySyncServer";
@@ -10,7 +10,7 @@ import {
 } from "@/assets/data/dashboard/qna";
 import StatusIcon from "@/components/StatusIcon";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
-import { ColumnConfig, Status } from "@/types";
+import { ColumnConfig, IndexStatus, Status } from "@/types";
 import { UploadSimple } from "@/types/upload";
 import {
   Tooltip,
@@ -18,18 +18,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@components/ui/tooltip";
-import { IconRefresh } from "@tabler/icons-react";
+import { fileIndexing } from "./utils";
 
-const IndexButton: React.FC<{
-  data: UploadSimple;
-  indexInfo: { id: string | undefined; status: Status };
-  setIndexInfo: Dispatch<
-    SetStateAction<{
-      id: string | undefined;
-      status: Status;
-    }>
-  >;
-}> = ({ data, indexInfo, setIndexInfo }) => {
+const IndexButton: React.FC<
+  IndexStatus & {
+    data: UploadSimple;
+  }
+> = ({ data, indexStatus, setIndexStatus }) => {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -37,33 +32,17 @@ const IndexButton: React.FC<{
           <div
             className="pl-2"
             onClick={async () => {
-              try {
-                setIndexInfo({ id: data.id, status: Status.PENDING });
-                await studySyncServer.post(serverEndpoints.index, data);
-
-                await studySyncDB.patch(`${dbEndpoints.uploads}/${data.id}`, {
-                  isIndexed: true,
-                });
-
-                setIndexInfo({ id: data.id, status: Status.SUCCESS });
-              } catch (error) {
-                console.error(error);
-                setIndexInfo({ id: data.id, status: Status.ERROR });
-              } finally {
-                setTimeout(() => {
-                  setIndexInfo({ id: data.id, status: Status.IDLE });
-                }, 2500);
-              }
+              await fileIndexing({ setIndexStatus, data });
             }}
           >
             <StatusIcon
-              status={indexInfo.id === data.id ? indexInfo.status : Status.IDLE}
+              status={indexStatus[data.id]}
               className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
-                indexInfo.id === data.id && indexInfo.status === Status.PENDING
+                indexStatus[data.id] === Status.PENDING
                   ? "animate-spin duration-1000"
                   : "duration-300"
               }
-                  ${indexInfo.id === data.id && indexInfo.status === Status.SUCCESS ? "!text-success" : indexInfo.status === Status.ERROR ? "!text-destructive" : ""}
+                  ${indexStatus[data.id] === Status.SUCCESS ? "!text-success" : indexStatus[data.id] === Status.ERROR ? "!text-destructive" : ""}
                   `}
               Icons={{
                 [Status.PENDING]: IconRefresh,
@@ -79,15 +58,10 @@ const IndexButton: React.FC<{
   );
 };
 
-export const columns = (
-  indexInfo: { id: string | undefined; status: Status },
-  setIndexInfo: Dispatch<
-    SetStateAction<{
-      id: string | undefined;
-      status: Status;
-    }>
-  >
-): ColumnDef<UploadSimple>[] => [
+export const columns = ({
+  indexStatus,
+  setIndexStatus,
+}: IndexStatus): ColumnDef<UploadSimple>[] => [
   {
     ...Checkbox(),
   },
@@ -101,8 +75,8 @@ export const columns = (
             return !props.isIndexed ? (
               <IndexButton
                 data={props}
-                indexInfo={indexInfo}
-                setIndexInfo={setIndexInfo}
+                indexStatus={indexStatus}
+                setIndexStatus={setIndexStatus}
               />
             ) : null;
           },

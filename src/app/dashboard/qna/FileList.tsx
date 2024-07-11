@@ -1,7 +1,7 @@
 "use client";
 
 import { flexRender } from "@tanstack/react-table";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
 import { search } from "@/assets/data/dashboard/qna";
@@ -16,26 +16,41 @@ import {
 } from "@/components/ui/table";
 import { useTable } from "@/hooks/useTable";
 import { useGetUploads } from "@/hooks/useUploads";
-import { Status, TableControls } from "@/types";
+import { Status, TableControls, UploadSimple } from "@/types";
 import Spinner from "@components/Spinner";
 import ControlBar from "@components/table/ControlBar";
 import { IconArrowRight } from "@tabler/icons-react";
 import { columns } from "./Columns";
+import { fileIndexing } from "./utils";
 
 const FileLIst = () => {
   const [uploadStatus, setUploadStatus] = useState<Status>(Status.IDLE);
-  const [indexInfo, setIndexInfo] = useState<{
-    id: string | undefined;
-    status: Status;
-  }>({ id: undefined, status: Status.IDLE });
+  const [indexStatus, setIndexStatus] = useState<{
+    [key: string]: Status;
+  }>({});
   const { data: uploads, status } = useGetUploads([
     uploadStatus,
-    indexInfo.status === Status.IDLE,
+    Object.keys(indexStatus).length === 0,
   ]).getUploads();
   const { table } = useTable({
     data: uploads,
-    columns: columns(indexInfo, setIndexInfo),
+    columns: columns({ indexStatus, setIndexStatus }),
   });
+
+  useEffect(() => {
+    if (uploads.length > 0) {
+      const nonIndexedUploads = uploads.filter((upload) => !upload.isIndexed);
+
+      nonIndexedUploads.forEach((file) => {
+        setIndexStatus((prevState) => ({
+          ...prevState,
+          [file.id]: Status.IDLE,
+        }));
+      });
+    }
+  }, [uploads]);
+
+  console.log(indexStatus);
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center">
@@ -159,19 +174,24 @@ const FileLIst = () => {
         Icon={IconArrowRight}
         iconClassName="!size-6"
         disabled={
-          table && table.getFilteredSelectedRowModel().rows.length === 0
+          (table && table.getFilteredSelectedRowModel().rows.length === 0) ||
+          Object.values(indexStatus).includes(Status.PENDING)
         }
         onClick={async () => {
-          // try {
-          //   const files: UploadSimple[] = table
-          //     .getFilteredSelectedRowModel()
-          //     .rows.map((row) => row.original);
-          // } catch (e) {
-          //   console.log(e);
-          //   setIndexStatus(Status.ERROR);
-          // } finally {
-          //   if (indexStatus !== Status.IDLE) setIndexStatus(Status.IDLE);
-          // }
+          const files: UploadSimple[] = table
+            .getFilteredSelectedRowModel()
+            .rows.map((row) => row.original);
+
+          files.forEach((file) => {
+            setIndexStatus((prevState) => ({
+              ...prevState,
+              [file.id]: Status.PENDING,
+            }));
+          });
+
+          files.forEach(async (file) => {
+            await fileIndexing({ setIndexStatus, data: file });
+          });
         }}
       />
     </div>

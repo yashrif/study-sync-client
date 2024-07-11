@@ -13,10 +13,11 @@ export const useGetUploads = (
 
   useEffect(() => {
     try {
-      studySyncDB.get(dbEndpoints.uploads).then(({ data }) => {
-        setUploads(data);
-        setStatus(Status.SUCCESS);
-      });
+      if (dependencies.at(-1) === true)
+        studySyncDB.get(dbEndpoints.uploads).then(({ data }) => {
+          setUploads(data);
+          setStatus(Status.SUCCESS);
+        });
     } catch (e) {
       setStatus(Status.ERROR);
     } finally {

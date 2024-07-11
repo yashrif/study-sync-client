@@ -22,6 +22,8 @@ const StatusIcon: React.FC<Props> = ({
 }) => {
   const customClass = `size-7 text-primary ${className}`;
 
+  if (!status) return content;
+
   switch (status) {
     case Status.IDLE:
       return Icons && Icons.IDLE ? (
