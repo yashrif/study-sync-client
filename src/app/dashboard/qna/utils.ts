@@ -9,7 +9,11 @@ type Props = Omit<IndexStatus, "indexStatus"> & {
   data: UploadSimple;
 };
 
-export const fileIndexing = async ({ setIndexStatus, data }: Props) => {
+export const fileIndexing = async ({
+  setIndexStatus,
+  data,
+  setUploads,
+}: Props) => {
   try {
     setIndexStatus((prevState) => ({
       ...prevState,
@@ -21,6 +25,13 @@ export const fileIndexing = async ({ setIndexStatus, data }: Props) => {
     //   isIndexed: true,
     // });
 
+    setUploads((prevState) => {
+      const newUploads = _.cloneDeep(prevState);
+      const index = newUploads.findIndex((upload) => upload.id === data.id);
+      newUploads[index].isIndexed = true;
+      return newUploads;
+    });
+
     setIndexStatus((prevState) => ({
       ...prevState,
       [data.id]: Status.SUCCESS,
@@ -31,10 +42,5 @@ export const fileIndexing = async ({ setIndexStatus, data }: Props) => {
       ...prevState,
       [data.id]: Status.ERROR,
     }));
-  }
-  finally {
-    setTimeout(() => {
-      setIndexStatus((prevState) => ({ ..._.omit(prevState, data.id) }));
-    }, 2500);
   }
 };

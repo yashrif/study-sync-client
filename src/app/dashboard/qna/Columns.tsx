@@ -1,9 +1,6 @@
 import { IconRefresh } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import studySyncDB from "@/api/studySyncDB";
-import studySyncServer from "@/api/studySyncServer";
-import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
 import {
   columnConfig as columnConfigObj,
   isIndexedData,
@@ -19,12 +16,18 @@ import {
   TooltipTrigger,
 } from "@components/ui/tooltip";
 import { fileIndexing } from "./utils";
+import { useMemo } from "react";
 
 const IndexButton: React.FC<
   IndexStatus & {
     data: UploadSimple;
   }
-> = ({ data, indexStatus, setIndexStatus }) => {
+> = (props) => {
+  const { data, indexStatus } = props;
+  const status = useMemo(() => indexStatus[data.id], [data.id, indexStatus]);
+
+  if (data.id === "3b01dfad-3d7d-489b-8f63-bba41571d6d0") console.log(status);
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -32,7 +35,7 @@ const IndexButton: React.FC<
           <div
             className="pl-2"
             onClick={async () => {
-              await fileIndexing({ setIndexStatus, data });
+              await fileIndexing(props);
             }}
           >
             <StatusIcon
@@ -51,17 +54,18 @@ const IndexButton: React.FC<
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          <p className="text-small">Click to start indexing</p>
+          <p className="text-small">
+            {indexStatus[data.id] === Status.SUCCESS
+              ? "Click to re-index"
+              : "Click to start indexing"}
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
 };
 
-export const columns = ({
-  indexStatus,
-  setIndexStatus,
-}: IndexStatus): ColumnDef<UploadSimple>[] => [
+export const columns = (props: IndexStatus): ColumnDef<UploadSimple>[] => [
   {
     ...Checkbox(),
   },
@@ -71,14 +75,8 @@ export const columns = ({
         ...columnConfigObj.columns,
         {
           ...isIndexedData,
-          additionalElement(props) {
-            return !props.isIndexed ? (
-              <IndexButton
-                data={props}
-                indexStatus={indexStatus}
-                setIndexStatus={setIndexStatus}
-              />
-            ) : null;
+          additionalElement(data) {
+            return <IndexButton data={data} {...props} />;
           },
         },
       ],

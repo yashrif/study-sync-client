@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Status } from "@allTypes";
+import { Status, UploadSimple } from "@allTypes";
 
 export type IndexStatus = {
   indexStatus: {
@@ -11,4 +11,5 @@ export type IndexStatus = {
       [key: string]: Status;
     }>
   >;
+  setUploads: Dispatch<SetStateAction<UploadSimple[]>>;
 };

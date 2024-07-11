@@ -5,29 +5,35 @@ import { dbEndpoints } from "@/assets/data/api";
 import { Status, UploadSimple } from "@allTypes";
 
 export const useGetUploads = (
-  dependencies: (string | number | boolean)[] = []
+  dependencies: (string | number | boolean)[] = [],
+  mode: "lazy" | "eager" = "eager"
 ) => {
-  console.log("useGetUploads", dependencies);
   const [uploads, setUploads] = useState<UploadSimple[]>([]);
   const [status, setStatus] = useState<Status>(Status.PENDING);
 
   useEffect(() => {
-    try {
-      if (dependencies.at(-1) === true)
-        studySyncDB.get(dbEndpoints.uploads).then(({ data }) => {
-          setUploads(data);
-          setStatus(Status.SUCCESS);
-        });
-    } catch (e) {
-      setStatus(Status.ERROR);
-    } finally {
-      setStatus(Status.IDLE);
-    }
+    const getUploads = async () => {
+      try {
+        const { data } = await studySyncDB.get(dbEndpoints.uploads);
+        setUploads(data);
+        if (mode === "lazy")
+          setTimeout(() => {
+            setStatus(Status.SUCCESS);
+          }, 1);
+        else setStatus(Status.SUCCESS);
+      } catch (e) {
+        setStatus(Status.ERROR);
+      } finally {
+        setStatus(Status.IDLE);
+      }
+    };
+
+    getUploads();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setStatus, setUploads, ...dependencies]);
+  }, [...dependencies]);
 
   const getUploads = () => {
-    return { data: uploads, status };
+    return { data: uploads, status, setUploads, setStatus };
   };
 
   return { getUploads };

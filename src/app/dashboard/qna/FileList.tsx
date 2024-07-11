@@ -1,169 +1,60 @@
 "use client";
 
-import { flexRender } from "@tanstack/react-table";
 import { Suspense, useEffect, useState } from "react";
 
-import { dbEndpoints } from "@/assets/data/api";
-import { search } from "@/assets/data/dashboard/qna";
 import IconButton from "@/components/button/IconButton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useTable } from "@/hooks/useTable";
 import { useGetUploads } from "@/hooks/useUploads";
-import { Status, TableControls, UploadSimple } from "@/types";
+import { Status, UploadSimple } from "@/types";
 import Spinner from "@components/Spinner";
-import ControlBar from "@components/table/ControlBar";
 import { IconArrowRight } from "@tabler/icons-react";
 import { columns } from "./Columns";
-import { fileIndexing } from "./utils";
+import Table from "./Table";
 
 const FileLIst = () => {
   const [uploadStatus, setUploadStatus] = useState<Status>(Status.IDLE);
   const [indexStatus, setIndexStatus] = useState<{
     [key: string]: Status;
   }>({});
-  const { data: uploads, status } = useGetUploads([
-    uploadStatus,
-    Object.keys(indexStatus).length === 0,
-  ]).getUploads();
+
+  const {
+    data: uploads,
+    status,
+    setUploads,
+  } = useGetUploads(
+    [uploadStatus, Object.keys(indexStatus).length === 0],
+    "lazy"
+  ).getUploads();
   const { table } = useTable({
     data: uploads,
-    columns: columns({ indexStatus, setIndexStatus }),
+    columns: columns({ indexStatus, setIndexStatus, setUploads }),
   });
 
   useEffect(() => {
     if (uploads.length > 0) {
-      const nonIndexedUploads = uploads.filter((upload) => !upload.isIndexed);
+      const newUploads: {
+        [key: string]: Status;
+      } = {};
 
-      nonIndexedUploads.forEach((file) => {
-        setIndexStatus((prevState) => ({
-          ...prevState,
-          [file.id]: Status.IDLE,
-        }));
+      uploads.forEach((upload) => {
+        newUploads[upload.id] = upload.isIndexed ? Status.SUCCESS : Status.IDLE;
       });
+
+      setIndexStatus(newUploads);
     }
   }, [uploads]);
 
-  console.log(indexStatus);
+  // console.log("uploads", uploads);
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center">
       <div className="divide-y-2 w-full">
         <Suspense fallback={<Spinner />}>
-          <div className={`flex flex-col gap-8 pt-8`}>
-            <ControlBar
-              table={table}
-              searchKey={search.key}
-              uploadEndpointDb={dbEndpoints.uploads}
-              controlsConfig={{
-                [TableControls.Upload]: {
-                  show: true,
-                  order: 2,
-                  variant: "outline",
-                },
-                [TableControls.Search]: {
-                  show: true,
-                  order: 1,
-                  title: "Search Files",
-                },
-              }}
-              setUploadStatus={setUploadStatus}
-              className={`!justify-start gap-3`}
-            />
-            <div className="flex flex-col gap-4">
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                      <TableRow key={headerGroup.id}>
-                        {headerGroup.headers.slice(0, 2).map((header) => {
-                          return (
-                            <TableHead key={header.id}>
-                              {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                            </TableHead>
-                          );
-                        })}
-                      </TableRow>
-                    ))}
-                  </TableHeader>
-
-                  <TableBody>
-                    {status === Status.PENDING ? (
-                      <TableRow>
-                        <TableCell colSpan={2} className="h-24">
-                          <Spinner className="mx-auto" />
-                        </TableCell>
-                      </TableRow>
-                    ) : table.getRowModel().rows?.length ? (
-                      table.getRowModel().rows.map((row) => {
-                        const checkBox = row.getVisibleCells().slice(0, 1)[0];
-                        const title = row
-                          .getVisibleCells()
-                          .slice(1)
-                          .slice(0, 1)[0];
-                        const cellGroup = row
-                          .getVisibleCells()
-                          .slice(1)
-                          .slice(1);
-
-                        return (
-                          <TableRow
-                            key={row.id}
-                            data-state={row.getIsSelected() && "selected"}
-                          >
-                            <TableCell className="align-top">
-                              {flexRender(
-                                checkBox.column.columnDef.cell,
-                                checkBox.getContext()
-                              )}
-                            </TableCell>
-
-                            <TableCell className="flex flex-col gap-2">
-                              <p>
-                                {flexRender(
-                                  title.column.columnDef.cell,
-                                  title.getContext()
-                                )}
-                              </p>
-
-                              <div className="flex flex-col gap-1.5">
-                                {cellGroup.map((cell) =>
-                                  flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                  )
-                                )}
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    ) : (
-                      <TableRow>
-                        <TableCell
-                          colSpan={columns.length}
-                          className="h-24 text-center"
-                        >
-                          No results.
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </div>
+          <Table
+            table={table}
+            setUploadStatus={setUploadStatus}
+            status={status}
+          />
         </Suspense>
       </div>
 
@@ -189,9 +80,9 @@ const FileLIst = () => {
             }));
           });
 
-          files.forEach(async (file) => {
-            await fileIndexing({ setIndexStatus, data: file });
-          });
+          // files.forEach(async (file) => {
+          //   await fileIndexing({ setIndexStatus, data: file });
+          // });
         }}
       />
     </div>
