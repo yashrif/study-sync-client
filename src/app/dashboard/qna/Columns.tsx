@@ -7,7 +7,7 @@ import {
 } from "@/assets/data/dashboard/qna";
 import StatusIcon from "@/components/StatusIcon";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
-import { ColumnConfig, IndexStatus, Status } from "@/types";
+import { ColumnConfig, IndexStates, Status } from "@/types";
 import { UploadSimple } from "@/types/upload";
 import {
   Tooltip,
@@ -15,18 +15,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@components/ui/tooltip";
-import { fileIndexing } from "./utils";
-import { useMemo } from "react";
+import { fileIndexing } from "@utils/fileIndexing";
+import { memo } from "react";
 
 const IndexButton: React.FC<
-  IndexStatus & {
+  IndexStates & {
     data: UploadSimple;
   }
-> = (props) => {
+> = memo((props) => {
+  IndexButton.displayName = "IndexButton";
   const { data, indexStatus } = props;
-  const status = useMemo(() => indexStatus[data.id], [data.id, indexStatus]);
-
-  if (data.id === "3b01dfad-3d7d-489b-8f63-bba41571d6d0") console.log(status);
 
   return (
     <TooltipProvider>
@@ -39,23 +37,24 @@ const IndexButton: React.FC<
             }}
           >
             <StatusIcon
-              status={indexStatus[data.id]}
+              status={indexStatus[data.id]?.status}
               className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
-                indexStatus[data.id] === Status.PENDING
+                indexStatus[data.id]?.status === Status.PENDING
                   ? "animate-spin duration-1000"
                   : "duration-300"
               }
-                  ${indexStatus[data.id] === Status.SUCCESS ? "!text-success" : indexStatus[data.id] === Status.ERROR ? "!text-destructive" : ""}
+                  ${indexStatus[data.id]?.status === Status.SUCCESS ? "!text-success" : indexStatus[data.id]?.status === Status.ERROR ? "!text-destructive" : ""}
                   `}
               Icons={{
                 [Status.PENDING]: IconRefresh,
               }}
+              isAnimation={indexStatus[data.id]?.animation}
             />
           </div>
         </TooltipTrigger>
         <TooltipContent>
           <p className="text-small">
-            {indexStatus[data.id] === Status.SUCCESS
+            {indexStatus[data.id]?.status === Status.SUCCESS
               ? "Click to re-index"
               : "Click to start indexing"}
           </p>
@@ -63,9 +62,9 @@ const IndexButton: React.FC<
       </Tooltip>
     </TooltipProvider>
   );
-};
+});
 
-export const columns = (props: IndexStatus): ColumnDef<UploadSimple>[] => [
+export const columns = (props: IndexStates): ColumnDef<UploadSimple>[] => [
   {
     ...Checkbox(),
   },

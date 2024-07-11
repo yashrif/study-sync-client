@@ -6,14 +6,21 @@ import { Suspense } from "react";
 type Props = {
   stroke?: string;
   className?: string;
+  isAnimation?: boolean;
 };
 
-export const CheckmarkAnimated: React.FC<Props> = ({ stroke, className }) => {
+export const CheckmarkAnimated: React.FC<Props> = ({
+  stroke,
+  className,
+  isAnimation,
+}) => {
   return (
     <Suspense fallback={null}>
       <Icon
         variants={[drawVariantsCircle, drawVariantsCheckmark]}
         className={className}
+        stroke={stroke}
+        isAnimation={isAnimation}
       />
     </Suspense>
   );
@@ -23,9 +30,10 @@ type Icon = {
   variants: Variants[];
   stroke?: string;
   className?: string;
+  isAnimation?: boolean;
 };
 
-const Icon: React.FC<Icon> = ({ variants, stroke, className }) => {
+const Icon: React.FC<Icon> = ({ variants, stroke, className, isAnimation }) => {
   return (
     <motion.svg
       width={24}
@@ -36,8 +44,8 @@ const Icon: React.FC<Icon> = ({ variants, stroke, className }) => {
       stroke={stroke || "hsl(var(--success))"}
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      initial="hidden"
-      animate="visible"
+      initial={isAnimation ? "hidden" : "visible"}
+      animate={"visible"}
       viewport={{ once: true }}
     >
       <motion.path

@@ -3,13 +3,14 @@ import { Dispatch, SetStateAction } from "react";
 import { Status, UploadSimple } from "@allTypes";
 
 export type IndexStatus = {
-  indexStatus: {
-    [key: string]: Status;
+  [key: string]: {
+    status: Status;
+    animation?: boolean | undefined;
   };
-  setIndexStatus: Dispatch<
-    SetStateAction<{
-      [key: string]: Status;
-    }>
-  >;
+};
+
+export type IndexStates = {
+  indexStatus: IndexStatus;
+  setIndexStatus: Dispatch<SetStateAction<IndexStatus>>;
   setUploads: Dispatch<SetStateAction<UploadSimple[]>>;
 };

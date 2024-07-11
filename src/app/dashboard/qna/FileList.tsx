@@ -5,7 +5,8 @@ import { Suspense, useEffect, useState } from "react";
 import IconButton from "@/components/button/IconButton";
 import { useTable } from "@/hooks/useTable";
 import { useGetUploads } from "@/hooks/useUploads";
-import { Status, UploadSimple } from "@/types";
+import { IndexStatus, Status, UploadSimple } from "@/types";
+import { fileIndexing } from "@/utils/fileIndexing";
 import Spinner from "@components/Spinner";
 import { IconArrowRight } from "@tabler/icons-react";
 import { columns } from "./Columns";
@@ -13,18 +14,13 @@ import Table from "./Table";
 
 const FileLIst = () => {
   const [uploadStatus, setUploadStatus] = useState<Status>(Status.IDLE);
-  const [indexStatus, setIndexStatus] = useState<{
-    [key: string]: Status;
-  }>({});
+  const [indexStatus, setIndexStatus] = useState<IndexStatus>({});
 
   const {
     data: uploads,
     status,
     setUploads,
-  } = useGetUploads(
-    [uploadStatus, Object.keys(indexStatus).length === 0],
-    "lazy"
-  ).getUploads();
+  } = useGetUploads([uploadStatus], "lazy").getUploads();
   const { table } = useTable({
     data: uploads,
     columns: columns({ indexStatus, setIndexStatus, setUploads }),
@@ -32,19 +28,24 @@ const FileLIst = () => {
 
   useEffect(() => {
     if (uploads.length > 0) {
-      const newUploads: {
-        [key: string]: Status;
-      } = {};
+      const newUploads: IndexStatus = {};
 
       uploads.forEach((upload) => {
-        newUploads[upload.id] = upload.isIndexed ? Status.SUCCESS : Status.IDLE;
+        newUploads[upload.id] = {
+          ...indexStatus[upload.id],
+          status: upload.isIndexed ? Status.SUCCESS : Status.IDLE,
+          animation: indexStatus[upload.id]?.animation
+            ? indexStatus[upload.id].animation
+            : upload.isIndexed
+              ? false
+              : true,
+        };
       });
 
       setIndexStatus(newUploads);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploads]);
-
-  // console.log("uploads", uploads);
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center">
@@ -66,7 +67,9 @@ const FileLIst = () => {
         iconClassName="!size-6"
         disabled={
           (table && table.getFilteredSelectedRowModel().rows.length === 0) ||
-          Object.values(indexStatus).includes(Status.PENDING)
+          Object.values(indexStatus)
+            .map((ele) => ele.status)
+            .includes(Status.PENDING)
         }
         onClick={async () => {
           const files: UploadSimple[] = table
@@ -76,13 +79,13 @@ const FileLIst = () => {
           files.forEach((file) => {
             setIndexStatus((prevState) => ({
               ...prevState,
-              [file.id]: Status.PENDING,
+              [file.id]: { status: Status.PENDING, animation: true },
             }));
           });
 
-          // files.forEach(async (file) => {
-          //   await fileIndexing({ setIndexStatus, data: file });
-          // });
+          files.forEach(async (file) => {
+            await fileIndexing({ setIndexStatus, data: file, setUploads });
+          });
         }}
       />
     </div>

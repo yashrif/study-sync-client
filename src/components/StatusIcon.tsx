@@ -11,6 +11,7 @@ type Props = {
   Icons?: {
     [key in Status]?: Icon;
   };
+  isAnimation?: boolean;
 };
 
 const StatusIcon: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const StatusIcon: React.FC<Props> = ({
   className,
   checkmarkStroke,
   Icons,
+  isAnimation = true,
 }) => {
   const customClass = `size-7 text-primary ${className}`;
 
@@ -39,7 +41,11 @@ const StatusIcon: React.FC<Props> = ({
       );
     case Status.SUCCESS:
       return (
-        <CheckmarkAnimated className={customClass} stroke={checkmarkStroke} />
+        <CheckmarkAnimated
+          className={customClass}
+          stroke={checkmarkStroke}
+          isAnimation={isAnimation}
+        />
       );
     case Status.ERROR:
       return content;
