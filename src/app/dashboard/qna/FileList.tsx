@@ -5,7 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 import IconButton from "@/components/button/IconButton";
 import { useTable } from "@/hooks/useTable";
 import { useGetUploads } from "@/hooks/useUploads";
-import { IndexStatus, Status, UploadSimple } from "@/types";
+import { IndexStatus, Status } from "@/types";
 import { fileIndexing } from "@/utils/fileIndexing";
 import Spinner from "@components/Spinner";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -31,15 +31,7 @@ const FileLIst = () => {
       const newUploads: IndexStatus = {};
 
       uploads.forEach((upload) => {
-        newUploads[upload.id] = {
-          ...indexStatus[upload.id],
-          status: upload.isIndexed ? Status.SUCCESS : Status.IDLE,
-          animation: indexStatus[upload.id]?.animation
-            ? indexStatus[upload.id].animation
-            : upload.isIndexed
-              ? false
-              : true,
-        };
+        newUploads[upload.id] = upload.isIndexed ? Status.SUCCESS : Status.IDLE;
       });
 
       setIndexStatus(newUploads);
@@ -67,25 +59,25 @@ const FileLIst = () => {
         iconClassName="!size-6"
         disabled={
           (table && table.getFilteredSelectedRowModel().rows.length === 0) ||
-          Object.values(indexStatus)
-            .map((ele) => ele.status)
-            .includes(Status.PENDING)
+          Object.values(indexStatus).includes(Status.PENDING)
         }
         onClick={async () => {
-          const files: UploadSimple[] = table
+          const ids: string[] = table
             .getFilteredSelectedRowModel()
-            .rows.map((row) => row.original);
+            .rows.map((row) => row.original.id);
 
-          files.forEach((file) => {
-            setIndexStatus((prevState) => ({
-              ...prevState,
-              [file.id]: { status: Status.PENDING, animation: true },
-            }));
-          });
+          // ids.forEach((id) => {
+          //   setIndexStatus((prevState) => ({
+          //     ...prevState,
+          //     [id]: { status: Status.PENDING, animation: true },
+          //   }));
+          // });
 
-          files.forEach(async (file) => {
-            await fileIndexing({ setIndexStatus, data: file, setUploads });
-          });
+          // await ids.forEach(async (file) => {
+          //   await fileIndexing({ setIndexStatus, data: file, setUploads });
+          // });
+
+          console.log("files", ids);
         }}
       />
     </div>

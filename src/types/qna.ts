@@ -3,10 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Status, UploadSimple } from "@allTypes";
 
 export type IndexStatus = {
-  [key: string]: {
-    status: Status;
-    animation?: boolean | undefined;
-  };
+  [key: string]: Status;
 };
 
 export type IndexStates = {

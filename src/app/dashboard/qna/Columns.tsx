@@ -37,24 +37,24 @@ const IndexButton: React.FC<
             }}
           >
             <StatusIcon
-              status={indexStatus[data.id]?.status}
+              status={indexStatus[data.id]}
               className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
-                indexStatus[data.id]?.status === Status.PENDING
+                indexStatus[data.id] === Status.PENDING
                   ? "animate-spin duration-1000"
                   : "duration-300"
               }
-                  ${indexStatus[data.id]?.status === Status.SUCCESS ? "!text-success" : indexStatus[data.id]?.status === Status.ERROR ? "!text-destructive" : ""}
+                  ${indexStatus[data.id] === Status.SUCCESS ? "!text-success" : indexStatus[data.id] === Status.ERROR ? "!text-destructive" : ""}
                   `}
               Icons={{
                 [Status.PENDING]: IconRefresh,
               }}
-              isAnimation={indexStatus[data.id]?.animation}
+              isAnimation={false}
             />
           </div>
         </TooltipTrigger>
         <TooltipContent>
           <p className="text-small">
-            {indexStatus[data.id]?.status === Status.SUCCESS
+            {indexStatus[data.id] === Status.SUCCESS
               ? "Click to re-index"
               : "Click to start indexing"}
           </p>
