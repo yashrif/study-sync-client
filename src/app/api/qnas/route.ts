@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { AxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -5,16 +6,21 @@ import studySyncAI from "@/api/studySyncAI";
 import { aiEndpoints } from "@/assets/data/api";
 
 export async function POST(request: NextRequest) {
-  const uuidFileName: string = await request.json();
+  const ids: string[] = await request.json();
 
   try {
-    const response = await studySyncAI.get(aiEndpoints.indxFile, {
-      params: { uuidFileName },
-    });
+    const response = await studySyncAI.post(aiEndpoints.qna, ids);
+    const data = response.data[0].collection;
 
     return NextResponse.json(
       {
-        ...response.data,
+        mcqs: _.chain(data)
+          .map((data) => ({
+            question: data.question,
+            choices: data.choice,
+            answers: data.isChoiceAnswer,
+          }))
+          .value(),
       },
       { status: 200 }
     );

@@ -1,10 +1,10 @@
 import { Icon, Status } from "@allTypes";
-import { CheckmarkAnimated } from "@components/icons";
+import { CheckmarkAnimated, CircleCheck } from "@components/icons";
 import Spinner from "@components/Spinner";
 import { IconRefresh } from "@tabler/icons-react";
 
 type Props = {
-  status: Status;
+  status?: Status;
   content?: React.ReactNode;
   className?: string;
   checkmarkStroke?: string;
@@ -40,12 +40,10 @@ const StatusIcon: React.FC<Props> = ({
         <Spinner className={customClass} />
       );
     case Status.SUCCESS:
-      return (
-        <CheckmarkAnimated
-          className={customClass}
-          stroke={checkmarkStroke}
-          isAnimation={isAnimation}
-        />
+      return isAnimation ? (
+        <CheckmarkAnimated className={customClass} stroke={checkmarkStroke} />
+      ) : (
+        <CircleCheck className={customClass} />
       );
     case Status.ERROR:
       return content;

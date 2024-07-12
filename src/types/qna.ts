@@ -1,13 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
+import { MCQRequest } from "@allTypes";
 
-import { Status, UploadSimple } from "@allTypes";
-
-export type IndexStatus = {
-  [key: string]: Status;
-};
-
-export type IndexStates = {
-  indexStatus: IndexStatus;
-  setIndexStatus: Dispatch<SetStateAction<IndexStatus>>;
-  setUploads: Dispatch<SetStateAction<UploadSimple[]>>;
+export type QnaRequest = {
+  title?: string;
+  mcqs: MCQRequest[];
 };

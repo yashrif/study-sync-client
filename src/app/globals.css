@@ -268,7 +268,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-[#747474]/80 hover:shadow-[#747474] border-[3.5px] border-solid border-transparent transition-colors duration-300;
+    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-[#9A73B5]/80 hover:shadow-[#9A73B5] border-[3.5px] border-solid border-transparent transition-colors duration-300;
   }
 
   .no-scrollbar {

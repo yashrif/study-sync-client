@@ -33,7 +33,7 @@ const IndexButton: React.FC<
           <div
             className="pl-2"
             onClick={async () => {
-              await fileIndexing(props);
+              await fileIndexing({ ...props, data });
             }}
           >
             <StatusIcon
@@ -43,12 +43,12 @@ const IndexButton: React.FC<
                   ? "animate-spin duration-1000"
                   : "duration-300"
               }
-                  ${indexStatus[data.id] === Status.SUCCESS ? "!text-success" : indexStatus[data.id] === Status.ERROR ? "!text-destructive" : ""}
+                  ${indexStatus[data.id] === Status.SUCCESS ? "!text-success stroke-success" : indexStatus[data.id] === Status.ERROR ? "!text-destructive" : ""}
                   `}
               Icons={{
                 [Status.PENDING]: IconRefresh,
               }}
-              isAnimation={false}
+              isAnimation={!data.isIndexed}
             />
           </div>
         </TooltipTrigger>

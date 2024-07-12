@@ -1,4 +1,4 @@
-import { Icon } from "@allTypes";
+import { Icon, Status } from "@allTypes";
 
 export type ButtonVariant =
   | "default"
@@ -35,4 +35,5 @@ export type Button = {
   className?: string;
   iconClassName?: string;
   disabled?: boolean;
+  status?: Status;
 };

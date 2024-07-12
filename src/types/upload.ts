@@ -1,3 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
+
+import { Status } from "@allTypes";
+
 export enum FileTypes {
   PDF = "application/pdf",
   JPG = "image/jpg",
@@ -23,13 +27,12 @@ export type FileIcon = {
   value: UploadSimple;
 };
 
-/* --------------------------------- Server --------------------------------- */
-
-export type FileIndexServer = {
-  fileId: string;
-  fileTypeName: string;
+export type IndexStatus = {
+  [key: string]: Status;
 };
 
-export type GenerateQnaServer = FileIndexServer & {
-  isIndexed: boolean;
+export type IndexStates = {
+  indexStatus: IndexStatus;
+  setIndexStatus: Dispatch<SetStateAction<IndexStatus>>;
+  setUploads: Dispatch<SetStateAction<UploadSimple[]>>;
 };

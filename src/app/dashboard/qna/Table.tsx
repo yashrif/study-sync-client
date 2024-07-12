@@ -44,28 +44,29 @@ const Table: React.FC<Props> = ({ table, setUploadStatus, status }) => {
         setUploadStatus={setUploadStatus}
         className={`!justify-start gap-3`}
       />
-      <div className="flex flex-col gap-4">
-        <div className="rounded-md border">
-          <UITable>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.slice(0, 2).map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-
+      <div className="flex flex-col rounded-md overflow-hidden">
+        <UITable>
+          <TableHeader className="bg-accent-300 !hover:bg-accent-300 [&_tr]:border-none">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.slice(0, 2).map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+        </UITable>
+        <div className="rounded-b-md border max-h-[420px] overflow-scroll overflow-x-clip">
+          <UITable className="">
             <TableBody>
               {status === Status.PENDING ? (
                 <TableRow>

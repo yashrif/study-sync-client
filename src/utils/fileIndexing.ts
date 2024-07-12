@@ -20,18 +20,25 @@ export const fileIndexing = async ({
       ...prevState,
       [data.id]: Status.PENDING,
     }));
-    await studySyncServer.post(serverEndpoints.index, data);
+    await studySyncServer.post(serverEndpoints.index, data.name);
 
-    // await studySyncDB.patch(`${dbEndpoints.uploads}/${data.id}`, {
-    //   isIndexed: true,
-    // });
+    await studySyncDB.patch(`${dbEndpoints.uploads}/${data.id}`, {
+      isIndexed: true,
+    });
 
     setIndexStatus((prevState) => ({
       ...prevState,
       [data.id]: Status.SUCCESS,
     }));
 
-
+    setTimeout(() => {
+      setUploads((prevState) => {
+        const newUploads = _.cloneDeep(prevState);
+        const index = newUploads.findIndex((upload) => upload.id === data.id);
+        newUploads[index].isIndexed = true;
+        return newUploads;
+      });
+    }, 2000);
   } catch (error) {
     console.error(error);
     setIndexStatus((prevState) => ({
@@ -39,15 +46,4 @@ export const fileIndexing = async ({
       [data.id]: Status.ERROR,
     }));
   }
-  // finally {
-  //   setTimeout(() => {
-  //     setIndexStatus((prevState) => ({
-  //       ...prevState,
-  //       [data.id]: {
-  //         ...prevState[data.id],
-  //         animation: false,
-  //       },
-  //     }));
-  //   }, 2500);
-  // }
 };

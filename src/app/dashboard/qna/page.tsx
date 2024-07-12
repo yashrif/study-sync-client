@@ -17,7 +17,7 @@ const page = () => {
             {create.description}
           </p>
         </div>
-        <div className="grid grid-cols-[max(700px),1fr] items-start gap-x-24 gap-y-16">
+        <div className="grid grid-cols-[3fr,2fr] items-start gap-x-24 gap-y-16">
           <FileList />
         </div>
       </div>

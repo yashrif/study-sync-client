@@ -12,3 +12,5 @@ export const refresh = `${auth}/refresh`;
 export const demo = `/demo-controller`;
 
 export const uploads = `/uploads`;
+
+export const qnas = `/qnas`;

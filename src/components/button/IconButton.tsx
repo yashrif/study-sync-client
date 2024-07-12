@@ -1,11 +1,13 @@
 import { CSSProperties } from "react";
 
-import { Button as ButtonType } from "@/types";
-import { Button } from "../ui/button";
+import { Button as ButtonType, Status } from "@/types";
+import { Button } from "@components/ui/button";
+import StatusIcon from "../StatusIcon";
 
 type Props = {
   show?: boolean;
   style?: CSSProperties;
+  showStatus?: boolean;
 };
 
 const IconButton: React.FC<Props & ButtonType> = ({
@@ -17,6 +19,8 @@ const IconButton: React.FC<Props & ButtonType> = ({
   className,
   iconClassName,
   title,
+  status,
+  showStatus,
   onClick,
   ...rest
 }) => {
@@ -32,10 +36,28 @@ const IconButton: React.FC<Props & ButtonType> = ({
       onClick={onClick ? onClick : () => {}}
       {...rest}
     >
-      {Icon && (
-        <Icon className={`h-4 w-auto stroke-[2.5px] ${iconClassName}`} />
+      {showStatus ? (
+        <StatusIcon
+          status={status}
+          className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
+            status === Status.PENDING
+              ? "animate-spin duration-1000"
+              : "duration-300"
+          } ${status === Status.SUCCESS ? "!text-success stroke-success" : status === Status.ERROR ? "!text-destructive" : ""}
+            ${iconClassName}
+          `}
+          Icons={{
+            [Status.IDLE]: Icon,
+          }}
+        />
+      ) : (
+        Icon && (
+          <Icon className={`h-4 w-auto stroke-[2.5px] ${iconClassName}`} />
+        )
       )}
-      {title && <span>{title}</span>}
+      {title && (
+        <span className={`${status ? "text-transparent" : ""}`}>{title}</span>
+      )}
     </Button>
   );
 };
