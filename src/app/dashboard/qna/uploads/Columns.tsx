@@ -68,7 +68,7 @@ export const columns = (props: IndexStates): ColumnDef<UploadSimple>[] => [
   {
     ...Checkbox(),
   },
-  ...(
+  ...((
     {
       columns: [
         ...columnConfigObj.columns,
@@ -81,5 +81,7 @@ export const columns = (props: IndexStates): ColumnDef<UploadSimple>[] => [
       ],
       actions: [...columnConfigObj.actions],
     } as ColumnConfig
-  ).columns.map((column) => ColumnHeader({ column })),
+  ).columns.map((column) =>
+    ColumnHeader({ column })
+  ) as ColumnDef<UploadSimple>[]),
 ];

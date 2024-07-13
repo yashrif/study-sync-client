@@ -88,7 +88,7 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none text-text-400 font-secondary tracking-tight",
+      "text-lg font-semibold leading-none text-primary font-secondary tracking-tight",
       className,
     )}
     {...props}

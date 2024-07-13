@@ -5,7 +5,7 @@ import Link from "next/link";
 import { sidebarLinks, signOut } from "@/assets/data/dashboard/sidebarLinks";
 import { routes } from "@/assets/data/routes";
 import Logo from "@/components/Logo";
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/spinner/Spinner";
 import { Suspense } from "react";
 import NavLink from "./NavLink";
 
@@ -25,7 +25,12 @@ const SideBar: React.FC = () => {
               >
                 {navLink.map(({ href, title, Icon }) => (
                   <Suspense fallback={<Spinner />} key={title}>
-                    <NavLink title={title} href={href} Icon={Icon}></NavLink>
+                    <NavLink
+                      title={title}
+                      href={href}
+                      Icon={Icon}
+                      links={navLink}
+                    ></NavLink>
                   </Suspense>
                 ))}
 

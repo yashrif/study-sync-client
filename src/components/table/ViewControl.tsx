@@ -1,18 +1,12 @@
 "use client";
 
-import { DropdownMenuTrigger } from "@components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 
 import { controlBar } from "@/assets/data/dashboard/controlBar";
 import { TTableControl } from "@/types";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "@components/ui/dropdown-menu";
-import IconButton from "../button/IconButton";
+import { Button } from "@components/ui/button";
+import { DropdownMenuCheckboxItem } from "@components/ui/dropdown-menu";
+import Dropdown from "../Dropdown";
 
 type Props<TData> = {
   table: Table<TData>;
@@ -23,48 +17,50 @@ function ViewControl<TData>({
   table,
   style,
   order,
-  title,
-  Icon,
-  variant,
-  size,
+  title = controlBar.view.title,
+  Icon = controlBar.view.Icon,
+  variant = controlBar.view.variant,
+  size = controlBar.view.size,
   ...rest
 }: Props<TData>) {
+  const triggerButton = (
+    <Button
+      className="flex gap-1.5 items-center"
+      variant={variant}
+      size={size}
+      style={{
+        ...style,
+        order,
+      }}
+      {...rest}
+    >
+      <span className="sr-only">Open menu</span>
+      {Icon && <Icon className="h-4 w-auto stroke-[2.5px]" />}
+      <span>{title}</span>
+    </Button>
+  );
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild style={{ ...style, order }} {...rest}>
-        <IconButton
-          title={title || controlBar.view.title}
-          Icon={Icon || controlBar.view.Icon}
-          variant={variant || controlBar.view.variant}
-          size={size || controlBar.view.size}
-          show={table.getFilteredSelectedRowModel().rows.length > 0}
-          style={{ ...style, order }}
-          {...rest}
-        />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {table
-          .getAllColumns()
-          .filter(
-            (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanHide()
-          )
-          .map((column) => {
-            return (
-              <DropdownMenuCheckboxItem
-                key={column.id}
-                className="capitalize"
-                checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-              >
-                {column.id}
-              </DropdownMenuCheckboxItem>
-            );
-          })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Dropdown triggerButton={triggerButton} size="md">
+      {table
+        .getAllColumns()
+        .filter(
+          (column) =>
+            typeof column.accessorFn !== "undefined" && column.getCanHide()
+        )
+        .map((column) => {
+          return (
+            <DropdownMenuCheckboxItem
+              key={column.id}
+              className="capitalize"
+              checked={column.getIsVisible()}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            >
+              {column.id}
+            </DropdownMenuCheckboxItem>
+          );
+        })}
+    </Dropdown>
   );
 }
 

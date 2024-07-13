@@ -8,7 +8,7 @@ import "filepond/dist/filepond.min.css";
 import { Suspense, useState } from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/spinner/Spinner";
 import "./dropzone.css";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);

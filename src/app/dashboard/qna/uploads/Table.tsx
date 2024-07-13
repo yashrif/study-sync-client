@@ -12,7 +12,7 @@ import {
   Table as UITable,
 } from "@/components/ui/table";
 import { Status, TableControls, UploadSimple } from "@/types";
-import Spinner from "@components/Spinner";
+import Spinner from "@/components/spinner/Spinner";
 import ControlBar from "@components/table/ControlBar";
 import { columns } from "./Columns";
 
@@ -40,6 +40,11 @@ const Table: React.FC<Props> = ({ table, setUploadStatus, status }) => {
             order: 1,
             title: "Search Files",
           },
+          [TableControls.View]: {
+            show: true,
+            order: 3,
+            variant: "outline",
+          },
         }}
         setUploadStatus={setUploadStatus}
         className={`!justify-start gap-3`}
@@ -49,7 +54,7 @@ const Table: React.FC<Props> = ({ table, setUploadStatus, status }) => {
           <TableHeader className="bg-accent-300 !hover:bg-accent-300 [&_tr]:border-none">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.slice(0, 2).map((header) => {
+                {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
@@ -65,13 +70,13 @@ const Table: React.FC<Props> = ({ table, setUploadStatus, status }) => {
             ))}
           </TableHeader>
         </UITable>
-        <div className="rounded-b-md border max-h-[420px] overflow-scroll overflow-x-clip">
+        <div className="rounded-b-md border h-[420px] overflow-scroll overflow-x-clip">
           <UITable className="">
             <TableBody>
               {status === Status.PENDING ? (
-                <TableRow>
-                  <TableCell colSpan={2} className="h-24">
-                    <Spinner className="mx-auto" />
+                <TableRow className="h-[418px]">
+                  <TableCell colSpan={2} className="h-full">
+                    <Spinner className="m-auto size-10" />
                   </TableCell>
                 </TableRow>
               ) : table.getRowModel().rows?.length ? (

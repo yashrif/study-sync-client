@@ -7,6 +7,7 @@ export * from "./list";
 export * from "./mcq";
 export * from "./qna";
 export * from "./role";
+export * from "./scroll";
 export * from "./status";
 export * from "./table";
 export * from "./upload";

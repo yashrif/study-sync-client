@@ -16,7 +16,7 @@ export type UploadSimple = {
   title: string;
   name: string;
   type: FileTypes;
-  createDate: Date | string;
+  createDate: string;
   isIndexed: boolean;
 };
 

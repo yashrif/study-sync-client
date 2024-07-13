@@ -1,21 +1,15 @@
-import { IconDots } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
 import { Checkbox as CheckboxComponent } from "@/components/ui/checkbox";
-import { Column, UploadSimple } from "@/types";
+import { Action, Column } from "@/types";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuItem
 } from "@components/ui/dropdown-menu";
-import { Button } from "../ui/button";
+import Dropdown from "../Dropdown";
 import { DataTableColumnHeader } from "./Header";
 
-export const Checkbox = (): ColumnDef<UploadSimple> => ({
+export const Checkbox = <T extends object>(): ColumnDef<T> => ({
   id: "select",
   header: ({ table }) => (
     <CheckboxComponent
@@ -38,59 +32,44 @@ export const Checkbox = (): ColumnDef<UploadSimple> => ({
   enableHiding: false,
 });
 
-type ActionProps = {
-  title: string;
-  onClick?: () => void;
-};
-
-export const Actions = ({
+export const Actions = <T extends object>({
   actions,
   copyId = false,
 }: {
-  actions: ActionProps[];
+  actions: Action[];
   copyId?: boolean;
-}): ColumnDef<UploadSimple> => ({
+}): ColumnDef<T> => ({
   id: "actions",
   cell: ({ row }) => {
     const data = row.original;
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <IconDots className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {copyId && "id" in data && (
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(String(data.id))}
-            >
-              Copy ID
-            </DropdownMenuItem>
-          )}
-          {actions.map((action) => (
-            <DropdownMenuItem key={action.title} onClick={action.onClick}>
-              {action.title}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Dropdown actions={actions}>
+        {copyId && "id" in data && (
+          <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(String(data.id))}
+            className="cursor-pointer"
+          >
+            Copy ID
+          </DropdownMenuItem>
+        )}
+      </Dropdown>
     );
   },
 });
 
-export const ColumnHeader = ({
+export const ColumnHeader = <T extends object>({
   column: columnInfo,
 }: {
   column: Column;
-}): ColumnDef<UploadSimple> => ({
+}): ColumnDef<T> => ({
   accessorKey: columnInfo.accessorKey,
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title={columnInfo.title} />
+    <DataTableColumnHeader
+      column={column}
+      title={columnInfo.title}
+      className={columnInfo.headerClassName}
+    />
   ),
   cell: ({ row }) => {
     const cell = columnInfo.formatter
@@ -124,7 +103,7 @@ export const ColumnHeader = ({
 
     const Icon = columnInfo.Icon({
       key: columnInfo.accessorKey,
-      value: row.original,
+      value: row.original as any,
     });
 
     return (
@@ -140,7 +119,7 @@ export const ColumnHeader = ({
         />
         {linkCell}
         {columnInfo.additionalElement &&
-          columnInfo.additionalElement(row.original)}
+          columnInfo.additionalElement(row.original as any)}
       </div>
     );
   },

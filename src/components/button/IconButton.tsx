@@ -28,12 +28,12 @@ const IconButton: React.FC<Props & ButtonType> = ({
     <Button
       variant={variant}
       size={size}
-      className={`${className}`}
+      className={`flex gap-1.5 items-center ${className}`}
       style={{
         visibility: show ? "visible" : "hidden",
         ...style,
       }}
-      onClick={onClick ? onClick : () => {}}
+      onClick={onClick}
       {...rest}
     >
       {showStatus ? (

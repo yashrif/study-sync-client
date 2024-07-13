@@ -1,7 +1,9 @@
 {
   "cSpell.words": [
     "filepond",
+    "mcqs",
     "qnas",
     "tabler"
-  ]
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

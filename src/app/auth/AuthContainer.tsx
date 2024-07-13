@@ -82,14 +82,12 @@ const AuthContainer: React.FC<Props> = ({
     } finally {
       setTimeout(() => {
         if (status === Status.SUCCESS) {
-          // if (redirect) replace(redirect);
+          if (redirect) replace(redirect);
         }
         setStatus(Status.IDLE);
       }, 2500);
     }
   };
-
-  console.log(status);
 
   return (
     <>

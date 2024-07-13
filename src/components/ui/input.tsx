@@ -13,7 +13,7 @@ const inputVariants = cva(
         default:
           "rounded-lg text-primary border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         underline:
-          "rounded-none !px-0 bg-transparent focus-visible:text-text-400 font-medium placeholder:text-text border-b-[1.5px] border-b-text focus-visible:ring-offset-0 focus-visible:ring-0 outline-none  focus-visible:border-b-primary no-autofill-style",
+          "rounded-none !px-0 bg-transparent focus-visible:text-primary font-medium placeholder:text-text border-b-[1.5px] border-b-text focus-visible:ring-offset-0 focus-visible:ring-0 outline-none  focus-visible:border-b-primary no-autofill-style",
       },
       dimension: {
         default: "h-10 px-3 py-2 text-base",
@@ -71,7 +71,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     return (
-      <div className="relative">
+      <div className="relative !mt-0">
         <input
           type={type}
           className={cn(

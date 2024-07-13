@@ -10,12 +10,23 @@ import {
 export type Column = {
   accessorKey: keyof UploadSimple;
   title: string;
+  header?: (data: string) => JSX.Element;
+  headerClassName?: string;
   formatter?: (data: string | Date | number | boolean) => string | number;
   linkKey?: string;
   Icon?: (props: FileIcon) => Icon;
   className?: (props: boolean) => string;
   iconClassName?: (props: boolean) => string;
   additionalElement?: (props: UploadSimple) => JSX.Element | null;
+};
+
+export type Action = {
+  title: string;
+  Icon?: Icon;
+  className?: string;
+  iconClassName?: string;
+  titleClassName?: string;
+  onClick: () => void;
 };
 
 export enum TableControls {

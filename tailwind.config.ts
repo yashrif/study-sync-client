@@ -80,6 +80,7 @@ const config = {
           300: "hsl(var(--text-300))",
           400: "hsl(var(--text-400))",
           500: "hsl(var(--text-500))",
+          600: "hsl(var(--text-600))",
         },
       },
       borderRadius: {

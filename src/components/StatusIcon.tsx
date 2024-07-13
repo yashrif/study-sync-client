@@ -1,6 +1,6 @@
 import { Icon, Status } from "@allTypes";
 import { CheckmarkAnimated, CircleCheck } from "@components/icons";
-import Spinner from "@components/Spinner";
+import Spinner from "@/components/spinner/Spinner";
 import { IconRefresh } from "@tabler/icons-react";
 
 type Props = {

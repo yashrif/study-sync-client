@@ -1,3 +1,5 @@
+import { Link } from "@/types";
+
 export const paths = {
   home: "/",
   benefits: "/benefits",
@@ -135,5 +137,8 @@ export const links = {
       href: routes.dashboard.uploads,
     },
     qna: { title: pathTitles.qna, href: routes.dashboard.qna },
+    qnaDetails(id: string) {
+      return { title: pathTitles.qna, href: `${routes.dashboard.qna}/${id}` };
+    },
   },
 };

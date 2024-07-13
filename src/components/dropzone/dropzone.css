@@ -9,7 +9,7 @@
 
 /* underline color for "Browse" button */
 .filepond--label-action {
-  @apply no-underline text-text-400 border-b border-text-400;
+  @apply no-underline text-primary border-b border-primary;
 }
 
 /* the background color of the filepond drop area */
