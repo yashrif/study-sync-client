@@ -2,8 +2,8 @@
 
 import { Dispatch, SetStateAction } from "react";
 
-import { qnaDetails } from "@/assets/data/dashboard/qna";
-import { Qna, Difficulty as TDifficulty } from "@/types";
+import { quizDetails } from "@/assets/data/dashboard/quiz";
+import { Quiz, Difficulty as TDifficulty } from "@/types";
 import {
   Select,
   SelectContent,
@@ -16,7 +16,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import Property from "../../components/Property";
 
 type Props = {
-  data: Qna;
+  data: Quiz;
   difficulty: TDifficulty;
   setDifficulty: Dispatch<SetStateAction<TDifficulty>>;
 };
@@ -25,8 +25,8 @@ const Difficulty: React.FC<Props> = ({ difficulty, setDifficulty }) => {
   return (
     <div className="flex gap-16 justify-between items-center text-medium">
       <Property
-        title={qnaDetails.preferences.fields.difficulty.title}
-        Icon={qnaDetails.preferences.fields.difficulty.Icon}
+        title={quizDetails.preferences.fields.difficulty.title}
+        Icon={quizDetails.preferences.fields.difficulty.Icon}
       />
       <Select
         value={difficulty}

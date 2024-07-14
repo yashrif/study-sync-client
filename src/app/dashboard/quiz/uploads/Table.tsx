@@ -2,7 +2,7 @@ import { flexRender, Table as TTable } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
-import { search } from "@/assets/data/dashboard/qna";
+import { search } from "@/assets/data/dashboard/quiz";
 import {
   TableBody,
   TableCell,

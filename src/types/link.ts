@@ -1,6 +1,4 @@
-import { Icon, IconProps } from "@tabler/icons-react";
-import { LucideProps } from "lucide-react";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { Icon } from "@allTypes";
 
 export type Link = {
   title: string;
@@ -8,9 +6,5 @@ export type Link = {
 };
 
 export type IconLink = Link & {
-  Icon:
-    | ForwardRefExoticComponent<
-        Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-      >
-    | ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
+  Icon: Icon;
 };

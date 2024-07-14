@@ -2,16 +2,16 @@
 
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
-import { qnaDetails } from "@/assets/data/dashboard/qna";
-import { Qna, Difficulty as TDifficulty } from "@/types";
+import { quizDetails } from "@/assets/data/dashboard/quiz";
+import { Quiz, Difficulty as TDifficulty } from "@/types";
 import Heading from "../components/Heading";
 import Property from "../components/Property";
 import Editable from "./editable";
 import { DURATION_PER_CQ, DURATION_PER_MCQ } from "@/utils/constants";
 
 type Props = {
-  data: Qna;
-  setData: Dispatch<SetStateAction<Qna | undefined>>;
+  data: Quiz;
+  setData: Dispatch<SetStateAction<Quiz | undefined>>;
 };
 
 const Overview: React.FC<Props> = (props) => {
@@ -30,18 +30,18 @@ const Overview: React.FC<Props> = (props) => {
   }, [difficulty]);
 
   const { data } = props;
-  const { mcq, cq, questions, duration } = qnaDetails.properties.fields;
+  const { mcq, cq, questions, duration } = quizDetails.properties.fields;
 
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <Heading
-          title={qnaDetails.overview.title}
-          Icon={qnaDetails.overview.Icon}
+          title={quizDetails.overview.title}
+          Icon={quizDetails.overview.Icon}
         />
         <div>
-          <qnaDetails.overview.descriptionIcon className="float-left size-[18px] text-yellow-500 mr-2 mt-0.5 align-middle" />
-          <p className="text-description">{qnaDetails.overview.description}</p>
+          <quizDetails.overview.descriptionIcon className="float-left size-[18px] text-yellow-500 mr-2 mt-0.5 align-middle" />
+          <p className="text-description">{quizDetails.overview.description}</p>
         </div>
       </div>
 
@@ -53,8 +53,8 @@ const Overview: React.FC<Props> = (props) => {
         />
         <div className="flex flex-col gap-4">
           <Heading
-            title={qnaDetails.properties.title}
-            Icon={qnaDetails.properties.Icon}
+            title={quizDetails.properties.title}
+            Icon={quizDetails.properties.Icon}
             size="sm"
           />
           <div className="flex flex-col gap-2">

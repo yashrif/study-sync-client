@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import {
   columnConfig as columnConfigObj,
   isIndexedData,
-} from "@/assets/data/dashboard/qna";
+} from "@/assets/data/dashboard/quiz";
 import StatusIcon from "@/components/StatusIcon";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
 import { ColumnConfig, IndexStates, Status } from "@/types";

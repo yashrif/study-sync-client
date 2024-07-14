@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import studySyncDB from "@/api/studySyncDB";
-import { defaultValues, qnaDetails } from "@/assets/data/dashboard/qna";
+import { defaultValues, quizDetails } from "@/assets/data/dashboard/quiz";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,9 +15,10 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Qna } from "@/types";
+import { Quiz } from "@/types";
 import { IconChecks } from "@tabler/icons-react";
 import { Dispatch, SetStateAction } from "react";
+import { dbEndpoints } from "@/assets/data/api";
 
 const FormSchema = z.object({
   title: z.string().max(60, {
@@ -26,15 +27,15 @@ const FormSchema = z.object({
 });
 
 type Props = {
-  data: Qna;
-  setData: Dispatch<SetStateAction<Qna | undefined>>;
+  data: Quiz;
+  setData: Dispatch<SetStateAction<Quiz | undefined>>;
 };
 
-const Title: React.FC<Props> = ({ data: qna, setData }) => {
+const Title: React.FC<Props> = ({ data: quiz, setData }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: qna.title || defaultValues.title,
+      title: quiz.title || defaultValues.title,
     },
   });
 
@@ -45,8 +46,8 @@ const Title: React.FC<Props> = ({ data: qna, setData }) => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      await studySyncDB.patch(`/qnas/${qna.id}`, data);
-      setData((prev) => ({ ...prev, ...data }) as Qna | undefined);
+      await studySyncDB.patch(`${dbEndpoints.quizzes}${quiz.id}`, data);
+      setData((prev) => ({ ...prev, ...data }) as Quiz | undefined);
     } catch (e) {
       console.log(e);
     } finally {
@@ -63,9 +64,9 @@ const Title: React.FC<Props> = ({ data: qna, setData }) => {
           render={({ field }) => (
             <FormItem className="flex gap-16 justify-between items-center">
               <FormLabel className="flex gap-2 items-center text-secondary-200">
-                <qnaDetails.preferences.fields.title.Icon className="size-[18px] stroke-[2.5]" />
+                <quizDetails.preferences.fields.title.Icon className="size-[18px] stroke-[2.5]" />
                 <span className="text-medium">
-                  {qnaDetails.preferences.fields.title.title}
+                  {quizDetails.preferences.fields.title.title}
                 </span>
               </FormLabel>
               <FormControl className="!m-0">

@@ -1,4 +1,4 @@
-import { QnaIntermediate } from "./qna";
+import { QuizIntermediate } from "./quiz";
 
 export type McqRequest = {
   question: string;
@@ -15,12 +15,12 @@ export type McqShallow = {
 };
 
 export type McqIntermediate = McqShallow & {
-  qna: string;
+  quiz: string;
   lastModified: string | null;
   createdBy: string;
   lastModifiedBy: string | null;
 };
 
-export type Mcq = Omit<McqIntermediate, "qna"> & {
-  qna: QnaIntermediate;
+export type Mcq = Omit<McqIntermediate, "quiz"> & {
+  quiz: QuizIntermediate;
 };

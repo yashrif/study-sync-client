@@ -1,32 +1,32 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import { getQna, getQnas } from "@/utils/qnaRequest";
-import { Qna, QnaShallow, Status } from "@allTypes";
+import { getQuiz, getQuizzes } from "@/utils/quizRequest";
+import { Quiz, QuizShallow, Status } from "@allTypes";
 
-type GetQnasWithStates = (
+type GetQuizzesWithStates = (
   | {
       type: "single";
       id: string;
-      setQna: Dispatch<SetStateAction<Qna | undefined>>;
+      setQuizzes: Dispatch<SetStateAction<Quiz | undefined>>;
     }
   | {
       type: "multiple";
-      setQna: Dispatch<SetStateAction<QnaShallow[]>>;
+      setQuizzes: Dispatch<SetStateAction<QuizShallow[]>>;
     }
 ) & { setStatus: Dispatch<SetStateAction<Status>>; mode: "lazy" | "eager" };
 
-export const getQnasWithStates = async (props: GetQnasWithStates) => {
-  const { type, setQna, setStatus, mode } = props;
+export const getQuizzesWithStates = async (props: GetQuizzesWithStates) => {
+  const { type, setQuizzes: setQuiz, setStatus, mode } = props;
 
   try {
     setStatus(Status.PENDING);
 
     if (type === "single") {
-      const data = await getQna(props.id);
-      data && setQna(data);
+      const data = await getQuiz(props.id);
+      data && setQuiz(data);
     } else {
-      const data = await getQnas();
-      data && setQna(data);
+      const data = await getQuizzes();
+      data && setQuiz(data);
     }
     if (mode === "lazy")
       setTimeout(() => {
@@ -40,51 +40,51 @@ export const getQnasWithStates = async (props: GetQnasWithStates) => {
   }
 };
 
-type UseGetQnas = {
+type UseGetQuizzes = {
   dependencies?: (string | number | boolean)[];
   mode?: "lazy" | "eager";
 };
 
-export const useGetQnas = ({
+export const useGetQuizzes = ({
   dependencies = [],
   mode = "eager",
-}: UseGetQnas) => {
-  const [qnas, setQnas] = useState<QnaShallow[]>([]);
+}: UseGetQuizzes) => {
+  const [quizzes, setQuizzes] = useState<QuizShallow[]>([]);
   const [status, setStatus] = useState<Status>(Status.PENDING);
 
   useEffect(() => {
-    getQnasWithStates({
+    getQuizzesWithStates({
       type: "multiple",
-      setQna: setQnas,
+      setQuizzes: setQuizzes,
       setStatus,
       mode,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependencies]);
 
-  const getQnas = () => {
-    return { data: qnas, status, setQnas, setStatus };
+  const getQuizzes = () => {
+    return { data: quizzes, status, setQuizzes, setStatus };
   };
 
-  return { getQnas };
+  return { getQuizzes };
 };
 
-type UseGetQna = UseGetQnas & {
+type UseGetQuiz = UseGetQuizzes & {
   id: string;
 };
 
-export const useGetQna = ({
+export const useGetQuiz = ({
   id,
   dependencies = [],
   mode = "eager",
-}: UseGetQna) => {
-  const [qna, setQna] = useState<Qna | undefined>();
+}: UseGetQuiz) => {
+  const [quiz, setQuiz] = useState<Quiz | undefined>();
   const [status, setStatus] = useState<Status>(Status.PENDING);
 
   useEffect(() => {
-    getQnasWithStates({
+    getQuizzesWithStates({
       type: "single",
-      setQna,
+      setQuizzes: setQuiz,
       setStatus,
       mode,
       id,
@@ -92,9 +92,9 @@ export const useGetQna = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependencies]);
 
-  const getQna = () => {
-    return { data: qna, status, setQna, setStatus };
+  const getQuiz = () => {
+    return { data: quiz, status, setQuiz, setStatus };
   };
 
-  return { getQna };
+  return { getQuiz };
 };

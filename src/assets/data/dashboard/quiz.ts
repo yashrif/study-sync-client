@@ -15,21 +15,22 @@ import {
   IconWriting,
 } from "@tabler/icons-react";
 
+import { Quiz } from "@/components/icons";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { Column, ColumnConfig, IconList } from "@allTypes";
 import { fileTypeIcons } from "./file";
 
 export const home: IconList = {
-  title: "Q&A",
-  Icon: IconMessages,
-  description: "Generate and manage all your Q&A here!",
+  title: "Quiz",
+  Icon: Quiz,
+  description: "Generate and manage all your quizzes here!",
 };
 
 export const create = {
-  title: "Generate Q&As",
+  title: "Generate Quiz",
   Icon: IconSquarePlus2,
   description:
-    "Select or upload documents to generate Q&A from! Uploaded documents will be saved in the library which can be accessed later.",
+    "Select or upload documents to generate quiz! Uploaded documents will be saved in the library which can be accessed later.",
 };
 
 export const search = {
@@ -107,10 +108,10 @@ export const columnConfig: ColumnConfig = {
 };
 
 export const recent = {
-  title: "Recent Q&As",
+  title: "Recent Quiz",
   Icon: IconHistory,
   description:
-    "Here are the 10 most recent Q&As you generated. Click to view the details.",
+    "Here are the 10 most recent Quiz you generated. Click to view the details.",
   actions: [
     {
       title: "Delete",
@@ -121,17 +122,17 @@ export const recent = {
   ],
 };
 
-export const qnaDetails = {
-  title: "Q&A Details",
+export const quizDetails = {
+  title: "Quiz Details",
   Icon: IconMessages,
   description:
-    "View the details of the Q&A you generated. You can also evaluate and delete the Q&A.",
+    "View the details of the quiz you generated. You can also evaluate and delete the quiz.",
 
   overview: {
     title: "Overview",
     Icon: IconBookmarks,
     description:
-      "View the properties of the Q&A. You can edit the title and difficulty under the preferences section.",
+      "View the properties of the quiz. You can edit the title and difficulty under the preferences section.",
     descriptionIcon: IconBulb,
   },
 

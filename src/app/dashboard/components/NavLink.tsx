@@ -37,7 +37,7 @@ const NavLink: React.FC<IconLink & { links?: IconLink[] }> = ({
       className={`group w-full flex gap-3 items-center px-4 py-3 rounded-sm hover:bg-background hover:shadow-[inset_0_0_0_1.5px_rgba(139,95,191,0.1)] transition-all duration-300`}
     >
       <Icon
-        className={`text-text-200 group-hover:text-primary h-5 w-auto transition-colors duration-300 ${
+        className={`text-text-200 group-hover:text-primary size-5 stroke-[1.75] transition-colors duration-300 ${
           isActive ? "!text-primary" : ""
         }`}
       />

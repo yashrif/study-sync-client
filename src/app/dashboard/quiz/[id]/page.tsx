@@ -2,9 +2,9 @@
 
 import { Suspense } from "react";
 
-import { qnaDetails } from "@/assets/data/dashboard/qna";
+import { quizDetails } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
-import { useGetQna } from "@/hooks/useQna";
+import { useGetQuiz } from "@/hooks/useQuiz";
 import PageHeader from "../../components/PageHeader";
 import Details from "./details";
 import Overview from "./overview";
@@ -15,23 +15,23 @@ type Props = {
   };
 };
 
-const QnaDetails: React.FC<Props> = ({ params: { id } }) => {
-  const { data, setQna } = useGetQna({
+const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
+  const { data, setQuiz } = useGetQuiz({
     id,
     mode: "lazy",
-  }).getQna();
+  }).getQuiz();
 
   return (
     <div className="divide-y-2 min-h-full">
       <PageHeader
-        title={qnaDetails.title}
-        description={qnaDetails.description}
-        Icon={qnaDetails.Icon}
+        title={quizDetails.title}
+        description={quizDetails.description}
+        Icon={quizDetails.Icon}
       />
       {data && (
         <div className="h-full pt-8 grid grid-cols-[280px,auto,1fr] gap-24">
           <Suspense fallback={<Spinner />}>
-            <Overview data={data} setData={setQna} />
+            <Overview data={data} setData={setQuiz} />
           </Suspense>
           <div className="h-[80%] w-0.5 bg-border rounded-full my-auto" />
           <Suspense fallback={<Spinner />}>
@@ -43,4 +43,4 @@ const QnaDetails: React.FC<Props> = ({ params: { id } }) => {
   );
 };
 
-export default QnaDetails;
+export default QuizDetails;

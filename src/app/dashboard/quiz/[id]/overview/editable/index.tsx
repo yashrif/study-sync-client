@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Qna, Difficulty as TDifficulty } from "@/types";
+import { Quiz, Difficulty as TDifficulty } from "@/types";
 import Difficulty from "./Difficulty";
 import Title from "./Title";
 import Heading from "../../components/Heading";
-import { qnaDetails } from "@/assets/data/dashboard/qna";
+import { quizDetails } from "@/assets/data/dashboard/quiz";
 
 type Props = {
-  data: Qna;
-  setData: Dispatch<SetStateAction<Qna | undefined>>;
+  data: Quiz;
+  setData: Dispatch<SetStateAction<Quiz | undefined>>;
   difficulty: TDifficulty;
   setDifficulty: Dispatch<SetStateAction<TDifficulty>>;
 };
@@ -17,8 +17,8 @@ const Editable: React.FC<Props> = (props) => {
   return (
     <div className="flex flex-col gap-4">
       <Heading
-        title={qnaDetails.preferences.title}
-        Icon={qnaDetails.preferences.Icon}
+        title={quizDetails.preferences.title}
+        Icon={quizDetails.preferences.Icon}
         size="sm"
       />
       <div className="flex flex-col gap-2">

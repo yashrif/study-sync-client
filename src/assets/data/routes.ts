@@ -26,7 +26,7 @@ export const paths = {
   cookies: "/cookies",
   settings: "/settings",
   uploads: "/uploads",
-  qna: "/qna",
+  quiz: "/quiz",
 };
 
 export const pathTitles = {
@@ -55,7 +55,7 @@ export const pathTitles = {
   cookies: "Cookies",
   settings: "Settings",
   uploads: "Uploads",
-  qna: "Q&A",
+  quiz: "Quiz",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -94,7 +94,7 @@ export const routes = {
     home: dashboardPath,
     settings: `${dashboardPath}${paths.settings}`,
     uploads: `${dashboardPath}${paths.uploads}`,
-    qna: `${dashboardPath}${paths.qna}`,
+    quiz: `${dashboardPath}${paths.quiz}`,
   },
 };
 
@@ -136,9 +136,9 @@ export const links = {
       title: pathTitles.uploads,
       href: routes.dashboard.uploads,
     },
-    qna: { title: pathTitles.qna, href: routes.dashboard.qna },
-    qnaDetails(id: string) {
-      return { title: pathTitles.qna, href: `${routes.dashboard.qna}/${id}` };
+    quiz: { title: pathTitles.quiz, href: routes.dashboard.quiz },
+    quizDetails(id: string) {
+      return { title: pathTitles.quiz, href: `${routes.dashboard.quiz}/${id}` };
     },
   },
 };

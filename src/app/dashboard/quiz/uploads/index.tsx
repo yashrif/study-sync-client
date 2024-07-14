@@ -6,15 +6,15 @@ import { Suspense, useEffect, useState } from "react";
 
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
+import { create, defaultValues } from "@/assets/data/dashboard/quiz";
 import { links } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import Spinner from "@/components/spinner/Spinner";
 import { useTable } from "@/hooks/useTable";
 import { useGetUploads } from "@/hooks/useUpload";
-import { IndexStatus, QnaResponseServer, Status, UploadSimple } from "@/types";
+import { IndexStatus, QuizResponseServer, Status, UploadSimple } from "@/types";
 import { fileIndexing } from "@/utils/fileIndexing";
-import { postQna } from "@/utils/qnaRequest";
-import { create, defaultValues } from "@assets/data/dashboard/qna";
+import { postQuiz } from "@/utils/quizRequest";
 import { columns } from "./Columns";
 import Table from "./Table";
 
@@ -111,11 +111,11 @@ const UploadList = () => {
                   })
                 );
 
-                const data: QnaResponseServer = (
-                  await studySyncServer.post(serverEndpoints.qnas, ids)
+                const data: QuizResponseServer = (
+                  await studySyncServer.post(serverEndpoints.quizzes, ids)
                 ).data;
 
-                await postQna({ ...data, title: defaultValues.title }).then(
+                await postQuiz({ ...data, title: defaultValues.title }).then(
                   (res) => {
                     id = res.id;
                   }
@@ -125,7 +125,7 @@ const UploadList = () => {
                 setProcessStatus(Status.ERROR);
               } finally {
                 setTimeout(() => {
-                  if (id) push(links.dashboard.qnaDetails(id).href);
+                  if (id) push(links.dashboard.quizDetails(id).href);
                   else setProcessStatus(Status.IDLE);
                 }, 2000);
               }

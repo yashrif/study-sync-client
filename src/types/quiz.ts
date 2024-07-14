@@ -2,9 +2,9 @@ import { McqIntermediate, McqRequest } from "@allTypes";
 
 /* --------------------------------- Server --------------------------------- */
 
-export type QnaRequestServer = string[];
+export type QuizRequestServer = string[];
 
-export type QnaResponseServer = {
+export type QuizResponseServer = {
   mcqs: McqRequest[];
 };
 
@@ -12,25 +12,25 @@ export type QnaResponseServer = {
 
 /* ----------------------------------- DB ----------------------------------- */
 
-export type QnaRequestDb = {
+export type QuizRequestDb = {
   id?: string;
   title?: string;
   mcqs: McqRequest[];
 };
 
-export type QnaShallow = {
+export type QuizShallow = {
   id: string;
   title: string | null;
   createDate: string;
 };
 
-export type QnaIntermediate = QnaShallow & {
+export type QuizIntermediate = QuizShallow & {
   lastModified: string | null;
   createdBy: string;
   lastModifiedBy: string | null;
 };
 
-export type Qna = QnaIntermediate & {
+export type Quiz = QuizIntermediate & {
   mcqs: McqIntermediate[] | null;
   cqs: string[] | null;
 };

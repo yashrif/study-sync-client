@@ -7,9 +7,10 @@ import {
   ColumnHeader,
 } from "@/components/table/ColumnTools";
 import { UploadSimple } from "@/types/upload";
+import { Action } from "@/types";
 
 const columnHeaders = columnConfig.columns.map((column) =>
-  ColumnHeader<UploadSimple>({ column }),
+  ColumnHeader<UploadSimple>({ column })
 );
 
 export const columns: ColumnDef<UploadSimple>[] = [
@@ -18,6 +19,9 @@ export const columns: ColumnDef<UploadSimple>[] = [
   },
   ...columnHeaders,
   {
-    ...Actions<UploadSimple>({ actions: columnConfig.actions, copyId: true }),
+    ...Actions<UploadSimple>({
+      actions: columnConfig.actions,
+      copyId: true,
+    }),
   },
 ];

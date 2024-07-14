@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { home } from "@/assets/data/dashboard/qna";
+import { home } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
 import PageHeader from "../components/PageHeader";
 import Recent from "./recent/Recent";

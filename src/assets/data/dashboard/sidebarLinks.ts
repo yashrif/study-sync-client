@@ -2,10 +2,10 @@ import {
   IconFileUpload,
   IconHome,
   IconLogout2,
-  IconMessages,
-  IconSettings,
+  IconSettings
 } from "@tabler/icons-react";
 
+import { Quiz } from "@/components/icons";
 import { IconLink } from "@allTypes";
 import { links, pathTitles } from "../routes";
 
@@ -20,8 +20,8 @@ export const sidebarLinks: IconLink[][] = [
       Icon: IconFileUpload,
     },
     {
-      ...links.dashboard.qna,
-      Icon: IconMessages,
+      ...links.dashboard.quiz,
+      Icon: Quiz,
     },
   ],
   [

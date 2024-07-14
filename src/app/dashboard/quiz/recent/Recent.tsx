@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 
-import { recent } from "@/assets/data/dashboard/qna";
+import { recent } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
-import QnaList from "./QnaList";
+import QuizList from "./QuizList";
 
 const Recent: React.FC = () => {
   return (
@@ -17,7 +17,7 @@ const Recent: React.FC = () => {
         </p>
       </div>
       <Suspense fallback={<Spinner />}>
-        <QnaList />
+        <QuizList />
       </Suspense>
     </div>
   );

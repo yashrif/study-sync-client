@@ -1,8 +1,8 @@
-import { Qna } from "@/types";
+import { Quiz } from "@/types";
 import Heading from "../components/Heading";
 
 type Props = {
-  data: Qna;
+  data: Quiz;
 };
 
 const Details: React.FC<Props> = ({ data }) => {
