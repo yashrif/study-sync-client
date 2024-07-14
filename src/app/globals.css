@@ -160,8 +160,12 @@
     @apply heading-section;
   }
 
+  h5 {
+    @apply text-xl text-text font-medium;
+  }
+
   h6 {
-    @apply text-xl text-text-200 font-medium;
+    @apply text-lg text-text font-medium;
   }
 
   /* ------------------------------ text classes ------------------------------ */
@@ -281,6 +285,11 @@
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* ---------------------------------- focus --------------------------------- */
+  *:focus {
+    @apply !ring-offset-0 !ring-0;
   }
 }
 

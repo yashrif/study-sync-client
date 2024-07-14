@@ -29,7 +29,7 @@ const QnaList = () => {
                 href={links.dashboard.qnaDetails(qna.id).href}
                 className="anchor text-text-400 flex gap-2 items-center"
               >
-                <IconNotes className="size-4 text-text-200 stroke-2" />
+                <IconNotes className="size-4 text-primary stroke-[2.5]" />
                 <span className="max-w-[45ch] text-ellipsis overflow-hidden">
                   {qna.title}
                 </span>

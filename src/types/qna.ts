@@ -25,14 +25,14 @@ export type QnaShallow = {
 };
 
 export type QnaIntermediate = QnaShallow & {
-  mcqs: string;
   lastModified: string | null;
   createdBy: string;
   lastModifiedBy: string | null;
 };
 
-export type Qna = Omit<QnaIntermediate, "mcqs"> & {
-  mcqs: McqIntermediate[];
+export type Qna = QnaIntermediate & {
+  mcqs: McqIntermediate[] | null;
+  cqs: string[] | null;
 };
 
 export enum Difficulty {

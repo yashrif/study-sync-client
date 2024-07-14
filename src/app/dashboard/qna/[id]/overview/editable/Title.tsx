@@ -63,9 +63,9 @@ const Title: React.FC<Props> = ({ data: qna, setData }) => {
           render={({ field }) => (
             <FormItem className="flex gap-16 justify-between items-center">
               <FormLabel className="flex gap-2 items-center text-secondary-200">
-                <qnaDetails.overview.fields.title.Icon className="size-[18px] stroke-[2.5]" />
+                <qnaDetails.preferences.fields.title.Icon className="size-[18px] stroke-[2.5]" />
                 <span className="text-medium">
-                  {qnaDetails.overview.fields.title.title}
+                  {qnaDetails.preferences.fields.title.title}
                 </span>
               </FormLabel>
               <FormControl className="!m-0">

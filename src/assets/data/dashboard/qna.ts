@@ -1,14 +1,16 @@
 import {
+  IconAdjustmentsCog,
   IconBookmarks,
+  IconBulb,
   IconClock,
   IconHistory,
   IconListCheck,
   IconMessages,
   IconNotes,
-  IconSettings,
   IconSquarePlus2,
   IconStack2,
   IconTextSize,
+  IconTools,
   IconTrash,
   IconWriting,
 } from "@tabler/icons-react";
@@ -124,14 +126,19 @@ export const qnaDetails = {
   Icon: IconMessages,
   description:
     "View the details of the Q&A you generated. You can also evaluate and delete the Q&A.",
+
   overview: {
     title: "Overview",
     Icon: IconBookmarks,
+    description:
+      "View the properties of the Q&A. You can edit the title and difficulty under the preferences section.",
+    descriptionIcon: IconBulb,
+  },
+
+  properties: {
+    title: "Properties",
+    Icon: IconTools,
     fields: {
-      title: {
-        title: "Title",
-        Icon: IconTextSize,
-      },
       mcq: {
         title: "MCQs",
         Icon: IconListCheck,
@@ -148,17 +155,17 @@ export const qnaDetails = {
         title: "Duration",
         Icon: IconClock,
       },
-      difficulty: {
-        title: "Difficulty",
-        Icon: IconStack2,
-      },
     },
   },
 
-  settings: {
-    title: "Settings",
-    Icon: IconSettings,
-    actions: {
+  preferences: {
+    title: "Preferences",
+    Icon: IconAdjustmentsCog,
+    fields: {
+      title: {
+        title: "Title",
+        Icon: IconTextSize,
+      },
       difficulty: {
         title: "Difficulty",
         Icon: IconStack2,

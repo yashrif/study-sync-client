@@ -21,8 +21,6 @@ const QnaDetails: React.FC<Props> = ({ params: { id } }) => {
     mode: "lazy",
   }).getQna();
 
-  console.log(data);
-
   return (
     <div className="divide-y-2 min-h-full">
       <PageHeader
