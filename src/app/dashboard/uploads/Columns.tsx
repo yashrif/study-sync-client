@@ -7,7 +7,6 @@ import {
   ColumnHeader,
 } from "@/components/table/ColumnTools";
 import { UploadSimple } from "@/types/upload";
-import { Action } from "@/types";
 
 const columnHeaders = columnConfig.columns.map((column) =>
   ColumnHeader<UploadSimple>({ column })

@@ -6,7 +6,7 @@ import { Suspense, useEffect, useState } from "react";
 
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
-import { create, defaultValues } from "@/assets/data/dashboard/quiz";
+import { create } from "@/assets/data/dashboard/quiz";
 import { links } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import Spinner from "@/components/spinner/Spinner";
@@ -115,7 +115,7 @@ const UploadList = () => {
                   await studySyncServer.post(serverEndpoints.quizzes, ids)
                 ).data;
 
-                await postQuiz({ ...data, title: defaultValues.title }).then(
+                await postQuiz({ ...data, title: uploads[0].title }).then(
                   (res) => {
                     id = res.id;
                   }

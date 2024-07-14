@@ -69,21 +69,22 @@ const AuthContainer: React.FC<Props> = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setStatus(Status.PENDING);
+    let statusCode = 0;
 
     try {
       const response = await studySyncDB.post(url, JSON.stringify(values));
 
       setStatus(Status.SUCCESS);
       const { access_token, refresh_token } = response.data;
+      statusCode = response.status;
       setTokens(access_token, refresh_token);
     } catch (err) {
       console.log(err);
       setStatus(Status.ERROR);
     } finally {
       setTimeout(() => {
-        if (status === Status.SUCCESS) {
-          if (redirect) replace(redirect);
-        }
+        if ((statusCode === 200 || statusCode === 201) && redirect)
+          replace(redirect);
         setStatus(Status.IDLE);
       }, 2500);
     }
