@@ -1,14 +1,13 @@
 "use client";
 
-import { Suspense, useRef } from "react";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
-import { FormHandle } from "@/app/dashboard/types/form-handle";
 import { quizDetails } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
 import { Button } from "@/components/ui/button";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { Status } from "@allTypes";
-import { notFound } from "next/navigation";
 import PageHeading from "../../_components/PageHeading";
 import Details from "./_details";
 import Overview from "./_overview";
@@ -21,9 +20,8 @@ type Props = {
 };
 
 const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
-  const formRef = useRef<FormHandle>(null);
   const {
-    state: { points, status },
+    state: { points, status, formRef, isShowResults, quiz },
   } = useQuizContext();
 
   useFetchQuiz();
@@ -38,9 +36,10 @@ const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
         Icon={quizDetails.Icon}
       >
         <div className="flex gap-24 items-center">
-          {points !== undefined && (
+          {isShowResults && points !== undefined && (
             <span className="text-large text-primary font-medium">
-              Obtained Points: {points}
+              Obtained Points: {points}/
+              {(quiz.mcqs?.length || 0) + (quiz.cqs?.length || 0)}
             </span>
           )}
           <div className="flex gap-4 items-center">
@@ -72,7 +71,7 @@ const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
         <div />
         <div className="h-[calc(100%-32px)] w-0.5 bg-border rounded-full my-auto" />
         <Suspense fallback={<Spinner />}>
-          <Details ref={formRef} />
+          <Details />
         </Suspense>
       </div>
     </div>

@@ -1,17 +1,8 @@
-import { Dispatch, forwardRef, SetStateAction } from "react";
-
-import { FormHandle } from "@/app/dashboard/types/form-handle";
-import { Quiz } from "@/types";
+import { useQuizContext } from "@/hooks/useQuizContext";
 import Heading from "../_components/Heading";
 import McqsList from "./McqList";
-import { useQuizContext } from "@/hooks/useQuizContext";
 
-const Details = forwardRef<
-  FormHandle,
-  React.FormHTMLAttributes<HTMLFormElement>
->((_, ref) => {
-  Details.displayName = "Quiz Details";
-
+const Details: React.FC = () => {
   const {
     state: {
       quiz: { title },
@@ -21,10 +12,9 @@ const Details = forwardRef<
   return (
     <div className="flex flex-col gap-8 h-full">
       <Heading title={title} />
-
-      <McqsList ref={ref} />
+      <McqsList />
     </div>
   );
-});
+};
 
 export default Details;

@@ -1,3 +1,4 @@
+import { FormHandle } from "@/app/dashboard/types/form-handle";
 import { McqIntermediate, McqRequest, Status } from "@allTypes";
 
 /* --------------------------------- Server --------------------------------- */
@@ -56,6 +57,7 @@ export enum QuizActionType {
   SET_QUIZ = "SET_QUIZ",
   SET_POINTS = "SET_POINTS",
   SET_IS_SHOW_RESULTS = "SET_IS_SHOW_RESULTS",
+  SET_FORM_REF = "SET_FORM_REF",
 }
 
 export type QuizAction =
@@ -74,6 +76,7 @@ export type QuizState = {
   difficulty: Difficulty;
   points: number | undefined;
   isShowResults: boolean;
+  formRef: React.RefObject<FormHandle>;
 };
 
 export type QuizContextProps = {

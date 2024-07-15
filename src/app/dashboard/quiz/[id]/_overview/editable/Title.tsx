@@ -20,6 +20,8 @@ import { Input } from "@/components/ui/input";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { IconChecks } from "@tabler/icons-react";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
 
 const FormSchema = z.object({
   title: z.string().max(60, {
@@ -56,7 +58,16 @@ const Title: React.FC = () => {
   } = form;
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    handler(data);
+    try {
+      handler(data);
+      toast({
+        title: "Updated Successfully",
+        description: "Quiz title has been updated successfully.",
+        duration: 5000,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

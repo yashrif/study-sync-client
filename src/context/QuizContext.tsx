@@ -19,6 +19,7 @@ const initialState: QuizState = {
   difficulty: Difficulty.MEDIUM,
   points: undefined,
   isShowResults: false,
+  formRef: { current: null },
 };
 
 const quizReducer = (state: QuizState, action: QuizAction): QuizState => {

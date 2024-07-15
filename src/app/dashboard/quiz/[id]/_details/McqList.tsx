@@ -1,29 +1,23 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { useImperativeHandle, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { FormHandle } from "@/app/dashboard/types/form-handle";
 import { Form } from "@/components/ui/form";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { Choices, McqIntermediate, QuizActionType } from "@/types";
 import Mcq from "./components/Mcq";
 
-const McqsList = forwardRef<
-  FormHandle,
-  React.FormHTMLAttributes<HTMLFormElement>
->((_, ref) => {
+const McqsList: React.FC = () => {
   const {
     state: {
-      quiz: { mcqs: data },
+      quiz: { mcqs },
+      formRef: ref,
     },
     dispatch,
   } = useQuizContext();
-
-  const mcqs = data?.slice(0, 3);
-  McqsList.displayName = "List of MCQs";
 
   const formRef = useRef<HTMLFormElement>(null);
   useImperativeHandle(ref, () => ({
@@ -76,7 +70,7 @@ const McqsList = forwardRef<
       </form>
     </Form>
   );
-});
+};
 
 export default McqsList;
 

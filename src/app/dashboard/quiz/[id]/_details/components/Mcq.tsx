@@ -33,8 +33,12 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
       render={({ field }) => (
         <FormItem className="flex flex-col gap-6">
           <FormLabel className="grid grid-cols-[40px,1fr] gap-x-10 items-center">
-            <div className="size-10 flex items-center justify-center rounded-full ring-2 ring-primary ring-inset">
-              <span className="text-large text-primary font-secondary font-semibold">
+            <div
+              className={`size-10 flex items-center justify-center rounded-full ${form.formState.errors[mcq.id] ? "ring-destructive" : "ring-primary"} ring-2 ring-inset`}
+            >
+              <span
+                className={`text-large ${form.formState.errors[mcq.id] ? "text-destructive" : "text-primary"} font-secondary font-semibold`}
+              >
                 {order}
               </span>
             </div>
@@ -72,7 +76,6 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
               ))}
             </RadioGroup>
           </FormControl>
-          <FormMessage />
         </FormItem>
       )}
     />

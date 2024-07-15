@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Suspense } from "react";
 
 import ProgressBar from "@/components/ProgressBar";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 const rubik = Rubik({
@@ -61,6 +62,7 @@ export default function RootLayout({
           </Suspense>
           {children}
         </div>
+        <Toaster />
       </body>
     </html>
   );
