@@ -1,23 +1,19 @@
 "use client";
 
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { quizDetails } from "@/assets/data/dashboard/quiz";
-import { Quiz, Difficulty as TDifficulty } from "@/types";
-import Heading from "../components/Heading";
-import Property from "../components/Property";
-import Editable from "./editable";
+import { useQuizContext } from "@/hooks/useQuizContext";
+import { Difficulty as TDifficulty } from "@/types";
 import { DURATION_PER_CQ, DURATION_PER_MCQ } from "@/utils/constants";
+import Heading from "../_components/Heading";
+import Property from "../_components/Property";
+import Editable from "./editable";
 
-type Props = {
-  data: Quiz;
-  setData: Dispatch<SetStateAction<Quiz | undefined>>;
-};
-
-const Overview: React.FC<Props> = (props) => {
-  const [difficulty, setDifficulty] = useState<TDifficulty>(TDifficulty.MEDIUM);
+const Overview: React.FC = () => {
+  const { state } = useQuizContext();
   const difficultyValue = useMemo(() => {
-    switch (difficulty) {
+    switch (state.difficulty) {
       case TDifficulty.EASY:
         return 0.5;
       case TDifficulty.MEDIUM:
@@ -27,10 +23,10 @@ const Overview: React.FC<Props> = (props) => {
       default:
         return 1;
     }
-  }, [difficulty]);
+  }, [state.difficulty]);
 
-  const { data } = props;
   const { mcq, cq, questions, duration } = quizDetails.properties.fields;
+  const data = state.quiz;
 
   return (
     <div className="fixed w-[280px] flex flex-col gap-8">
@@ -46,11 +42,7 @@ const Overview: React.FC<Props> = (props) => {
       </div>
 
       <div className="flex flex-col gap-8">
-        <Editable
-          {...props}
-          difficulty={difficulty}
-          setDifficulty={setDifficulty}
-        />
+        <Editable />
         <div className="flex flex-col gap-4">
           <Heading
             title={quizDetails.properties.title}

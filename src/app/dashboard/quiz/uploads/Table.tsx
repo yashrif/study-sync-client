@@ -12,7 +12,7 @@ import {
   TableRow,
   Table as UITable,
 } from "@/components/ui/table";
-import { Status, TableControls, UploadSimple } from "@/types";
+import { Status, TableControlTypes, UploadSimple } from "@/types";
 import ControlBar from "@components/table/ControlBar";
 import { columns } from "./Columns";
 
@@ -30,17 +30,17 @@ const Table: React.FC<Props> = ({ table, setUploadStatus, status }) => {
         searchKey={search.key}
         uploadEndpointDb={dbEndpoints.uploads}
         controlsConfig={{
-          [TableControls.Upload]: {
+          [TableControlTypes.Upload]: {
             show: true,
             order: 2,
             variant: "outline",
           },
-          [TableControls.Search]: {
+          [TableControlTypes.Search]: {
             show: true,
             order: 1,
             title: "Search Files",
           },
-          [TableControls.View]: {
+          [TableControlTypes.View]: {
             show: true,
             order: 3,
             variant: "outline",

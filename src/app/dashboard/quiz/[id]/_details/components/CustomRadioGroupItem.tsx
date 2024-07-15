@@ -1,17 +1,21 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import React from "react";
 
+import { useQuizContext } from "@/hooks/useQuizContext";
 import { cn } from "@/lib/utils";
 
 type Props = React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> & {
   answer: string;
-  showResult: boolean;
 };
 
 const CustomRadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   Props
->(({ className, value, answer, showResult, ...props }, ref) => {
+>(({ className, value, answer, ...props }, ref) => {
+  const {
+    state: { isShowResults },
+  } = useQuizContext();
+
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
@@ -24,7 +28,7 @@ const CustomRadioGroupItem = React.forwardRef<
     >
       <div
         className={`size-8 flex items-center justify-center rounded-full text-primary hover:ring-2 hover:ring-inset hover:ring-primary cursor-pointer peer-hover:ring-2 transition-colors duration-150
-        ${showResult && value === answer ? "ring-success ring-2 ring-inset text-success" : ""}`}
+        ${isShowResults && value === answer ? "ring-success ring-2 ring-inset text-success" : ""}`}
       >
         <span className="text-medium font-secondary font-semibold">
           {value}
@@ -33,7 +37,7 @@ const CustomRadioGroupItem = React.forwardRef<
 
       <RadioGroupPrimitive.Indicator
         className={`absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 size-8 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-150
-           ${showResult ? (value === answer ? "bg-success" : "bg-destructive") : "bg-primary"}`}
+           ${isShowResults ? (value === answer ? "bg-success" : "bg-destructive") : "bg-primary"}`}
       >
         <span className="text-medium text-text-300 font-secondary font-semibold">
           {value}

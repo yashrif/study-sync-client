@@ -6,6 +6,7 @@ export * from "./link";
 export * from "./list";
 export * from "./mcq";
 export * from "./quiz";
+export * from "./api";
 export * from "./role";
 export * from "./scroll";
 export * from "./status";

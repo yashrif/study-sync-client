@@ -1,15 +1,18 @@
 "use client";
 
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useRef } from "react";
 
 import { FormHandle } from "@/app/dashboard/types/form-handle";
 import { quizDetails } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
 import { Button } from "@/components/ui/button";
-import { useGetQuiz } from "@/hooks/useQuiz";
-import PageHeading from "../../components/PageHeading";
-import Details from "./details";
-import Overview from "./overview";
+import { useQuizContext } from "@/hooks/useQuizContext";
+import { Status } from "@allTypes";
+import { notFound } from "next/navigation";
+import PageHeading from "../../_components/PageHeading";
+import Details from "./_details";
+import Overview from "./_overview";
+import { useFetchQuiz } from "./fetchQuiz";
 
 type Props = {
   params: {
@@ -19,11 +22,13 @@ type Props = {
 
 const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
   const formRef = useRef<FormHandle>(null);
-  const [points, setPoints] = useState<number | undefined>(undefined);
-  const { data, setQuiz } = useGetQuiz({
-    id,
-    mode: "lazy",
-  }).getQuiz();
+  const {
+    state: { points, status },
+  } = useQuizContext();
+
+  useFetchQuiz();
+
+  if (status === Status.ERROR) return notFound();
 
   return (
     <div className="min-h-full">
@@ -33,9 +38,9 @@ const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
         Icon={quizDetails.Icon}
       >
         <div className="flex gap-24 items-center">
-          {points && (
+          {points !== undefined && (
             <span className="text-large text-primary font-medium">
-              Total Points: {points}
+              Obtained Points: {points}
             </span>
           )}
           <div className="flex gap-4 items-center">
@@ -59,18 +64,17 @@ const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
           </div>
         </div>
       </PageHeading>
-      {data && (
-        <div className="h-full grid grid-cols-[280px,auto,1fr] gap-16">
-          <Suspense fallback={<Spinner />}>
-            <Overview data={data} setData={setQuiz} />
-          </Suspense>
-          <div />
-          <div className="h-[calc(100%-32px)] w-0.5 bg-border rounded-full my-auto" />
-          <Suspense fallback={<Spinner />}>
-            <Details ref={formRef} data={data} setPoints={setPoints} />
-          </Suspense>
-        </div>
-      )}
+
+      <div className="h-full grid grid-cols-[280px,auto,1fr] gap-16">
+        <Suspense fallback={<Spinner />}>
+          <Overview />
+        </Suspense>
+        <div />
+        <div className="h-[calc(100%-32px)] w-0.5 bg-border rounded-full my-auto" />
+        <Suspense fallback={<Spinner />}>
+          <Details ref={formRef} />
+        </Suspense>
+      </div>
     </div>
   );
 };

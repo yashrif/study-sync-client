@@ -5,6 +5,7 @@ type Props = {
   Icon?: Icon;
   size?: "sm" | "md";
 };
+
 const Heading: React.FC<Props> = ({ title, Icon, size = "md" }) => {
   return (
     <div className="flex gap-2 items-center text-primary">

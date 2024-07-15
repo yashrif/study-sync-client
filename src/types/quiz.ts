@@ -1,4 +1,4 @@
-import { McqIntermediate, McqRequest } from "@allTypes";
+import { McqIntermediate, McqRequest, Status } from "@allTypes";
 
 /* --------------------------------- Server --------------------------------- */
 
@@ -20,7 +20,7 @@ export type QuizRequestDb = {
 
 export type QuizShallow = {
   id: string;
-  title: string | null;
+  title: string;
   createDate: string;
 };
 
@@ -40,3 +40,43 @@ export enum Difficulty {
   MEDIUM = "MEDIUM",
   HARD = "HARD",
 }
+
+/* --------------------------------- Context -------------------------------- */
+
+type Action<T, P = void> = P extends void
+  ? { type: T }
+  : { type: T; payload: P };
+
+export enum QuizActionType {
+  FETCH_START = "FETCH_START",
+  FETCH_SUCCESS = "FETCH_SUCCESS",
+  FETCH_ERROR = "FETCH_ERROR",
+  FETCH_RESET = "FETCH_RESET",
+  SET_DIFFICULTY = "SET_DIFFICULTY",
+  SET_QUIZ = "SET_QUIZ",
+  SET_POINTS = "SET_POINTS",
+  SET_IS_SHOW_RESULTS = "SET_IS_SHOW_RESULTS",
+}
+
+export type QuizAction =
+  | Action<QuizActionType.FETCH_START>
+  | Action<QuizActionType.FETCH_SUCCESS, Quiz>
+  | Action<QuizActionType.FETCH_ERROR>
+  | Action<QuizActionType.FETCH_RESET>
+  | Action<QuizActionType.SET_DIFFICULTY, Difficulty>
+  | Action<QuizActionType.SET_QUIZ, Quiz>
+  | Action<QuizActionType.SET_POINTS, number>
+  | Action<QuizActionType.SET_IS_SHOW_RESULTS, boolean>;
+
+export type QuizState = {
+  quiz: Quiz;
+  status: Status;
+  difficulty: Difficulty;
+  points: number | undefined;
+  isShowResults: boolean;
+};
+
+export type QuizContextProps = {
+  state: QuizState;
+  dispatch: React.Dispatch<QuizAction>;
+};

@@ -1,6 +1,6 @@
 import { IconDots } from "@tabler/icons-react";
 
-import { Action } from "@/types";
+import { TableAction } from "@/types";
 import { Button } from "@components/ui/button";
 import {
   DropdownMenu,
@@ -13,7 +13,7 @@ import {
 
 type Props = {
   label?: string;
-  actions?: Action[];
+  actions?: TableAction[];
   triggerButton?: React.ReactNode;
   children?: React.ReactNode;
   size?: "md" | "auto";

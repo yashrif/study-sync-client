@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
 import { Checkbox as CheckboxComponent } from "@/components/ui/checkbox";
-import { Action, Column } from "@/types";
+import { TableAction, Column } from "@/types";
 import {
   DropdownMenuItem
 } from "@components/ui/dropdown-menu";
@@ -36,7 +36,7 @@ export const Actions = <T extends object>({
   actions,
   copyId = false,
 }: {
-  actions: Action[];
+  actions: TableAction[];
   copyId?: boolean;
 }): ColumnDef<T> => ({
   id: "actions",

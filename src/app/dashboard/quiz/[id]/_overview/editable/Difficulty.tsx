@@ -1,9 +1,8 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
-
 import { quizDetails } from "@/assets/data/dashboard/quiz";
-import { Quiz, Difficulty as TDifficulty } from "@/types";
+import { useQuizContext } from "@/hooks/useQuizContext";
+import { QuizActionType, Difficulty as TDifficulty } from "@/types";
 import {
   Select,
   SelectContent,
@@ -13,15 +12,14 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { IconChevronDown } from "@tabler/icons-react";
-import Property from "../../components/Property";
+import Property from "../../_components/Property";
 
-type Props = {
-  data: Quiz;
-  difficulty: TDifficulty;
-  setDifficulty: Dispatch<SetStateAction<TDifficulty>>;
-};
+const Difficulty: React.FC = () => {
+  const {
+    state: { difficulty },
+    dispatch,
+  } = useQuizContext();
 
-const Difficulty: React.FC<Props> = ({ difficulty, setDifficulty }) => {
   return (
     <div className="flex gap-16 justify-between items-center text-medium">
       <Property
@@ -31,7 +29,10 @@ const Difficulty: React.FC<Props> = ({ difficulty, setDifficulty }) => {
       <Select
         value={difficulty}
         onValueChange={(value) => {
-          setDifficulty(value as TDifficulty);
+          dispatch({
+            type: QuizActionType.SET_DIFFICULTY,
+            payload: value as TDifficulty,
+          });
         }}
       >
         <SelectTrigger className="group size-auto border-none p-0 flex items-center gap-4 [&>*:last-child]:hidden text-base text-text-200">

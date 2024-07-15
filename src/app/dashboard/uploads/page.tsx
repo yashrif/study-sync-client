@@ -8,7 +8,7 @@ import Spinner from "@/components/spinner/Spinner";
 import { Status } from "@/types";
 import { useGetUploads } from "@hooks/useUpload";
 import DataTable from "../../../components/table";
-import PageHeading from "../components/PageHeading";
+import PageHeading from "../_components/PageHeading";
 import { columns } from "./Columns";
 
 const Uploads: React.FC = () => {

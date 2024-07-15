@@ -20,7 +20,7 @@ export type Column = {
   additionalElement?: (props: UploadSimple) => JSX.Element | null;
 };
 
-export type Action = {
+export type TableAction = {
   title: string;
   Icon?: Icon;
   className?: string;
@@ -29,7 +29,7 @@ export type Action = {
   onClick: () => void;
 };
 
-export enum TableControls {
+export enum TableControlTypes {
   Upload = "Upload",
   AddFolder = "AddFolder",
   Delete = "Delete",

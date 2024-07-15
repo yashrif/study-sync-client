@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTable } from "@/hooks/useTable";
-import { TableControls, TTableControl } from "@/types";
+import { TableControlTypes, TTableControl } from "@/types";
 import Spinner from "../spinner/Spinner";
 import ControlBar from "./ControlBar";
 
@@ -23,7 +23,7 @@ type DataTableProps<TData, TValue> = {
   uploadEndpointDb: string | undefined;
   searchKey: string;
   showPagination?: boolean;
-  controlsConfig?: { [key in TableControls]?: TTableControl };
+  controlsConfig?: { [key in TableControlTypes]?: TTableControl };
   className?: string;
   classNameControls?: string;
 };

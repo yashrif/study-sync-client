@@ -4,7 +4,7 @@ import { Table } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 
 import { controlBar } from "@/assets/data/dashboard/controlBar";
-import { Status, TableControls, TTableControl } from "@allTypes";
+import { Status, TableControlTypes, TTableControl } from "@allTypes";
 import IconButton from "../button/IconButton";
 import SearchControl from "./SearchControl";
 import UploadControl from "./UploadControl";
@@ -14,7 +14,7 @@ type Props<TData, TValue> = {
   table: Table<TData>;
   uploadEndpointDb: string | undefined;
   searchKey: string;
-  controlsConfig?: { [key in TableControls]?: TTableControl };
+  controlsConfig?: { [key in TableControlTypes]?: TTableControl };
   className?: string;
   setUploadStatus?: Dispatch<SetStateAction<Status>>;
 };
@@ -24,31 +24,31 @@ const ControlBar = <TData, TValue>({
   uploadEndpointDb: url,
   searchKey,
   controlsConfig = {
-    [TableControls.Upload]: {
+    [TableControlTypes.Upload]: {
       show: true,
       order: 1,
       variant: controlBar.upload.variant,
       title: controlBar.upload.title,
     },
-    [TableControls.AddFolder]: {
+    [TableControlTypes.AddFolder]: {
       show: true,
       order: 2,
       variant: controlBar.addFolder.variant,
       title: controlBar.addFolder.title,
     },
-    [TableControls.Delete]: {
+    [TableControlTypes.Delete]: {
       show: true,
       order: 3,
       variant: controlBar.delete.variant,
       title: controlBar.delete.title,
     },
-    [TableControls.Search]: {
+    [TableControlTypes.Search]: {
       show: true,
       order: 4,
       variant: "outline",
       title: controlBar.search.title,
     },
-    [TableControls.View]: {
+    [TableControlTypes.View]: {
       show: true,
       order: 5,
       variant: controlBar.view.variant,
@@ -65,9 +65,9 @@ const ControlBar = <TData, TValue>({
           <UploadControl
             uploadEndpointDb={url}
             style={{
-              order: controlsConfig[TableControls.Upload]?.order,
+              order: controlsConfig[TableControlTypes.Upload]?.order,
             }}
-            {...controlsConfig[TableControls.Upload]}
+            {...controlsConfig[TableControlTypes.Upload]}
             setUploadStatus={setUploadStatus}
           />
         )}
@@ -81,9 +81,9 @@ const ControlBar = <TData, TValue>({
             }
             size={controlsConfig.AddFolder.size || controlBar.addFolder.size}
             style={{
-              order: controlsConfig[TableControls.AddFolder]?.order,
+              order: controlsConfig[TableControlTypes.AddFolder]?.order,
             }}
-            {...controlsConfig[TableControls.AddFolder]}
+            {...controlsConfig[TableControlTypes.AddFolder]}
           />
         )}
         {controlsConfig?.Delete?.show && (
@@ -95,15 +95,15 @@ const ControlBar = <TData, TValue>({
             show={table.getFilteredSelectedRowModel().rows.length > 0}
             className="mr-auto"
             style={{
-              order: controlsConfig[TableControls.Delete]?.order,
+              order: controlsConfig[TableControlTypes.Delete]?.order,
             }}
-            {...controlsConfig[TableControls.Delete]}
+            {...controlsConfig[TableControlTypes.Delete]}
           />
         )}
         {controlsConfig.Search?.show && (
           <div
             style={{
-              order: controlsConfig[TableControls.Search]?.order,
+              order: controlsConfig[TableControlTypes.Search]?.order,
             }}
           >
             {

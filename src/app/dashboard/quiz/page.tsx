@@ -2,9 +2,9 @@ import { Suspense } from "react";
 
 import { home } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
-import PageHeading from "../components/PageHeading";
-import Recent from "./recent/Recent";
-import FileList from "./uploads";
+import PageHeading from "../_components/PageHeading";
+import Recent from "./_recent/Recent";
+import UploadList from "./uploads";
 
 const page = () => {
   return (
@@ -16,7 +16,7 @@ const page = () => {
       />
       <div className="flex flex-col gap-24">
         <Suspense fallback={<Spinner />}>
-          <FileList />
+          <UploadList />
         </Suspense>
 
         <Suspense fallback={<Spinner />}>

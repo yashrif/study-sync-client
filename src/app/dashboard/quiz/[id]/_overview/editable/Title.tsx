@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import studySyncDB from "@/api/studySyncDB";
+import { serverEndpoints } from "@/assets/data/api";
 import { defaultValues, quizDetails } from "@/assets/data/dashboard/quiz";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,10 +17,9 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Quiz } from "@/types";
+import { useApiHandler } from "@/hooks/useApiHandler";
+import { useQuizContext } from "@/hooks/useQuizContext";
 import { IconChecks } from "@tabler/icons-react";
-import { Dispatch, SetStateAction } from "react";
-import { dbEndpoints } from "@/assets/data/api";
 
 const FormSchema = z.object({
   title: z.string().max(60, {
@@ -26,33 +27,36 @@ const FormSchema = z.object({
   }),
 });
 
-type Props = {
-  data: Quiz;
-  setData: Dispatch<SetStateAction<Quiz | undefined>>;
-};
+const Title: React.FC = () => {
+  const {
+    state: { quiz },
+    dispatch,
+  } = useQuizContext();
+  const { handler } = useApiHandler<{ title: string }>({
+    apiCall: useCallback(
+      (data) =>
+        studySyncDB.patch(`${serverEndpoints.quizzes}/${quiz.id}`, data),
+      [quiz.id]
+    ),
+    dispatch,
+  });
 
-const Title: React.FC<Props> = ({ data: quiz, setData }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: quiz.title || defaultValues.title,
+      title: defaultValues.title,
+    },
+    values: {
+      title: quiz.title,
     },
   });
 
   const {
     formState: { dirtyFields },
-    reset,
   } = form;
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    try {
-      await studySyncDB.patch(`${dbEndpoints.quizzes}${quiz.id}`, data);
-      setData((prev) => ({ ...prev, ...data }) as Quiz | undefined);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      reset(data);
-    }
+    handler(data);
   };
 
   return (

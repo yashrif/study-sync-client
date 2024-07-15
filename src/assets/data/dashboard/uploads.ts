@@ -1,6 +1,6 @@
 import { IconFileUpload } from "@tabler/icons-react";
 
-import { Action, Column, IconList } from "@allTypes";
+import { TableAction, Column, IconList } from "@allTypes";
 import { fileTypeIcons } from "./file";
 
 export const home: IconList = {
@@ -21,7 +21,7 @@ export const search = {
 
 export const columnConfig: {
   columns: Column[];
-  actions: Action[];
+  actions: TableAction[];
 } = {
   columns: [
     {

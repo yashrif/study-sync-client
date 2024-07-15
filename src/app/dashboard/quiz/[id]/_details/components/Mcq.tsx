@@ -22,10 +22,9 @@ type Props = {
     any,
     undefined
   >;
-  showResults: boolean;
 };
 
-const Mcq: React.FC<Props> = ({ mcq, order, form, showResults }) => {
+const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
   return (
     <FormField
       key={mcq.id}
@@ -43,6 +42,7 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, showResults }) => {
           </FormLabel>
           <FormControl>
             <RadioGroup
+              value={field.value}
               onValueChange={field.onChange}
               defaultValue={field.value}
               className="flex flex-col gap-3"
@@ -63,7 +63,6 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, showResults }) => {
                             .filter((x) => x !== null)[0]
                         ) || ""
                       }
-                      showResult={showResults}
                     />
                   </FormControl>
                   <FormLabel className="text-base text-text-200">
