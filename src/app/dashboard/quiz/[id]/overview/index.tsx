@@ -33,7 +33,7 @@ const Overview: React.FC<Props> = (props) => {
   const { mcq, cq, questions, duration } = quizDetails.properties.fields;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="fixed w-[280px] flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <Heading
           title={quizDetails.overview.title}

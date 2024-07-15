@@ -9,7 +9,7 @@ export type McqRequest = {
 export type McqShallow = {
   id: string;
   question: string;
-  choices: string | number[];
+  choices: string[] | number[];
   answers: boolean[];
   createDate: string;
 };
@@ -24,3 +24,10 @@ export type McqIntermediate = McqShallow & {
 export type Mcq = Omit<McqIntermediate, "quiz"> & {
   quiz: QuizIntermediate;
 };
+
+export enum Choices {
+  A,
+  B,
+  C,
+  D,
+}

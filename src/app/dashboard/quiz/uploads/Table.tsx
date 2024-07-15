@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
 import { search } from "@/assets/data/dashboard/quiz";
+import Spinner from "@/components/spinner/Spinner";
 import {
   TableBody,
   TableCell,
@@ -12,7 +13,6 @@ import {
   Table as UITable,
 } from "@/components/ui/table";
 import { Status, TableControls, UploadSimple } from "@/types";
-import Spinner from "@/components/spinner/Spinner";
 import ControlBar from "@components/table/ControlBar";
 import { columns } from "./Columns";
 
@@ -24,7 +24,7 @@ type Props = {
 
 const Table: React.FC<Props> = ({ table, setUploadStatus, status }) => {
   return (
-    <div className={`flex flex-col gap-8 pt-8`}>
+    <div className="flex flex-col gap-8">
       <ControlBar
         table={table}
         searchKey={search.key}

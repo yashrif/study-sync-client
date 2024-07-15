@@ -1,11 +1,13 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useRef, useState } from "react";
 
+import { FormHandle } from "@/app/dashboard/types/form-handle";
 import { quizDetails } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
+import { Button } from "@/components/ui/button";
 import { useGetQuiz } from "@/hooks/useQuiz";
-import PageHeader from "../../components/PageHeader";
+import PageHeading from "../../components/PageHeading";
 import Details from "./details";
 import Overview from "./overview";
 
@@ -16,26 +18,56 @@ type Props = {
 };
 
 const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
+  const formRef = useRef<FormHandle>(null);
+  const [points, setPoints] = useState<number | undefined>(undefined);
   const { data, setQuiz } = useGetQuiz({
     id,
     mode: "lazy",
   }).getQuiz();
 
   return (
-    <div className="divide-y-2 min-h-full">
-      <PageHeader
+    <div className="min-h-full">
+      <PageHeading
         title={quizDetails.title}
         description={quizDetails.description}
         Icon={quizDetails.Icon}
-      />
+      >
+        <div className="flex gap-24 items-center">
+          {points && (
+            <span className="text-large text-primary font-medium">
+              Total Points: {points}
+            </span>
+          )}
+          <div className="flex gap-4 items-center">
+            <Button
+              type="submit"
+              onClick={() => {
+                formRef.current?.submit();
+              }}
+            >
+              Submit
+            </Button>
+            <Button
+              type="reset"
+              variant={"outline"}
+              onClick={() => {
+                formRef.current?.clear();
+              }}
+            >
+              Clear
+            </Button>
+          </div>
+        </div>
+      </PageHeading>
       {data && (
-        <div className="h-full pt-8 grid grid-cols-[280px,auto,1fr] gap-24">
+        <div className="h-full grid grid-cols-[280px,auto,1fr] gap-16">
           <Suspense fallback={<Spinner />}>
             <Overview data={data} setData={setQuiz} />
           </Suspense>
-          <div className="h-[80%] w-0.5 bg-border rounded-full my-auto" />
+          <div />
+          <div className="h-[calc(100%-32px)] w-0.5 bg-border rounded-full my-auto" />
           <Suspense fallback={<Spinner />}>
-            <Details data={data} />
+            <Details ref={formRef} data={data} setPoints={setPoints} />
           </Suspense>
         </div>
       )}
