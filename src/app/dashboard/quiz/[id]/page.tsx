@@ -11,7 +11,7 @@ import { Status } from "@allTypes";
 import PageHeading from "../../_components/PageHeading";
 import Details from "./_details";
 import Overview from "./_overview";
-import { useFetchQuiz } from "./fetchQuiz";
+import { useFetchQuiz } from "../../../../hooks/fetchQuiz";
 
 type Props = {
   params: {

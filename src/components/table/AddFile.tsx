@@ -22,7 +22,7 @@ const onFileUpload = ({ data, url }: UploadDataProps) => {
         .post(url, JSON.stringify(JSON.parse(data)))
         .then((res) => res.data);
 
-    const response = store();
+    store();
   } catch (e) {
     console.log(e);
   }

@@ -2,6 +2,7 @@
 
 import {
   Difficulty,
+  FetchActionType,
   Quiz,
   QuizAction,
   QuizActionType,
@@ -24,18 +25,18 @@ const initialState: QuizState = {
 
 const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
   switch (action.type) {
-    case QuizActionType.FETCH_START:
+    case FetchActionType.FETCH_START:
       return {
         ...state,
         status: Status.PENDING,
       };
-    case QuizActionType.FETCH_SUCCESS:
+    case FetchActionType.FETCH_SUCCESS:
       return {
         ...state,
         status: Status.SUCCESS,
         quiz: action.payload,
       };
-    case QuizActionType.FETCH_ERROR:
+    case FetchActionType.FETCH_ERROR:
       return {
         ...state,
         status: Status.ERROR,

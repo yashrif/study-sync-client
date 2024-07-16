@@ -1,26 +1,26 @@
 import { AxiosResponse } from "axios";
 import { Dispatch, useCallback } from "react";
 
-import { QuizAction, QuizActionType } from "@allTypes";
+import { FetchAction, FetchActionType } from "@allTypes";
 
-type Props<T> = {
+type Props<T, R> = {
   apiCall: (data: T | null) => Promise<AxiosResponse<any, any>>;
-  dispatch: Dispatch<QuizAction>;
+  dispatch: Dispatch<FetchAction<R>>;
 };
 
-export const useApiHandler = <T>({ apiCall, dispatch }: Props<T>) => {
+export const useApiHandler = <T, R>({ apiCall, dispatch }: Props<T, R>) => {
   const handler = useCallback(
     async (data: T | null = null) => {
-      dispatch({ type: QuizActionType.FETCH_START });
+      dispatch({ type: FetchActionType.FETCH_START });
       try {
         const response = await apiCall(data);
         dispatch({
-          type: QuizActionType.FETCH_SUCCESS,
+          type: FetchActionType.FETCH_SUCCESS,
           payload: response.data,
         });
       } catch (e) {
         console.log(e);
-        dispatch({ type: QuizActionType.FETCH_ERROR });
+        dispatch({ type: FetchActionType.FETCH_ERROR });
       }
     },
     [apiCall, dispatch]

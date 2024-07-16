@@ -26,13 +26,11 @@ export type ButtonLink = {
   className?: string;
 };
 
-export type Button = {
+export type Button = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   title: string;
   Icon?: Icon;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  onClick?: () => void;
-  className?: string;
   iconClassName?: string;
   disabled?: boolean;
   status?: Status;

@@ -17,7 +17,7 @@ import {
 
 import { Quiz } from "@/components/icons";
 import { dateFormatter } from "@/utils/dateFormatter";
-import { Column, ColumnConfig, IconList } from "@allTypes";
+import { Column, ColumnConfig, IconList, QuizTypes } from "@allTypes";
 import { fileTypeIcons } from "./file";
 
 export const home: IconList = {
@@ -31,7 +31,20 @@ export const create = {
   Icon: IconSquarePlus2,
   description:
     "Select or upload documents to generate quiz! Uploaded documents will be saved in the library which can be accessed later.",
-};
+  quizType: [
+    {
+      id: QuizTypes.MCQ,
+      label: "MCQ",
+    },
+    {
+      id: QuizTypes.CQ,
+      label: "CQ",
+    },
+  ],
+  quizTypeError: {
+    empty: "You have to select at least one type.",
+  },
+} as const;
 
 export const search = {
   key: "title",

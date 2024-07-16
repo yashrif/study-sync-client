@@ -49,12 +49,12 @@ const Dropdown: React.FC<Props> = ({
         {actions?.map((action) => (
           <DropdownMenuItem
             key={action.title}
-            onClick={action.onClick}
-            className={`flex items-center gap-1.5 cursor-pointer ${action.className}`}
+            // onClick={action.onClick}
+            // className={`flex items-center gap-1.5 cursor-pointer ${action.className}`}
           >
-            {action.Icon && (
+            {/* {action.Icon && (
               <action.Icon className={`size-[14px] ${action.iconClassName}`} />
-            )}
+            )} */}
             <span className={action.titleClassName}>{action.title}</span>
           </DropdownMenuItem>
         ))}

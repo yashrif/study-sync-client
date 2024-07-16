@@ -1,14 +1,14 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { controlBar } from "@/assets/data/dashboard/controlBar";
-import { Status, TTableControl } from "@/types";
+import { TTableControl } from "@/types";
 import IconButton from "../button/IconButton";
 import AddFile from "./AddFile";
 
 type Props = {
   uploadEndpointDb: string | undefined;
   style?: React.CSSProperties;
-  setUploadStatus?: Dispatch<SetStateAction<Status>>;
+  onUpload?: () => void;
 } & TTableControl;
 
 const UploadControl: React.FC<Props> = ({
@@ -19,15 +19,14 @@ const UploadControl: React.FC<Props> = ({
   title,
   uploadEndpointDb: url,
   variant,
-  setUploadStatus,
+  onUpload,
   ...rest
 }) => {
   const [isDropzoneOpen, setIsDropzoneOpen] = useState(false);
 
   useEffect(() => {
-    setUploadStatus &&
-      setUploadStatus(isDropzoneOpen ? Status.PENDING : Status.IDLE);
-  }, [isDropzoneOpen, setUploadStatus]);
+    if (!isDropzoneOpen && onUpload) onUpload();
+  }, [isDropzoneOpen, onUpload]);
 
   return (
     <>

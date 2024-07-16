@@ -16,7 +16,7 @@ type Props<TData, TValue> = {
   searchKey: string;
   controlsConfig?: { [key in TableControlTypes]?: TTableControl };
   className?: string;
-  setUploadStatus?: Dispatch<SetStateAction<Status>>;
+  onUpload?: () => void;
 };
 
 const ControlBar = <TData, TValue>({
@@ -56,7 +56,7 @@ const ControlBar = <TData, TValue>({
     },
   },
   className,
-  setUploadStatus,
+  onUpload,
 }: Props<TData, TValue>) => {
   return (
     <div className={`flex gap-16 items-center justify-between ${className}`}>
@@ -68,7 +68,7 @@ const ControlBar = <TData, TValue>({
               order: controlsConfig[TableControlTypes.Upload]?.order,
             }}
             {...controlsConfig[TableControlTypes.Upload]}
-            setUploadStatus={setUploadStatus}
+            onUpload={onUpload}
           />
         )}
         {controlsConfig?.AddFolder?.show && (

@@ -21,7 +21,6 @@ function ViewControl<TData>({
   Icon = controlBar.view.Icon,
   variant = controlBar.view.variant,
   size = controlBar.view.size,
-  ...rest
 }: Props<TData>) {
   const triggerButton = (
     <Button
@@ -32,7 +31,6 @@ function ViewControl<TData>({
         ...style,
         order,
       }}
-      {...rest}
     >
       <span className="sr-only">Open menu</span>
       {Icon && <Icon className="h-4 w-auto stroke-[2.5px]" />}

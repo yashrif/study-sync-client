@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import ProgressBar from "@/components/ProgressBar";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
+import { QuizUploadsProvider } from "@/context/QuizUploadsContext";
 
 const rubik = Rubik({
   weight: ["400", "500", "600", "700"],

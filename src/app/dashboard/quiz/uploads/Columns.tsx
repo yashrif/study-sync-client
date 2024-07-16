@@ -1,5 +1,6 @@
 import { IconRefresh } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { memo } from "react";
 
 import {
   columnConfig as columnConfigObj,
@@ -7,7 +8,8 @@ import {
 } from "@/assets/data/dashboard/quiz";
 import StatusIcon from "@/components/StatusIcon";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
-import { ColumnConfig, IndexStates, Status } from "@/types";
+import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
+import { ColumnConfig, Status } from "@/types";
 import { UploadSimple } from "@/types/upload";
 import {
   Tooltip,
@@ -15,16 +17,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@components/ui/tooltip";
-import { fileIndexing } from "@utils/fileIndexing";
-import { memo } from "react";
+import { fileIndexing } from "./fileIndexing";
 
-const IndexButton: React.FC<
-  IndexStates & {
-    data: UploadSimple;
-  }
-> = memo((props) => {
+const IndexButton: React.FC<{ data: UploadSimple }> = memo(({ data }) => {
   IndexButton.displayName = "IndexButton";
-  const { data, indexStatus } = props;
+  const {
+    state: { indexStatus },
+    dispatch,
+  } = useQuizUploadsContext();
 
   return (
     <TooltipProvider>
@@ -33,7 +33,7 @@ const IndexButton: React.FC<
           <div
             className="pl-2"
             onClick={async () => {
-              await fileIndexing({ ...props, data });
+              await fileIndexing({ data, dispatch });
             }}
           >
             <StatusIcon
@@ -64,7 +64,7 @@ const IndexButton: React.FC<
   );
 });
 
-export const columns = (props: IndexStates): ColumnDef<UploadSimple>[] => [
+export const columns: ColumnDef<UploadSimple>[] = [
   {
     ...Checkbox(),
   },
@@ -75,7 +75,7 @@ export const columns = (props: IndexStates): ColumnDef<UploadSimple>[] => [
         {
           ...isIndexedData,
           additionalElement(data) {
-            return <IndexButton data={data} {...props} />;
+            return <IndexButton data={data} />;
           },
         },
       ],

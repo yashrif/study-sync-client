@@ -30,9 +30,3 @@ export type FileIcon = {
 export type IndexStatus = {
   [key: string]: Status;
 };
-
-export type IndexStates = {
-  indexStatus: IndexStatus;
-  setIndexStatus: Dispatch<SetStateAction<IndexStatus>>;
-  setUploads: Dispatch<SetStateAction<UploadSimple[]>>;
-};

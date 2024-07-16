@@ -5,6 +5,7 @@ import Spinner from "@/components/spinner/Spinner";
 import PageHeading from "../_components/PageHeading";
 import Recent from "./_recent/Recent";
 import UploadList from "./uploads";
+import { QuizUploadsProvider } from "@/context/QuizUploadsContext";
 
 const page = () => {
   return (
@@ -16,9 +17,10 @@ const page = () => {
       />
       <div className="flex flex-col gap-24">
         <Suspense fallback={<Spinner />}>
-          <UploadList />
+          <QuizUploadsProvider>
+            <UploadList />
+          </QuizUploadsProvider>
         </Suspense>
-
         <Suspense fallback={<Spinner />}>
           <Recent />
         </Suspense>

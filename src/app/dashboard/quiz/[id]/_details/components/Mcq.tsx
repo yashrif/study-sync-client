@@ -5,7 +5,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Choices, McqIntermediate } from "@/types";
 import { RadioGroup } from "@components/ui/radio-group";
@@ -49,7 +48,7 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
               value={field.value}
               onValueChange={field.onChange}
               defaultValue={field.value}
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-3 !mt-0"
             >
               {mcq.choices.map((choice, index) => (
                 <FormItem
@@ -69,7 +68,7 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
                       }
                     />
                   </FormControl>
-                  <FormLabel className="text-base text-text-200">
+                  <FormLabel className="text-base text-text-200 !mt-0">
                     {choice}
                   </FormLabel>
                 </FormItem>

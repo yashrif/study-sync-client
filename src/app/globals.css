@@ -234,7 +234,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-[#747474]/80 hover:shadow-[#747474] border-[3.5px] border-solid border-transparent transition-colors duration-300;
+    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-accent-200/50 hover:shadow-accent-200/80 border-[3.5px] border-solid border-transparent transition-colors duration-300;
   }
 
   .no-scrollbar {
@@ -260,27 +260,6 @@
     -webkit-text-fill-color: hsl(var(--secondary-300));
     -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255, 0) inset;
     transition: background-color 5000s ease-in-out 0s;
-  }
-
-  /* -------------------------------- scrollbar ------------------------------- */
-  ::-webkit-scrollbar {
-    @apply w-[15.5px];
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply rounded-[10px] shadow-[inset_0_0_10px_10px_transparent] border-[3.5px] border-solid border-transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-[#61398F]/80 hover:shadow-[#61398F] border-[3.5px] border-solid border-transparent transition-colors duration-300;
-  }
-
-  .no-scrollbar {
-    scrollbar-width: none;
-  }
-
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
   }
 
   /* ---------------------------------- focus --------------------------------- */
