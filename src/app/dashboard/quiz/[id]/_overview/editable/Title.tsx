@@ -17,11 +17,12 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizContext } from "@/hooks/useQuizContext";
+import { Quiz } from "@/types";
 import { IconChecks } from "@tabler/icons-react";
-import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/components/ui/use-toast";
+import Property from "../../_components/Property";
 
 const FormSchema = z.object({
   title: z.string().max(60, {
@@ -34,7 +35,7 @@ const Title: React.FC = () => {
     state: { quiz },
     dispatch,
   } = useQuizContext();
-  const { handler } = useApiHandler<{ title: string }>({
+  const { handler } = useApiHandler<{ title: string }, Quiz>({
     apiCall: useCallback(
       (data) =>
         studySyncDB.patch(`${serverEndpoints.quizzes}/${quiz.id}`, data),
@@ -78,11 +79,11 @@ const Title: React.FC = () => {
           name="title"
           render={({ field }) => (
             <FormItem className="flex gap-16 justify-between items-center">
-              <FormLabel className="flex gap-2 items-center text-secondary-200">
-                <quizDetails.preferences.fields.title.Icon className="size-[18px] stroke-[2.5]" />
-                <span className="text-medium">
-                  {quizDetails.preferences.fields.title.title}
-                </span>
+              <FormLabel>
+                <Property
+                  title={quizDetails.preferences.fields.title.title}
+                  Icon={quizDetails.preferences.fields.title.Icon}
+                />
               </FormLabel>
               <FormControl className="!m-0">
                 <Input

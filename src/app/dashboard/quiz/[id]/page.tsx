@@ -13,13 +13,7 @@ import PageHeading from "../../_components/PageHeading";
 import List from "./_details";
 import Overview from "./_overview";
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
+const QuizDetails: React.FC = () => {
   const {
     state: { points, status, formRef, isShowResults, quiz },
   } = useQuizContext();
@@ -36,10 +30,16 @@ const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
         Icon={quizDetails.Icon}
       >
         <div className="flex gap-24 items-center">
-          {isShowResults && points !== undefined && (
-            <span className="text-large text-primary font-medium">
-              Obtained Points: {points}/
-              {(quiz.mcqs?.length || 0) + (quiz.cqs?.length || 0)}
+          {isShowResults && (
+            <span className="flex items-center gap-1.5 text-large text-primary font-medium">
+              <span>Obtained Points:</span>
+              {status === Status.PENDING ? (
+                <Spinner className="!size-5" />
+              ) : (
+                <span>
+                  {points}/{(quiz.mcqs?.length || 0) + (quiz.cqs?.length || 0)}
+                </span>
+              )}
             </span>
           )}
           <div className="flex gap-4 items-center">

@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 
-import { quizDetails } from "@/assets/data/dashboard/quiz";
+import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
+import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { Difficulty as TDifficulty } from "@/types";
 import { DURATION_PER_CQ, DURATION_PER_MCQ } from "@/utils/constants";
@@ -12,8 +13,12 @@ import Editable from "./editable";
 
 const Overview: React.FC = () => {
   const { state } = useQuizContext();
+  const difficulty = useQueryString().getQueryString(
+    queryParams.difficulty.name
+  );
+
   const difficultyValue = useMemo(() => {
-    switch (state.difficulty) {
+    switch (difficulty) {
       case TDifficulty.EASY:
         return 0.5;
       case TDifficulty.MEDIUM:
@@ -23,7 +28,7 @@ const Overview: React.FC = () => {
       default:
         return 1;
     }
-  }, [state.difficulty]);
+  }, [difficulty]);
 
   const { mcq, cq, questions, duration } = quizDetails.properties.fields;
   const data = state.quiz;

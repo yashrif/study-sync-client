@@ -85,9 +85,9 @@ type Action<T, P = void> = P extends void
   : { type: T; payload: P };
 
 export enum QuizActionType {
-  SET_DIFFICULTY = "SET_DIFFICULTY",
   SET_QUIZ = "SET_QUIZ",
-  SET_POINTS = "SET_POINTS",
+  SET_POINTS_START = "SET_POINTS_START",
+  SET_POINTS_SUCCESS = "SET_POINTS_SUCCESS",
   SET_IS_SHOW_RESULTS = "SET_IS_SHOW_RESULTS",
   SET_FORM_REF = "SET_FORM_REF",
   QUIZ_EVALUATE_START = "QUIZ_EVALUATE_START",
@@ -96,9 +96,10 @@ export enum QuizActionType {
 }
 
 export type QuizAction =
-  | (FetchAction<Quiz> | Action<QuizActionType.SET_DIFFICULTY, Difficulty>)
+  | FetchAction<Quiz>
   | Action<QuizActionType.SET_QUIZ, Quiz>
-  | Action<QuizActionType.SET_POINTS, number>
+  | Action<QuizActionType.SET_POINTS_START>
+  | Action<QuizActionType.SET_POINTS_SUCCESS, number>
   | Action<QuizActionType.SET_IS_SHOW_RESULTS, boolean>
   | Action<QuizActionType.QUIZ_EVALUATE_START>
   | Action<
@@ -112,7 +113,6 @@ export type QuizAction =
 export type QuizState = {
   quiz: Quiz;
   status: Status;
-  difficulty: Difficulty;
   points: number | undefined;
   isShowResults: boolean;
   formRef: React.RefObject<FormHandle>;

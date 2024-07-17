@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Difficulty,
   FetchActionType,
   Quiz,
   QuizAction,
@@ -17,7 +16,6 @@ const QuizContext = createContext<QuizContextProps | undefined>(undefined);
 const initialState: QuizState = {
   quiz: {} as Quiz,
   status: Status.IDLE,
-  difficulty: Difficulty.MEDIUM,
   points: undefined,
   isShowResults: false,
   formRef: { current: null },
@@ -42,19 +40,20 @@ const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
         ...state,
         status: Status.ERROR,
       };
-    case QuizActionType.SET_DIFFICULTY:
-      return {
-        ...state,
-        difficulty: action.payload,
-      };
     case QuizActionType.SET_QUIZ:
       return {
         ...state,
         quiz: action.payload,
       };
-    case QuizActionType.SET_POINTS:
+    case QuizActionType.SET_POINTS_START:
       return {
         ...state,
+        status: Status.PENDING,
+      };
+    case QuizActionType.SET_POINTS_SUCCESS:
+      return {
+        ...state,
+        status: Status.SUCCESS,
         points: action.payload,
       };
     case QuizActionType.SET_IS_SHOW_RESULTS:

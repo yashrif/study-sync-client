@@ -2,6 +2,7 @@ import {
   IconAdjustmentsCog,
   IconBookmarks,
   IconBulb,
+  IconCategory,
   IconClock,
   IconHistory,
   IconListCheck,
@@ -17,7 +18,13 @@ import {
 
 import { Quiz } from "@/components/icons";
 import { dateFormatter } from "@/utils/dateFormatter";
-import { Column, ColumnConfig, IconList, QuizTypes } from "@allTypes";
+import {
+  Column,
+  ColumnConfig,
+  Difficulty,
+  IconList,
+  QuizTypes,
+} from "@allTypes";
 import { fileTypeIcons } from "./file";
 
 export const home: IconList = {
@@ -184,6 +191,10 @@ export const quizDetails = {
         title: "Difficulty",
         Icon: IconStack2,
       },
+      types: {
+        title: "Types",
+        Icon: IconCategory,
+      },
     },
   },
 
@@ -197,4 +208,15 @@ export const quizDetails = {
 
 export const defaultValues = {
   title: "Untitled",
+};
+
+export const queryParams = {
+  difficulty: {
+    name: "difficulty",
+    value: Difficulty.MEDIUM,
+  },
+  types: {
+    key: "types",
+    value: [QuizTypes.MCQ, QuizTypes.CQ],
+  },
 };

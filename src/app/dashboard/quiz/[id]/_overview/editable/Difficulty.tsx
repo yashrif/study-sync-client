@@ -1,8 +1,8 @@
 "use client";
 
-import { quizDetails } from "@/assets/data/dashboard/quiz";
-import { useQuizContext } from "@/hooks/useQuizContext";
-import { QuizActionType, Difficulty as TDifficulty } from "@/types";
+import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
+import { useQueryString } from "@/hooks/useQueryString";
+import { Difficulty as TDifficulty } from "@/types";
 import {
   Select,
   SelectContent,
@@ -11,14 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
+import { useQueryParams } from "@hooks/useQueryParams";
 import { IconChevronDown } from "@tabler/icons-react";
 import Property from "../../_components/Property";
 
 const Difficulty: React.FC = () => {
-  const {
-    state: { difficulty },
-    dispatch,
-  } = useQuizContext();
+  const { setQueryParams } = useQueryParams();
+  const difficulty =
+    useQueryString().getQueryString(queryParams.difficulty.name) ||
+    queryParams.difficulty.value;
 
   return (
     <div className="flex gap-16 justify-between items-center text-medium">
@@ -27,12 +28,9 @@ const Difficulty: React.FC = () => {
         Icon={quizDetails.preferences.fields.difficulty.Icon}
       />
       <Select
-        value={difficulty}
+        value={difficulty || ""}
         onValueChange={(value) => {
-          dispatch({
-            type: QuizActionType.SET_DIFFICULTY,
-            payload: value as TDifficulty,
-          });
+          setQueryParams(queryParams.difficulty.name, value);
         }}
       >
         <SelectTrigger className="group size-auto border-none p-0 flex items-center gap-4 [&>*:last-child]:hidden text-base text-text-200">
