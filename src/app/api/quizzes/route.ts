@@ -16,14 +16,15 @@ export async function POST(request: NextRequest) {
   } = await request.json();
 
   try {
-    let mcqs, cqs;
+    let mcqs = [],
+      cqs = [];
     if (types.includes(QuizTypes.MCQ)) {
       const response = await studySyncAI.post(aiEndpoints.qna, ids);
-      mcqs = response.data[0].collection;
+      mcqs = response.data.collection[0];
     }
     if (types.includes(QuizTypes.CQ)) {
       const response = await studySyncAI.post(aiEndpoints.cqna, ids);
-      cqs = response.data[0].collection;
+      cqs = response.data.collection[0];
     }
 
     return NextResponse.json(

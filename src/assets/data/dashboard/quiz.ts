@@ -186,6 +186,13 @@ export const quizDetails = {
       },
     },
   },
+
+  mcq: {
+    title: "Multiple Choice Questions",
+  },
+  cq: {
+    title: "Short Questions",
+  },
 };
 
 export const defaultValues = {

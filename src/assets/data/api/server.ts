@@ -7,3 +7,4 @@ export const api = `${hostname}/api`;
 export const uploads = `/uploads`;
 export const index = `/index`;
 export const quizzes = `/quizzes`;
+export const evaluate = `/evaluate`;

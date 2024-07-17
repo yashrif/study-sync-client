@@ -8,10 +8,10 @@ import Spinner from "@/components/spinner/Spinner";
 import { Button } from "@/components/ui/button";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { Status } from "@allTypes";
-import PageHeading from "../../_components/PageHeading";
-import Details from "./_details";
-import Overview from "./_overview";
 import { useFetchQuiz } from "../../../../hooks/fetchQuiz";
+import PageHeading from "../../_components/PageHeading";
+import List from "./_details";
+import Overview from "./_overview";
 
 type Props = {
   params: {
@@ -71,7 +71,7 @@ const QuizDetails: React.FC<Props> = ({ params: { id } }) => {
         <div />
         <div className="h-[calc(100%-32px)] w-0.5 bg-border rounded-full my-auto" />
         <Suspense fallback={<Spinner />}>
-          <Details />
+          <List />
         </Suspense>
       </div>
     </div>

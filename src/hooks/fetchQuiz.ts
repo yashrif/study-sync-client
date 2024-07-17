@@ -12,7 +12,7 @@ export const useFetchQuiz = async () => {
   const { dispatch } = useQuizContext();
   const { handler } = useApiHandler({
     apiCall: useCallback(
-      () => studySyncDB.get(`${serverEndpoints.quizzes}/${id}`),
+      async () => await studySyncDB.get(`${serverEndpoints.quizzes}/${id}`),
       [id]
     ),
     dispatch,

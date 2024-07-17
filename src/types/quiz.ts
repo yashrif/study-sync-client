@@ -1,5 +1,7 @@
 import { FormHandle } from "@/app/dashboard/types/form-handle";
 import {
+  CqIntermediate,
+  CqRequest,
   FetchAction,
   IndexStatus,
   McqIntermediate,
@@ -19,9 +21,26 @@ export type QuizRequestServer = string[];
 
 export type QuizResponseServer = {
   mcqs: McqRequest[];
+  cqs: CqRequest[];
+};
+
+export type QuizEvaluateRequestServer = {
+  rightAnswer: string;
+  givenAnswer: string;
+};
+
+export type QuizEvaluateResponseServer = {
+  correctness: number;
+  comment: string;
 };
 
 /* ----------------------------------- AI ----------------------------------- */
+
+export type QuizEvaluateRequestAi = QuizEvaluateRequestServer;
+
+export type QuizEvaluateResponseAi = {
+  data: QuizEvaluateResponseServer;
+};
 
 /* ----------------------------------- DB ----------------------------------- */
 
@@ -29,6 +48,7 @@ export type QuizRequestDb = {
   id?: string;
   title?: string;
   mcqs: McqRequest[];
+  cqs: CqRequest[];
 };
 
 export type QuizShallow = {
@@ -45,7 +65,7 @@ export type QuizIntermediate = QuizShallow & {
 
 export type Quiz = QuizIntermediate & {
   mcqs: McqIntermediate[] | null;
-  cqs: string[] | null;
+  cqs: CqIntermediate[] | null;
 };
 
 export enum Difficulty {
@@ -70,13 +90,24 @@ export enum QuizActionType {
   SET_POINTS = "SET_POINTS",
   SET_IS_SHOW_RESULTS = "SET_IS_SHOW_RESULTS",
   SET_FORM_REF = "SET_FORM_REF",
+  QUIZ_EVALUATE_START = "QUIZ_EVALUATE_START",
+  QUIZ_EVALUATE_SUCCESS = "QUIZ_EVALUATE_SUCCESS",
+  QUIZ_EVALUATE_ERROR = "QUIZ_EVALUATE_ERROR",
 }
 
 export type QuizAction =
   | (FetchAction<Quiz> | Action<QuizActionType.SET_DIFFICULTY, Difficulty>)
   | Action<QuizActionType.SET_QUIZ, Quiz>
   | Action<QuizActionType.SET_POINTS, number>
-  | Action<QuizActionType.SET_IS_SHOW_RESULTS, boolean>;
+  | Action<QuizActionType.SET_IS_SHOW_RESULTS, boolean>
+  | Action<QuizActionType.QUIZ_EVALUATE_START>
+  | Action<
+      QuizActionType.QUIZ_EVALUATE_SUCCESS,
+      {
+        [key: string]: QuizEvaluateResponseServer;
+      }
+    >
+  | Action<QuizActionType.QUIZ_EVALUATE_ERROR>;
 
 export type QuizState = {
   quiz: Quiz;
@@ -85,6 +116,9 @@ export type QuizState = {
   points: number | undefined;
   isShowResults: boolean;
   formRef: React.RefObject<FormHandle>;
+  cqEvaluation: {
+    [key: string]: QuizEvaluateResponseServer;
+  };
 };
 
 export type QuizContextProps = {

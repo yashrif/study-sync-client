@@ -30,4 +30,5 @@ export enum Choices {
   B,
   C,
   D,
+  E,
 }
