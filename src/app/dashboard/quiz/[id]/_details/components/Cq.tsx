@@ -30,7 +30,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
   } = useQuizContext();
 
   const result = useMemo(() => {
-    return cqEvaluation[cq.id] || { correctness: 0, comment: "" };
+    return cqEvaluation[cq.id] || { correctness: -1, comment: "" };
   }, [cqEvaluation, cq.id]);
 
   return (
@@ -41,10 +41,31 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
         <FormItem className="flex flex-col gap-6">
           <FormLabel className="grid grid-cols-[40px,1fr] gap-x-10 items-center">
             <div
-              className={`size-10 flex items-center justify-center rounded-full ${form.formState.errors[cq.id] || result.correctness < 50 ? "ring-destructive" : "ring-primary"} ${result.correctness < 50 ? "bg-destructive" : ""} ring-2 ring-inset`}
+              className={`size-10 flex items-center justify-center rounded-full
+                ${
+                  form.formState.errors[cq.id] ||
+                  (result.correctness < 50 && result.correctness >= 0)
+                    ? "ring-destructive"
+                    : "ring-primary"
+                }
+                ${
+                  result.correctness >= 50
+                    ? result.correctness >= 80
+                      ? "bg-success ring-success"
+                      : "bg-blue-500 ring-blue-500"
+                    : result.correctness >= 0
+                      ? "bg-destructive"
+                      : ""
+                } ring-2 ring-inset`}
             >
               <span
-                className={`text-large ${form.formState.errors[cq.id] ? "text-destructive" : result.correctness >= 50 ? "text-primary" : "text-text-300"}  font-secondary font-semibold`}
+                className={`text-large ${
+                  form.formState.errors[cq.id]
+                    ? "text-destructive"
+                    : result.correctness <= 50 && result.correctness >= 0
+                      ? "text-text-300"
+                      : "text-primary"
+                }  font-secondary font-semibold`}
               >
                 {order}
               </span>

@@ -24,17 +24,26 @@ import {
   Difficulty,
   IconList,
   QuizTypes,
+  TableAction,
 } from "@allTypes";
+import { routes } from "../routes";
 import { fileTypeIcons } from "./file";
 
-export const home: IconList = {
-  title: "Quiz",
-  Icon: Quiz,
-  description: "Generate and manage all your quizzes here!",
+export const home: { create: IconList; saved: IconList } = {
+  create: {
+    title: "Generate Quiz",
+    Icon: Quiz,
+    description: "Generate your quizzes here!",
+  },
+  saved: {
+    title: "Saved Quiz",
+    Icon: Quiz,
+    description: "View all the quizzes you generated here!",
+  },
 };
 
 export const create = {
-  title: "Generate Quiz",
+  title: "Create Quiz",
   Icon: IconSquarePlus2,
   description:
     "Select or upload documents to generate quiz! Uploaded documents will be saved in the library which can be accessed later.",
@@ -59,6 +68,7 @@ export const search = {
 };
 
 export const isIndexedData: Column = {
+  type: "no_link",
   accessorKey: "isIndexed",
   title: "Index Status",
   headerClassName: "hidden",
@@ -79,17 +89,20 @@ export const isIndexedData: Column = {
 export const columnConfig: ColumnConfig = {
   columns: [
     {
+      type: "link",
       accessorKey: "title",
       title: "Document",
       formatter: (title) => {
         return title as string;
       },
       linkKey: "id",
+      path: routes.dashboard.uploads,
       className() {
         return "text-base no-underline font-semibold";
       },
     },
     {
+      type: "no_link",
       accessorKey: "name",
       title: "Name",
       headerClassName: "invisible",
@@ -104,6 +117,7 @@ export const columnConfig: ColumnConfig = {
       },
     },
     {
+      type: "no_link",
       accessorKey: "createDate",
       title: "Create Date",
       headerClassName: "hidden",
@@ -131,7 +145,7 @@ export const recent = {
   title: "Recent Quiz",
   Icon: IconHistory,
   description:
-    "Here are the 10 most recent Quiz you generated. Click to view the details.",
+    "Here are the 5 most recent Quiz you generated. Click to view the details.",
   actions: [
     {
       title: "Delete",
@@ -218,5 +232,63 @@ export const queryParams = {
   types: {
     key: "types",
     value: [QuizTypes.MCQ, QuizTypes.CQ],
+  },
+};
+
+export const saved: {
+  search: {
+    key: string;
+    placeholder: string;
+  };
+  columnConfig: {
+    columns: Column[];
+    actions: TableAction[];
+  };
+} = {
+  search: {
+    key: "title",
+    placeholder: "Search by title",
+  },
+
+  columnConfig: {
+    columns: [
+      {
+        type: "link",
+        accessorKey: "title",
+        title: "Title",
+        formatter: (title) => {
+          return title as string;
+        },
+        linkKey: "id",
+        path: routes.dashboard.quiz.home,
+        Icon(props) {
+          return fileTypeIcons({
+            key: "type",
+            value: props.value,
+          });
+        },
+        iconClassName() {
+          return "text-primary";
+        },
+      },
+      {
+        type: "no_link",
+        accessorKey: "createDate",
+        title: "Create Date",
+        formatter: (date) => {
+          return new Date(date as string).toLocaleDateString();
+        },
+      },
+    ],
+    actions: [
+      {
+        title: "View",
+        onClick: () => console.log("View"),
+      },
+      {
+        title: "Delete",
+        onClick: () => console.log("Delete"),
+      },
+    ],
   },
 };

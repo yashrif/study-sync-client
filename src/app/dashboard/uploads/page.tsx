@@ -2,17 +2,19 @@
 
 import { Suspense } from "react";
 
-import { dbEndpoints } from "@/assets/data/api";
+import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
 import { home, search } from "@/assets/data/dashboard/uploads";
 import Spinner from "@/components/spinner/Spinner";
-import { Status } from "@/types";
-import { useGetUploads } from "@hooks/useUpload";
+import { useFetchDataState } from "@/hooks/fetchData";
+import { Status, UploadSimple } from "@/types";
 import DataTable from "../../../components/table";
 import PageHeading from "../_components/PageHeading";
 import { columns } from "./Columns";
 
 const Uploads: React.FC = () => {
-  const { data: uploads, status } = useGetUploads({}).getUploads();
+  const {
+    state: { data, status },
+  } = useFetchDataState<UploadSimple[]>(serverEndpoints.uploads);
 
   return (
     <div className="flex flex-col">
@@ -24,7 +26,7 @@ const Uploads: React.FC = () => {
       <Suspense fallback={<Spinner />}>
         <DataTable
           columns={columns}
-          data={uploads}
+          data={data || []}
           loading={status === Status.PENDING}
           searchKey={search.key}
           uploadEndpointDb={dbEndpoints.uploads}

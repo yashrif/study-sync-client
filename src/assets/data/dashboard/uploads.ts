@@ -2,6 +2,7 @@ import { IconFileUpload } from "@tabler/icons-react";
 
 import { TableAction, Column, IconList } from "@allTypes";
 import { fileTypeIcons } from "./file";
+import { routes } from "../routes";
 
 export const home: IconList = {
   title: "Uploads",
@@ -25,12 +26,14 @@ export const columnConfig: {
 } = {
   columns: [
     {
+      type: "link",
       accessorKey: "title",
       title: "Title",
       formatter: (title) => {
         return title as string;
       },
       linkKey: "id",
+      path: routes.dashboard.uploads,
       Icon(props) {
         return fileTypeIcons({
           key: "type",
@@ -42,6 +45,7 @@ export const columnConfig: {
       },
     },
     {
+      type: "no_link",
       accessorKey: "type",
       title: "Type",
       formatter: (type) => {
@@ -49,6 +53,7 @@ export const columnConfig: {
       },
     },
     {
+      type: "no_link",
       accessorKey: "createDate",
       title: "Create Date",
       formatter: (date) => {

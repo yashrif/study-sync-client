@@ -23,14 +23,15 @@ const SideBar: React.FC = () => {
                 key={index}
                 className="w-full flex flex-col gap-2 items-start"
               >
-                {navLink.map(({ href, title, Icon }) => (
+                {navLink.map(({ href, title, Icon, subLinks }) => (
                   <Suspense fallback={<Spinner />} key={title}>
                     <NavLink
                       title={title}
                       href={href}
                       Icon={Icon}
                       links={navLink}
-                    ></NavLink>
+                      subLinks={subLinks}
+                    />
                   </Suspense>
                 ))}
 

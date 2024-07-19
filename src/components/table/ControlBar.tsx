@@ -1,10 +1,9 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
-import { Dispatch, SetStateAction } from "react";
 
 import { controlBar } from "@/assets/data/dashboard/controlBar";
-import { Status, TableControlTypes, TTableControl } from "@allTypes";
+import { TableControlTypes, TTableControl } from "@allTypes";
 import IconButton from "../button/IconButton";
 import SearchControl from "./SearchControl";
 import UploadControl from "./UploadControl";

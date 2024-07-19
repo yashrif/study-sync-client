@@ -6,16 +6,17 @@ import studySyncDB from "@/api/studySyncDB";
 import { serverEndpoints } from "@/assets/data/api";
 import { create } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
-import { useFetchUploads } from "@/hooks/fetchUploads";
+import { useFetchDataState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { useTable } from "@/hooks/useTable";
+import { UploadSimple } from "@/types";
 import { columns } from "./Columns";
 import CreateAction from "./CreateAction";
 import Table from "./Table";
 
 const UploadList = () => {
-  useFetchUploads();
+  const { state } = useFetchDataState<UploadSimple[]>(serverEndpoints.uploads);
 
   const {
     state: { uploads, status, indexStatus },

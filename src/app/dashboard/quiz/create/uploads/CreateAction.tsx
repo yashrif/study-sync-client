@@ -87,7 +87,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
       setProcessStatus(Status.ERROR);
     } finally {
       setTimeout(() => {
-        if (id) push(links.dashboard.quizDetails(id).href);
+        if (id) push(links.dashboard.quiz.quizDetails(id).href);
         else setProcessStatus(Status.IDLE);
       }, 2000);
     }

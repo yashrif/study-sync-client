@@ -1,32 +1,51 @@
+"use client";
+
 import { Suspense } from "react";
 
-import { home } from "@/assets/data/dashboard/quiz";
+import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
+import { home, search } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
+import DataTable from "@/components/table";
+import { useFetchDataState } from "@/hooks/fetchData";
+import { QuizShallow, Status } from "@allTypes";
 import PageHeading from "../_components/PageHeading";
-import Recent from "./_recent/Recent";
-import UploadList from "./uploads";
-import { QuizUploadsProvider } from "@/context/QuizUploadsContext";
+import { columns } from "./_saved/Columns";
 
-const page = () => {
+const GenerateQuiz: React.FC = () => {
+  const { state } = useFetchDataState<QuizShallow[]>(serverEndpoints.quizzes);
+
   return (
-    <div>
+    <div className="flex flex-col">
       <PageHeading
-        title={home.title}
-        description={home.description}
-        Icon={home.Icon}
+        title={home.saved.title}
+        description={home.saved.description}
+        Icon={home.saved.Icon}
       />
-      <div className="flex flex-col gap-24">
-        <Suspense fallback={<Spinner />}>
-          <QuizUploadsProvider>
-            <UploadList />
-          </QuizUploadsProvider>
-        </Suspense>
-        <Suspense fallback={<Spinner />}>
-          <Recent />
-        </Suspense>
-      </div>
+      <Suspense fallback={<Spinner />}>
+        <DataTable
+          columns={columns}
+          data={state.data || []}
+          loading={state.status === Status.PENDING}
+          searchKey={search.key}
+          uploadEndpointDb={dbEndpoints.uploads}
+          controlsConfig={{
+            Delete: {
+              show: true,
+              order: 3,
+            },
+            Search: {
+              show: true,
+              order: 1,
+            },
+            View: {
+              show: true,
+              order: 2,
+            },
+          }}
+        />
+      </Suspense>
     </div>
   );
 };
 
-export default page;
+export default GenerateQuiz;

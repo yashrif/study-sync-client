@@ -1,24 +1,30 @@
 "use client";
 
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { Suspense } from "react";
 
+import { serverEndpoints } from "@/assets/data/api";
 import { quizDetails } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
 import { Button } from "@/components/ui/button";
+import { useFetchData } from "@/hooks/fetchData";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { Status } from "@allTypes";
-import { useFetchQuiz } from "../../../../hooks/fetchQuiz";
+import { Quiz, Status } from "@allTypes";
 import PageHeading from "../../_components/PageHeading";
 import List from "./_details";
 import Overview from "./_overview";
 
 const QuizDetails: React.FC = () => {
+  const { id } = useParams();
+
   const {
-    state: { points, status, formRef, isShowResults, quiz },
+    state: { points, status, formRef, isShowResults, quiz },dispatch
   } = useQuizContext();
 
-  useFetchQuiz();
+  useFetchData<Quiz>({
+    endpoint: `${serverEndpoints.quizzes}/${id}`,
+    dispatch,
+  });
 
   if (status === Status.ERROR) return notFound();
 

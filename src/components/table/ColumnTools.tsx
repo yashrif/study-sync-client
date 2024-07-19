@@ -2,10 +2,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
 import { Checkbox as CheckboxComponent } from "@/components/ui/checkbox";
-import { TableAction, Column } from "@/types";
-import {
-  DropdownMenuItem
-} from "@components/ui/dropdown-menu";
+import { Column, TableAction } from "@/types";
+import { DropdownMenuItem } from "@components/ui/dropdown-menu";
 import Dropdown from "../Dropdown";
 import { DataTableColumnHeader } from "./Header";
 
@@ -78,26 +76,27 @@ export const ColumnHeader = <T extends object>({
         )
       : (row.original as Record<string, any>)[columnInfo.accessorKey];
 
-    const linkCell = columnInfo.linkKey ? (
-      <Link
-        href={(row.original as Record<string, any>)[columnInfo.linkKey]}
-        className={`anchor-sm ${columnInfo.className}`}
-      >
-        {cell}
-      </Link>
-    ) : (
-      <span
-        className={
-          (columnInfo.className &&
-            columnInfo.className(
-              (row.original as Record<string, any>)[columnInfo.accessorKey]
-            )) ||
-          "text-text-200"
-        }
-      >
-        {cell}
-      </span>
-    );
+    const linkCell =
+      columnInfo.type === "link" ? (
+        <Link
+          href={`${columnInfo.path}/${(row.original as Record<string, any>)[columnInfo.linkKey]}`}
+          className={`anchor-sm ${columnInfo.className}`}
+        >
+          {cell}
+        </Link>
+      ) : (
+        <span
+          className={
+            (columnInfo.className &&
+              columnInfo.className(
+                (row.original as Record<string, any>)[columnInfo.accessorKey]
+              )) ||
+            "text-text-200"
+          }
+        >
+          {cell}
+        </span>
+      );
 
     if (!columnInfo.Icon) return linkCell;
 
