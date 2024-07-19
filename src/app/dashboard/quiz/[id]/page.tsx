@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound, useParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 import { serverEndpoints } from "@/assets/data/api";
 import { quizDetails } from "@/assets/data/dashboard/quiz";
@@ -9,16 +9,18 @@ import Spinner from "@/components/spinner/Spinner";
 import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/fetchData";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { Quiz, Status } from "@allTypes";
+import { Quiz, QuizActionType, Status } from "@allTypes";
 import PageHeading from "../../_components/PageHeading";
 import List from "./_details";
 import Overview from "./_overview";
+import { IconArrowRight } from "@tabler/icons-react";
 
 const QuizDetails: React.FC = () => {
   const { id } = useParams();
 
   const {
-    state: { points, status, formRef, isShowResults, quiz },dispatch
+    state: { points, status, formRef, isShowResults, quiz, isShowOverview },
+    dispatch,
   } = useQuizContext();
 
   useFetchData<Quiz>({
@@ -70,15 +72,35 @@ const QuizDetails: React.FC = () => {
         </div>
       </PageHeading>
 
-      <div className="h-full grid grid-cols-[280px,auto,1fr] gap-16">
-        <Suspense fallback={<Spinner />}>
-          <Overview />
-        </Suspense>
-        <div />
-        <div className="h-[calc(100%-32px)] w-0.5 bg-border rounded-full my-auto" />
-        <Suspense fallback={<Spinner />}>
-          <List />
-        </Suspense>
+      <div
+        className={`relative h-full ${isShowOverview ? "grid grid-cols-[280px,auto,1fr]" : "flex"} gap-16`}
+      >
+        {isShowOverview && (
+          <>
+            <Suspense fallback={<Spinner />}>
+              <Overview />
+            </Suspense>
+            <div />
+            <div className="h-[calc(100%-32px)] w-0.5 bg-border rounded-full my-auto" />
+          </>
+        )}
+        {!isShowOverview && (
+          <IconArrowRight
+            className="fixed text-primary size-6 hover:scale-110 transition-all duration-300 cursor-pointer"
+            onClick={() => {
+              dispatch({
+                type: QuizActionType.SET_IS_SHOW_OVERVIEW,
+                payload: true,
+              });
+            }}
+          />
+        )}
+        <div className="w-full flex justify-center">
+          {!isShowOverview && <div className="w-12" />}
+          <Suspense fallback={<Spinner />}>
+            <List />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

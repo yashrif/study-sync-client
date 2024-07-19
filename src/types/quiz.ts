@@ -93,6 +93,7 @@ export enum QuizActionType {
   QUIZ_EVALUATE_START = "QUIZ_EVALUATE_START",
   QUIZ_EVALUATE_SUCCESS = "QUIZ_EVALUATE_SUCCESS",
   QUIZ_EVALUATE_ERROR = "QUIZ_EVALUATE_ERROR",
+  SET_IS_SHOW_OVERVIEW = "QUIZ_IS_SHOW_OVERVIEW",
 }
 
 export type QuizAction =
@@ -108,7 +109,8 @@ export type QuizAction =
         [key: string]: QuizEvaluateResponseServer;
       }
     >
-  | Action<QuizActionType.QUIZ_EVALUATE_ERROR>;
+  | Action<QuizActionType.QUIZ_EVALUATE_ERROR>
+  | Action<QuizActionType.SET_IS_SHOW_OVERVIEW, boolean>;
 
 export type QuizState = {
   quiz: Quiz;
@@ -119,6 +121,7 @@ export type QuizState = {
   cqEvaluation: {
     [key: string]: QuizEvaluateResponseServer;
   };
+  isShowOverview: boolean;
 };
 
 export type QuizContextProps = {

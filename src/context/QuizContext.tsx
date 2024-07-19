@@ -20,6 +20,7 @@ const initialState: QuizState = {
   isShowResults: false,
   formRef: { current: null },
   cqEvaluation: {},
+  isShowOverview: true,
 };
 
 const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
@@ -76,6 +77,11 @@ const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
       return {
         ...state,
         status: Status.ERROR,
+      };
+    case QuizActionType.SET_IS_SHOW_OVERVIEW:
+      return {
+        ...state,
+        isShowOverview: action.payload,
       };
     default:
       return state;

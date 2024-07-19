@@ -5,14 +5,18 @@ import { useMemo } from "react";
 import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
 import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { Difficulty as TDifficulty } from "@/types";
+import { QuizActionType, Difficulty as TDifficulty } from "@/types";
 import { DURATION_PER_CQ, DURATION_PER_MCQ } from "@/utils/constants";
 import Heading from "../_components/Heading";
 import Property from "../_components/Property";
 import Editable from "./editable";
+import { IconX } from "@tabler/icons-react";
 
 const Overview: React.FC = () => {
-  const { state } = useQuizContext();
+  const {
+    state: { quiz },
+    dispatch,
+  } = useQuizContext();
   const difficulty = useQueryString().getQueryString(
     queryParams.difficulty.name
   );
@@ -31,15 +35,26 @@ const Overview: React.FC = () => {
   }, [difficulty]);
 
   const { mcq, cq, questions, duration } = quizDetails.properties.fields;
-  const data = state.quiz;
+  const data = quiz;
 
   return (
     <div className="fixed w-[280px] flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <Heading
-          title={quizDetails.overview.title}
-          Icon={quizDetails.overview.Icon}
-        />
+        <div className="flex items-start justify-between gap-16">
+          <Heading
+            title={quizDetails.overview.title}
+            Icon={quizDetails.overview.Icon}
+          />
+          <IconX
+            className="size-6 text-destructive/50 hover:scale-110 cursor-pointer transition-all duration-300"
+            onClick={() => {
+              dispatch({
+                type: QuizActionType.SET_IS_SHOW_OVERVIEW,
+                payload: false,
+              });
+            }}
+          />
+        </div>
         <div>
           <quizDetails.overview.descriptionIcon className="float-left size-[18px] text-yellow-500 mr-2 mt-0.5 align-middle" />
           <p className="text-description">{quizDetails.overview.description}</p>
