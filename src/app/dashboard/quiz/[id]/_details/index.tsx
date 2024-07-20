@@ -131,7 +131,7 @@ const List: React.FC = () => {
       <form
         ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-16"
+        className="flex flex-col gap-16 max-w-[940px]"
       >
         <div className="flex flex-col gap-16 divide-y-2">
           {mcqs?.length > 0 && (

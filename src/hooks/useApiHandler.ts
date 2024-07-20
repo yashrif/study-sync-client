@@ -8,10 +8,15 @@ type Props<T, R> = {
   dispatch: Dispatch<FetchAction<R>>;
 };
 
+type HandlerProps<T> = {
+  data?: T | null;
+  isUpdateStatus?: boolean;
+};
+
 export const useApiHandler = <T, R>({ apiCall, dispatch }: Props<T, R>) => {
   const handler = useCallback(
-    async (data: T | null = null) => {
-      dispatch({ type: FetchActionType.FETCH_START });
+    async ({ data = null, isUpdateStatus = true }: HandlerProps<T>) => {
+      if (isUpdateStatus) dispatch({ type: FetchActionType.FETCH_START });
       try {
         const response = await apiCall(data);
         dispatch({

@@ -106,7 +106,7 @@ export const ColumnHeader = <T extends object>({
     });
 
     return (
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center gap-1.5">
         <Icon
           className={`h-4 w-auto ${
             (columnInfo.iconClassName &&

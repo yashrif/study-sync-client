@@ -3,6 +3,7 @@
 import {
   FetchActionType,
   IndexStatus,
+  QuizTypes,
   QuizUploadsAction,
   QuizUploadsActionType,
   QuizUploadsContextProps,
@@ -20,6 +21,9 @@ const initialState: QuizUploadsState = {
   uploads: [],
   status: Status.IDLE,
   indexStatus: {},
+  defaultQuizTypes: [QuizTypes.MCQ],
+  isShowCheckbox: true,
+  isShowRecentQuiz: true,
 };
 
 const generateIndexStatus = (uploads: UploadSimple[]) => {
@@ -91,6 +95,21 @@ const quizUploadsReducer = (
         uploads: state.uploads.map((upload) =>
           upload.id === action.payload ? { ...upload, isIndexed: true } : upload
         ),
+      };
+    case QuizUploadsActionType.SET_DEFAULT_QUIZ_TYPES:
+      return {
+        ...state,
+        defaultQuizTypes: action.payload,
+      };
+    case QuizUploadsActionType.SET_IS_SHOW_CHECKBOX:
+      return {
+        ...state,
+        isShowCheckbox: action.payload,
+      };
+    case QuizUploadsActionType.SET_IS_SHOW_RECENT_QUIZ:
+      return {
+        ...state,
+        isShowRecentQuiz: action.payload,
       };
     default:
       return state;

@@ -32,3 +32,8 @@ export type SignInSchema = z.ZodObject<{
   password: z.ZodString;
   remember: z.ZodBoolean;
 }>;
+
+export type FormHandle = {
+  submit: () => void;
+  clear: () => void;
+};

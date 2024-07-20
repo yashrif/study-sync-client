@@ -73,7 +73,7 @@ const QuizDetails: React.FC = () => {
       </PageHeading>
 
       <div
-        className={`relative h-full ${isShowOverview ? "grid grid-cols-[280px,auto,1fr]" : "flex"} gap-16`}
+        className={`relative h-full ${isShowOverview ? "grid grid-cols-[344px,auto,1fr]" : "flex"} gap-0`}
       >
         {isShowOverview && (
           <>
@@ -85,6 +85,7 @@ const QuizDetails: React.FC = () => {
           </>
         )}
         {!isShowOverview && (
+          //TODO: add a relevant icon here
           <IconArrowRight
             className="fixed text-primary size-6 hover:scale-110 transition-all duration-300 cursor-pointer"
             onClick={() => {
@@ -95,7 +96,9 @@ const QuizDetails: React.FC = () => {
             }}
           />
         )}
-        <div className="w-full flex justify-center">
+        <div
+          className={`w-full flex justify-center ${isShowOverview ? "pl-16" : ""}`}
+        >
           {!isShowOverview && <div className="w-12" />}
           <Suspense fallback={<Spinner />}>
             <List />

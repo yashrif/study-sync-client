@@ -1,5 +1,6 @@
 import {
   IconAdjustmentsCog,
+  IconBook2,
   IconBookmarks,
   IconBulb,
   IconCategory,
@@ -146,14 +147,13 @@ export const recent = {
   Icon: IconHistory,
   description:
     "Here are the 5 most recent Quiz you generated. Click to view the details.",
-  actions: [
-    {
+  actions: {
+    delete: {
       title: "Delete",
       Icon: IconTrash,
       className: "!text-destructive",
-      onClick: () => console.log("Delete"),
     },
-  ],
+  },
 };
 
 export const quizDetails = {
@@ -166,7 +166,7 @@ export const quizDetails = {
     title: "Overview",
     Icon: IconBookmarks,
     description:
-      "View the properties of the quiz. You can edit the title and difficulty under the preferences section.",
+      "View the properties of the quiz. You can edit the title, difficulty and type of quiz under the preferences section.",
     descriptionIcon: IconBulb,
   },
 
@@ -210,6 +210,11 @@ export const quizDetails = {
         Icon: IconCategory,
       },
     },
+  },
+
+  timer: {
+    title: "Timer",
+    Icon: IconClock,
   },
 
   mcq: {
@@ -261,11 +266,8 @@ export const saved: {
         },
         linkKey: "id",
         path: routes.dashboard.quiz.home,
-        Icon(props) {
-          return fileTypeIcons({
-            key: "type",
-            value: props.value,
-          });
+        Icon() {
+          return IconBook2;
         },
         iconClassName() {
           return "text-primary";

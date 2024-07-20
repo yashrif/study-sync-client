@@ -4,22 +4,22 @@ import { Suspense, useCallback } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
 import { serverEndpoints } from "@/assets/data/api";
-import { create } from "@/assets/data/dashboard/quiz";
 import Spinner from "@/components/spinner/Spinner";
-import { useFetchDataState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { useTable } from "@/hooks/useTable";
-import { UploadSimple } from "@/types";
+import { IconList } from "@/types";
 import { columns } from "./Columns";
 import CreateAction from "./CreateAction";
 import Table from "./Table";
 
-const UploadList = () => {
-  const { state } = useFetchDataState<UploadSimple[]>(serverEndpoints.uploads);
+type Props = {
+  create: IconList;
+};
 
+const UploadList: React.FC<Props> = ({ create }) => {
   const {
-    state: { uploads, status, indexStatus },
+    state: { uploads },
     dispatch,
   } = useQuizUploadsContext();
   const { handler } = useApiHandler({
@@ -33,7 +33,7 @@ const UploadList = () => {
   });
 
   const onUpload = useCallback(() => {
-    handler();
+    handler({});
   }, [handler]);
 
   return (

@@ -60,7 +60,7 @@ const Title: React.FC = () => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      handler(data);
+      handler({ data });
       toast({
         title: "Updated Successfully",
         description: "Quiz title has been updated successfully.",

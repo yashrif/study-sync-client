@@ -14,3 +14,5 @@ export const demo = `/demo-controller`;
 export const uploads = `/uploads`;
 
 export const quizzes = `/quizzes`;
+
+export const flashcard = `/flashcards`;

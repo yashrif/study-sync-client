@@ -1,7 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IconArrowRight } from "@tabler/icons-react";
 import { Table } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,8 +25,6 @@ import {
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { QuizResponseServer, Status, UploadSimple } from "@/types";
 import { postQuiz } from "@/utils/quizRequest";
-import { IconArrowRight } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { fileIndexing } from "./fileIndexing";
 
 const FormSchema = z.object({
@@ -41,14 +41,14 @@ const CreateAction: React.FC<Props> = ({ table }) => {
   const { push } = useRouter();
   const [processStatus, setProcessStatus] = useState(Status.IDLE);
   const {
-    state: { status, indexStatus },
+    state: { status, indexStatus, defaultQuizTypes, isShowCheckbox },
     dispatch,
   } = useQuizUploadsContext();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      types: [create.quizType[0].id],
+      types: defaultQuizTypes,
     },
   });
 
@@ -97,51 +97,53 @@ const CreateAction: React.FC<Props> = ({ table }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full flex justify-between items-center gap-16"
+        className={`w-full flex ${isShowCheckbox ? "justify-between" : "justify-center"} items-center gap-16`}
       >
-        <FormField
-          control={form.control}
-          name="types"
-          render={() => (
-            <FormItem className="flex items-center gap-8">
-              {create.quizType.map((item) => (
-                <FormField
-                  key={item.id}
-                  control={form.control}
-                  name="types"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
-                        key={item.id}
-                        className="flex flex-row items-start space-x-3 space-y-0 !mt-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(item.id)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, item.id])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== item.id
-                                    )
-                                  );
-                            }}
-                            className="size-4"
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal text-medium">
-                          {item.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  }}
-                />
-              ))}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {isShowCheckbox && (
+          <FormField
+            control={form.control}
+            name="types"
+            render={() => (
+              <FormItem className="flex items-center gap-8">
+                {create.quizType.map((item) => (
+                  <FormField
+                    key={item.id}
+                    control={form.control}
+                    name="types"
+                    render={({ field }) => {
+                      return (
+                        <FormItem
+                          key={item.id}
+                          className="flex flex-row items-start space-x-3 space-y-0 !mt-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(item.id)}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([...field.value, item.id])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== item.id
+                                      )
+                                    );
+                              }}
+                              className="size-4"
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal text-medium">
+                            {item.label}
+                          </FormLabel>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                ))}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <IconButton
           title=""
           size="lg"

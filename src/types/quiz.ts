@@ -1,8 +1,8 @@
-import { FormHandle } from "@/app/dashboard/types/form-handle";
 import {
   CqIntermediate,
   CqRequest,
   FetchAction,
+  FormHandle,
   IndexStatus,
   McqIntermediate,
   McqRequest,
@@ -154,6 +154,9 @@ export enum QuizUploadsActionType {
   INDEX_STATUS_SUCCESS = "INDEX_STATUS_SUCCESS",
   INDEX_STATUS_ERROR = "INDEX_STATUS_ERROR",
   SET_UPLOAD_INDEX_TRUE = "SET_UPLOAD_INDEX_TRUE",
+  SET_DEFAULT_QUIZ_TYPES = "SET_DEFAULT_QUIZ_TYPES",
+  SET_IS_SHOW_CHECKBOX = "SET_IS_SHOW_CHECKBOX",
+  SET_IS_SHOW_RECENT_QUIZ = "SET_IS_SHOW_RECENT_QUIZ",
 }
 
 export type QuizUploadsAction =
@@ -162,12 +165,18 @@ export type QuizUploadsAction =
   | Action<QuizUploadsActionType.INDEX_STATUS_START, string>
   | Action<QuizUploadsActionType.INDEX_STATUS_SUCCESS, string>
   | Action<QuizUploadsActionType.INDEX_STATUS_ERROR, string>
-  | Action<QuizUploadsActionType.SET_UPLOAD_INDEX_TRUE, string>;
+  | Action<QuizUploadsActionType.SET_UPLOAD_INDEX_TRUE, string>
+  | Action<QuizUploadsActionType.SET_DEFAULT_QUIZ_TYPES, QuizTypes[]>
+  | Action<QuizUploadsActionType.SET_IS_SHOW_CHECKBOX, boolean>
+  | Action<QuizUploadsActionType.SET_IS_SHOW_RECENT_QUIZ, boolean>;
 
 export type QuizUploadsState = {
   uploads: UploadSimple[];
   status: Status;
   indexStatus: IndexStatus;
+  defaultQuizTypes: QuizTypes[];
+  isShowCheckbox: boolean;
+  isShowRecentQuiz: boolean;
 };
 
 export type QuizUploadsContextProps = {

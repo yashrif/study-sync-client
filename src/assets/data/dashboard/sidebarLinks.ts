@@ -3,6 +3,7 @@ import {
   IconHome,
   IconLogout2,
   IconSettings,
+  IconStack2,
 } from "@tabler/icons-react";
 
 import { Quiz } from "@/components/icons";
@@ -39,7 +40,7 @@ export const sidebarLinks: SidebarLink[][] = [
     },
     {
       ...links.dashboard.flashcard.home,
-      Icon: Quiz,
+      Icon: IconStack2,
       subLinks: [
         {
           ...links.dashboard.flashcard.review,
