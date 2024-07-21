@@ -1,5 +1,11 @@
+import { IconCirclePlus2 } from "@tabler/icons-react";
+import _ from "lodash";
+import { useCallback, useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
 
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
+import { CircleCheck } from "@/components/icons";
 import {
   FormControl,
   FormDescription,
@@ -8,9 +14,10 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { useFetchState } from "@/hooks/fetchData";
+import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { CqIntermediate, Status } from "@/types";
-import { useMemo } from "react";
+import { CqIntermediate, QuizActionType, Status } from "@/types";
 
 type Props = {
   cq: CqIntermediate;
@@ -26,12 +33,30 @@ type Props = {
 
 const Cq: React.FC<Props> = ({ cq, order, form }) => {
   const {
-    state: { cqEvaluation, status, isShowResults },
+    state: { cqEvaluation, status, isShowResults, quiz },
+    dispatch,
   } = useQuizContext();
 
   const result = useMemo(() => {
     return cqEvaluation[cq.id] || { correctness: -1, comment: "" };
   }, [cqEvaluation, cq.id]);
+
+  const {
+    state: { status: createStatus },
+    dispatch: createDispatch,
+  } = useFetchState<{ isFlashcard: boolean }>();
+
+  const { handler } = useApiHandler<
+    { isFlashcard: boolean },
+    { isFlashcard: boolean }
+  >({
+    apiCall: useCallback(
+      (data, pathVariable) =>
+        studySyncDB.patch(`${dbEndpoints.cqs}/${pathVariable}`, data),
+      []
+    ),
+    dispatch: createDispatch,
+  });
 
   return (
     <FormField
@@ -39,7 +64,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
       name={cq.id}
       render={({ field }) => (
         <FormItem className="flex flex-col gap-6">
-          <FormLabel className="grid grid-cols-[40px,1fr] gap-x-10 items-center">
+          <FormLabel className="grid grid-cols-[40px,1fr,auto] gap-x-10 items-center">
             <div
               className={`size-10 flex items-center justify-center rounded-full
                 ${
@@ -71,6 +96,42 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
               </span>
             </div>
             <h6 className="text-wrap">{cq.question}</h6>
+            {/* TODO: make it tooltip */}
+            {cq.isFlashcard && (
+              <CircleCheck
+                className="size-[18px] stroke-success hover:scale-110 transition-all duration-300 cursor-pointer"
+                onClick={async () => {}}
+              />
+            )}
+            {!cq.isFlashcard && (
+              <IconCirclePlus2
+                className="size-[18px] stroke-primary hover:scale-110 transition-all duration-300 cursor-pointer"
+                onClick={async () => {
+                  try {
+                    await handler({
+                      data: {
+                        isFlashcard: true,
+                      },
+                      pathVariable: cq.id,
+                    });
+                    const cqs = _.cloneDeep(quiz.cqs);
+                    cqs?.splice(
+                      _.findIndex(cqs, (theCq) => theCq.id === cq.id),
+                      1
+                    );
+                    dispatch({
+                      type: QuizActionType.SET_QUIZ,
+                      payload: {
+                        ...quiz,
+                        cqs: [...(cqs || []), { ...cq, isFlashcard: true }],
+                      },
+                    });
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }}
+              />
+            )}
           </FormLabel>
           <FormControl>
             <div className="grid grid-cols-[40px_1fr] gap-10 items-center !mt-0">
