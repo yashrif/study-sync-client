@@ -1,8 +1,11 @@
+import { FlashcardStatus } from "@allTypes";
+
 export type CqRequest = {
   id?: string;
   question: string;
   answer: string;
   isFlashcard?: boolean;
+  status: FlashcardStatus | null;
 };
 
 export type CqShallow = {
@@ -11,6 +14,7 @@ export type CqShallow = {
   answer: string;
   isFlashcard: boolean;
   createDate: string;
+  status: FlashcardStatus | null;
 };
 
 export type CqIntermediate = CqShallow & {
@@ -23,9 +27,3 @@ export type CqIntermediate = CqShallow & {
 export type Cq = Omit<CqIntermediate, "quiz"> & {
   quiz: CqIntermediate;
 };
-
-export enum CqStatus {
-  FORGOTTEN = "FORGOTTEN",
-  TOOK_A_WHILE_TO_REMEMBER = "TOOK_A_WHILE_TO_REMEMBER",
-  REMEMBERED = "REMEMBERED",
-}

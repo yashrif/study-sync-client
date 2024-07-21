@@ -27,7 +27,7 @@ const quizReducer = <T, R>(state: T, action: FetchAction<R>): T => {
   }
 };
 
-export const useFetchState = <T>() => {
+export const useFetchState = <T>(initialStatus?: Status) => {
   type State = {
     status: Status;
     data: T | null;
@@ -35,7 +35,7 @@ export const useFetchState = <T>() => {
 
   const initialState: State = {
     data: null,
-    status: Status.IDLE,
+    status: initialStatus || Status.IDLE,
   };
 
   const [state, dispatch] = useReducer(quizReducer<State, T>, initialState);
@@ -44,7 +44,7 @@ export const useFetchState = <T>() => {
 };
 
 export const useFetchDataState = <T>(endpoint: string) => {
-  const { state, dispatch } = useFetchState<T>();
+  const { state, dispatch } = useFetchState<T>(Status.PENDING);
 
   useFetchData<T>({
     endpoint,

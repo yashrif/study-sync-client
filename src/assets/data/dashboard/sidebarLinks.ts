@@ -1,9 +1,9 @@
 import {
+  IconBolt,
   IconFileUpload,
   IconHome,
   IconLogout2,
   IconSettings,
-  IconStack2,
 } from "@tabler/icons-react";
 
 import { Quiz } from "@/components/icons";
@@ -29,25 +29,25 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: Quiz,
       subLinks: [
         {
-          ...links.dashboard.quiz.saved,
+          ...links.dashboard.quiz.create,
           Icon: Quiz,
         },
         {
-          ...links.dashboard.quiz.create,
+          ...links.dashboard.quiz.saved,
           Icon: Quiz,
         },
       ],
     },
     {
       ...links.dashboard.flashcard.home,
-      Icon: IconStack2,
+      Icon: IconBolt,
       subLinks: [
         {
-          ...links.dashboard.flashcard.review,
+          ...links.dashboard.flashcard.create,
           Icon: Quiz,
         },
         {
-          ...links.dashboard.flashcard.create,
+          ...links.dashboard.flashcard.review,
           Icon: Quiz,
         },
       ],

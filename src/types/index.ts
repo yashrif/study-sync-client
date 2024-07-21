@@ -1,5 +1,6 @@
 export * from "./button";
 export * from "./cq";
+export * from "./flashcard";
 export * from "./form";
 export * from "./handler";
 export * from "./icon";

@@ -8,8 +8,8 @@ import Spinner from "@/components/spinner/Spinner";
 import DataTable from "@/components/table";
 import { useFetchDataState } from "@/hooks/fetchData";
 import { QuizShallow, Status } from "@allTypes";
-import PageHeading from "../_components/PageHeading";
-import { columns } from "./_saved/Columns";
+import PageHeading from "../../_components/PageHeading";
+import { columns } from "./Columns";
 
 const GenerateQuiz: React.FC = () => {
   const { state } = useFetchDataState<QuizShallow[]>(serverEndpoints.quizzes);

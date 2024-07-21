@@ -103,14 +103,14 @@ export const routes = {
     quiz: {
       default: `${dashboardPath}${paths.quiz}`,
       home: `${dashboardPath}${paths.quiz}`,
-      saved: `${dashboardPath}${paths.quiz}`,
-      create: `${dashboardPath}${paths.quiz}${paths.create}`,
+      create: `${dashboardPath}${paths.quiz}`,
+      saved: `${dashboardPath}${paths.quiz}${paths.saved}`,
     },
     flashcard: {
       default: `${dashboardPath}${paths.flashcard}`,
       home: `${dashboardPath}${paths.flashcard}`,
-      review: `${dashboardPath}${paths.flashcard}`,
-      create: `${dashboardPath}${paths.flashcard}${paths.create}`,
+      create: `${dashboardPath}${paths.flashcard}`,
+      review: `${dashboardPath}${paths.flashcard}${paths.review}`,
     },
   },
 };
