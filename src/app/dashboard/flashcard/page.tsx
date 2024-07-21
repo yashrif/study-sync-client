@@ -10,8 +10,6 @@ const FlashCard: React.FC = () => {
     state: { data, status },
   } = useFetchDataState(dbEndpoints.flashcards);
 
-  console.log(data);
-
   return (
     <div className="flex flex-col">
       <PageHeading

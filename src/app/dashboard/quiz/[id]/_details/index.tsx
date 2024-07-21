@@ -26,7 +26,7 @@ import Mcq from "./components/Mcq";
 const List: React.FC = () => {
   const { checkQueryString } = useQueryString();
   const {
-    state: { quiz, formRef: ref, cqEvaluation, status },
+    state: { quiz, formRef: ref },
     dispatch,
   } = useQuizContext();
   const { mcqs, cqs } = useMemo(() => {
@@ -39,6 +39,8 @@ const List: React.FC = () => {
         : [],
     };
   }, [checkQueryString, quiz.cqs, quiz.mcqs]);
+
+  console.log(quiz.cqs);
 
   const formRef = useRef<HTMLFormElement>(null);
   useImperativeHandle(ref, () => ({

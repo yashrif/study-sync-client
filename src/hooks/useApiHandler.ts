@@ -1,29 +1,17 @@
-import { AxiosResponse } from "axios";
-import { Dispatch, useCallback } from "react";
+import { useCallback } from "react";
 
-import { FetchAction, FetchActionType } from "@allTypes";
+import { ApiHandler, FetchActionType, Handler } from "@allTypes";
 
-type Props<T, R> = {
-  apiCall: (
-    data: T | null,
-    pathVariable?: string | null
-  ) => Promise<AxiosResponse<any, any>>;
-  dispatch: Dispatch<FetchAction<R>>;
-};
-
-type HandlerProps<T> = {
-  data?: T | null;
-  pathVariable?: string;
-  isUpdateStatus?: boolean;
-};
-
-export const useApiHandler = <T, R>({ apiCall, dispatch }: Props<T, R>) => {
+export const useApiHandler = <T, R>({
+  apiCall,
+  dispatch,
+}: ApiHandler<T, R>) => {
   const handler = useCallback(
     async ({
       data = null,
       isUpdateStatus = true,
       pathVariable,
-    }: HandlerProps<T>) => {
+    }: Handler<T>) => {
       if (isUpdateStatus) dispatch({ type: FetchActionType.FETCH_START });
       try {
         const response = await apiCall(data, pathVariable);

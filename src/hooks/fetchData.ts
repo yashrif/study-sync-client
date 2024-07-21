@@ -35,7 +35,7 @@ export const useFetchState = <T>() => {
 
   const initialState: State = {
     data: null,
-    status: Status.PENDING,
+    status: Status.IDLE,
   };
 
   const [state, dispatch] = useReducer(quizReducer<State, T>, initialState);

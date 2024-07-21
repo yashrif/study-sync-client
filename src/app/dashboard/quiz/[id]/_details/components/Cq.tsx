@@ -1,11 +1,16 @@
-import { IconCirclePlus2 } from "@tabler/icons-react";
-import _ from "lodash";
+import {
+  IconCirclePlus2,
+  IconSquarePlus2,
+  IconTrash,
+} from "@tabler/icons-react";
+import { useParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
-import { CircleCheck } from "@/components/icons";
+import { CheckmarkAnimated } from "@/components/icons";
+import StatusIcon from "@/components/StatusIcon";
 import {
   FormControl,
   FormDescription,
@@ -14,10 +19,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { CqIntermediate, QuizActionType, Status } from "@/types";
+import { CqIntermediate, Quiz, Status } from "@/types";
 
 type Props = {
   cq: CqIntermediate;
@@ -32,6 +43,7 @@ type Props = {
 };
 
 const Cq: React.FC<Props> = ({ cq, order, form }) => {
+  const { id } = useParams();
   const {
     state: { cqEvaluation, status, isShowResults, quiz },
     dispatch,
@@ -40,6 +52,14 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
   const result = useMemo(() => {
     return cqEvaluation[cq.id] || { correctness: -1, comment: "" };
   }, [cqEvaluation, cq.id]);
+
+  const { handler: quizHandler } = useApiHandler<null, Quiz>({
+    apiCall: useCallback(
+      () => studySyncDB.get(`${dbEndpoints.quizzes}/${id}`),
+      [id]
+    ),
+    dispatch,
+  });
 
   const {
     state: { status: createStatus },
@@ -96,42 +116,66 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
               </span>
             </div>
             <h6 className="text-wrap">{cq.question}</h6>
-            {/* TODO: make it tooltip */}
-            {cq.isFlashcard && (
-              <CircleCheck
-                className="size-[18px] stroke-success hover:scale-110 transition-all duration-300 cursor-pointer"
-                onClick={async () => {}}
-              />
-            )}
-            {!cq.isFlashcard && (
-              <IconCirclePlus2
-                className="size-[18px] stroke-primary hover:scale-110 transition-all duration-300 cursor-pointer"
-                onClick={async () => {
-                  try {
-                    await handler({
-                      data: {
-                        isFlashcard: true,
-                      },
-                      pathVariable: cq.id,
-                    });
-                    const cqs = _.cloneDeep(quiz.cqs);
-                    cqs?.splice(
-                      _.findIndex(cqs, (theCq) => theCq.id === cq.id),
-                      1
-                    );
-                    dispatch({
-                      type: QuizActionType.SET_QUIZ,
-                      payload: {
-                        ...quiz,
-                        cqs: [...(cqs || []), { ...cq, isFlashcard: true }],
-                      },
-                    });
-                  } catch (e) {
-                    console.error(e);
-                  }
-                }}
-              />
-            )}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      await handler({
+                        data: {
+                          isFlashcard: !cq.isFlashcard,
+                        },
+                        pathVariable: cq.id,
+                      });
+                      await quizHandler({ isUpdateStatus: false });
+                    }}
+                  >
+                    <StatusIcon
+                      status={createStatus}
+                      className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
+                        createStatus === Status.PENDING
+                          ? "animate-spin duration-1000"
+                          : "duration-300"
+                      }
+                      ${
+                        (createStatus === Status.SUCCESS && cq.isFlashcard) ||
+                        cq.isFlashcard
+                          ? "!text-success stroke-success"
+                          : createStatus === Status.ERROR
+                            ? "!text-destructive"
+                            : "text-primary"
+                      }
+                    `}
+                      Icons={{
+                        [Status.IDLE]: cq.isFlashcard
+                          ? CheckmarkAnimated
+                          : IconCirclePlus2,
+                        [Status.SUCCESS]: cq.isFlashcard
+                          ? CheckmarkAnimated
+                          : IconCirclePlus2,
+                      }}
+                    />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="text-small">
+                    <div className="flex gap-1.5 items-center text-destructive">
+                      {cq.isFlashcard ? (
+                        <IconTrash className="size-[15px]" />
+                      ) : (
+                        <IconSquarePlus2 className="size-[15px]" />
+                      )}
+                      <span>
+                        {cq.isFlashcard
+                          ? "Remove flashcard"
+                          : "Create flashcard"}
+                      </span>
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </FormLabel>
           <FormControl>
             <div className="grid grid-cols-[40px_1fr] gap-10 items-center !mt-0">
