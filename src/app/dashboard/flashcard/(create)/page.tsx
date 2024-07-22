@@ -4,8 +4,6 @@ import { useEffect } from "react";
 
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { QuizTypes, QuizUploadsActionType } from "@/types";
-import CreateQuiz from "../../_components/create";
-import { create, home } from "@/assets/data/dashboard/flashcard";
 
 const CreateFlashCard = () => {
   const { dispatch } = useQuizUploadsContext();
@@ -25,7 +23,7 @@ const CreateFlashCard = () => {
     });
   }, [dispatch]);
 
-  return <CreateQuiz home={home.create} create={create} />;
+  return null;
 };
 
 export default CreateFlashCard;

@@ -34,6 +34,7 @@ const SubNavLink: React.FC<Props> = ({ href, title, Icon, links }) => {
     <Link
       href={href}
       className={`group w-full rounded-sm transition-all duration-300`}
+      scroll={false}
     >
       <span
         className={`text-nav-link-medium group-hover:text-primary transition-colors duration-300 ${
