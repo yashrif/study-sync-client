@@ -11,18 +11,20 @@ const inputVariants = cva(
     variants: {
       variant: {
         default:
-          "rounded-lg text-primary border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          "rounded-md text-primary border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         underline:
-          "rounded-none !px-0 bg-transparent focus-visible:text-primary font-medium placeholder:text-text border-b-[1.5px] border-b-text focus-visible:ring-offset-0 focus-visible:ring-0 outline-none  focus-visible:border-b-primary no-autofill-style",
+          "rounded-none bg-transparent focus-visible:text-primary font-medium placeholder:text-text border-b-[1.5px] border-b-text focus-visible:ring-offset-0 focus-visible:ring-0 outline-none  focus-visible:border-b-primary no-autofill-style",
       },
       dimension: {
         default: "h-10 px-3 py-2 text-base",
         sm: "h-9  px-3 py-1.5 rounded-sm text-sm",
+        md: "h-10 px-3 py-2 text-base",
         lg: "h-12 px-4 py-2 text-large",
       },
       spacing: {
-        default: "pl-10",
-        sm: "pl-10",
+        default: "",
+        sm: "pl-8",
+        md: "pl-10",
         lg: "pl-12",
       },
     },
@@ -40,6 +42,7 @@ const iconVariants = cva(
       dimension: {
         default: "h-6 top-1/2 -translate-y-1/2 left-3",
         sm: "h-5 top-1/2 -translate-y-1/2 left-3",
+        md: "h-6 top-1/2 -translate-y-1/2 left-3",
         lg: "h-7 top-1/2 -translate-y-1/2 left-4",
       },
     },

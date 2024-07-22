@@ -18,3 +18,5 @@ export const quizzes = `/quizzes`;
 export const flashcards = `/flashcards`;
 
 export const cqs = `/cqs`;
+
+export const users = `/users`;

@@ -31,6 +31,7 @@ const SubmitButton = React.forwardRef<HTMLButtonElement, Props>(
         asChild={asChild}
         ref={ref}
         disabled={status === Status.PENDING}
+        type="submit"
         {...filteredProps}
       >
         {StatusIcon({ status, content: props.children })}

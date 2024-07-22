@@ -1,8 +1,8 @@
 export const paths = {
   home: "/",
-  benefits: "/benefits",
-  features: "/features",
-  howItWorks: "/how-it-works",
+  benefits: "#benefits",
+  features: "#features",
+  howItWorks: "#how-it-works",
   auth: "/auth",
   signUp: "/sign-up",
   signIn: "/sign-in",
@@ -11,7 +11,7 @@ export const paths = {
   confirm: "/confirm",
   verify: "/verify",
   changePassword: "/change-password",
-  profile: "/profile",
+  profile: "#profile",
   dashboard: "/dashboard",
   overview: "/overview",
   users: "/users",
@@ -75,10 +75,13 @@ const users = `${dashboardPath}${paths.users}`;
 /* ----------------------------------- End ---------------------------------- */
 
 export const routes = {
-  home: paths.home,
-  benefits: `#${paths.benefits}`,
-  features: `#${paths.features}`,
-  howItWorks: `#${paths.howItWorks}`,
+  home: {
+    home: paths.home,
+    default: paths.home,
+    benefits: `${paths.home}${paths.benefits}`,
+    features: `${paths.home}${paths.features}`,
+    howItWorks: `${paths.home}${paths.howItWorks}`,
+  },
   auth: authPath,
   signUp: `${authPath}${paths.signUp}`,
   signIn: `${authPath}${paths.signIn}`,
@@ -88,7 +91,6 @@ export const routes = {
   initiateChange: `${changePasswordPath}${paths.initiate}`,
   confirmChange: `${changePasswordPath}${paths.confirm}`,
   verify: `${resetPasswordPath}${paths.verify}`,
-  profile: `${paths.profile}`,
   contact: `${paths.contact}`,
   faq: `${paths.faq}`,
   support: `${paths.support}`,
@@ -98,11 +100,15 @@ export const routes = {
   dashboard: {
     default: dashboardPath,
     home: dashboardPath,
-    settings: `${dashboardPath}${paths.settings}`,
+    settings: {
+      home: `${dashboardPath}${paths.settings}`,
+      default: `${dashboardPath}${paths.settings}${paths.profile}`,
+      profile: `${dashboardPath}${paths.settings}${paths.profile}`,
+    },
     uploads: `${dashboardPath}${paths.uploads}`,
     quiz: {
-      default: `${dashboardPath}${paths.quiz}`,
       home: `${dashboardPath}${paths.quiz}`,
+      default: `${dashboardPath}${paths.quiz}`,
       create: `${dashboardPath}${paths.quiz}`,
       saved: `${dashboardPath}${paths.quiz}${paths.saved}`,
     },
@@ -116,10 +122,13 @@ export const routes = {
 };
 
 export const links = {
-  home: { title: pathTitles.home, href: routes.home },
-  benefits: { title: pathTitles.benefits, href: routes.benefits },
-  features: { title: pathTitles.features, href: routes.features },
-  howItWorks: { title: pathTitles.howItWorks, href: routes.howItWorks },
+  home: {
+    home: { title: pathTitles.home, href: routes.home.default },
+    default: { title: pathTitles.home, href: routes.home.default },
+    benefits: { title: pathTitles.benefits, href: routes.home.benefits },
+    features: { title: pathTitles.features, href: routes.home.features },
+    howItWorks: { title: pathTitles.howItWorks, href: routes.home.howItWorks },
+  },
   auth: { title: pathTitles.auth, href: routes.auth },
   signUp: { title: pathTitles.signUp, href: routes.signUp },
   signIn: { title: pathTitles.signIn, href: routes.signIn },
@@ -138,7 +147,6 @@ export const links = {
     title: pathTitles.changePassword,
     href: routes.confirmChange,
   },
-  profile: { title: pathTitles.profile, href: routes.profile },
   contact: { title: pathTitles.const, href: routes.contact },
   faq: { title: pathTitles.faq, href: routes.faq },
   support: { title: pathTitles.support, href: routes.support },
@@ -148,7 +156,20 @@ export const links = {
   dashboard: {
     default: { title: pathTitles.dashboard, href: routes.dashboard.default },
     home: { title: pathTitles.home, href: routes.dashboard.home },
-    settings: { title: pathTitles.settings, href: routes.dashboard.settings },
+    settings: {
+      home: {
+        title: pathTitles.settings,
+        href: routes.dashboard.settings.home,
+      },
+      default: {
+        title: pathTitles.settings,
+        href: routes.dashboard.settings.default,
+      },
+      profile: {
+        title: pathTitles.profile,
+        href: routes.dashboard.settings.profile,
+      },
+    },
     uploads: {
       title: pathTitles.uploads,
       href: routes.dashboard.uploads,

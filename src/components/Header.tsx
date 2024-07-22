@@ -1,14 +1,13 @@
 import Link from "next/link";
 
-import { button, navLinks } from "@assets/data/header";
-import { routes } from "@assets/data/routes";
+import { button, home, navLinks } from "@assets/data/header";
 import Logo from "@components/Logo";
 import { Button } from "@components/ui/button";
 
 const Header: React.FC = () => {
   return (
     <header className="h-20 flex justify-between items-center px-12">
-      <Link href={routes.home}>
+      <Link href={home.href}>
         <Logo className="h-9 w-auto" />
       </Link>
       <nav className="flex gap-12">

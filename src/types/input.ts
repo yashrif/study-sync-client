@@ -1,1 +1,1 @@
-export type InputSizes = "default" | "sm" | "lg";
+export type InputSizes = "default" | "sm" | "md" | "lg";

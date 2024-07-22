@@ -1,5 +1,7 @@
 "use client";
 
+import { createContext, useReducer } from "react";
+
 import {
   FetchActionType,
   IndexStatus,
@@ -11,7 +13,6 @@ import {
   Status,
   UploadSimple,
 } from "@/types";
-import { createContext, useReducer } from "react";
 
 const QuizUploadsContext = createContext<QuizUploadsContextProps | undefined>(
   undefined

@@ -1,5 +1,5 @@
 import Spinner from "@/components/spinner/Spinner";
-import { Icon, Status } from "@allTypes";
+import { ButtonSize, Icon, Status } from "@allTypes";
 import { CheckmarkAnimated, CircleCheck } from "@components/icons";
 import { IconRefresh } from "@tabler/icons-react";
 
@@ -12,6 +12,7 @@ type Props = {
     [key in Status]?: Icon;
   };
   isAnimation?: boolean;
+  size?: ButtonSize;
 };
 
 const StatusIcon: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const StatusIcon: React.FC<Props> = ({
   checkmarkStroke,
   Icons,
   isAnimation = true,
+  size = "default",
 }) => {
   const customClass = `size-7 text-primary ${className}`;
 

@@ -9,6 +9,7 @@ import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { useTable } from "@/hooks/useTable";
 import { IconList } from "@/types";
+import SectionHeading from "../../SectionHeading";
 import { columns } from "./Columns";
 import CreateAction from "./CreateAction";
 import Table from "./Table";
@@ -37,16 +38,12 @@ const UploadList: React.FC<Props> = ({ create }) => {
   }, [handler]);
 
   return (
-    <div className="max-w-[700px] flex flex-col gap-4">
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2 text-primary">
-          <create.Icon className="size-[30px] stroke-[2.5]" />
-          <h2>{create.title}</h2>
-        </div>
-        <p className="text-medium text-text-200 max-w-prose">
-          {create.description}
-        </p>
-      </div>
+    <div className="max-w-[700px] flex flex-col gap-8">
+      <SectionHeading
+        title={create.title}
+        Icon={create.Icon}
+        description={create.description}
+      />
       <Suspense fallback={<Spinner />}>
         <div className="flex flex-col gap-8 items-center justify-center">
           <div className="divide-y-2 w-full">

@@ -8,6 +8,7 @@ import {
   McqRequest,
   Status,
   UploadSimple,
+  Action,
 } from "@allTypes";
 
 export enum QuizTypes {
@@ -79,10 +80,6 @@ export enum Difficulty {
 /* -------------------------------------------------------------------------- */
 
 /* ----------------------------- QuizContext.tsx ---------------------------- */
-
-type Action<T, P = void> = P extends void
-  ? { type: T }
-  : { type: T; payload: P };
 
 export enum QuizActionType {
   SET_QUIZ = "SET_QUIZ",

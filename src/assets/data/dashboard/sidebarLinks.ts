@@ -4,14 +4,16 @@ import {
   IconHome,
   IconLogout2,
   IconSettings,
+  IconUserCircle,
 } from "@tabler/icons-react";
 
 import { Quiz } from "@/components/icons";
 import { IconLink } from "@allTypes";
-import { links, pathTitles } from "../routes";
+import { links, pathTitles, routes } from "../routes";
 
 type SidebarLink = IconLink & {
-  subLinks?: IconLink[];
+  subLinks?: (IconLink & { altHref?: string })[];
+  altHref?: string;
 };
 
 export const sidebarLinks: SidebarLink[][] = [
@@ -55,8 +57,15 @@ export const sidebarLinks: SidebarLink[][] = [
   ],
   [
     {
-      ...links.dashboard.settings,
+      ...links.dashboard.settings.home,
       Icon: IconSettings,
+      subLinks: [
+        {
+          ...links.dashboard.settings.profile,
+          Icon: IconUserCircle,
+          altHref: routes.dashboard.settings.home,
+        },
+      ],
     },
   ],
 ];

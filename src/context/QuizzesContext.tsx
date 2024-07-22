@@ -1,5 +1,7 @@
 "use client";
 
+import { createContext, useReducer } from "react";
+
 import {
   FetchActionType,
   QuizzesAction,
@@ -7,7 +9,6 @@ import {
   QuizzesState,
   Status,
 } from "@/types";
-import { createContext, useReducer } from "react";
 
 const QuizzesContext = createContext<QuizzesContextProps | undefined>(
   undefined
