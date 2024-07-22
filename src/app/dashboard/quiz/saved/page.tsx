@@ -12,7 +12,9 @@ import PageHeading from "../../_components/PageHeading";
 import { columns } from "./Columns";
 
 const GenerateQuiz: React.FC = () => {
-  const { state } = useFetchDataState<QuizShallow[]>(serverEndpoints.quizzes);
+  const { state } = useFetchDataState<null, QuizShallow[]>({
+    endpoint: serverEndpoints.quizzes,
+  });
 
   return (
     <div className="flex flex-col">

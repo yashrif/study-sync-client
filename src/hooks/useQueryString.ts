@@ -10,7 +10,7 @@ export const useQueryString = () => {
       params.append(name, value);
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   const checkQueryString = useCallback(
@@ -18,7 +18,7 @@ export const useQueryString = () => {
       const params = new URLSearchParams(searchParams.toString());
       return params.has(name, value);
     },
-    [searchParams]
+    [searchParams],
   );
 
   const getQueryString = useCallback(
@@ -26,7 +26,7 @@ export const useQueryString = () => {
       const params = new URLSearchParams(searchParams);
       return params.get(name);
     },
-    [searchParams]
+    [searchParams],
   );
 
   const getAllQueryString = useCallback(
@@ -34,7 +34,7 @@ export const useQueryString = () => {
       const params = new URLSearchParams(searchParams);
       return params.getAll(name);
     },
-    [searchParams]
+    [searchParams],
   );
 
   const setQueryString = useCallback(
@@ -43,7 +43,7 @@ export const useQueryString = () => {
       params.set(name, value);
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   const toggleQueryString = useCallback(
@@ -56,7 +56,7 @@ export const useQueryString = () => {
       }
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   return {

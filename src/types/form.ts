@@ -5,4 +5,5 @@ export type FormField = {
   id: string;
   required: boolean;
   className?: string;
+  disabled?: boolean;
 };

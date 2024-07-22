@@ -1,10 +1,11 @@
-import SectionHeading from "../../_components/SectionHeading";
 import { profile } from "@/assets/data/dashboard/settings";
+import SectionHeading from "../../_components/SectionHeading";
+import ChangePassword from "./ChangePassword";
 import PersonalInfo from "./PersonalInfo";
 
 const Profile = () => {
   return (
-    <div className="flex flex-col gap-8">
+    <section id="profile" className="flex flex-col gap-8">
       <SectionHeading
         title={profile.title}
         Icon={profile.Icon}
@@ -13,8 +14,9 @@ const Profile = () => {
 
       <div className="flex flex-col gap-24">
         <PersonalInfo />
+        <ChangePassword />
       </div>
-    </div>
+    </section>
   );
 };
 

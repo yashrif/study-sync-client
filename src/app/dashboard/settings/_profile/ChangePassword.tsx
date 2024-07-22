@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import _ from "lodash";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -19,89 +19,90 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useFetchData, useFetchState } from "@/hooks/fetchData";
+import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
-import { useSettingContext } from "@/hooks/useSettingContext";
-import { PatchUser, SettingActionType, Status, User } from "@/types";
+import { ChangePassword as TChangePassword } from "@/types";
 import { Input } from "@components/ui/input";
 import ScopeHeading from "../../_components/ScopeHeading";
 
-const formSchema = z.object({
-  email: z.string().email().readonly().optional(),
-  role: z.string().readonly().optional(),
-  firstName: z.string().min(1, {
-    message: "First name can not be empty.",
-  }),
-  lastName: z.string().min(1, {
-    message: "Last name is required.",
-  }),
-});
+const formSchema = z
+  .object({
+    currentPassword: z.string().min(1, {
+      message: "Password is required.",
+    }),
+    newPassword: z.string().min(8, {
+      message: "Password must be at least 8 characters.",
+    }),
+    confirmPassword: z.string(),
+  })
+  .superRefine((data, context) => {
+    if (data.newPassword !== data.confirmPassword) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["confirmPassword"],
+        message: "Passwords do not match.",
+      });
+    }
+    if (data.currentPassword === data.newPassword) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["newPassword"],
+        message: "New Password and current password can not be the same.",
+      });
+    }
+  });
+
+const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
+  if (
+    issue.code === z.ZodIssueCode.custom &&
+    issue.path[0] === "confirmPassword"
+  )
+    return { message: issue.message || `An error occurred.` };
+
+  if (issue.code === z.ZodIssueCode.custom && issue.path[0] === "newPassword")
+    return { message: issue.message || `An error occurred.` };
+
+  return { message: ctx.defaultError };
+};
+
+z.setErrorMap(customErrorMap);
 
 const MotionFormControl = motion(FormControl);
 const MotionFormLabel = motion(FormLabel);
 
-const PersonalInfo = () => {
+const ChangePassword = () => {
   const {
-    state: { user, status },
+    state: { status },
     dispatch,
-  } = useSettingContext();
+  } = useFetchState<TChangePassword>();
 
-  useFetchData({
-    endpoint: dbEndpoints.users,
-    dispatch,
-  });
-
-  const { state: patchState, dispatch: patchDispatch } =
-    useFetchState<PatchUser>();
-
-  const { handler } = useApiHandler<PatchUser, User>({
+  const { handler } = useApiHandler<TChangePassword, TChangePassword>({
     apiCall: useCallback(
-      (data) => studySyncDB.patch(dbEndpoints.users, data),
+      (data) => studySyncDB.patch(dbEndpoints.changePassword, data),
       [],
     ),
-    dispatch: patchDispatch,
+    dispatch,
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: user || {},
+    defaultValues: {},
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const data: {
-      [key: string]: string;
-    } = {};
-    _.forEach(values, (value, key) => {
-      if (value) data[key] = value;
-    });
-    try {
-      await handler({ data: data as PatchUser, fetchType: "lazy" });
-      dispatch({
-        type: SettingActionType.SET_USER,
-        payload: {
-          ...user,
-          ...data,
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    await handler({ data: values as TChangePassword, fetchType: "lazy" });
   };
-
-  useEffect(() => {
-    if (status === Status.SUCCESS) form.reset(user);
-  }, [form, status, user]);
 
   return (
     <div className="flex flex-col gap-8">
-      <ScopeHeading {...profile.info} />
+      <ScopeHeading {...profile.changePassword} />
       <Form {...form}>
         <motion.form
           onSubmit={form.handleSubmit(onSubmit)}
           className="h-full max-w-[700px] grid grid-cols-[max(150px),1fr] gap-x-12 gap-y-8 items-center"
           layout
         >
-          {profile.info.fields.map((formField) => (
+          {profile.changePassword.fields.map((formField) => (
             <FormField
               key={formField.id}
               control={form.control}
@@ -140,13 +141,13 @@ const PersonalInfo = () => {
               {
                 ...actionButton.submit,
                 disabled: !form.formState.errors || !form.control._getDirty(),
-                status: patchState.status,
+                status: status,
               },
               {
                 ...actionButton.cancel,
                 disabled: !form.control._getDirty(),
                 onClick: () => {
-                  form.reset(user);
+                  form.reset();
                 },
               },
             ].map((action) => (
@@ -161,4 +162,4 @@ const PersonalInfo = () => {
   );
 };
 
-export default PersonalInfo;
+export default ChangePassword;

@@ -9,7 +9,7 @@ import {
 import { QuizShallow } from "@/types";
 
 const columnHeaders = saved.columnConfig.columns.map((column) =>
-  ColumnHeader<QuizShallow>({ column })
+  ColumnHeader<QuizShallow>({ column }),
 );
 
 export const columns: ColumnDef<QuizShallow>[] = [

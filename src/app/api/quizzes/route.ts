@@ -43,14 +43,14 @@ export async function POST(request: NextRequest) {
           }))
           .value(),
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (e: AxiosError | any | unknown | Error) {
     return NextResponse.json(
       {
         message: e.message.message || e.message || "An error occurred",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

@@ -72,7 +72,7 @@ export const ColumnHeader = <T extends object>({
   cell: ({ row }) => {
     const cell = columnInfo.formatter
       ? columnInfo.formatter(
-          (row.original as Record<string, any>)[columnInfo.accessorKey]
+          (row.original as Record<string, any>)[columnInfo.accessorKey],
         )
       : (row.original as Record<string, any>)[columnInfo.accessorKey];
 
@@ -89,7 +89,7 @@ export const ColumnHeader = <T extends object>({
           className={
             (columnInfo.className &&
               columnInfo.className(
-                (row.original as Record<string, any>)[columnInfo.accessorKey]
+                (row.original as Record<string, any>)[columnInfo.accessorKey],
               )) ||
             "text-text-200"
           }
@@ -111,7 +111,7 @@ export const ColumnHeader = <T extends object>({
           className={`h-4 w-auto ${
             (columnInfo.iconClassName &&
               columnInfo.iconClassName(
-                (row.original as Record<string, any>)[columnInfo.accessorKey]
+                (row.original as Record<string, any>)[columnInfo.accessorKey],
               )) ||
             "text-text-200"
           }`}

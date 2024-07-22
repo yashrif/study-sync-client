@@ -21,7 +21,7 @@ const CustomRadioGroupItem = React.forwardRef<
       ref={ref}
       className={cn(
         "parent-container relative w-10 flex gap-10 items-center justify-center",
-        className
+        className,
       )}
       value={value}
       {...props}

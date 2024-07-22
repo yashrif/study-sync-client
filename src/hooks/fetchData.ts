@@ -1,8 +1,7 @@
 import { Dispatch, useCallback, useEffect, useReducer } from "react";
 
-import studySyncDB from "@/api/studySyncDB";
-import { FetchAction, FetchActionType, Status } from "@/types";
-import { useApiHandler } from "./useApiHandler";
+import { FetchAction, FetchActionType, RequestType, Status } from "@/types";
+import { requestHandler, useApiHandler } from "@hooks/useApiHandler";
 
 const quizReducer = <T, R>(state: T, action: FetchAction<R>): T => {
   switch (action.type) {
@@ -21,6 +20,11 @@ const quizReducer = <T, R>(state: T, action: FetchAction<R>): T => {
       return {
         ...state,
         status: Status.ERROR,
+      };
+    case FetchActionType.FETCH_IDLE:
+      return {
+        ...state,
+        status: Status.IDLE,
       };
     default:
       return state;
@@ -43,25 +47,42 @@ export const useFetchState = <T>(initialStatus?: Status) => {
   return { state, dispatch };
 };
 
-export const useFetchDataState = <T>(endpoint: string) => {
-  const { state, dispatch } = useFetchState<T>(Status.PENDING);
+type FetchDataState = { endpoint: string; requestType?: RequestType };
 
-  useFetchData<T>({
+export const useFetchDataState = <T, R>({
+  endpoint,
+  requestType = RequestType.GET,
+}: FetchDataState) => {
+  const { state, dispatch } = useFetchState<R>(Status.PENDING);
+
+  useFetchData<T, R>({
     endpoint,
     dispatch,
+    requestType,
   });
 
   return { state, dispatch };
 };
 
-type FetchData<T> = {
-  endpoint: string;
+type FetchData<T> = FetchDataState & {
   dispatch: Dispatch<FetchAction<T>>;
 };
 
-export const useFetchData = <T>({ endpoint, dispatch }: FetchData<T>) => {
-  const { handler } = useApiHandler<null, T>({
-    apiCall: useCallback(() => studySyncDB.get(endpoint), [endpoint]),
+export const useFetchData = <T, R>({
+  endpoint,
+  dispatch,
+  requestType = RequestType.GET,
+}: FetchData<R>) => {
+  const { handler } = useApiHandler<T, R>({
+    apiCall: useCallback(
+      (data) =>
+        requestHandler<T>({
+          endpoint,
+          requestType,
+          data,
+        }),
+      [endpoint, requestType]
+    ),
     dispatch,
   });
 

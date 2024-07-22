@@ -19,7 +19,7 @@ const Overview: React.FC = () => {
     dispatch,
   } = useQuizContext();
   const difficulty = useQueryString().getQueryString(
-    queryParams.difficulty.name
+    queryParams.difficulty.name,
   ) as TDifficulty;
 
   const { mcq, cq, questions, duration } = quizDetails.properties.fields;

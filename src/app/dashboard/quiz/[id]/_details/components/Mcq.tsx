@@ -63,7 +63,7 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
                           Choices,
                           mcq.answers
                             .map((answer, index) => (answer ? index : null))
-                            .filter((x) => x !== null)[0]
+                            .filter((x) => x !== null)[0],
                         ) || ""
                       }
                     />

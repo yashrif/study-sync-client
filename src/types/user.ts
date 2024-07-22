@@ -10,3 +10,16 @@ export type User = {
   email: string;
   role: UserRoles;
 };
+
+/* --------------------------------- Request -------------------------------- */
+
+export type PatchUser = {
+  firstName: string;
+  lastName: string;
+};
+
+export type ChangePassword = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};

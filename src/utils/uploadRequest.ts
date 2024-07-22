@@ -5,7 +5,7 @@ import { dbEndpoints } from "@/assets/data/api";
 import { Status, UploadSimple } from "@/types";
 
 export const getUpload = async (
-  id: string
+  id: string,
 ): Promise<UploadSimple | undefined> => {
   try {
     const response = await studySyncDB.get(`${dbEndpoints.uploads}/${id}`);

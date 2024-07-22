@@ -1,10 +1,4 @@
 {
-  "cSpell.words": [
-    "filepond",
-    "hookform",
-    "mcqs",
-    "qnas",
-    "tabler"
-  ],
+  "cSpell.words": ["filepond", "hookform", "mcqs", "qnas", "tabler"],
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }

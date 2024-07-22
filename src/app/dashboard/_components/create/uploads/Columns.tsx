@@ -82,6 +82,6 @@ export const columns: ColumnDef<UploadSimple>[] = [
       actions: [...columnConfigObj.actions],
     } as ColumnConfig
   ).columns.map((column) =>
-    ColumnHeader({ column })
+    ColumnHeader({ column }),
   ) as ColumnDef<UploadSimple>[]),
 ];

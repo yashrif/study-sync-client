@@ -1,6 +1,6 @@
 export const dateFormatter = (
   date: Date | string,
-  mode: "long" | "numeric" = "long"
+  mode: "long" | "numeric" = "long",
 ) =>
   new Date(date).toLocaleDateString("en-US", {
     year: "numeric",

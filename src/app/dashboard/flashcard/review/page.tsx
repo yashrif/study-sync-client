@@ -33,7 +33,9 @@ const FlashCard: React.FC = () => {
   const { back } = useRouter();
   const {
     state: { data, status },
-  } = useFetchDataState<Flashcard[]>(dbEndpoints.flashcards);
+  } = useFetchDataState<null, Flashcard[]>({
+    endpoint: dbEndpoints.flashcards,
+  });
 
   return (
     <Dialog
@@ -109,7 +111,7 @@ const FlashCard: React.FC = () => {
                             onClick: () => {
                               setIsOpen(false);
                               setIndex(
-                                index + 1 >= data.length ? 0 : index + 1
+                                index + 1 >= data.length ? 0 : index + 1,
                               );
                             },
                           },
@@ -120,7 +122,7 @@ const FlashCard: React.FC = () => {
                                 `${dbEndpoints.cqs}/${data?.[index].id}`,
                                 {
                                   status: null,
-                                }
+                                },
                               );
                             },
                           },
@@ -152,11 +154,11 @@ const FlashCard: React.FC = () => {
                                 `${dbEndpoints.cqs}/${data?.[index].id}`,
                                 {
                                   status: button.status,
-                                }
+                                },
                               );
                               setIsOpen(false);
                               setIndex(
-                                index + 1 >= data.length ? 0 : index + 1
+                                index + 1 >= data.length ? 0 : index + 1,
                               );
                             }}
                             className={button.className}

@@ -12,7 +12,7 @@ const Timer = () => {
     state: { quiz },
   } = useQuizContext();
   const difficulty = useQueryString().getQueryString(
-    queryParams.difficulty.name
+    queryParams.difficulty.name,
   ) as Difficulty;
 
   const duration = useMemo(() => {

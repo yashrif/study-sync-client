@@ -23,7 +23,7 @@ const QuizDetails: React.FC = () => {
     dispatch,
   } = useQuizContext();
 
-  useFetchData<Quiz>({
+  useFetchData<null, Quiz>({
     endpoint: `${serverEndpoints.quizzes}/${id}`,
     dispatch,
   });

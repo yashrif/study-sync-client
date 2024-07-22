@@ -11,7 +11,7 @@ import {
 } from "@/types";
 
 const QuizzesContext = createContext<QuizzesContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 const initialState: QuizzesState = {
@@ -22,7 +22,7 @@ const initialState: QuizzesState = {
 
 const quizzesReducer = (
   state: QuizzesState,
-  action: QuizzesAction
+  action: QuizzesAction,
 ): QuizzesState => {
   switch (action.type) {
     case FetchActionType.FETCH_START:

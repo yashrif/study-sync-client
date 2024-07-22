@@ -39,7 +39,7 @@ const Title: React.FC = () => {
     apiCall: useCallback(
       (data) =>
         studySyncDB.patch(`${serverEndpoints.quizzes}/${quiz.id}`, data),
-      [quiz.id]
+      [quiz.id],
     ),
     dispatch,
   });

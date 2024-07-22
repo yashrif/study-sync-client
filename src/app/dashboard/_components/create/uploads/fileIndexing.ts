@@ -38,7 +38,7 @@ export const fileIndexing = async ({ data, dispatch }: Props) => {
       });
     }, 2000);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     dispatch({
       type: QuizUploadsActionType.INDEX_STATUS_ERROR,
       payload: data.id,

@@ -64,7 +64,7 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -97,7 +97,7 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
                         <TableCell className="align-top">
                           {flexRender(
                             checkBox.column.columnDef.cell,
-                            checkBox.getContext()
+                            checkBox.getContext(),
                           )}
                         </TableCell>
 
@@ -105,7 +105,7 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
                           <p>
                             {flexRender(
                               title.column.columnDef.cell,
-                              title.getContext()
+                              title.getContext(),
                             )}
                           </p>
 
@@ -114,7 +114,7 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
                               <span key={cell.id}>
                                 {flexRender(
                                   cell.column.columnDef.cell,
-                                  cell.getContext()
+                                  cell.getContext(),
                                 )}
                               </span>
                             ))}

@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
 import { Icon, InputSizes } from "@/types";
 
 const inputVariants = cva(
-  "flex w-full font-medium placeholder:font-normal focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-color duration-300",
+  "flex w-full placeholder:font-normal focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 transition-color duration-300",
   {
     variants: {
       variant: {
         default:
-          "rounded-md text-primary border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          "rounded-md text-text border border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         underline:
-          "rounded-none bg-transparent focus-visible:text-primary font-medium placeholder:text-text border-b-[1.5px] border-b-text focus-visible:ring-offset-0 focus-visible:ring-0 outline-none  focus-visible:border-b-primary no-autofill-style",
+          "rounded-none bg-transparent font-medium text-primary focus-visible:text-primary font-medium placeholder:text-text border-b-[1.5px] border-b-text focus-visible:ring-offset-0 focus-visible:ring-0 outline-none  focus-visible:border-b-primary no-autofill-style",
       },
       dimension: {
         default: "h-10 px-3 py-2 text-base",
@@ -32,7 +32,7 @@ const inputVariants = cva(
       variant: "default",
       dimension: "default",
     },
-  }
+  },
 );
 
 const iconVariants = cva(
@@ -49,7 +49,7 @@ const iconVariants = cva(
     defaultVariants: {
       dimension: "default",
     },
-  }
+  },
 );
 
 export interface InputProps
@@ -71,7 +71,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       iconStyle,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div className="relative !mt-0">
@@ -83,7 +83,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               variant,
               spacing: dimension,
               className: `${className}`,
-            })
+            }),
           )}
           ref={ref}
           {...props}
@@ -95,7 +95,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 Input.displayName = "Input";
 

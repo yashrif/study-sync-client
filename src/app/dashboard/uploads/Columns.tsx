@@ -9,7 +9,7 @@ import {
 import { UploadSimple } from "@/types/upload";
 
 const columnHeaders = columnConfig.columns.map((column) =>
-  ColumnHeader<UploadSimple>({ column })
+  ColumnHeader<UploadSimple>({ column }),
 );
 
 export const columns: ColumnDef<UploadSimple>[] = [

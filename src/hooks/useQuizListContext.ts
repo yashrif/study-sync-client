@@ -7,7 +7,7 @@ export const useQuizzesContext = (): QuizzesContextProps => {
   const context = useContext(QuizzesContext);
   if (context === undefined) {
     throw new Error(
-      "useQuizzesContext must be used within an QuizListProvider"
+      "useQuizzesContext must be used within an QuizListProvider",
     );
   }
   return context;

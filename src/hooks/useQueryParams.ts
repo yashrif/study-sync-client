@@ -13,7 +13,7 @@ export const useQueryParams = () => {
       pathname + "?" + value.map((v) => setQueryString(name, v)).join("&"),
       {
         scroll: false,
-      }
+      },
     );
   };
 

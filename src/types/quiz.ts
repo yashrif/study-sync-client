@@ -1,4 +1,5 @@
 import {
+  Action,
   CqIntermediate,
   CqRequest,
   FetchAction,
@@ -8,7 +9,6 @@ import {
   McqRequest,
   Status,
   UploadSimple,
-  Action,
 } from "@allTypes";
 
 export enum QuizTypes {

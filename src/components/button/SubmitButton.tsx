@@ -19,7 +19,7 @@ const SubmitButton = React.forwardRef<HTMLButtonElement, Props>(
       status = Status.IDLE,
       ...props
     },
-    ref
+    ref,
   ) => {
     const filteredProps = { ..._.omit(props, "children") };
 
@@ -37,7 +37,7 @@ const SubmitButton = React.forwardRef<HTMLButtonElement, Props>(
         {StatusIcon({ status, content: props.children })}
       </Button>
     );
-  }
+  },
 );
 SubmitButton.displayName = "SubmitButton";
 

@@ -19,7 +19,7 @@ const AuthLayout: React.FC<
         <div className="absolute inset-0 bg-auth-bg bg-cover object-cover bg-center"></div>
         <>
           <Link
-            href={routes.home}
+            href={routes.home.home}
             className="absolute z-10 top-12 left-12 no-underline"
           >
             <Logo className="h-auto w-40 z-10 fill-accent" />

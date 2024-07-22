@@ -60,7 +60,7 @@ const QuizList = () => {
                       ...recent.actions.delete,
                       onClick: async () => {
                         await studySyncDB.delete(
-                          `${dbEndpoints.quizzes}/${quiz.id}`
+                          `${dbEndpoints.quizzes}/${quiz.id}`,
                         );
 
                         handler({ isUpdateStatus: false });

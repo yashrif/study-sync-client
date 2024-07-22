@@ -14,7 +14,9 @@ import { columns } from "./Columns";
 const Uploads: React.FC = () => {
   const {
     state: { data, status },
-  } = useFetchDataState<UploadSimple[]>(serverEndpoints.uploads);
+  } = useFetchDataState<null, UploadSimple[]>({
+    endpoint: serverEndpoints.uploads,
+  });
 
   return (
     <div className="flex flex-col">
