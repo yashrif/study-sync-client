@@ -31,7 +31,7 @@ const QuizList = () => {
   }, [handler]);
 
   return (
-    <div className="max-h-400px overflow-scroll">
+    <div className="max-h-400px overflow-y-scroll">
       {status === Status.PENDING ? (
         <SpinnerContainer className="size-10" height={250} />
       ) : (

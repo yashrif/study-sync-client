@@ -56,7 +56,7 @@ const FlashCard: React.FC = () => {
         <DialogTitle className="hidden">{review.title}</DialogTitle>
         <DialogDescription className="hidden">{review.title}</DialogDescription>
         <div className="flex flex-col gap-4">
-          <div className="w-full flex gap-16 items-center justify-between mt-4">
+          <div className="w-full flex gap-16 items-center justify-between mt-6">
             <div className="">
               <IconBolt className="size-5 fill-yellow-500 stroke-none mt-0.5" />
             </div>

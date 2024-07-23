@@ -45,7 +45,7 @@ const AddFile: React.FC<Props> = ({
         <DialogHeader className="flex flex-col gap-2">
           <DialogTitle>{create.title}</DialogTitle>
           <DialogDescription />
-          <div className="max-h-96 overflow-scroll pr-2">
+          <div className="max-h-96 overflow-y-scroll pr-2">
             <Dropzone
               name="in_file"
               uploadEndpoint={`${serverEndpoints.api}${serverEndpoints.uploads}`}

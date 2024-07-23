@@ -25,7 +25,7 @@ const Overview: React.FC = () => {
   const { mcq, cq, questions, duration } = quizDetails.properties.fields;
 
   return (
-    <div className="fixed w-[344px] h-[calc(100%-200px)] flex flex-col gap-8 overflow-scroll no-scrollbar pr-16">
+    <div className="fixed w-[344px] h-[calc(100%-200px)] flex flex-col gap-8 overflow-y-scroll no-scrollbar pr-16">
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between gap-16">
           <Heading

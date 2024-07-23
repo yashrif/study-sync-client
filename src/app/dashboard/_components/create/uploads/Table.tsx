@@ -73,7 +73,7 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
             ))}
           </TableHeader>
         </UITable>
-        <div className="rounded-b-md border h-[420px] overflow-scroll overflow-x-clip">
+        <div className="rounded-b-md border h-[420px] overflow-y-scroll overflow-x-clip">
           <UITable className="">
             <TableBody>
               {status === Status.PENDING || status === Status.IDLE ? (
