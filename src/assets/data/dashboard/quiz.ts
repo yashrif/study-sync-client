@@ -5,10 +5,12 @@ import {
   IconBulb,
   IconCategory,
   IconClock,
+  IconDeviceFloppy,
   IconHistory,
   IconListCheck,
   IconMessages,
   IconNotes,
+  IconReload,
   IconSquarePlus2,
   IconStack2,
   IconTextSize,
@@ -20,6 +22,7 @@ import {
 import { Quiz } from "@/components/icons";
 import { dateFormatter } from "@/utils/dateFormatter";
 import {
+  Button,
   Column,
   ColumnConfig,
   Difficulty,
@@ -292,5 +295,24 @@ export const saved: {
         onClick: () => console.log("Delete"),
       },
     ],
+  },
+};
+
+export const actionButton: {
+  submit: Button;
+  reset: Button;
+} = {
+  submit: {
+    title: "Submit",
+    Icon: IconDeviceFloppy,
+    type: "submit",
+  },
+  reset: {
+    title: "Reset",
+    Icon: IconReload,
+    type: "reset",
+    variant: "outline",
+    className: "text-destructive ring-destructive hover:bg-destructive/20",
+    iconClassName: "text-destructive",
   },
 };

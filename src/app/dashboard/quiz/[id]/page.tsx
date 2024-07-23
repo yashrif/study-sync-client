@@ -4,9 +4,9 @@ import { notFound, useParams } from "next/navigation";
 import { Suspense } from "react";
 
 import { serverEndpoints } from "@/assets/data/api";
-import { quizDetails } from "@/assets/data/dashboard/quiz";
+import { actionButton, quizDetails } from "@/assets/data/dashboard/quiz";
+import IconButton from "@/components/button/IconButton";
 import Spinner from "@/components/spinner/Spinner";
-import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/fetchData";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { Quiz, QuizActionType, Status } from "@allTypes";
@@ -61,23 +61,18 @@ const QuizDetails: React.FC = () => {
             </span>
           )}
           <div className="flex gap-4 items-center">
-            <Button
-              type="submit"
+            <IconButton
+              {...actionButton.submit}
               onClick={() => {
                 formRef.current?.submit();
               }}
-            >
-              Submit
-            </Button>
-            <Button
-              type="reset"
-              variant={"outline"}
+            />
+            <IconButton
+              {...actionButton.reset}
               onClick={() => {
                 formRef.current?.clear();
               }}
-            >
-              Clear
-            </Button>
+            />
           </div>
         </div>
       </PageHeading>
