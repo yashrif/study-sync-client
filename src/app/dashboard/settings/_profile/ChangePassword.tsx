@@ -144,7 +144,7 @@ const ChangePassword = () => {
                 status: status,
               },
               {
-                ...actionButton.cancel,
+                ...actionButton.reset,
                 disabled: !form.control._getDirty(),
                 onClick: () => {
                   form.reset();
@@ -154,6 +154,7 @@ const ChangePassword = () => {
               <IconButton
                 key={action.title}
                 type="submit"
+                Icon={action.Icon}
                 {..._.omit(action, "Icon")}
               >
                 {action.title}

@@ -143,7 +143,7 @@ const PersonalInfo = () => {
                 status: patchState.status,
               },
               {
-                ...actionButton.cancel,
+                ...actionButton.reset,
                 disabled: !form.control._getDirty(),
                 onClick: () => {
                   form.reset(user);
@@ -153,6 +153,7 @@ const PersonalInfo = () => {
               <IconButton
                 key={action.title}
                 type="submit"
+                Icon={action.Icon}
                 {..._.omit(action, "Icon")}
               >
                 {action.title}

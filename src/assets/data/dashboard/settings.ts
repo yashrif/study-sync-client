@@ -2,9 +2,9 @@ import {
   IconDeviceFloppy,
   IconInfoCircle,
   IconPasswordUser,
+  IconReload,
   IconSettings,
   IconUserCircle,
-  IconX,
 } from "@tabler/icons-react";
 
 import { Button, ChangePasswordField, IconList, InfoField } from "@/types";
@@ -95,18 +95,19 @@ export const profile: IconList & {
 
 export const actionButton: {
   submit: Button;
-  cancel: Button;
+  reset: Button;
 } = {
   submit: {
     title: "Submit",
     Icon: IconDeviceFloppy,
     type: "submit",
   },
-  cancel: {
-    title: "Cancel",
-    Icon: IconX,
+  reset: {
+    title: "Reset",
+    Icon: IconReload,
     type: "reset",
     variant: "outline",
     className: "text-destructive border-destructive hover:bg-destructive/20",
+    iconClassName: "text-destructive",
   },
 };
