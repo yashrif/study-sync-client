@@ -138,25 +138,21 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                           ? "animate-spin duration-1000"
                           : "duration-300"
                       }
-                      ${
-                        (createStatus === Status.SUCCESS && cq.isFlashcard) ||
-                        cq.isFlashcard
-                          ? "!text-success stroke-success"
-                          : createStatus === Status.ERROR
-                            ? "!text-destructive"
-                            : "text-primary"
-                      }
-                    `}
+                      `}
                       Icons={{
                         [Status.IDLE]: {
                           Icon: cq.isFlashcard
                             ? CheckmarkAnimated
                             : IconCirclePlus2,
+                          className: cq.isFlashcard
+                            ? "stroke-success"
+                            : "stroke-primary",
                         },
                         [Status.SUCCESS]: {
                           Icon: cq.isFlashcard
                             ? CheckmarkAnimated
                             : IconCirclePlus2,
+                          className: "text-success stroke-success",
                         },
                       }}
                     />
@@ -164,11 +160,13 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-small">
-                    <div className="flex gap-1.5 items-center text-destructive">
+                    <div
+                      className={`flex gap-1.5 items-center ${cq.isFlashcard ? "text-destructive" : "text-primary"}`}
+                    >
                       {cq.isFlashcard ? (
-                        <IconTrash className="size-[15px]" />
+                        <IconTrash className="size-[14px]" />
                       ) : (
-                        <IconSquarePlus2 className="size-[15px]" />
+                        <IconSquarePlus2 className="size-[14px]" />
                       )}
                       <span>
                         {cq.isFlashcard
