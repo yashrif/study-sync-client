@@ -33,7 +33,7 @@ function ViewControl<TData>({
       }}
     >
       <span className="sr-only">Open menu</span>
-      {Icon && <Icon className="h-4 w-auto stroke-[2.5px]" />}
+      {Icon && <Icon className="h-4 w-auto stroke-[2.5]" />}
       <span>{title}</span>
     </Button>
   );
@@ -44,7 +44,7 @@ function ViewControl<TData>({
         .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide(),
+            typeof column.accessorFn !== "undefined" && column.getCanHide()
         )
         .map((column) => {
           return (

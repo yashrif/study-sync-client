@@ -1,65 +1,39 @@
-import { CSSProperties } from "react";
+import React from "react";
 
-import { Button as ButtonType, Status } from "@/types";
+import StatusContent from "@/components/StatusContent";
+import { Icon, Status, Button as TButton } from "@/types";
 import { Button } from "@components/ui/button";
-import StatusIcon from "../StatusIcon";
 
-type Props = {
-  show?: boolean;
-  style?: CSSProperties;
-  showStatus?: boolean;
+type Props = TButton & {
+  isAnimation?: boolean;
+  Icons?: {
+    [key in Status]?: {
+      Icon?: Icon;
+      className?: string;
+    };
+  };
+  hidden?: boolean;
 };
 
-const IconButton: React.FC<Props & ButtonType> = ({
-  variant,
-  size,
-  show = true,
-  style,
-  Icon,
-  className,
-  iconClassName,
-  title,
-  status,
-  showStatus,
-  onClick,
-  ...rest
-}) => {
-  return (
-    <Button
-      variant={variant}
-      size={size}
-      className={`flex gap-1.5 items-center ${className}`}
-      style={{
-        visibility: show ? "visible" : "hidden",
-        ...style,
-      }}
-      onClick={onClick}
-      {...rest}
-    >
-      {showStatus ? (
-        <StatusIcon
-          status={status}
-          className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
-            status === Status.PENDING
-              ? "animate-spin duration-1000"
-              : "duration-300"
-          } ${status === Status.SUCCESS ? "!text-success stroke-success" : status === Status.ERROR ? "!text-destructive" : ""}
-            ${iconClassName}
-          `}
+const IconButton = React.forwardRef<HTMLButtonElement, Props>(
+  ({ status, iconClassName, Icon, children, ...props }, ref) => {
+    if (props.hidden) console.log(props.hidden);
+    return (
+      <Button disabled={status === Status.PENDING} {...props} ref={ref}>
+        <StatusContent
+          status={status || Status.IDLE}
+          iconClassName={iconClassName}
+          {...props}
           Icons={{
-            [Status.IDLE]: Icon,
+            [Status.IDLE]: { Icon: Icon },
           }}
-        />
-      ) : (
-        Icon && (
-          <Icon className={`h-4 w-auto stroke-[2.5px] ${iconClassName}`} />
-        )
-      )}
-      {title && (
-        <span className={`${status ? "text-transparent" : ""}`}>{title}</span>
-      )}
-    </Button>
-  );
-};
+        >
+          {children}
+        </StatusContent>
+      </Button>
+    );
+  }
+);
+IconButton.displayName = "SubmitButton";
 
 export default IconButton;

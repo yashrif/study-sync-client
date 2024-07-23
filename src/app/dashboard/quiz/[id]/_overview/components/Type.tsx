@@ -6,8 +6,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useQueryParams } from "@/hooks/useQueryParams";
@@ -16,13 +14,13 @@ import { QuizTypes } from "@/types";
 import Property from "../../_components/Property";
 
 const Type: React.FC = () => {
-  const { checkQueryString } = useQueryString();
+  const { getQueryString, checkQueryString } = useQueryString();
   const { updateQueryParams, setParams } = useQueryParams();
 
   useEffect(() => {
-    setParams(queryParams.types.key, queryParams.types.value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!getQueryString(queryParams.types.key))
+      setParams(queryParams.types.key, queryParams.types.value);
+  }, [getQueryString, setParams]);
 
   return (
     <div className="flex gap-16 justify-between items-center">

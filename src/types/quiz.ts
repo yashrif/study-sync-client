@@ -119,6 +119,7 @@ export type QuizState = {
     [key: string]: QuizEvaluateResponseServer;
   };
   isShowOverview: boolean;
+  evaluateStatus: Status;
 };
 
 export type QuizContextProps = {

@@ -1,3 +1,4 @@
+import { ButtonProps } from "@/components/ui/button";
 import { Icon, Status } from "@allTypes";
 
 export type ButtonVariant =
@@ -26,12 +27,9 @@ export type ButtonLink = {
   className?: string;
 };
 
-export type Button = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  title: string;
-  Icon?: Icon;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  iconClassName?: string;
-  disabled?: boolean;
-  status?: Status;
-};
+export type Button = React.ButtonHTMLAttributes<HTMLButtonElement> &
+  ButtonProps & {
+    Icon?: Icon;
+    iconClassName?: string;
+    status?: Status;
+  };

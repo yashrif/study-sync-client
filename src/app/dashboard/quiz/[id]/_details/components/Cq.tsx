@@ -10,7 +10,7 @@ import { UseFormReturn } from "react-hook-form";
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { CheckmarkAnimated } from "@/components/icons";
-import StatusIcon from "@/components/StatusIcon";
+import StatusContent from "@/components/StatusContent";
 import {
   FormControl,
   FormDescription,
@@ -45,7 +45,7 @@ type Props = {
 const Cq: React.FC<Props> = ({ cq, order, form }) => {
   const { id } = useParams();
   const {
-    state: { cqEvaluation, status, isShowResults, quiz },
+    state: { cqEvaluation, status, isShowResults, evaluateStatus },
     dispatch,
   } = useQuizContext();
 
@@ -56,7 +56,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
   const { handler: quizHandler } = useApiHandler<null, Quiz>({
     apiCall: useCallback(
       () => studySyncDB.get(`${dbEndpoints.quizzes}/${id}`),
-      [id],
+      [id]
     ),
     dispatch,
   });
@@ -73,7 +73,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
     apiCall: useCallback(
       (data, pathVariable) =>
         studySyncDB.patch(`${dbEndpoints.cqs}/${pathVariable}`, data),
-      [],
+      []
     ),
     dispatch: createDispatch,
   });
@@ -131,7 +131,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                       await quizHandler({ isUpdateStatus: false });
                     }}
                   >
-                    <StatusIcon
+                    <StatusContent
                       status={createStatus}
                       className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
                         createStatus === Status.PENDING
@@ -148,12 +148,16 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                       }
                     `}
                       Icons={{
-                        [Status.IDLE]: cq.isFlashcard
-                          ? CheckmarkAnimated
-                          : IconCirclePlus2,
-                        [Status.SUCCESS]: cq.isFlashcard
-                          ? CheckmarkAnimated
-                          : IconCirclePlus2,
+                        [Status.IDLE]: {
+                          Icon: cq.isFlashcard
+                            ? CheckmarkAnimated
+                            : IconCirclePlus2,
+                        },
+                        [Status.SUCCESS]: {
+                          Icon: cq.isFlashcard
+                            ? CheckmarkAnimated
+                            : IconCirclePlus2,
+                        },
                       }}
                     />
                   </button>
@@ -187,23 +191,25 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
               />
             </div>
           </FormControl>
-          {isShowResults && status === Status.SUCCESS && (
-            <FormDescription className="grid grid-cols-[40px_1fr] gap-10 items-center !mt-0">
-              <div />
-              <div className="flex flex-col gap-2">
-                <p className="text-text-200 text-medium">
-                  <span className="text-primary font-medium">
-                    Correctness:{" "}
-                  </span>
-                  {result.correctness}
-                </p>
-                <p className="text-text-200 text-medium">
-                  <span className="text-primary font-medium">Comment: </span>
-                  {result.comment}
-                </p>
-              </div>
-            </FormDescription>
-          )}
+          {isShowResults &&
+            status === Status.SUCCESS &&
+            evaluateStatus !== Status.ERROR && (
+              <FormDescription className="grid grid-cols-[40px_1fr] gap-10 items-center !mt-0">
+                <div />
+                <div className="flex flex-col gap-2">
+                  <p className="text-text-200 text-medium">
+                    <span className="text-primary font-medium">
+                      Correctness:{" "}
+                    </span>
+                    {result.correctness}
+                  </p>
+                  <p className="text-text-200 text-medium">
+                    <span className="text-primary font-medium">Comment: </span>
+                    {result.comment}
+                  </p>
+                </div>
+              </FormDescription>
+            )}
         </FormItem>
       )}
     />

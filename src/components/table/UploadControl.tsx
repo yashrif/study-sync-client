@@ -33,6 +33,7 @@ const UploadControl: React.FC<Props> = ({
       <IconButton
         title={title || controlBar.upload.title}
         Icon={Icon || controlBar.upload.Icon}
+        iconClassName="stroke-[2.5]"
         variant={variant || controlBar.upload.variant}
         size={size || controlBar.upload.size}
         onClick={() => setIsDropzoneOpen(!isDropzoneOpen)}

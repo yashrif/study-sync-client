@@ -21,6 +21,7 @@ const initialState: QuizState = {
   isShowResults: false,
   formRef: { current: null },
   cqEvaluation: {},
+  evaluateStatus: Status.IDLE,
   isShowOverview: true,
 };
 
@@ -66,18 +67,18 @@ const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
     case QuizActionType.QUIZ_EVALUATE_START:
       return {
         ...state,
-        status: Status.PENDING,
+        evaluateStatus: Status.PENDING,
       };
     case QuizActionType.QUIZ_EVALUATE_SUCCESS:
       return {
         ...state,
-        status: Status.SUCCESS,
+        evaluateStatus: Status.SUCCESS,
         cqEvaluation: action.payload,
       };
     case QuizActionType.QUIZ_EVALUATE_ERROR:
       return {
         ...state,
-        status: Status.ERROR,
+        evaluateStatus: Status.ERROR,
       };
     case QuizActionType.SET_IS_SHOW_OVERVIEW:
       return {

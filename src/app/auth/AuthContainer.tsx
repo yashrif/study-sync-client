@@ -10,7 +10,7 @@ import { z } from "zod";
 
 import studySyncDB from "@/api/studySyncDB";
 import { actions, additionalFields } from "@/assets/data/auth/sign-in";
-import SubmitButton from "@/components/button/SubmitButton";
+import IconButton from "@/components/button/IconButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -162,14 +162,14 @@ const AuthContainer: React.FC<Props> = ({
           </div>
 
           <div className="flex flex-col gap-4">
-            <SubmitButton
+            <IconButton
               type={"submit"}
               size={"lg"}
               status={status}
               className="group col-span-2 bg-text hover:bg-primary text-accent hover:text-white"
             >
               {actionButton}
-            </SubmitButton>
+            </IconButton>
             <div className="flex gap-2 items-center justify-center">
               <p className="text-medium font-medium">{altLink.title}</p>
               <Link

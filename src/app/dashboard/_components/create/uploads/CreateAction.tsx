@@ -69,7 +69,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
             });
           }
           return upload.id;
-        }),
+        })
       );
 
       const response: QuizResponseServer = (
@@ -124,8 +124,8 @@ const CreateAction: React.FC<Props> = ({ table }) => {
                                   ? field.onChange([...field.value, item.id])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.id,
-                                      ),
+                                        (value) => value !== item.id
+                                      )
                                     );
                               }}
                               className="size-4"
@@ -145,7 +145,6 @@ const CreateAction: React.FC<Props> = ({ table }) => {
           />
         )}
         <IconButton
-          title=""
           size="lg"
           className="size-12 p-0 rounded-full"
           Icon={IconArrowRight}
@@ -162,7 +161,6 @@ const CreateAction: React.FC<Props> = ({ table }) => {
               : processStatus
           }
           type="submit"
-          showStatus
         />
       </form>
     </Form>

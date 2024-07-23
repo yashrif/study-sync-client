@@ -10,7 +10,7 @@ import { z } from "zod";
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { actionButton, profile } from "@/assets/data/dashboard/settings";
-import SubmitButton from "@/components/button/SubmitButton";
+import IconButton from "@/components/button/IconButton";
 import {
   Form,
   FormControl,
@@ -79,7 +79,7 @@ const ChangePassword = () => {
   const { handler } = useApiHandler<TChangePassword, TChangePassword>({
     apiCall: useCallback(
       (data) => studySyncDB.patch(dbEndpoints.changePassword, data),
-      [],
+      []
     ),
     dispatch,
   });
@@ -151,9 +151,13 @@ const ChangePassword = () => {
                 },
               },
             ].map((action) => (
-              <SubmitButton key={action.title} {..._.omit(action, "Icon")}>
+              <IconButton
+                key={action.title}
+                type="submit"
+                {..._.omit(action, "Icon")}
+              >
                 {action.title}
-              </SubmitButton>
+              </IconButton>
             ))}
           </div>
         </motion.form>

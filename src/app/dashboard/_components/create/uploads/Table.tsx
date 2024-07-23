@@ -33,18 +33,18 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
         searchKey={search.key}
         uploadEndpointDb={dbEndpoints.uploads}
         controlsConfig={{
-          [TableControlTypes.Upload]: {
-            show: true,
+          [TableControlTypes.UPLOAD]: {
+            hidden: false,
             order: 2,
             variant: "outline",
           },
-          [TableControlTypes.Search]: {
-            show: true,
+          [TableControlTypes.SEARCH]: {
+            hidden: false,
             order: 1,
             title: "Search Files",
           },
-          [TableControlTypes.View]: {
-            show: true,
+          [TableControlTypes.VIEW]: {
+            hidden: false,
             order: 3,
             variant: "outline",
           },

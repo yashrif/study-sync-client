@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound, useParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 
 import { serverEndpoints } from "@/assets/data/api";
 import { quizDetails } from "@/assets/data/dashboard/quiz";
@@ -10,16 +10,24 @@ import { Button } from "@/components/ui/button";
 import { useFetchData } from "@/hooks/fetchData";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { Quiz, QuizActionType, Status } from "@allTypes";
+import { IconArrowRight, IconWifiOff } from "@tabler/icons-react";
 import PageHeading from "../../_components/PageHeading";
 import List from "./_details";
 import Overview from "./_overview";
-import { IconArrowRight } from "@tabler/icons-react";
 
 const QuizDetails: React.FC = () => {
   const { id } = useParams();
 
   const {
-    state: { points, status, formRef, isShowResults, quiz, isShowOverview },
+    state: {
+      points,
+      status,
+      evaluateStatus,
+      formRef,
+      isShowResults,
+      quiz,
+      isShowOverview,
+    },
     dispatch,
   } = useQuizContext();
 
@@ -40,13 +48,15 @@ const QuizDetails: React.FC = () => {
         <div className="flex gap-24 items-center">
           {isShowResults && (
             <span className="flex items-center gap-1.5 text-large text-primary font-medium">
-              <span>Obtained Points:</span>
-              {status === Status.PENDING ? (
+              {evaluateStatus !== Status.ERROR && <span>Obtained Points:</span>}
+              {evaluateStatus === Status.PENDING ? (
                 <Spinner className="!size-5" />
-              ) : (
+              ) : evaluateStatus === Status.SUCCESS ? (
                 <span>
                   {points}/{(quiz.mcqs?.length || 0) + (quiz.cqs?.length || 0)}
                 </span>
+              ) : (
+                <IconWifiOff className="size-6 text-destructive" />
               )}
             </span>
           )}

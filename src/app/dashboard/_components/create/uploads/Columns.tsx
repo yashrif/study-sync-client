@@ -6,7 +6,7 @@ import {
   columnConfig as columnConfigObj,
   isIndexedData,
 } from "@/assets/data/dashboard/quiz";
-import StatusIcon from "@/components/StatusIcon";
+import StatusContent from "@/components/StatusContent";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { ColumnConfig, Status } from "@/types";
@@ -36,7 +36,7 @@ const IndexButton: React.FC<{ data: UploadSimple }> = memo(({ data }) => {
               await fileIndexing({ data, dispatch });
             }}
           >
-            <StatusIcon
+            <StatusContent
               status={indexStatus[data.id]}
               className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
                 indexStatus[data.id] === Status.PENDING
@@ -46,7 +46,7 @@ const IndexButton: React.FC<{ data: UploadSimple }> = memo(({ data }) => {
                   ${indexStatus[data.id] === Status.SUCCESS ? "!text-success stroke-success" : indexStatus[data.id] === Status.ERROR ? "!text-destructive" : ""}
                   `}
               Icons={{
-                [Status.PENDING]: IconRefresh,
+                [Status.PENDING]: { Icon: IconRefresh },
               }}
               isAnimation={!data.isIndexed}
             />
@@ -82,6 +82,6 @@ export const columns: ColumnDef<UploadSimple>[] = [
       actions: [...columnConfigObj.actions],
     } as ColumnConfig
   ).columns.map((column) =>
-    ColumnHeader({ column }),
+    ColumnHeader({ column })
   ) as ColumnDef<UploadSimple>[]),
 ];

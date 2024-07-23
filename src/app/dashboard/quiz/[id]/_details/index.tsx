@@ -40,8 +40,6 @@ const List: React.FC = () => {
     };
   }, [checkQueryString, quiz.cqs, quiz.mcqs]);
 
-  console.log(quiz.cqs);
-
   const formRef = useRef<HTMLFormElement>(null);
   useImperativeHandle(ref, () => ({
     submit: () => {
@@ -86,25 +84,21 @@ const List: React.FC = () => {
     try {
       const evaluation = await Promise.all(
         cqs?.map(async (cq) => {
-          try {
-            const response = await studySyncServer.post(
-              serverEndpoints.evaluate,
-              {
-                rightAnswer: cq.answer,
-                givenAnswer: data[cq.id],
-              },
-            );
+          const response = await studySyncServer.post(
+            serverEndpoints.evaluate,
+            {
+              rightAnswer: cq.answer,
+              givenAnswer: data[cq.id],
+            }
+          );
 
-            return { [cq.id]: response.data as QuizEvaluateResponseServer };
-          } catch (e) {
-            console.log(e);
-          }
-        }) || [],
+          return { [cq.id]: response.data as QuizEvaluateResponseServer };
+        }) || []
       );
 
       const cqEvaluation = evaluation.reduce(
         (acc, curr) => ({ ...acc, ...curr }),
-        {},
+        {}
       ) as { [key: string]: QuizEvaluateResponseServer };
 
       dispatch({
@@ -183,7 +177,7 @@ const generateFormSchema = ({
       [...(Object.values(Choices) as [string, ...string[]])],
       {
         required_error: "You need to chose one option.",
-      },
+      }
     );
   });
   cqs.forEach((cq) => {

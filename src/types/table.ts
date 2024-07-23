@@ -38,15 +38,15 @@ export type TableAction = {
 };
 
 export enum TableControlTypes {
-  Upload = "Upload",
-  AddFolder = "AddFolder",
-  Delete = "Delete",
-  Search = "Search",
-  View = "View",
+  UPLOAD = "UPLOAD",
+  ADD_FOLDER = "ADD_FOLDER",
+  DELETE = "DELETE",
+  SEARCH = "SEARCH",
+  VIEW = "VIEW",
 }
 
 export type TTableControl = {
-  show?: boolean;
+  hidden?: boolean;
   order?: number;
   className?: string;
   variant?: ButtonVariant;

@@ -31,16 +31,16 @@ const GenerateQuiz: React.FC = () => {
           searchKey={search.key}
           uploadEndpointDb={dbEndpoints.uploads}
           controlsConfig={{
-            Delete: {
-              show: true,
+            DELETE: {
+              hidden: false,
               order: 3,
             },
-            Search: {
-              show: true,
+            SEARCH: {
+              hidden: false,
               order: 1,
             },
-            View: {
-              show: true,
+            VIEW: {
+              hidden: false,
               order: 2,
             },
           }}

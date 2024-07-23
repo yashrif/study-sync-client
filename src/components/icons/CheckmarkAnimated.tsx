@@ -4,17 +4,15 @@ import { Variants, motion } from "framer-motion";
 import { Suspense } from "react";
 
 type Props = {
-  stroke?: string;
   className?: string;
 };
 
-export const CheckmarkAnimated: React.FC<Props> = ({ stroke, className }) => {
+export const CheckmarkAnimated: React.FC<Props> = ({ className }) => {
   return (
     <Suspense fallback={null}>
       <Icon
         variants={[drawVariantsCircle, drawVariantsCheckmark]}
         className={className}
-        stroke={stroke}
       />
     </Suspense>
   );
@@ -22,11 +20,10 @@ export const CheckmarkAnimated: React.FC<Props> = ({ stroke, className }) => {
 
 type Icon = {
   variants: Variants[];
-  stroke?: string;
   className?: string;
 };
 
-const Icon: React.FC<Icon> = ({ variants, stroke, className }) => {
+const Icon: React.FC<Icon> = ({ variants, className }) => {
   return (
     <motion.svg
       width={24}
@@ -34,9 +31,8 @@ const Icon: React.FC<Icon> = ({ variants, stroke, className }) => {
       viewBox="0 0 38 36"
       fill="none"
       strokeWidth={3}
-      stroke={stroke || "hsl(var(--success))"}
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className={`stroke-success ${className}`}
       initial={"hidden"}
       animate={"visible"}
       viewport={{ once: true }}
