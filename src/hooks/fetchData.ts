@@ -26,6 +26,13 @@ const quizReducer = <T, R>(state: T, action: FetchAction<R>): T => {
         ...state,
         status: Status.IDLE,
       };
+    case FetchActionType.FETCH_RESET:
+      return {
+        ...state,
+        status: Status.IDLE,
+        data: action.payload || null,
+      };
+
     default:
       return state;
   }

@@ -74,4 +74,7 @@ export const review = {
       className: "",
     },
   },
+  message: {
+    caughtUp: `Congrats, you've reviewed all the cards, see you next time! 💯`,
+  },
 };

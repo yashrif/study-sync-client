@@ -18,5 +18,5 @@ export type FetchAction<T> =
   | { type: FetchActionType.FETCH_START }
   | { type: FetchActionType.FETCH_SUCCESS; payload: T }
   | { type: FetchActionType.FETCH_ERROR }
-  | { type: FetchActionType.FETCH_RESET }
+  | { type: FetchActionType.FETCH_RESET; payload?: T | null }
   | { type: FetchActionType.FETCH_IDLE };

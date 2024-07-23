@@ -6,15 +6,15 @@ import {
   IconLetterA,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
+import _ from "lodash";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { review } from "@/assets/data/dashboard/flashcard";
 import IconButton from "@/components/button/IconButton";
 import SpinnerContainer from "@/components/spinner/SpinnerContainer";
-import { DialogHeader } from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
@@ -22,8 +22,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFetchDataState } from "@/hooks/fetchData";
-import { Flashcard, Status } from "@/types";
+import { FetchActionType, Flashcard, Status } from "@/types";
 import { Dialog, DialogContent } from "@components/ui/dialog";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 
 const FlashCard: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -32,10 +33,17 @@ const FlashCard: React.FC = () => {
 
   const { back } = useRouter();
   const {
-    state: { data, status },
+    state: { data: flashcards, status },
+    dispatch,
   } = useFetchDataState<null, Flashcard[]>({
     endpoint: dbEndpoints.flashcards,
   });
+
+  const filteredFlashcards = useMemo(() => {
+    return isPreview
+      ? flashcards || []
+      : flashcards?.filter((item) => item.status === null) || [];
+  }, [flashcards, isPreview]);
 
   return (
     <Dialog
@@ -45,7 +53,9 @@ const FlashCard: React.FC = () => {
       }}
     >
       <DialogContent className="max-w-[700px] h-[450px] bg-background">
-        <DialogHeader className="flex flex-col gap-6">
+        <DialogTitle className="hidden">{review.title}</DialogTitle>
+        <DialogDescription className="hidden">{review.title}</DialogDescription>
+        <div className="flex flex-col gap-4">
           <div className="w-full flex gap-16 items-center justify-between mt-4">
             <div className="">
               <IconBolt className="size-5 fill-yellow-500 stroke-none mt-0.5" />
@@ -57,6 +67,7 @@ const FlashCard: React.FC = () => {
                     <IconLetterA
                       className={`size-[18px] ${isPreview ? "text-primary" : "text-text-200/80"} stroke-2 cursor-pointer hover:scale-110 transition-all duration-300`}
                       onClick={() => {
+                        setIndex(0);
                         setIsPreview(!isPreview);
                       }}
                     />
@@ -66,10 +77,14 @@ const FlashCard: React.FC = () => {
               </TooltipProvider>
               <p className="text-small font-medium text-primary text-pretty">
                 <span>
-                  {data ? (isPreview ? index + 1 : data?.length - index) : 0}
+                  {filteredFlashcards
+                    ? isPreview
+                      ? index + 1
+                      : filteredFlashcards?.length - index
+                    : 0}
                 </span>
                 <span>/</span>
-                <span>{data ? data?.length : 0}</span>
+                <span>{filteredFlashcards?.length}</span>
               </p>
             </div>
           </div>
@@ -77,7 +92,7 @@ const FlashCard: React.FC = () => {
             <SpinnerContainer />
           ) : (
             <div className="h-full flex flex-col justify-between items-center gap-8">
-              {data && data.length > 0 && (
+              {filteredFlashcards.length > 0 ? (
                 <>
                   <motion.div
                     className="max-h-[280px] h-auto w-full flex flex-col gap-4 border border-primary/80 p-4 pt-6 rounded-md overflow-x-scroll overflow-y-contain"
@@ -85,12 +100,14 @@ const FlashCard: React.FC = () => {
                   >
                     <motion.div layout="position">
                       <IconBolt className="float-left mr-2 size-6 fill-yellow-500 stroke-none mt-0.5" />
-                      <h5>{data?.[index].question}</h5>
+                      <h5>{filteredFlashcards?.[index].question}</h5>
                     </motion.div>
                     {isOpen && (
                       <div>
                         <IconCircleLetterAFilled className="float-left mr-2 size-5 text-success mt-0.5" />
-                        <p className="text-medium">{data?.[index].answer}</p>
+                        <p className="text-medium">
+                          {filteredFlashcards?.[index].answer}
+                        </p>
                       </div>
                     )}
                   </motion.div>
@@ -111,7 +128,9 @@ const FlashCard: React.FC = () => {
                             onClick: () => {
                               setIsOpen(false);
                               setIndex(
-                                index + 1 >= data.length ? 0 : index + 1,
+                                index + 1 >= filteredFlashcards.length
+                                  ? 0
+                                  : index + 1
                               );
                             },
                           },
@@ -119,10 +138,10 @@ const FlashCard: React.FC = () => {
                             ...review.buttons.reset,
                             onClick: async () => {
                               await studySyncDB.patch(
-                                `${dbEndpoints.cqs}/${data?.[index].id}`,
+                                `${dbEndpoints.cqs}/${filteredFlashcards?.[index].id}`,
                                 {
                                   status: null,
-                                },
+                                }
                               );
                             },
                           },
@@ -133,7 +152,7 @@ const FlashCard: React.FC = () => {
                             Icon={button.Icon}
                             size={"sm"}
                             onClick={button.onClick}
-                            className={button.className}
+                            className={`min-w-24 ${button.className}`}
                           />
                         ))}
                       </div>
@@ -151,15 +170,22 @@ const FlashCard: React.FC = () => {
                             size={"sm"}
                             onClick={async () => {
                               await studySyncDB.patch(
-                                `${dbEndpoints.cqs}/${data?.[index].id}`,
+                                `${dbEndpoints.cqs}/${filteredFlashcards?.[index].id}`,
                                 {
                                   status: button.status,
-                                },
+                                }
                               );
                               setIsOpen(false);
-                              setIndex(
-                                index + 1 >= data.length ? 0 : index + 1,
-                              );
+                              let theData = _.cloneDeep(filteredFlashcards);
+                              theData?.splice(index, 1, {
+                                ...filteredFlashcards?.[index],
+                                status: button.status,
+                              });
+                              dispatch({
+                                type: FetchActionType.FETCH_RESET,
+                                payload: theData,
+                              });
+                              setIndex(0);
                             }}
                             className={button.className}
                           />
@@ -177,10 +203,14 @@ const FlashCard: React.FC = () => {
                     )}
                   </>
                 </>
+              ) : (
+                <div className="w-full h-24 flex justify-center items-center border border-primary/80 rounded-md">
+                  <p>{review.message.caughtUp}</p>
+                </div>
               )}
             </div>
           )}
-        </DialogHeader>
+        </div>
       </DialogContent>
     </Dialog>
   );
