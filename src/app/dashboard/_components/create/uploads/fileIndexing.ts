@@ -6,11 +6,11 @@ import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
 import {
   QuizUploadsAction,
   QuizUploadsActionType,
-  UploadSimple,
+  UploadShallow,
 } from "@allTypes";
 
 type Props = {
-  data: UploadSimple;
+  data: UploadShallow;
   dispatch: Dispatch<QuizUploadsAction>;
 };
 

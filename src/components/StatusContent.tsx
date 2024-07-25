@@ -78,10 +78,10 @@ const StatusContent: React.FC<Props> = ({
   variant = "default",
 }) => {
   const contentClassName = cn(
-    contentVariants({ variant, size, className: "" })
+    contentVariants({ variant, size, className: "" }),
   );
   const iconCustomClassName = cn(
-    iconVariants({ variant, size, className: iconClassName })
+    iconVariants({ variant, size, className: iconClassName }),
   );
 
   if (!status) return children;
@@ -160,8 +160,8 @@ const Content: React.FC<ContentProps> = ({
   Icon,
   iconClassName,
   title,
-}) => {
-  return Icon ? (
+}) =>
+  Icon ? (
     <div className={`flex gap-1.5 items-center justify-center ${className}`}>
       <Icon className={iconClassName} />
       {content || (title && <span className={contentClassName}>{title}</span>)}
@@ -171,6 +171,7 @@ const Content: React.FC<ContentProps> = ({
       {content || (title && <span className={contentClassName}>{title}</span>)}
     </div>
   ) : (
-    <DefaultIcon className={iconClassName} />
+    <div className={`flex justify-center items-center ${className}`}>
+      <DefaultIcon className={iconClassName} />
+    </div>
   );
-};

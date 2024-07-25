@@ -88,7 +88,7 @@ export const useFetchData = <T, R>({
           requestType,
           data,
         }),
-      [endpoint, requestType]
+      [endpoint, requestType],
     ),
     dispatch,
   });

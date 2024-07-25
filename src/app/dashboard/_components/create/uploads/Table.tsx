@@ -11,13 +11,13 @@ import {
   TableRow,
   Table as UITable,
 } from "@/components/ui/table";
-import { Status, TableControlTypes, UploadSimple } from "@/types";
+import { Status, TableControlTypes, UploadShallow } from "@/types";
 import ControlBar from "@components/table/ControlBar";
 import { columns } from "./Columns";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 
 type Props = {
-  table: TTable<UploadSimple>;
+  table: TTable<UploadShallow>;
   onUpload?: () => void;
 };
 

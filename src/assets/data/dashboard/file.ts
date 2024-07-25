@@ -13,7 +13,7 @@ import {
   IconSitemap,
 } from "@tabler/icons-react";
 
-export const fileTypeIcons = (props: FileIcon) => {
+export const fileTypeIcons = <T>(props: FileIcon<T>) => {
   if (props.key === "type")
     switch (props.value.type) {
       case FileTypes.PDF:

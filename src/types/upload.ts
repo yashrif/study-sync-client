@@ -1,6 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
-
-import { Status } from "@allTypes";
+import { Action, FetchAction, Status } from "@allTypes";
 
 export enum FileTypes {
   PDF = "application/pdf",
@@ -11,7 +9,7 @@ export enum FileTypes {
   PPT = "application/vnd.ms-powerpoint",
 }
 
-export type UploadSimple = {
+export type UploadShallow = {
   id: string;
   title: string;
   name: string;
@@ -20,13 +18,28 @@ export type UploadSimple = {
   isIndexed: boolean;
 };
 
-export type Upload = UploadSimple;
-
-export type FileIcon = {
-  key: keyof UploadSimple;
-  value: UploadSimple;
-};
+export type Upload = UploadShallow;
 
 export type IndexStatus = {
   [key: string]: Status;
+};
+
+/* --------------------------------- Context -------------------------------- */
+
+export enum UploadsActionType {
+  SET_UPLOADS = "SET_UPLOADS",
+}
+
+export type UploadsAction =
+  | FetchAction<UploadShallow[]>
+  | Action<UploadsActionType.SET_UPLOADS, UploadShallow[]>;
+
+export type UploadsState = {
+  uploads: UploadShallow[];
+  status: Status;
+};
+
+export type UploadsContextProps = {
+  state: UploadsState;
+  dispatch: React.Dispatch<UploadsAction>;
 };

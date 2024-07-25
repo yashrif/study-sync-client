@@ -130,7 +130,7 @@ const FlashCard: React.FC = () => {
                               setIndex(
                                 index + 1 >= filteredFlashcards.length
                                   ? 0
-                                  : index + 1
+                                  : index + 1,
                               );
                             },
                           },
@@ -141,7 +141,7 @@ const FlashCard: React.FC = () => {
                                 `${dbEndpoints.cqs}/${filteredFlashcards?.[index].id}`,
                                 {
                                   status: null,
-                                }
+                                },
                               );
                             },
                           },
@@ -173,7 +173,7 @@ const FlashCard: React.FC = () => {
                                 `${dbEndpoints.cqs}/${filteredFlashcards?.[index].id}`,
                                 {
                                   status: button.status,
-                                }
+                                },
                               );
                               setIsOpen(false);
                               let theData = _.cloneDeep(filteredFlashcards);

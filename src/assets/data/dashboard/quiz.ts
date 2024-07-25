@@ -27,8 +27,10 @@ import {
   ColumnConfig,
   Difficulty,
   IconList,
+  QuizShallow,
   QuizTypes,
   TableAction,
+  UploadShallow,
 } from "@allTypes";
 import { routes } from "../routes";
 import { fileTypeIcons } from "./file";
@@ -71,7 +73,7 @@ export const search = {
   placeholder: "Search by title",
 };
 
-export const isIndexedData: Column = {
+export const isIndexedData: Column<UploadShallow> = {
   type: "no_link",
   accessorKey: "isIndexed",
   title: "Index Status",
@@ -90,7 +92,7 @@ export const isIndexedData: Column = {
   },
 };
 
-export const columnConfig: ColumnConfig = {
+export const columnConfig: ColumnConfig<UploadShallow> = {
   columns: [
     {
       type: "link",
@@ -249,8 +251,8 @@ export const saved: {
     placeholder: string;
   };
   columnConfig: {
-    columns: Column[];
-    actions: TableAction[];
+    columns: Column<QuizShallow>[];
+    actions: TableAction<QuizShallow>[];
   };
 } = {
   search: {

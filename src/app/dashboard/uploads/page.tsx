@@ -2,20 +2,25 @@
 
 import { Suspense } from "react";
 
-import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
+import { dbEndpoints } from "@/assets/data/api";
 import { home, search } from "@/assets/data/dashboard/uploads";
 import Spinner from "@/components/spinner/Spinner";
-import { useFetchDataState } from "@/hooks/fetchData";
-import { Status, UploadSimple } from "@/types";
+import { useFetchData } from "@/hooks/fetchData";
+import { useUploadsContext } from "@/hooks/useUploadsContext";
+import { Status, UploadShallow } from "@/types";
 import DataTable from "../../../components/table";
 import PageHeading from "../_components/PageHeading";
-import { columns } from "./Columns";
+import { useColumns } from "./Columns";
 
 const Uploads: React.FC = () => {
   const {
-    state: { data, status },
-  } = useFetchDataState<null, UploadSimple[]>({
-    endpoint: serverEndpoints.uploads,
+    state: { uploads, status },
+    dispatch,
+  } = useUploadsContext();
+
+  useFetchData<null, UploadShallow[]>({
+    endpoint: dbEndpoints.uploads,
+    dispatch,
   });
 
   return (
@@ -27,8 +32,8 @@ const Uploads: React.FC = () => {
       />
       <Suspense fallback={<Spinner />}>
         <DataTable
-          columns={columns}
-          data={data || []}
+          columns={useColumns()}
+          data={uploads || []}
           loading={status === Status.PENDING}
           searchKey={search.key}
           uploadEndpointDb={dbEndpoints.uploads}

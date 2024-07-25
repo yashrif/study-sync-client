@@ -34,7 +34,7 @@ export const Actions = <T extends object>({
   actions,
   copyId = false,
 }: {
-  actions: TableAction[];
+  actions: TableAction<T>[];
   copyId?: boolean;
 }): ColumnDef<T> => ({
   id: "actions",
@@ -42,7 +42,7 @@ export const Actions = <T extends object>({
     const data = row.original;
 
     return (
-      <Dropdown actions={actions}>
+      <Dropdown actions={actions} data={data}>
         {copyId && "id" in data && (
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(String(data.id))}
@@ -59,7 +59,7 @@ export const Actions = <T extends object>({
 export const ColumnHeader = <T extends object>({
   column: columnInfo,
 }: {
-  column: Column;
+  column: Column<T>;
 }): ColumnDef<T> => ({
   accessorKey: columnInfo.accessorKey,
   header: ({ column }) => (
@@ -71,15 +71,13 @@ export const ColumnHeader = <T extends object>({
   ),
   cell: ({ row }) => {
     const cell = columnInfo.formatter
-      ? columnInfo.formatter(
-          (row.original as Record<string, any>)[columnInfo.accessorKey],
-        )
-      : (row.original as Record<string, any>)[columnInfo.accessorKey];
+      ? columnInfo.formatter(row.original[columnInfo.accessorKey])
+      : (row.original[columnInfo.accessorKey] as string);
 
     const linkCell =
       columnInfo.type === "link" ? (
         <Link
-          href={`${columnInfo.path}/${(row.original as Record<string, any>)[columnInfo.linkKey]}`}
+          href={`${columnInfo.path}/${row.original[columnInfo.linkKey]}`}
           className={`anchor-sm ${columnInfo.className}`}
         >
           {cell}
@@ -89,7 +87,7 @@ export const ColumnHeader = <T extends object>({
           className={
             (columnInfo.className &&
               columnInfo.className(
-                (row.original as Record<string, any>)[columnInfo.accessorKey],
+                row.original[columnInfo.accessorKey] as boolean,
               )) ||
             "text-text-200"
           }
@@ -111,7 +109,7 @@ export const ColumnHeader = <T extends object>({
           className={`h-4 w-auto ${
             (columnInfo.iconClassName &&
               columnInfo.iconClassName(
-                (row.original as Record<string, any>)[columnInfo.accessorKey],
+                row.original[columnInfo.accessorKey] as boolean,
               )) ||
             "text-text-200"
           }`}

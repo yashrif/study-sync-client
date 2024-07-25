@@ -10,7 +10,7 @@ import StatusContent from "@/components/StatusContent";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { ColumnConfig, Status } from "@/types";
-import { UploadSimple } from "@/types/upload";
+import { UploadShallow } from "@/types/upload";
 import {
   Tooltip,
   TooltipContent,
@@ -19,7 +19,7 @@ import {
 } from "@components/ui/tooltip";
 import { fileIndexing } from "./fileIndexing";
 
-const IndexButton: React.FC<{ data: UploadSimple }> = memo(({ data }) => {
+const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
   IndexButton.displayName = "IndexButton";
   const {
     state: { indexStatus },
@@ -43,12 +43,25 @@ const IndexButton: React.FC<{ data: UploadSimple }> = memo(({ data }) => {
                   ? "animate-spin duration-1000"
                   : "duration-300"
               }
-                  ${indexStatus[data.id] === Status.SUCCESS ? "!text-success stroke-success" : indexStatus[data.id] === Status.ERROR ? "!text-destructive" : ""}
+                  ${
+                    indexStatus[data.id] === Status.SUCCESS
+                      ? "!text-success stroke-success"
+                      : indexStatus[data.id] === Status.ERROR
+                        ? "!text-destructive"
+                        : ""
+                  }
                   `}
               Icons={{
                 [Status.PENDING]: { Icon: IconRefresh },
               }}
               isAnimation={!data.isIndexed}
+              iconClassName={`stroke-primary ${
+                indexStatus[data.id] === Status.SUCCESS
+                  ? "stroke-success"
+                  : indexStatus[data.id] === Status.ERROR
+                    ? "stroke-destructive"
+                    : ""
+              }`}
             />
           </div>
         </TooltipTrigger>
@@ -64,7 +77,7 @@ const IndexButton: React.FC<{ data: UploadSimple }> = memo(({ data }) => {
   );
 });
 
-export const columns: ColumnDef<UploadSimple>[] = [
+export const columns: ColumnDef<UploadShallow>[] = [
   {
     ...Checkbox(),
   },
@@ -80,8 +93,8 @@ export const columns: ColumnDef<UploadSimple>[] = [
         },
       ],
       actions: [...columnConfigObj.actions],
-    } as ColumnConfig
+    } as ColumnConfig<UploadShallow>
   ).columns.map((column) =>
-    ColumnHeader({ column })
-  ) as ColumnDef<UploadSimple>[]),
+    ColumnHeader({ column }),
+  ) as ColumnDef<UploadShallow>[]),
 ];

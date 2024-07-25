@@ -11,7 +11,7 @@ import {
   QuizUploadsContextProps,
   QuizUploadsState,
   Status,
-  UploadSimple,
+  UploadShallow,
 } from "@/types";
 
 const QuizUploadsContext = createContext<QuizUploadsContextProps | undefined>(
@@ -27,7 +27,7 @@ const initialState: QuizUploadsState = {
   isShowRecentQuiz: true,
 };
 
-const generateIndexStatus = (uploads: UploadSimple[]) => {
+const generateIndexStatus = (uploads: UploadShallow[]) => {
   const newUploads: IndexStatus = {};
 
   uploads.forEach((upload) => {

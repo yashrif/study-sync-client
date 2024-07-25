@@ -79,7 +79,7 @@ const ChangePassword = () => {
   const { handler } = useApiHandler<TChangePassword, TChangePassword>({
     apiCall: useCallback(
       (data) => studySyncDB.patch(dbEndpoints.changePassword, data),
-      []
+      [],
     ),
     dispatch,
   });

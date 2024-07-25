@@ -56,7 +56,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
   const { handler: quizHandler } = useApiHandler<null, Quiz>({
     apiCall: useCallback(
       () => studySyncDB.get(`${dbEndpoints.quizzes}/${id}`),
-      [id]
+      [id],
     ),
     dispatch,
   });
@@ -73,7 +73,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
     apiCall: useCallback(
       (data, pathVariable) =>
         studySyncDB.patch(`${dbEndpoints.cqs}/${pathVariable}`, data),
-      []
+      [],
     ),
     dispatch: createDispatch,
   });

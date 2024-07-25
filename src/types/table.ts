@@ -1,40 +1,33 @@
-import {
-  Button,
-  ButtonSize,
-  ButtonVariant,
-  FileIcon,
-  Icon,
-  UploadSimple,
-} from "@allTypes";
+import { Button, ButtonSize, ButtonVariant, FileTypes, Icon } from "@allTypes";
 
-export type ColumnNoLink = {
+export type ColumnNoLink<T> = {
   type: "no_link";
-  accessorKey: keyof UploadSimple;
+  accessorKey: keyof T;
   title: string;
   header?: (data: string) => JSX.Element;
   headerClassName?: string;
-  formatter?: (data: string | Date | number | boolean) => string | number;
-  Icon?: (props: FileIcon) => Icon;
+  formatter?: (data: T[keyof T]) => string | number;
+  Icon?: (props: FileIcon<T>) => Icon;
   className?: (props: boolean) => string;
   iconClassName?: (props: boolean) => string;
-  additionalElement?: (props: UploadSimple) => JSX.Element | null;
+  additionalElement?: (props: T) => JSX.Element | null;
 };
 
-export type Column =
-  | ColumnNoLink
-  | (Omit<ColumnNoLink, "type"> & {
+export type Column<T> =
+  | ColumnNoLink<T>
+  | (Omit<ColumnNoLink<T>, "type"> & {
       type: "link";
-      linkKey: string;
+      linkKey: keyof T;
       path: string;
     });
 
-export type TableAction = {
+export type TableAction<T> = {
   title: string;
   Icon?: Icon;
   className?: string;
   iconClassName?: string;
   titleClassName?: string;
-  onClick: () => void;
+  onClick: (data?: T) => void;
 };
 
 export enum TableControlTypes {
@@ -55,7 +48,14 @@ export type TTableControl = {
   size?: ButtonSize;
 };
 
-export type ColumnConfig = {
-  columns: Column[];
+export type ColumnConfig<T> = {
+  columns: Column<T>[];
   actions: Button[];
+};
+
+export type FileIcon<T> = {
+  key: keyof T;
+  value: T & {
+    type?: FileTypes;
+  };
 };

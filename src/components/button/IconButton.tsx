@@ -32,7 +32,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, Props>(
         </StatusContent>
       </Button>
     );
-  }
+  },
 );
 IconButton.displayName = "SubmitButton";
 

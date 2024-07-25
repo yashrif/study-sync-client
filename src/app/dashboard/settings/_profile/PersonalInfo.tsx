@@ -57,7 +57,7 @@ const PersonalInfo = () => {
   const { handler } = useApiHandler<PatchUser, User>({
     apiCall: useCallback(
       (data) => studySyncDB.patch(dbEndpoints.users, data),
-      []
+      [],
     ),
     dispatch: patchDispatch,
   });

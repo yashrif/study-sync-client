@@ -89,16 +89,16 @@ const List: React.FC = () => {
             {
               rightAnswer: cq.answer,
               givenAnswer: data[cq.id],
-            }
+            },
           );
 
           return { [cq.id]: response.data as QuizEvaluateResponseServer };
-        }) || []
+        }) || [],
       );
 
       const cqEvaluation = evaluation.reduce(
         (acc, curr) => ({ ...acc, ...curr }),
-        {}
+        {},
       ) as { [key: string]: QuizEvaluateResponseServer };
 
       dispatch({
@@ -177,7 +177,7 @@ const generateFormSchema = ({
       [...(Object.values(Choices) as [string, ...string[]])],
       {
         required_error: "You need to chose one option.",
-      }
+      },
     );
   });
   cqs.forEach((cq) => {

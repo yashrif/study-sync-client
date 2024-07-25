@@ -2,11 +2,11 @@ import { Dispatch, SetStateAction } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
-import { Status, UploadSimple } from "@/types";
+import { Status, UploadShallow } from "@/types";
 
 export const getUpload = async (
   id: string,
-): Promise<UploadSimple | undefined> => {
+): Promise<UploadShallow | undefined> => {
   try {
     const response = await studySyncDB.get(`${dbEndpoints.uploads}/${id}`);
     return response.data;
@@ -15,7 +15,7 @@ export const getUpload = async (
   }
 };
 
-export const getUploads = async (): Promise<UploadSimple[]> => {
+export const getUploads = async (): Promise<UploadShallow[]> => {
   const response = await studySyncDB.get(dbEndpoints.uploads);
   return response.data;
 };

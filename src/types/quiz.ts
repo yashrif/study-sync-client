@@ -8,7 +8,7 @@ import {
   McqIntermediate,
   McqRequest,
   Status,
-  UploadSimple,
+  UploadShallow,
 } from "@allTypes";
 
 export enum QuizTypes {
@@ -158,7 +158,7 @@ export enum QuizUploadsActionType {
 }
 
 export type QuizUploadsAction =
-  | FetchAction<UploadSimple[]>
+  | FetchAction<UploadShallow[]>
   | Action<QuizUploadsActionType.RESET_INDEX_STATUS>
   | Action<QuizUploadsActionType.INDEX_STATUS_START, string>
   | Action<QuizUploadsActionType.INDEX_STATUS_SUCCESS, string>
@@ -169,7 +169,7 @@ export type QuizUploadsAction =
   | Action<QuizUploadsActionType.SET_IS_SHOW_RECENT_QUIZ, boolean>;
 
 export type QuizUploadsState = {
-  uploads: UploadSimple[];
+  uploads: UploadShallow[];
   status: Status;
   indexStatus: IndexStatus;
   defaultQuizTypes: QuizTypes[];

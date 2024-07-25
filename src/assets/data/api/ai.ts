@@ -4,7 +4,7 @@ export const hostname = process.env.NEXT_PUBLIC_HOSTNAME_AI;
 
 export const api = `${hostname}/api`;
 
-export const uploads = `/uploadFile`;
+export const uploads = { create: `/uploadFile`, delete: `/removeFile` };
 
 const generate = "/generate";
 export const qna = `${generate}/qna`;

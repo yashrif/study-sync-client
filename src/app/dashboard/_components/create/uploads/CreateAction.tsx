@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
-import { QuizResponseServer, Status, UploadSimple } from "@/types";
+import { QuizResponseServer, Status, UploadShallow } from "@/types";
 import { postQuiz } from "@/utils/quizRequest";
 import { fileIndexing } from "./fileIndexing";
 
@@ -34,7 +34,7 @@ const FormSchema = z.object({
 });
 
 type Props = {
-  table: Table<UploadSimple>;
+  table: Table<UploadShallow>;
 };
 
 const CreateAction: React.FC<Props> = ({ table }) => {
@@ -56,7 +56,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
     let id: string | null = null;
     try {
       setProcessStatus(Status.PENDING);
-      const uploads: UploadSimple[] = table
+      const uploads: UploadShallow[] = table
         .getFilteredSelectedRowModel()
         .rows.map((row) => row.original);
 
@@ -69,7 +69,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
             });
           }
           return upload.id;
-        })
+        }),
       );
 
       const response: QuizResponseServer = (
@@ -124,8 +124,8 @@ const CreateAction: React.FC<Props> = ({ table }) => {
                                   ? field.onChange([...field.value, item.id])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.id
-                                      )
+                                        (value) => value !== item.id,
+                                      ),
                                     );
                               }}
                               className="size-4"

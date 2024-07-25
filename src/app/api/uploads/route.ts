@@ -9,7 +9,10 @@ export async function POST(request: NextRequest) {
   let body = Object.fromEntries(formData);
 
   try {
-    const response = await studySyncAI.post(aiEndpoints.uploads, formData);
+    const response = await studySyncAI.post(
+      aiEndpoints.uploads.create,
+      formData,
+    );
 
     const name =
       typeof body.in_file === "object" && "name" in body.in_file

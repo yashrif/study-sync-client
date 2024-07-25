@@ -11,15 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 
-type Props = {
+type Props<T> = {
   label?: string;
-  actions?: TableAction[];
+  actions?: TableAction<T>[];
   triggerButton?: React.ReactNode;
   children?: React.ReactNode;
   size?: "md" | "auto";
+  data?: T;
 };
 
-const Dropdown: React.FC<Props> = ({
+const Dropdown = <T,>({
   label = "Actions",
   actions,
   triggerButton = (
@@ -33,7 +34,8 @@ const Dropdown: React.FC<Props> = ({
   ),
   children,
   size = "auto",
-}) => {
+  data,
+}: Props<T>) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
@@ -49,7 +51,9 @@ const Dropdown: React.FC<Props> = ({
         {actions?.map((action) => (
           <DropdownMenuItem
             key={action.title}
-            onClick={action.onClick}
+            onClick={() => {
+              action.onClick(data);
+            }}
             className={`flex items-center gap-1.5 cursor-pointer ${action.className}`}
           >
             {action.Icon && (
