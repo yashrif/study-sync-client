@@ -23,7 +23,12 @@ export const paths = {
   privacy: "/privacy",
   cookies: "/cookies",
   settings: "/settings",
-  documents: "/documents",
+  uploads: "/uploads",
+  quiz: "/quiz",
+  create: "/create",
+  saved: "/saved",
+  flashcard: "/flashcard",
+  review: "/review",
 };
 
 export const pathTitles = {
@@ -51,7 +56,12 @@ export const pathTitles = {
   privacy: "Privacy Policy",
   cookies: "Cookies",
   settings: "Settings",
-  documents: "Documents",
+  uploads: "Uploads",
+  quiz: "Quiz",
+  create: "Create",
+  saved: "Saved",
+  flashcard: "Flashcard",
+  review: "Review",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -89,7 +99,19 @@ export const routes = {
     default: dashboardPath,
     home: dashboardPath,
     settings: `${dashboardPath}${paths.settings}`,
-    documents: `${dashboardPath}${paths.documents}`,
+    uploads: `${dashboardPath}${paths.uploads}`,
+    quiz: {
+      default: `${dashboardPath}${paths.quiz}`,
+      home: `${dashboardPath}${paths.quiz}`,
+      saved: `${dashboardPath}${paths.quiz}`,
+      create: `${dashboardPath}${paths.quiz}${paths.create}`,
+    },
+    flashcard: {
+      default: `${dashboardPath}${paths.flashcard}`,
+      home: `${dashboardPath}${paths.flashcard}`,
+      review: `${dashboardPath}${paths.flashcard}`,
+      create: `${dashboardPath}${paths.flashcard}${paths.create}`,
+    },
   },
 };
 
@@ -127,9 +149,45 @@ export const links = {
     default: { title: pathTitles.dashboard, href: routes.dashboard.default },
     home: { title: pathTitles.home, href: routes.dashboard.home },
     settings: { title: pathTitles.settings, href: routes.dashboard.settings },
-    documents: {
-      title: pathTitles.documents,
-      href: routes.dashboard.documents,
+    uploads: {
+      title: pathTitles.uploads,
+      href: routes.dashboard.uploads,
+    },
+    quiz: {
+      default: { title: pathTitles.quiz, href: routes.dashboard.quiz.default },
+      home: { title: pathTitles.quiz, href: routes.dashboard.quiz.home },
+      create: { title: pathTitles.create, href: routes.dashboard.quiz.create },
+      saved: { title: pathTitles.saved, href: routes.dashboard.quiz.saved },
+      quizDetails(id: string) {
+        return {
+          title: pathTitles.quiz,
+          href: `${routes.dashboard.quiz.home}/${id}`,
+        };
+      },
+    },
+    flashcard: {
+      default: {
+        title: pathTitles.flashcard,
+        href: routes.dashboard.flashcard.default,
+      },
+      home: {
+        title: pathTitles.flashcard,
+        href: routes.dashboard.flashcard.home,
+      },
+      create: {
+        title: pathTitles.create,
+        href: routes.dashboard.flashcard.create,
+      },
+      review: {
+        title: pathTitles.review,
+        href: routes.dashboard.flashcard.review,
+      },
+      flashcardDetails(id: string) {
+        return {
+          title: pathTitles.flashcard,
+          href: `${routes.dashboard.flashcard.home}/${id}`,
+        };
+      },
     },
   },
 };

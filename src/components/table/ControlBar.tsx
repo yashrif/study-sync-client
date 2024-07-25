@@ -1,90 +1,125 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
-import { useState } from "react";
 
-import { navbarButtons } from "@/assets/data/dashboard/documents";
-import { DataTableViewOptions } from "@/components/table/ColumnToggle";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { IconSearch } from "@tabler/icons-react";
-import AddFile from "./AddFile";
+import { controlBar } from "@/assets/data/dashboard/controlBar";
+import { TableControlTypes, TTableControl } from "@allTypes";
+import IconButton from "../button/IconButton";
+import SearchControl from "./SearchControl";
+import UploadControl from "./UploadControl";
+import ViewControl from "./ViewControl";
 
-interface Props<TData, TValue> {
+type Props<TData, TValue> = {
   table: Table<TData>;
   uploadEndpointDb: string | undefined;
-  search: {
-    placeholder: string;
-    key: string;
-  };
-}
+  searchKey: string;
+  controlsConfig?: { [key in TableControlTypes]?: TTableControl };
+  className?: string;
+  onUpload?: () => void;
+};
 
-const Controls = <TData, TValue>({
+const ControlBar = <TData, TValue>({
   table,
   uploadEndpointDb: url,
-  search,
+  searchKey,
+  controlsConfig = {
+    [TableControlTypes.Upload]: {
+      show: true,
+      order: 1,
+      variant: controlBar.upload.variant,
+      title: controlBar.upload.title,
+    },
+    [TableControlTypes.AddFolder]: {
+      show: true,
+      order: 2,
+      variant: controlBar.addFolder.variant,
+      title: controlBar.addFolder.title,
+    },
+    [TableControlTypes.Delete]: {
+      show: true,
+      order: 3,
+      variant: controlBar.delete.variant,
+      title: controlBar.delete.title,
+    },
+    [TableControlTypes.Search]: {
+      show: true,
+      order: 4,
+      variant: "outline",
+      title: controlBar.search.title,
+    },
+    [TableControlTypes.View]: {
+      show: true,
+      order: 5,
+      variant: controlBar.view.variant,
+      title: controlBar.view.title,
+    },
+  },
+  className,
+  onUpload,
 }: Props<TData, TValue>) => {
-  const [isDropzoneOpen, setIsDropzoneOpen] = useState(false);
-
   return (
-    <div className="flex gap-16 items-center justify-between">
-      <AddFile
-        uploadEndpointDb={url}
-        isOpen={isDropzoneOpen}
-        setIsOpen={setIsDropzoneOpen}
-      />
-      <div className="flex gap-3 items-center">
-        {[
-          {
-            ...navbarButtons.upload,
-            show: true,
-            onClick: () => {
-              setIsDropzoneOpen(!isDropzoneOpen);
-            },
-          },
-          {
-            ...navbarButtons.addFolder,
-            show: true,
-          },
-          {
-            ...navbarButtons.delete,
-            show: table.getFilteredSelectedRowModel().rows.length > 0,
-          },
-        ].map((button, index) => (
-          <Button
-            key={index}
-            variant={button.variant}
-            size={button.size}
-            className="flex items-center gap-1.5"
+    <div className={`flex gap-16 items-center justify-between ${className}`}>
+      <div className="w-full flex gap-3 items-center">
+        {controlsConfig?.Upload?.show && (
+          <UploadControl
+            uploadEndpointDb={url}
             style={{
-              visibility: button.show ? "visible" : "hidden",
+              order: controlsConfig[TableControlTypes.Upload]?.order,
             }}
-            onClick={button.onClick ? button.onClick : () => {}}
-          >
-            {button.Icon && <button.Icon className="h-4 w-auto" />}
-            {button.title}
-          </Button>
-        ))}
-      </div>
-      <div className="flex gap-3 items-center">
-        <div className="flex items-center">
-          <Input
-            dimension="sm"
-            placeholder={search.placeholder}
-            value={
-              (table.getColumn(search.key)?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn(search.key)?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm rounded-sm border-primary placeholder:text-muted-foreground/70"
-            Icon={IconSearch}
+            {...controlsConfig[TableControlTypes.Upload]}
+            onUpload={onUpload}
           />
-        </div>
-        <DataTableViewOptions table={table} />
+        )}
+        {controlsConfig?.AddFolder?.show && (
+          <IconButton
+            title={controlsConfig.AddFolder.title || controlBar.addFolder.title}
+            Icon={controlsConfig.AddFolder.Icon || controlBar.addFolder.Icon}
+            variant={
+              controlsConfig.AddFolder.variant ||
+              controlsConfig.AddFolder.variant
+            }
+            size={controlsConfig.AddFolder.size || controlBar.addFolder.size}
+            style={{
+              order: controlsConfig[TableControlTypes.AddFolder]?.order,
+            }}
+            {...controlsConfig[TableControlTypes.AddFolder]}
+          />
+        )}
+        {controlsConfig?.Delete?.show && (
+          <IconButton
+            title={controlsConfig.Delete.title || controlBar.delete.title}
+            Icon={controlsConfig.Delete.Icon || controlBar.delete.Icon}
+            variant={controlsConfig.Delete.variant || controlBar.delete.variant}
+            size={controlsConfig.Delete.size || controlBar.delete.size}
+            show={table.getFilteredSelectedRowModel().rows.length > 0}
+            className="mr-auto"
+            style={{
+              order: controlsConfig[TableControlTypes.Delete]?.order,
+            }}
+            {...controlsConfig[TableControlTypes.Delete]}
+          />
+        )}
+        {controlsConfig.Search?.show && (
+          <div
+            style={{
+              order: controlsConfig[TableControlTypes.Search]?.order,
+            }}
+          >
+            {
+              <SearchControl
+                table={table}
+                searchKey={searchKey}
+                {...controlsConfig.Search}
+              />
+            }
+          </div>
+        )}
+        {controlsConfig.View?.show && (
+          <ViewControl table={table} {...controlsConfig.View} />
+        )}
       </div>
     </div>
   );
 };
 
-export default Controls;
+export default ControlBar;

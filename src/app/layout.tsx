@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Rubik } from "next/font/google";
 import localFont from "next/font/local";
 import { Suspense } from "react";
 
 import ProgressBar from "@/components/ProgressBar";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
+import { QuizUploadsProvider } from "@/context/QuizUploadsContext";
 
-const roboto = Roboto({
-  weight: ["400", "500", "700"],
+const rubik = Rubik({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-roboto",
+  variable: "--font-rubik",
 });
 const satoshi = localFont({
   src: [
@@ -54,13 +56,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${roboto.variable} ${satoshi.variable}`}>
+      <body className={`${rubik.variable} ${satoshi.variable}`}>
         <div className="flex flex-col min-h-screen overflow-hidden">
           <Suspense>
             <ProgressBar />
           </Suspense>
           {children}
         </div>
+        <Toaster />
       </body>
     </html>
   );

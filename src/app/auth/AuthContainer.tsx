@@ -10,7 +10,7 @@ import { z } from "zod";
 
 import studySyncDB from "@/api/studySyncDB";
 import { actions, additionalFields } from "@/assets/data/auth/sign-in";
-import SubmitButton from "@/components/SubmitButton";
+import SubmitButton from "@/components/button/SubmitButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -30,7 +30,6 @@ import {
 } from "@/types";
 import { setTokens } from "@/utils/auth";
 import { Status } from "@allTypes";
-import Spinner from "@/components/Spinner";
 
 const MotionFormItem = motion(FormItem);
 
@@ -70,28 +69,26 @@ const AuthContainer: React.FC<Props> = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setStatus(Status.PENDING);
+    let statusCode = 0;
 
     try {
       const response = await studySyncDB.post(url, JSON.stringify(values));
-      console.log(response);
 
-      setStatus(response.status === 200 ? Status.SUCCESS : Status.ERROR);
+      setStatus(Status.SUCCESS);
       const { access_token, refresh_token } = response.data;
+      statusCode = response.status;
       setTokens(access_token, refresh_token);
     } catch (err) {
       console.log(err);
       setStatus(Status.ERROR);
     } finally {
       setTimeout(() => {
-        if (status === Status.SUCCESS) {
-          // if (redirect) replace(redirect);
-        }
+        if ((statusCode === 200 || statusCode === 201) && redirect)
+          replace(redirect);
         setStatus(Status.IDLE);
       }, 2500);
     }
   };
-
-  console.log(status);
 
   return (
     <>

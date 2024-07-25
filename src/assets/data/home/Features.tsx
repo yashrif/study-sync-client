@@ -5,7 +5,7 @@ import {
   IconMessage2Question,
   IconNotification,
   IconPlugConnected,
-  IconProgressCheck
+  IconProgressCheck,
 } from "@tabler/icons-react";
 
 export const sectionName = "Unlock Your Potential";

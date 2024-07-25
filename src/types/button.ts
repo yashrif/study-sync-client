@@ -1,4 +1,4 @@
-import { Icon } from "@allTypes";
+import { Icon, Status } from "@allTypes";
 
 export type ButtonVariant =
   | "default"
@@ -26,10 +26,12 @@ export type ButtonLink = {
   className?: string;
 };
 
-export type Button = {
+export type Button = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   title: string;
   Icon?: Icon;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  onClick?: () => void;
+  iconClassName?: string;
+  disabled?: boolean;
+  status?: Status;
 };

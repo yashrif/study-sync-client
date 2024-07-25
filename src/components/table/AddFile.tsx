@@ -1,6 +1,6 @@
 import studySyncDB from "@/api/studySyncDB";
 import { serverEndpoints } from "@/assets/data/api";
-import { create } from "@/assets/data/dashboard/documents";
+import { create } from "@/assets/data/dashboard/uploads";
 import {
   Dialog,
   DialogContent,
@@ -19,12 +19,10 @@ const onFileUpload = ({ data, url }: UploadDataProps) => {
   try {
     const store = async () =>
       studySyncDB
-        .post(url, JSON.stringify(JSON.parse(data).data))
+        .post(url, JSON.stringify(JSON.parse(data)))
         .then((res) => res.data);
 
-    const response = store();
-
-    console.log(response);
+    store();
   } catch (e) {
     console.log(e);
   }
@@ -43,7 +41,7 @@ const AddFile: React.FC<Props> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-[800px]">
+      <DialogContent className="max-w-[700px]">
         <DialogHeader className="flex flex-col gap-2">
           <DialogTitle>{create.title}</DialogTitle>
           <DialogDescription />

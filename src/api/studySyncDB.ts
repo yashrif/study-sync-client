@@ -44,6 +44,7 @@ studySyncDB.interceptors.response.use(
         return studySyncDB(originalRequest);
       }
     }
+
     return Promise.reject(error);
   }
 );

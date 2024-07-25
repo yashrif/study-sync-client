@@ -10,19 +10,27 @@ const Footer = () => {
         <Logo className="h-9 w-auto" />
         <div className="flex gap-8 justify-center items-center">
           {footerLinks.map((link) => (
-            <Link key={link.href} href={link} className="anchor text-text font-normal">
+            <Link
+              key={link.href}
+              href={link}
+              className="anchor text-text font-normal"
+            >
               {link.title}
             </Link>
           ))}
         </div>
 
         <div className="flex flex-col gap-4 items-center">
-          <hr className="w-full"/>
+          <hr className="w-full" />
           <div className="w-full flex gap-16 justify-between items-center">
             <p className="text-footer">{copyright}</p>
             <div className="flex gap-8 justify-center items-between">
               {copyrightLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="anchor text-footer text-text font-normal">
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="anchor text-footer text-text font-normal"
+                >
                   {link.title}
                 </Link>
               ))}

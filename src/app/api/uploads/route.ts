@@ -22,8 +22,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "File uploaded successfully",
-        data: { id: response.data.fileId, name, type },
+        id: response.data.fileId,
+        title: name?.split(".")[0] || "File",
+        type,
+        name: `${response.data.fileId}.${name?.split(".").pop()}`,
       },
       { status: 200 }
     );

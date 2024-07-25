@@ -12,18 +12,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTable } from "@/hooks/useTable";
-import Spinner from "../Spinner";
-import Controls from "./ControlBar";
+import { TableControlTypes, TTableControl } from "@/types";
+import Spinner from "../spinner/Spinner";
+import ControlBar from "./ControlBar";
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   loading?: boolean;
   uploadEndpointDb: string | undefined;
-  search: {
-    key: string;
-    placeholder: string;
-  };
+  searchKey: string;
+  showPagination?: boolean;
+  controlsConfig?: { [key in TableControlTypes]?: TTableControl };
+  className?: string;
+  classNameControls?: string;
 };
 
 const DataTable = <TData, TValue>({
@@ -31,7 +33,11 @@ const DataTable = <TData, TValue>({
   data,
   uploadEndpointDb,
   loading = false,
-  search,
+  searchKey,
+  showPagination = true,
+  controlsConfig,
+  className,
+  classNameControls,
 }: DataTableProps<TData, TValue>) => {
   const { table } = useTable({
     data,
@@ -39,11 +45,13 @@ const DataTable = <TData, TValue>({
   });
 
   return (
-    <div className="pt-8 flex flex-col gap-8">
-      <Controls
+    <div className={`flex flex-col gap-8 ${className}`}>
+      <ControlBar
         table={table}
-        search={search}
+        searchKey={searchKey}
         uploadEndpointDb={uploadEndpointDb}
+        controlsConfig={controlsConfig}
+        className={classNameControls}
       />
       <div className="flex flex-col gap-4">
         <div className="rounded-md border">
@@ -79,9 +87,13 @@ const DataTable = <TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className="group border-none"
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell
+                        key={cell.id}
+                        className="pb-0 pt-2.5 group-last:pb-4"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -103,8 +115,7 @@ const DataTable = <TData, TValue>({
             </TableBody>
           </Table>
         </div>
-
-        <DataTablePagination table={table} />
+        {showPagination && <DataTablePagination table={table} />}
       </div>
     </div>
   );

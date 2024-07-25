@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        primary: ["var(--font-roboto)", "sans-serif"],
+        primary: ["var(--font-rubik)", "sans-serif"],
         secondary: ["var(--font-satoshi)", "sans-serif"],
       },
       colors: {
@@ -49,10 +49,9 @@ const config = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        success:{
+        success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
-
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
