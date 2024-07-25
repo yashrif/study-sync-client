@@ -8,6 +8,7 @@ export const usePath = () => {
   };
 
   return {
+    path,
     isCurrentPath,
   };
 };

@@ -1,4 +1,4 @@
-import { routes } from "./routes";
+import { links, routes } from "./routes";
 
 export const button = {
   login: {
@@ -11,17 +11,14 @@ export const button = {
   },
 };
 
+export const home = links.home.home;
+
 export const navLinks = [
   {
-    href: routes.benefits,
-    title: "Benefits",
+    ...links.home.benefits,
   },
   {
-    href: routes.features,
-    title: "Features",
+    ...links.home.features,
   },
-  {
-    href: routes.howItWorks,
-    title: "How it works",
-  },
+  { ...links.home.howItWorks },
 ];

@@ -20,7 +20,7 @@ studySyncDB.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 studySyncDB.interceptors.response.use(
@@ -44,8 +44,9 @@ studySyncDB.interceptors.response.use(
         return studySyncDB(originalRequest);
       }
     }
+
     return Promise.reject(error);
-  }
+  },
 );
 
 export default studySyncDB;

@@ -8,7 +8,10 @@ import BenefitsImage from "./BenefitsImage";
 
 const Benefits: React.FC = () => {
   return (
-    <section id="benefits" className="py-24 flex flex-col gap-24 items-center justify-center">
+    <section
+      id="benefits"
+      className="py-24 flex flex-col gap-24 items-center justify-center"
+    >
       <div className="max-w-[800px] flex flex-col gap-6">
         <div className="flex flex-col gap-4">
           <h4>{sectionName}</h4>

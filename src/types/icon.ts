@@ -7,4 +7,6 @@ export type Icon =
       Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
     >
   | ForwardRefExoticComponent<IconProps & RefAttributes<IconType>>
-  | ((props: SVGProps<SVGSVGElement>) => JSX.Element);
+  | ((props: SVGProps<SVGSVGElement>) => JSX.Element)
+  | React.FC
+  | ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;

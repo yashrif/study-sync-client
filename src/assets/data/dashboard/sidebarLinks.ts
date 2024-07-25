@@ -1,28 +1,71 @@
 import {
-  IconFileDescription,
+  IconBolt,
+  IconFileUpload,
   IconHome,
   IconLogout2,
   IconSettings,
+  IconUserCircle,
 } from "@tabler/icons-react";
 
+import { Quiz } from "@/components/icons";
 import { IconLink } from "@allTypes";
-import { links, pathTitles } from "../routes";
+import { links, pathTitles, routes } from "../routes";
 
-export const sidebarLinks: IconLink[][] = [
+type SidebarLink = IconLink & {
+  subLinks?: (IconLink & { altHref?: string })[];
+  altHref?: string;
+};
+
+export const sidebarLinks: SidebarLink[][] = [
   [
     {
       ...links.dashboard.home,
       Icon: IconHome,
     },
     {
-      ...links.dashboard.documents,
-      Icon: IconFileDescription,
+      ...links.dashboard.uploads,
+      Icon: IconFileUpload,
+    },
+    {
+      ...links.dashboard.quiz.home,
+      Icon: Quiz,
+      subLinks: [
+        {
+          ...links.dashboard.quiz.create,
+          Icon: Quiz,
+        },
+        {
+          ...links.dashboard.quiz.saved,
+          Icon: Quiz,
+        },
+      ],
+    },
+    {
+      ...links.dashboard.flashcard.home,
+      Icon: IconBolt,
+      subLinks: [
+        {
+          ...links.dashboard.flashcard.create,
+          Icon: Quiz,
+        },
+        {
+          ...links.dashboard.flashcard.review,
+          Icon: Quiz,
+        },
+      ],
     },
   ],
   [
     {
-      ...links.dashboard.settings,
+      ...links.dashboard.settings.home,
       Icon: IconSettings,
+      subLinks: [
+        {
+          ...links.dashboard.settings.profile,
+          Icon: IconUserCircle,
+          altHref: routes.dashboard.settings.home,
+        },
+      ],
     },
   ],
 ];

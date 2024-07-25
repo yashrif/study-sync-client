@@ -23,10 +23,10 @@
     --accent: 275.56 31.03% 82.94%;
     --accent-foreground: 0 0% 29.02%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 85.58% 59.22%;
     --destructive-foreground: 210 40% 98%;
 
-    --success: 130.78 50.39% 50.2%;
+    --success: 130.73 52.79% 45.69%;
     --success-foreground: 0 0% 100%;
 
     --border: 217.5 12.12% 87.06%;
@@ -53,7 +53,7 @@
     --text: 0 0% 29.02%;
     --text-200: 0 0% 52.94%;
     --text-300: 0 0% 100%;
-    --text-400: 267.21 34.13% 50.59%;
+    --text-400: 267.27 33.62% 44.9%;
     --text-500: 0 0% 23.14%;
   }
 
@@ -136,6 +136,10 @@
     @apply font-bold font-secondary text-[30px] leading-[1.2] -tracking-[0.5px];
   }
 
+  .heading-tertiary {
+    @apply font-bold font-secondary text-2xl leading-[1.2] -tracking-[0.5px];
+  }
+
   .heading-section {
     @apply font-medium font-secondary text-[16px] text-text-400 text-center tracking-[0.75px] uppercase;
   }
@@ -148,8 +152,16 @@
     @apply heading-secondary;
   }
 
-  h4 {
-    @apply heading-section;
+  h3 {
+    @apply heading-tertiary;
+  }
+
+  h5 {
+    @apply text-xl text-text font-medium font-secondary;
+  }
+
+  h6 {
+    @apply text-lg text-text font-medium font-secondary;
   }
 
   /* ------------------------------ text classes ------------------------------ */
@@ -175,6 +187,10 @@
 
   .text-footer {
     @apply text-small text-text-200 leading-[1];
+  }
+
+  .text-description {
+    @apply text-medium text-text-200;
   }
 
   p {
@@ -218,7 +234,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-[#747474]/80 hover:shadow-[#747474] border-[3.5px] border-solid border-transparent transition-colors duration-300;
+    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-accent-200/50 hover:shadow-accent-200/80 border-[3.5px] border-solid border-transparent transition-colors duration-300;
   }
 
   .no-scrollbar {
@@ -246,25 +262,9 @@
     transition: background-color 5000s ease-in-out 0s;
   }
 
-  /* -------------------------------- scrollbar ------------------------------- */
-  ::-webkit-scrollbar {
-    @apply w-[15.5px];
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply rounded-[10px] shadow-[inset_0_0_10px_10px_transparent] border-[3.5px] border-solid border-transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply rounded-[10px] shadow-[inset_0_0_10px_10px] shadow-[#747474]/80 hover:shadow-[#747474] border-[3.5px] border-solid border-transparent transition-colors duration-300;
-  }
-
-  .no-scrollbar {
-    scrollbar-width: none;
-  }
-
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  /* ---------------------------------- focus --------------------------------- */
+  *:focus {
+    @apply !ring-offset-0 !ring-0;
   }
 }
 

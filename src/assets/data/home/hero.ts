@@ -8,7 +8,7 @@ export const description =
 export const buttons: ButtonLink[] = [
   {
     title: "Learn More",
-    href: links.benefits.href,
+    href: links.home.benefits.href,
     variant: "default",
   },
   {

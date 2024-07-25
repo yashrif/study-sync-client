@@ -12,3 +12,12 @@ export const refresh = `${auth}/refresh`;
 export const demo = `/demo-controller`;
 
 export const uploads = `/uploads`;
+
+export const quizzes = `/quizzes`;
+
+export const flashcards = `/flashcards`;
+
+export const cqs = `/cqs`;
+
+export const users = `/users`;
+export const changePassword = `${users}/change-password`;

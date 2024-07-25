@@ -1,20 +1,10 @@
-import { IconDots } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-import { fileIcons } from "@/assets/data/dashboard/documents";
 import { Checkbox as CheckboxComponent } from "@/components/ui/checkbox";
-import { Column } from "@/types";
-import { FileTypes } from "@/types/upload";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@components/ui/dropdown-menu";
-import { Button } from "../ui/button";
+import { Column, TableAction } from "@/types";
+import { DropdownMenuItem } from "@components/ui/dropdown-menu";
+import Dropdown from "../Dropdown";
 import { DataTableColumnHeader } from "./Header";
 
 export const Checkbox = <T extends object>(): ColumnDef<T> => ({
@@ -40,16 +30,11 @@ export const Checkbox = <T extends object>(): ColumnDef<T> => ({
   enableHiding: false,
 });
 
-type ActionProps = {
-  title: string;
-  onClick?: () => void;
-};
-
 export const Actions = <T extends object>({
   actions,
   copyId = false,
 }: {
-  actions: ActionProps[];
+  actions: TableAction<T>[];
   copyId?: boolean;
 }): ColumnDef<T> => ({
   id: "actions",
@@ -57,30 +42,16 @@ export const Actions = <T extends object>({
     const data = row.original;
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <IconDots className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {copyId && "id" in data && (
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(String(data.id))}
-            >
-              Copy ID
-            </DropdownMenuItem>
-          )}
-          {actions.map((action) => (
-            <DropdownMenuItem key={action.title} onClick={action.onClick}>
-              {action.title}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Dropdown actions={actions} data={data}>
+        {copyId && "id" in data && (
+          <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(String(data.id))}
+            className="cursor-pointer"
+          >
+            Copy ID
+          </DropdownMenuItem>
+        )}
+      </Dropdown>
     );
   },
 });
@@ -88,43 +59,65 @@ export const Actions = <T extends object>({
 export const ColumnHeader = <T extends object>({
   column: columnInfo,
 }: {
-  column: Column;
+  column: Column<T>;
 }): ColumnDef<T> => ({
   accessorKey: columnInfo.accessorKey,
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title={columnInfo.title} />
+    <DataTableColumnHeader
+      column={column}
+      title={columnInfo.title}
+      className={columnInfo.headerClassName}
+    />
   ),
   cell: ({ row }) => {
     const cell = columnInfo.formatter
-      ? columnInfo.formatter(
-          (row.original as Record<string, any>)[columnInfo.accessorKey]
-        )
-      : (row.original as Record<string, any>)[columnInfo.accessorKey];
+      ? columnInfo.formatter(row.original[columnInfo.accessorKey])
+      : (row.original[columnInfo.accessorKey] as string);
 
-    const linkCell = columnInfo.linkKey ? (
-      <Link
-        href={(row.original as Record<string, any>)[columnInfo.linkKey]}
-        className="anchor-sm"
-      >
-        {cell}
-      </Link>
-    ) : (
-      cell
-    );
+    const linkCell =
+      columnInfo.type === "link" ? (
+        <Link
+          href={`${columnInfo.path}/${row.original[columnInfo.linkKey]}`}
+          className={`anchor-sm ${columnInfo.className}`}
+        >
+          {cell}
+        </Link>
+      ) : (
+        <span
+          className={
+            (columnInfo.className &&
+              columnInfo.className(
+                row.original[columnInfo.accessorKey] as boolean,
+              )) ||
+            "text-text-200"
+          }
+        >
+          {cell}
+        </span>
+      );
 
-    if (!columnInfo.iconKey) return cell;
+    if (!columnInfo.Icon) return linkCell;
 
-    const iconKey = (row.original as Record<string, any>)[columnInfo?.iconKey];
+    const Icon = columnInfo.Icon({
+      key: columnInfo.accessorKey,
+      value: row.original as any,
+    });
 
-    const Icon = fileIcons(iconKey as FileTypes);
-
-    return columnInfo.iconKey ? (
-      <div className="flex items-center space-x-1">
-        <Icon className="h-4 w-4 text-primary" />
+    return (
+      <div className="flex items-center gap-1.5">
+        <Icon
+          className={`h-4 w-auto ${
+            (columnInfo.iconClassName &&
+              columnInfo.iconClassName(
+                row.original[columnInfo.accessorKey] as boolean,
+              )) ||
+            "text-text-200"
+          }`}
+        />
         {linkCell}
+        {columnInfo.additionalElement &&
+          columnInfo.additionalElement(row.original as any)}
       </div>
-    ) : (
-      linkCell
     );
   },
 });

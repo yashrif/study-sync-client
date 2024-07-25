@@ -9,7 +9,10 @@ export async function POST(request: NextRequest) {
   let body = Object.fromEntries(formData);
 
   try {
-    const response = await studySyncAI.post(aiEndpoints.uploads, formData);
+    const response = await studySyncAI.post(
+      aiEndpoints.uploads.create,
+      formData,
+    );
 
     const name =
       typeof body.in_file === "object" && "name" in body.in_file
@@ -22,17 +25,19 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "File uploaded successfully",
-        data: { id: response.data.fileId, name, type },
+        id: response.data.fileId,
+        title: name?.split(".")[0] || "File",
+        type,
+        name: `${response.data.fileId}.${name?.split(".").pop()}`,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (e: AxiosError | any | unknown | Error) {
     return NextResponse.json(
       {
         message: e.message.message || e.message || "An error occurred",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
