@@ -24,4 +24,5 @@ export type Handler<T> = {
   pathVariable?: string;
   isUpdateStatus?: boolean;
   fetchType?: "lazy" | "eager";
+  isReset?: boolean;
 };

@@ -1,8 +1,9 @@
 import { QuizIntermediate } from "./quiz";
 
 export type McqRequest = {
+  id?: string;
   question: string;
-  choices: string | number[];
+  choices: string[] | number[];
   answers: boolean[];
 };
 

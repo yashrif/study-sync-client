@@ -1,12 +1,20 @@
-import { Button, ButtonSize, ButtonVariant, FileTypes, Icon } from "@allTypes";
+import {
+  Button,
+  ButtonSize,
+  ButtonVariant,
+  FileTypes,
+  Icon,
+  Status,
+} from "@allTypes";
 
 export type ColumnNoLink<T> = {
   type: "no_link";
   accessorKey: keyof T;
   title: string;
   header?: (data: string) => JSX.Element;
+  showSort?: boolean;
   headerClassName?: string;
-  formatter?: (data: T[keyof T]) => string | number;
+  formatter?: (field: T[keyof T], row?: T) => string | number | React.ReactNode;
   Icon?: (props: FileIcon<T>) => Icon;
   className?: (props: boolean) => string;
   iconClassName?: (props: boolean) => string;
@@ -46,6 +54,8 @@ export type TTableControl = {
   title?: string;
   Icon?: Icon;
   size?: ButtonSize;
+  onClick?: () => void;
+  status?: Status;
 };
 
 export type ColumnConfig<T> = {

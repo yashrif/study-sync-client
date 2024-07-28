@@ -16,17 +16,21 @@ type Props = TButton & {
 };
 
 const IconButton = React.forwardRef<HTMLButtonElement, Props>(
-  ({ status, iconClassName, Icon, children, ...props }, ref) => {
-    if (props.hidden) console.log(props.hidden);
+  (
+    { status, iconClassName, contentClassName, Icon, children, ...props },
+    ref,
+  ) => {
     return (
       <Button disabled={status === Status.PENDING} {...props} ref={ref}>
         <StatusContent
           status={status || Status.IDLE}
           iconClassName={iconClassName}
+          contentClassName={`font-medium ${contentClassName}`}
           {...props}
           Icons={{
             [Status.IDLE]: { Icon: Icon },
           }}
+          alwaysIcons={true}
         >
           {children}
         </StatusContent>

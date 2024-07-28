@@ -31,5 +31,6 @@ export type Button = React.ButtonHTMLAttributes<HTMLButtonElement> &
   ButtonProps & {
     Icon?: Icon;
     iconClassName?: string;
+    contentClassName?: string;
     status?: Status;
   };

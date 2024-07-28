@@ -3,15 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconArrowRight } from "@tabler/icons-react";
 import { Table } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
 import { create } from "@/assets/data/dashboard/quiz";
-import { links } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -22,9 +20,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useFetchState } from "@/hooks/fetchData";
+import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
-import { QuizResponseServer, Status, UploadShallow } from "@/types";
-import { postQuiz } from "@/utils/quizRequest";
+import {
+  QuizResponseServer,
+  QuizUploadsActionType,
+  Status,
+  UploadShallow,
+} from "@/types";
 import { fileIndexing } from "./fileIndexing";
 
 const FormSchema = z.object({
@@ -37,25 +41,38 @@ type Props = {
   table: Table<UploadShallow>;
 };
 
+type ServerQuizRequest = {
+  ids: string[];
+  types: string[];
+};
+
 const CreateAction: React.FC<Props> = ({ table }) => {
-  const { push } = useRouter();
-  const [processStatus, setProcessStatus] = useState(Status.IDLE);
   const {
     state: { status, indexStatus, defaultQuizTypes, isShowCheckbox },
     dispatch,
   } = useQuizUploadsContext();
 
+  const { state, dispatch: serverDispatch } =
+    useFetchState<QuizResponseServer>();
+  const { handler } = useApiHandler<ServerQuizRequest, QuizResponseServer>({
+    apiCall: useCallback(
+      (data) => studySyncServer.post(serverEndpoints.quizzes, data),
+      [],
+    ),
+    dispatch: serverDispatch,
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      types: defaultQuizTypes,
-    },
   });
+
+  useEffect(() => {
+    if (defaultQuizTypes) form.setValue("types", defaultQuizTypes);
+  }, [defaultQuizTypes, form]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let id: string | null = null;
     try {
-      setProcessStatus(Status.PENDING);
       const uploads: UploadShallow[] = table
         .getFilteredSelectedRowModel()
         .rows.map((row) => row.original);
@@ -72,24 +89,22 @@ const CreateAction: React.FC<Props> = ({ table }) => {
         }),
       );
 
-      const response: QuizResponseServer = (
-        await studySyncServer.post(serverEndpoints.quizzes, {
+      const response = await handler({
+        data: {
           ids,
           types: data.types,
-        })
-      ).data;
-
-      await postQuiz({ ...response, title: uploads[0].title }).then((res) => {
-        id = res.id;
+        },
+        fetchType: "lazy",
+        isReset: true,
       });
-      setProcessStatus(Status.SUCCESS);
-    } catch (e) {
-      setProcessStatus(Status.ERROR);
-    } finally {
-      setTimeout(() => {
-        if (id) push(links.dashboard.quiz.quizDetails(id).href);
-        else setProcessStatus(Status.IDLE);
-      }, 2000);
+
+      if (response)
+        dispatch({
+          type: QuizUploadsActionType.SET_QUIZ,
+          payload: { ...response, title: uploads[0].title },
+        });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -152,13 +167,13 @@ const CreateAction: React.FC<Props> = ({ table }) => {
           disabled={
             (table && table.getFilteredSelectedRowModel().rows.length === 0) ||
             Object.values(indexStatus).includes(Status.PENDING) ||
-            processStatus === Status.PENDING ||
+            state.status === Status.PENDING ||
             status === Status.PENDING
           }
           status={
             Object.values(indexStatus).includes(Status.PENDING)
               ? Status.PENDING
-              : processStatus
+              : state.status
           }
           type="submit"
         />

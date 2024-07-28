@@ -11,48 +11,37 @@ import {
   TableRow,
   Table as UITable,
 } from "@/components/ui/table";
-import { Status, TableControlTypes, UploadShallow } from "@/types";
+import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
+import {
+  Status,
+  TableControlTypes,
+  TTableControl,
+  UploadShallow,
+} from "@/types";
 import ControlBar from "@components/table/ControlBar";
 import { columns } from "./Columns";
-import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 
 type Props = {
   table: TTable<UploadShallow>;
-  onUpload?: () => void;
+
+  controlsConfig?: { [key in TableControlTypes]?: TTableControl };
 };
 
-const Table: React.FC<Props> = ({ table, onUpload }) => {
+const UploadsTable: React.FC<Props> = ({ table, controlsConfig }) => {
   const {
     state: { status },
   } = useQuizUploadsContext();
 
   return (
-    <div className="flex flex-col gap-8">
+    <>
       <ControlBar
         table={table}
         searchKey={search.key}
         uploadEndpointDb={dbEndpoints.uploads}
-        controlsConfig={{
-          [TableControlTypes.UPLOAD]: {
-            hidden: false,
-            order: 2,
-            variant: "outline",
-          },
-          [TableControlTypes.SEARCH]: {
-            hidden: false,
-            order: 1,
-            title: "Search Files",
-          },
-          [TableControlTypes.VIEW]: {
-            hidden: false,
-            order: 3,
-            variant: "outline",
-          },
-        }}
-        onUpload={onUpload}
+        controlsConfig={controlsConfig}
         className={`!justify-start gap-3`}
       />
-      <div className="flex flex-col rounded-md overflow-hidden">
+      <div className="flex flex-col rounded-md overflow-hidden row-start-2 col-start-1">
         <UITable>
           <TableHeader className="bg-accent-300 !hover:bg-accent-300 [&_tr]:border-none">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -102,12 +91,12 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
                         </TableCell>
 
                         <TableCell className="flex flex-col gap-2">
-                          <p>
+                          <span>
                             {flexRender(
                               title.column.columnDef.cell,
                               title.getContext(),
                             )}
-                          </p>
+                          </span>
 
                           <div className="flex flex-col gap-1.5">
                             {cellGroup.map((cell) => (
@@ -147,8 +136,8 @@ const Table: React.FC<Props> = ({ table, onUpload }) => {
           </UITable>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Table;
+export default UploadsTable;

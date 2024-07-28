@@ -1,6 +1,8 @@
 import {
   IconAdjustmentsHorizontal,
   IconArrowsSort,
+  IconCircleX,
+  IconDeviceFloppy,
   IconFolderPlus,
   IconSearch,
   IconTrash,
@@ -16,6 +18,8 @@ export const controlBar: {
   view: Button;
   delete: Button;
   search: Button;
+  save: Button;
+  close: Button;
 } = {
   upload: {
     title: "Upload",
@@ -52,5 +56,19 @@ export const controlBar: {
     Icon: IconSearch,
     variant: "outline",
     size: "sm",
+  },
+  save: {
+    title: "Save",
+    Icon: IconDeviceFloppy,
+    variant: "default",
+    size: "sm",
+  },
+  close: {
+    title: "Close",
+    Icon: IconCircleX,
+    variant: "outline",
+    size: "sm",
+    className: "text-destructive ring-destructive hover:text-destructive",
+    iconClassName: "stroke-destructive",
   },
 };

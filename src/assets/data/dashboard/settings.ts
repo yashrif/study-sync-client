@@ -41,7 +41,7 @@ export const profile: IconList & {
       },
       {
         label: "User Type",
-        type: "role",
+        type: "text",
         placeholder: "UNSET",
         id: "role",
         required: false,

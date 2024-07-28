@@ -1,6 +1,5 @@
 import {
   IconAdjustmentsCog,
-  IconBook2,
   IconBookmarks,
   IconBulb,
   IconCategory,
@@ -20,20 +19,7 @@ import {
 } from "@tabler/icons-react";
 
 import { Quiz } from "@/components/icons";
-import { dateFormatter } from "@/utils/dateFormatter";
-import {
-  Button,
-  Column,
-  ColumnConfig,
-  Difficulty,
-  IconList,
-  QuizShallow,
-  QuizTypes,
-  TableAction,
-  UploadShallow,
-} from "@allTypes";
-import { routes } from "../routes";
-import { fileTypeIcons } from "./file";
+import { Button, Difficulty, FormField, IconList, QuizTypes } from "@allTypes";
 
 export const home: { create: IconList; saved: IconList } = {
   create: {
@@ -71,80 +57,6 @@ export const create = {
 export const search = {
   key: "title",
   placeholder: "Search by title",
-};
-
-export const isIndexedData: Column<UploadShallow> = {
-  type: "no_link",
-  accessorKey: "isIndexed",
-  title: "Index Status",
-  headerClassName: "hidden",
-  formatter: (isIndexed) => {
-    return isIndexed ? "Indexed" : "Not Indexed";
-  },
-  Icon(props) {
-    return fileTypeIcons(props);
-  },
-  className(props) {
-    return `${props ? "text-success" : "text-destructive"}`;
-  },
-  iconClassName(props) {
-    return props ? "text-success" : "text-destructive";
-  },
-};
-
-export const columnConfig: ColumnConfig<UploadShallow> = {
-  columns: [
-    {
-      type: "link",
-      accessorKey: "title",
-      title: "Document",
-      formatter: (title) => {
-        return title as string;
-      },
-      linkKey: "id",
-      path: routes.dashboard.uploads,
-      className() {
-        return "text-base no-underline font-semibold";
-      },
-    },
-    {
-      type: "no_link",
-      accessorKey: "name",
-      title: "Name",
-      headerClassName: "invisible",
-      formatter: (type) => {
-        return type as string;
-      },
-      Icon(props) {
-        return fileTypeIcons({
-          key: "type",
-          value: props.value,
-        });
-      },
-    },
-    {
-      type: "no_link",
-      accessorKey: "createDate",
-      title: "Create Date",
-      headerClassName: "hidden",
-      formatter: (date) => {
-        return dateFormatter(date as string, "numeric");
-      },
-      Icon(props) {
-        return fileTypeIcons(props);
-      },
-    },
-  ],
-  actions: [
-    {
-      title: "View",
-      onClick: () => console.log("View"),
-    },
-    {
-      title: "Delete",
-      onClick: () => console.log("Delete"),
-    },
-  ],
 };
 
 export const recent = {
@@ -245,61 +157,6 @@ export const queryParams = {
   },
 };
 
-export const saved: {
-  search: {
-    key: string;
-    placeholder: string;
-  };
-  columnConfig: {
-    columns: Column<QuizShallow>[];
-    actions: TableAction<QuizShallow>[];
-  };
-} = {
-  search: {
-    key: "title",
-    placeholder: "Search by title",
-  },
-
-  columnConfig: {
-    columns: [
-      {
-        type: "link",
-        accessorKey: "title",
-        title: "Title",
-        formatter: (title) => {
-          return title as string;
-        },
-        linkKey: "id",
-        path: routes.dashboard.quiz.home,
-        Icon() {
-          return IconBook2;
-        },
-        iconClassName() {
-          return "text-primary";
-        },
-      },
-      {
-        type: "no_link",
-        accessorKey: "createDate",
-        title: "Create Date",
-        formatter: (date) => {
-          return new Date(date as string).toLocaleDateString();
-        },
-      },
-    ],
-    actions: [
-      {
-        title: "View",
-        onClick: () => console.log("View"),
-      },
-      {
-        title: "Delete",
-        onClick: () => console.log("Delete"),
-      },
-    ],
-  },
-};
-
 export const actionButton: {
   submit: Button;
   reset: Button;
@@ -316,5 +173,20 @@ export const actionButton: {
     variant: "outline",
     className: "text-destructive ring-destructive hover:bg-destructive/20",
     iconClassName: "text-destructive",
+  },
+};
+
+export const preview: {
+  fields: { title: FormField };
+} = {
+  fields: {
+    title: {
+      id: "title",
+      label: "Title",
+      type: "text",
+      placeholder: defaultValues.title,
+      required: true,
+      Icon: IconTextSize,
+    },
   },
 };

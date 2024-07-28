@@ -67,11 +67,12 @@ export const ColumnHeader = <T extends object>({
       column={column}
       title={columnInfo.title}
       className={columnInfo.headerClassName}
+      showSort={columnInfo.showSort}
     />
   ),
   cell: ({ row }) => {
     const cell = columnInfo.formatter
-      ? columnInfo.formatter(row.original[columnInfo.accessorKey])
+      ? columnInfo.formatter(row.original[columnInfo.accessorKey], row.original)
       : (row.original[columnInfo.accessorKey] as string);
 
     const linkCell =

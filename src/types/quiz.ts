@@ -155,7 +155,11 @@ export enum QuizUploadsActionType {
   SET_DEFAULT_QUIZ_TYPES = "SET_DEFAULT_QUIZ_TYPES",
   SET_IS_SHOW_CHECKBOX = "SET_IS_SHOW_CHECKBOX",
   SET_IS_SHOW_RECENT_QUIZ = "SET_IS_SHOW_RECENT_QUIZ",
+  SET_QUIZ = "SET_QUIZ",
+  SET_IS_FLASHCARD = "SET_IS_FLASHCARD",
 }
+
+type RedirectType = "flashcard" | "quiz";
 
 export type QuizUploadsAction =
   | FetchAction<UploadShallow[]>
@@ -166,15 +170,19 @@ export type QuizUploadsAction =
   | Action<QuizUploadsActionType.SET_UPLOAD_INDEX_TRUE, string>
   | Action<QuizUploadsActionType.SET_DEFAULT_QUIZ_TYPES, QuizTypes[]>
   | Action<QuizUploadsActionType.SET_IS_SHOW_CHECKBOX, boolean>
-  | Action<QuizUploadsActionType.SET_IS_SHOW_RECENT_QUIZ, boolean>;
+  | Action<QuizUploadsActionType.SET_IS_SHOW_RECENT_QUIZ, boolean>
+  | Action<QuizUploadsActionType.SET_QUIZ, QuizRequestDb>
+  | Action<QuizUploadsActionType.SET_IS_FLASHCARD, boolean>;
 
 export type QuizUploadsState = {
   uploads: UploadShallow[];
+  quiz: QuizRequestDb | null;
   status: Status;
   indexStatus: IndexStatus;
   defaultQuizTypes: QuizTypes[];
   isShowCheckbox: boolean;
   isShowRecentQuiz: boolean;
+  isFlashcard: boolean;
 };
 
 export type QuizUploadsContextProps = {
