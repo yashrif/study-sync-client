@@ -2,15 +2,14 @@ import { IconRefresh } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { memo } from "react";
 
-import {
-  columnConfig as columnConfigObj,
-  isIndexedData,
-} from "@/assets/data/dashboard/quiz";
+import { fileTypeIcons } from "@/assets/data/dashboard/file";
+import { routes } from "@/assets/data/routes";
 import StatusContent from "@/components/StatusContent";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
-import { ColumnConfig, Status } from "@/types";
+import { Column, ColumnConfig, Status } from "@/types";
 import { UploadShallow } from "@/types/upload";
+import { dateFormatter } from "@/utils/dateFormatter";
 import {
   Tooltip,
   TooltipContent,
@@ -18,6 +17,84 @@ import {
   TooltipTrigger,
 } from "@components/ui/tooltip";
 import { fileIndexing } from "./fileIndexing";
+
+/* ---------------------------- fields and values --------------------------- */
+
+const columnConfig: ColumnConfig<UploadShallow> = {
+  columns: [
+    {
+      type: "link",
+      accessorKey: "title",
+      title: "Document",
+      formatter: (title) => {
+        return title as string;
+      },
+      linkKey: "id",
+      path: routes.dashboard.uploads,
+      className() {
+        return "text-base no-underline font-semibold";
+      },
+    },
+    {
+      type: "no_link",
+      accessorKey: "name",
+      title: "Name",
+      headerClassName: "invisible",
+      formatter: (type) => {
+        return type as string;
+      },
+      Icon(props) {
+        return fileTypeIcons({
+          key: "type",
+          value: props.value,
+        });
+      },
+    },
+    {
+      type: "no_link",
+      accessorKey: "createDate",
+      title: "Create Date",
+      headerClassName: "hidden",
+      formatter: (date) => {
+        return dateFormatter(date as string, "numeric");
+      },
+      Icon(props) {
+        return fileTypeIcons(props);
+      },
+    },
+  ],
+  actions: [
+    {
+      title: "View",
+      onClick: () => console.log("View"),
+    },
+    {
+      title: "Delete",
+      onClick: () => console.log("Delete"),
+    },
+  ],
+};
+
+const isIndexedData: Column<UploadShallow> = {
+  type: "no_link",
+  accessorKey: "isIndexed",
+  title: "Index Status",
+  headerClassName: "hidden",
+  formatter: (isIndexed) => {
+    return isIndexed ? "Indexed" : "Not Indexed";
+  },
+  Icon(props) {
+    return fileTypeIcons(props);
+  },
+  className(props) {
+    return `${props ? "text-success" : "text-destructive"}`;
+  },
+  iconClassName(props) {
+    return props ? "text-success" : "text-destructive";
+  },
+};
+
+/* ---------------------------- IndexButton component ---------------------------- */
 
 const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
   IndexButton.displayName = "IndexButton";
@@ -38,6 +115,7 @@ const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
           >
             <StatusContent
               status={indexStatus[data.id]}
+              alwaysIcons
               className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
                 indexStatus[data.id] === Status.PENDING
                   ? "animate-spin duration-1000"
@@ -77,6 +155,8 @@ const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
   );
 });
 
+/* ---------------------------- columns ---------------------------- */
+
 export const columns: ColumnDef<UploadShallow>[] = [
   {
     ...Checkbox(),
@@ -84,7 +164,7 @@ export const columns: ColumnDef<UploadShallow>[] = [
   ...((
     {
       columns: [
-        ...columnConfigObj.columns,
+        ...columnConfig.columns,
         {
           ...isIndexedData,
           additionalElement(data) {
@@ -92,7 +172,7 @@ export const columns: ColumnDef<UploadShallow>[] = [
           },
         },
       ],
-      actions: [...columnConfigObj.actions],
+      actions: [...columnConfig.actions],
     } as ColumnConfig<UploadShallow>
   ).columns.map((column) =>
     ColumnHeader({ column }),

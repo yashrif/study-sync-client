@@ -1,3 +1,4 @@
+import { AxiosInstance } from "axios";
 import { useCallback } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
@@ -13,7 +14,8 @@ export const useApiHandler = <T, R>({
       isUpdateStatus = true,
       pathVariable,
       fetchType = "eager",
-    }: Handler<T>) => {
+      isReset,
+    }: Handler<T>): Promise<R | undefined> => {
       if (isUpdateStatus) dispatch({ type: FetchActionType.FETCH_START });
       try {
         const response = await apiCall(data, pathVariable);
@@ -21,16 +23,20 @@ export const useApiHandler = <T, R>({
           type: FetchActionType.FETCH_SUCCESS,
           payload: response.data,
         });
+
+        return response.data;
       } catch (e) {
         console.log(e);
         dispatch({ type: FetchActionType.FETCH_ERROR });
       } finally {
-        if (fetchType === "lazy")
-          setTimeout(() => {
-            dispatch({
-              type: FetchActionType.FETCH_IDLE,
-            });
-          }, 2500);
+        if (isReset)
+          if (fetchType === "lazy")
+            setTimeout(() => {
+              dispatch({
+                type: FetchActionType.FETCH_IDLE,
+              });
+            }, 2500);
+          else dispatch({ type: FetchActionType.FETCH_IDLE });
       }
     },
     [apiCall, dispatch],
@@ -40,26 +46,28 @@ export const useApiHandler = <T, R>({
 };
 
 export type RequestHandler<T> = {
+  axiosInstance?: AxiosInstance;
   endpoint: string;
   requestType?: RequestType;
   data: T | null;
 };
 
 export const requestHandler = <T>({
+  axiosInstance = studySyncDB,
   endpoint,
   requestType,
   data,
 }: RequestHandler<T>) => {
   switch (requestType) {
     case RequestType.PATCH:
-      return studySyncDB.patch(endpoint, data);
+      return axiosInstance.patch(endpoint, data);
     case RequestType.DELETE:
-      return studySyncDB.delete(endpoint);
+      return axiosInstance.delete(endpoint);
     case RequestType.POST:
-      return studySyncDB.post(endpoint, data);
+      return axiosInstance.post(endpoint, data);
     case RequestType.PUT:
-      return studySyncDB.post(endpoint, data);
+      return axiosInstance.post(endpoint, data);
     default:
-      return studySyncDB.get(endpoint);
+      return axiosInstance.get(endpoint);
   }
 };

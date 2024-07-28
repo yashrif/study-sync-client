@@ -5,6 +5,7 @@ import { createContext, useReducer } from "react";
 import {
   FetchActionType,
   IndexStatus,
+  QuizRequestDb,
   QuizTypes,
   QuizUploadsAction,
   QuizUploadsActionType,
@@ -20,11 +21,13 @@ const QuizUploadsContext = createContext<QuizUploadsContextProps | undefined>(
 
 const initialState: QuizUploadsState = {
   uploads: [],
+  quiz: {} as QuizRequestDb,
   status: Status.IDLE,
   indexStatus: {},
   defaultQuizTypes: [QuizTypes.MCQ],
-  isShowCheckbox: true,
-  isShowRecentQuiz: true,
+  isShowCheckbox: false,
+  isShowRecentQuiz: false,
+  isFlashcard: false,
 };
 
 const generateIndexStatus = (uploads: UploadShallow[]) => {
@@ -113,6 +116,16 @@ const quizUploadsReducer = (
       return {
         ...state,
         isShowRecentQuiz: action.payload,
+      };
+    case QuizUploadsActionType.SET_QUIZ:
+      return {
+        ...state,
+        quiz: action.payload,
+      };
+    case QuizUploadsActionType.SET_IS_FLASHCARD:
+      return {
+        ...state,
+        isFlashcard: action.payload,
       };
     default:
       return state;

@@ -10,16 +10,12 @@ const CreateFlashCard = () => {
 
   useEffect(() => {
     dispatch({
-      type: QuizUploadsActionType.SET_IS_SHOW_CHECKBOX,
-      payload: false,
-    });
-    dispatch({
       type: QuizUploadsActionType.SET_DEFAULT_QUIZ_TYPES,
       payload: [QuizTypes.CQ],
     });
     dispatch({
-      type: QuizUploadsActionType.SET_IS_SHOW_RECENT_QUIZ,
-      payload: false,
+      type: QuizUploadsActionType.SET_IS_FLASHCARD,
+      payload: true,
     });
   }, [dispatch]);
 

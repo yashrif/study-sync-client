@@ -23,9 +23,9 @@ const inputVariants = cva(
       },
       spacing: {
         default: "",
-        sm: "pl-8",
-        md: "pl-10",
-        lg: "pl-12",
+        sm: "pl-10",
+        md: "pl-12",
+        lg: "pl-16",
       },
     },
     defaultVariants: {
@@ -81,7 +81,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             inputVariants({
               dimension,
               variant,
-              spacing: dimension,
+              spacing: Icon ? dimension : "default",
               className: `${className}`,
             }),
           )}

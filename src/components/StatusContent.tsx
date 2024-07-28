@@ -53,11 +53,13 @@ type Props = {
   children?: React.ReactNode;
   className?: string;
   iconClassName?: string;
+  contentClassName?: string;
   isAnimation?: boolean;
   size?: ButtonSize;
   status?: Status;
   title?: string;
   variant?: ButtonVariant;
+  alwaysIcons?: boolean;
   Icons?: {
     [key in Status]?: {
       Icon?: Icon;
@@ -67,9 +69,11 @@ type Props = {
 };
 
 const StatusContent: React.FC<Props> = ({
+  alwaysIcons = false,
   children,
   className,
   iconClassName,
+  contentClassName,
   Icons,
   isAnimation = true,
   size = "default",
@@ -77,8 +81,8 @@ const StatusContent: React.FC<Props> = ({
   title,
   variant = "default",
 }) => {
-  const contentClassName = cn(
-    contentVariants({ variant, size, className: "" }),
+  const contentClassNameExtended = cn(
+    contentVariants({ variant, size, className: contentClassName }),
   );
   const iconCustomClassName = cn(
     iconVariants({ variant, size, className: iconClassName }),
@@ -90,22 +94,25 @@ const StatusContent: React.FC<Props> = ({
     case Status.IDLE:
       return (
         <Content
+          alwaysIcons={alwaysIcons}
           Icon={Icons?.IDLE?.Icon}
           iconClassName={`${iconCustomClassName} ${Icons?.IDLE?.className}`}
           DefaultIcon={IconRefresh}
-          contentClassName={contentClassName}
+          contentClassName={contentClassNameExtended}
           className={className}
           content={children}
           title={title}
         />
       );
     case Status.PENDING:
+      console.log(Icons?.PENDING?.Icon);
       return (
         <Content
+          alwaysIcons={alwaysIcons}
           Icon={Icons?.PENDING?.Icon}
           iconClassName={`${iconCustomClassName} ${Icons?.PENDING?.className}`}
           DefaultIcon={Spinner}
-          contentClassName={contentClassName}
+          contentClassName={contentClassNameExtended}
           className={className}
           content={children}
           title={title}
@@ -114,10 +121,11 @@ const StatusContent: React.FC<Props> = ({
     case Status.SUCCESS:
       return (
         <Content
+          alwaysIcons={alwaysIcons}
           Icon={Icons?.SUCCESS?.Icon}
           iconClassName={`text-success stroke-success ${iconCustomClassName} ${Icons?.SUCCESS?.className}`}
           DefaultIcon={isAnimation ? CheckmarkAnimated : CircleCheck}
-          contentClassName={contentClassName}
+          contentClassName={contentClassNameExtended}
           className={className}
           content={children}
           title={title}
@@ -126,10 +134,11 @@ const StatusContent: React.FC<Props> = ({
     case Status.ERROR:
       return (
         <Content
-          Icon={Icons?.SUCCESS?.Icon}
+          alwaysIcons={alwaysIcons}
+          Icon={Icons?.ERROR?.Icon}
           iconClassName={`text-destructive ${iconCustomClassName} ${Icons?.SUCCESS?.className}`}
           DefaultIcon={IconCircleX}
-          contentClassName={contentClassName}
+          contentClassName={contentClassNameExtended}
           className={className}
           content={children}
           title={title}
@@ -143,6 +152,7 @@ const StatusContent: React.FC<Props> = ({
 export default StatusContent;
 
 type ContentProps = {
+  alwaysIcons: boolean;
   content?: React.ReactNode;
   contentClassName?: string;
   className?: string;
@@ -153,6 +163,7 @@ type ContentProps = {
 };
 
 const Content: React.FC<ContentProps> = ({
+  alwaysIcons,
   content,
   className,
   contentClassName,
@@ -161,9 +172,13 @@ const Content: React.FC<ContentProps> = ({
   iconClassName,
   title,
 }) =>
-  Icon ? (
+  alwaysIcons ? (
     <div className={`flex gap-1.5 items-center justify-center ${className}`}>
-      <Icon className={iconClassName} />
+      {Icon ? (
+        <Icon className={iconClassName} />
+      ) : (
+        <DefaultIcon className={iconClassName} />
+      )}
       {content || (title && <span className={contentClassName}>{title}</span>)}
     </div>
   ) : content || title ? (

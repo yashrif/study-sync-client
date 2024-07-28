@@ -1,6 +1,7 @@
 "use client";
 
 import { Table } from "@tanstack/react-table";
+import _ from "lodash";
 
 import { controlBar } from "@/assets/data/dashboard/controlBar";
 import { TableControlTypes, TTableControl } from "@allTypes";
@@ -15,7 +16,6 @@ type Props<TData, TValue> = {
   searchKey: string;
   controlsConfig?: { [key in TableControlTypes]?: TTableControl };
   className?: string;
-  onUpload?: () => void;
 };
 
 const ControlBar = <TData, TValue>({
@@ -55,7 +55,6 @@ const ControlBar = <TData, TValue>({
     },
   },
   className,
-  onUpload,
 }: Props<TData, TValue>) => {
   return (
     <div className={`flex gap-16 items-center justify-between ${className}`}>
@@ -66,8 +65,9 @@ const ControlBar = <TData, TValue>({
             style={{
               order: controlsConfig[TableControlTypes.UPLOAD]?.order,
             }}
-            {...controlsConfig[TableControlTypes.UPLOAD]}
-            onUpload={onUpload}
+            {..._.omit(controlsConfig[TableControlTypes.UPLOAD], "onClick")}
+            onUpload={controlsConfig.UPLOAD.onClick}
+            status={controlsConfig.UPLOAD.status}
           />
         )}
         {controlsConfig.ADD_FOLDER && !controlsConfig?.ADD_FOLDER?.hidden && (
@@ -77,8 +77,7 @@ const ControlBar = <TData, TValue>({
             }
             Icon={controlsConfig.ADD_FOLDER.Icon || controlBar.addFolder.Icon}
             variant={
-              controlsConfig.ADD_FOLDER.variant ||
-              controlsConfig.ADD_FOLDER.variant
+              controlsConfig.ADD_FOLDER.variant || controlBar.addFolder.variant
             }
             size={controlsConfig.ADD_FOLDER.size || controlBar.addFolder.size}
             style={{
@@ -86,6 +85,7 @@ const ControlBar = <TData, TValue>({
             }}
             iconClassName="stroke-[2.5]"
             {...controlsConfig[TableControlTypes.ADD_FOLDER]}
+            status={controlsConfig.ADD_FOLDER.status}
           />
         )}
         {controlsConfig.DELETE && !controlsConfig?.DELETE?.hidden && (
@@ -100,6 +100,8 @@ const ControlBar = <TData, TValue>({
               order: controlsConfig[TableControlTypes.DELETE]?.order,
             }}
             {...controlsConfig[TableControlTypes.DELETE]}
+            onClick={controlsConfig.DELETE.onClick}
+            status={controlsConfig.DELETE.status}
           />
         )}
         {controlsConfig.SEARCH && !controlsConfig.SEARCH?.hidden && (
