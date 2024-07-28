@@ -57,7 +57,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
   const { handler } = useApiHandler<ServerQuizRequest, QuizResponseServer>({
     apiCall: useCallback(
       (data) => studySyncServer.post(serverEndpoints.quizzes, data),
-      [],
+      []
     ),
     dispatch: serverDispatch,
   });
@@ -71,7 +71,6 @@ const CreateAction: React.FC<Props> = ({ table }) => {
   }, [defaultQuizTypes, form]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    let id: string | null = null;
     try {
       const uploads: UploadShallow[] = table
         .getFilteredSelectedRowModel()
@@ -86,7 +85,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
             });
           }
           return upload.id;
-        }),
+        })
       );
 
       const response = await handler({
@@ -101,7 +100,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
       if (response)
         dispatch({
           type: QuizUploadsActionType.SET_QUIZ,
-          payload: { ...response, title: uploads[0].title },
+          payload: { ...response, title: uploads[0].title, uploads },
         });
     } catch (err) {
       console.log(err);
@@ -139,8 +138,8 @@ const CreateAction: React.FC<Props> = ({ table }) => {
                                   ? field.onChange([...field.value, item.id])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.id,
-                                      ),
+                                        (value) => value !== item.id
+                                      )
                                     );
                               }}
                               className="size-4"

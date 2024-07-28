@@ -50,6 +50,7 @@ export type QuizRequestDb = {
   title?: string;
   mcqs: McqRequest[];
   cqs: CqRequest[];
+  uploads: UploadShallow[];
 };
 
 export type QuizShallow = {
@@ -67,6 +68,7 @@ export type QuizIntermediate = QuizShallow & {
 export type Quiz = QuizIntermediate & {
   mcqs: McqIntermediate[] | null;
   cqs: CqIntermediate[] | null;
+  uploads: UploadShallow[];
 };
 
 export enum Difficulty {
@@ -158,8 +160,6 @@ export enum QuizUploadsActionType {
   SET_QUIZ = "SET_QUIZ",
   SET_IS_FLASHCARD = "SET_IS_FLASHCARD",
 }
-
-type RedirectType = "flashcard" | "quiz";
 
 export type QuizUploadsAction =
   | FetchAction<UploadShallow[]>
