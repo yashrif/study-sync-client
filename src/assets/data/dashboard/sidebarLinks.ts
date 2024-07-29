@@ -3,6 +3,7 @@ import {
   IconFileUpload,
   IconHome,
   IconLogout2,
+  IconRoute,
   IconSettings,
   IconUserCircle,
 } from "@tabler/icons-react";
@@ -46,11 +47,25 @@ export const sidebarLinks: SidebarLink[][] = [
       subLinks: [
         {
           ...links.dashboard.flashcard.create,
-          Icon: Quiz,
+          Icon: IconBolt,
         },
         {
           ...links.dashboard.flashcard.review,
-          Icon: Quiz,
+          Icon: IconBolt,
+        },
+      ],
+    },
+    {
+      ...links.dashboard.planner.home,
+      Icon: IconRoute,
+      subLinks: [
+        {
+          ...links.dashboard.planner.create,
+          Icon: IconRoute,
+        },
+        {
+          ...links.dashboard.planner.saved,
+          Icon: IconRoute,
         },
       ],
     },
