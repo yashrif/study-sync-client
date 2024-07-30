@@ -3,8 +3,15 @@ import { cva } from "class-variance-authority";
 
 import Spinner from "@/components/spinner/Spinner";
 import { cn } from "@/lib/utils";
-import { ButtonSize, ButtonVariant, Icon, Status } from "@allTypes";
-import { CheckmarkAnimated, CircleCheck } from "@components/icons";
+import {
+  ButtonSize,
+  ButtonVariant,
+  ContentType,
+  Icon,
+  Status,
+  Content as TContent,
+} from "@allTypes";
+import { CheckmarkAnimated, CircleCheck } from "@icons";
 
 const variantColor = {
   default: "text-primary-foreground",
@@ -15,13 +22,13 @@ const variantColor = {
   link: "text-primary",
 };
 
-const contentVariants = cva("text-medium", {
+const contentVariants = cva("text-medium transition-all duration-300", {
   variants: {
-    variant: variantColor,
+    variant: { ...variantColor },
     size: {
-      default: "text-medium",
-      sm: "text-small",
-      lg: "text-large",
+      default: "text-base",
+      sm: "text-sm",
+      lg: "text-lg",
       xl: "text-xl",
       icon: "h-6 w-6",
     },
@@ -32,14 +39,14 @@ const contentVariants = cva("text-medium", {
   },
 });
 
-const iconVariants = cva("size-4", {
+const iconVariants = cva("size-4 stroke-2", {
   variants: {
-    variant: variantColor,
+    variant: { ...variantColor },
     size: {
       default: "size-4",
       sm: "size-[14px]",
-      lg: "size-[18px]",
-      xl: "size-5",
+      lg: "size-[18px] stroke-[2.5px]",
+      xl: "size-5 stroke-[2.5px]",
       icon: "h-6 w-6",
     },
   },
@@ -49,6 +56,10 @@ const iconVariants = cva("size-4", {
   },
 });
 
+const containerVariants = cva(
+  "flex gap-1.5 items-center justify-center transition-all duration-300"
+);
+
 type Props = {
   children?: React.ReactNode;
   className?: string;
@@ -57,36 +68,34 @@ type Props = {
   isAnimation?: boolean;
   size?: ButtonSize;
   status?: Status;
-  title?: string;
   variant?: ButtonVariant;
-  alwaysIcons?: boolean;
-  Icons?: {
-    [key in Status]?: {
-      Icon?: Icon;
-      className?: string;
-    };
+  isAlwaysIcons?: boolean;
+  contents?: {
+    [key in Status]?: TContent;
   };
+  type?: ContentType;
 };
 
 const StatusContent: React.FC<Props> = ({
-  alwaysIcons = false,
+  isAlwaysIcons = false,
   children,
   className,
   iconClassName,
   contentClassName,
-  Icons,
+  contents,
   isAnimation = true,
   size = "default",
   status = Status.IDLE,
-  title,
   variant = "default",
+  type = "icon-content",
 }) => {
   const contentClassNameExtended = cn(
-    contentVariants({ variant, size, className: contentClassName }),
+    contentVariants({ variant, size, className: contentClassName })
   );
-  const iconCustomClassName = cn(
-    iconVariants({ variant, size, className: iconClassName }),
+  const iconClassNameExtended = cn(
+    iconVariants({ variant, size, className: iconClassName })
   );
+  const classNameExtended = cn(containerVariants({ className }));
 
   if (!status) return children;
 
@@ -94,55 +103,58 @@ const StatusContent: React.FC<Props> = ({
     case Status.IDLE:
       return (
         <Content
-          alwaysIcons={alwaysIcons}
-          Icon={Icons?.IDLE?.Icon}
-          iconClassName={`${iconCustomClassName} ${Icons?.IDLE?.className}`}
+          alwaysIcons={isAlwaysIcons}
+          content={contents?.IDLE}
+          iconClassName={`${iconClassNameExtended}`}
           DefaultIcon={IconRefresh}
           contentClassName={contentClassNameExtended}
-          className={className}
-          content={children}
-          title={title}
-        />
+          className={classNameExtended}
+          type={type}
+        >
+          {children}
+        </Content>
       );
     case Status.PENDING:
-      console.log(Icons?.PENDING?.Icon);
       return (
         <Content
-          alwaysIcons={alwaysIcons}
-          Icon={Icons?.PENDING?.Icon}
-          iconClassName={`${iconCustomClassName} ${Icons?.PENDING?.className}`}
+          alwaysIcons={isAlwaysIcons}
+          content={contents?.PENDING}
+          iconClassName={`${iconClassNameExtended}`}
           DefaultIcon={Spinner}
           contentClassName={contentClassNameExtended}
-          className={className}
-          content={children}
-          title={title}
-        />
+          className={classNameExtended}
+          type={type}
+        >
+          {children}
+        </Content>
       );
     case Status.SUCCESS:
       return (
         <Content
-          alwaysIcons={alwaysIcons}
-          Icon={Icons?.SUCCESS?.Icon}
-          iconClassName={`text-success stroke-success ${iconCustomClassName} ${Icons?.SUCCESS?.className}`}
+          alwaysIcons={isAlwaysIcons}
+          content={contents?.SUCCESS}
+          iconClassName={`text-success stroke-success ${iconClassNameExtended}`}
           DefaultIcon={isAnimation ? CheckmarkAnimated : CircleCheck}
           contentClassName={contentClassNameExtended}
-          className={className}
-          content={children}
-          title={title}
-        />
+          className={classNameExtended}
+          type={type}
+        >
+          {children}
+        </Content>
       );
     case Status.ERROR:
       return (
         <Content
-          alwaysIcons={alwaysIcons}
-          Icon={Icons?.ERROR?.Icon}
-          iconClassName={`text-destructive ${iconCustomClassName} ${Icons?.SUCCESS?.className}`}
+          alwaysIcons={isAlwaysIcons}
+          content={contents?.ERROR}
+          iconClassName={`text-destructive ${iconClassNameExtended}`}
           DefaultIcon={IconCircleX}
           contentClassName={contentClassNameExtended}
-          className={className}
-          content={children}
-          title={title}
-        />
+          className={classNameExtended}
+          type={type}
+        >
+          {children}
+        </Content>
       );
     default:
       return children;
@@ -153,40 +165,98 @@ export default StatusContent;
 
 type ContentProps = {
   alwaysIcons: boolean;
-  content?: React.ReactNode;
+  children?: React.ReactNode;
   contentClassName?: string;
   className?: string;
   DefaultIcon: Icon;
-  Icon?: Icon;
+  content?: TContent;
   iconClassName?: string;
-  title?: string;
+  type: ContentType;
 };
 
 const Content: React.FC<ContentProps> = ({
   alwaysIcons,
-  content,
+  children,
   className,
   contentClassName,
   DefaultIcon,
-  Icon,
+  content,
   iconClassName,
-  title,
-}) =>
-  alwaysIcons ? (
-    <div className={`flex gap-1.5 items-center justify-center ${className}`}>
-      {Icon ? (
-        <Icon className={iconClassName} />
-      ) : (
-        <DefaultIcon className={iconClassName} />
-      )}
-      {content || (title && <span className={contentClassName}>{title}</span>)}
-    </div>
-  ) : content || title ? (
+  type,
+}) => {
+  const renderedAlwaysIcon = (content: TContent): React.ReactNode => {
+    switch (content.type) {
+      case "icon-only":
+        return content.Icon ? (
+          <content.Icon
+            className={`${iconClassName} ${content.iconClassName || ""}`}
+          />
+        ) : (
+          <DefaultIcon
+            className={`${iconClassName} ${content.iconClassName || ""}`}
+          />
+        );
+      case "content-only":
+        return content.content ? (
+          <span
+            className={`${contentClassName} ${content.contentClassName || ""}`}
+          >
+            {content.content}
+          </span>
+        ) : (
+          <div className={contentClassName}>{children}</div> || null
+        );
+      case "icon-content":
+      default:
+        return (
+          <>
+            {renderedAlwaysIcon({ ...content, type: "icon-only" })}
+            {children &&
+              renderedAlwaysIcon({ ...content, type: "content-only" })}
+          </>
+        );
+    }
+  };
+
+  const renderedContent = (content: TContent): React.ReactNode => {
+    switch (content.type) {
+      case "icon-only":
+        return content.Icon ? (
+          <content.Icon
+            className={`${iconClassName} ${content.iconClassName || ""}`}
+          />
+        ) : (
+          <DefaultIcon
+            className={`${iconClassName} ${content.iconClassName || ""}`}
+          />
+        );
+      case "content-only":
+        return content.content ? (
+          <span
+            className={`${contentClassName} ${content.contentClassName || ""}`}
+          >
+            {content.content}
+          </span>
+        ) : children ? (
+          <div className={contentClassName}>{children}</div>
+        ) : null;
+      case "icon-content":
+      default:
+        return (
+          <>
+            {content?.Icon &&
+              renderedAlwaysIcon({ ...content, type: "icon-only" })}
+            {renderedAlwaysIcon({ ...content, type: "content-only" })}
+          </>
+        );
+    }
+  };
+
+  return (
     <div className={className}>
-      {content || (title && <span className={contentClassName}>{title}</span>)}
-    </div>
-  ) : (
-    <div className={`flex justify-center items-center ${className}`}>
-      <DefaultIcon className={iconClassName} />
+      {alwaysIcons
+        ? renderedAlwaysIcon(content || ({ type } as TContent))
+        : renderedContent(content || ({ type } as TContent))}
     </div>
   );
+};

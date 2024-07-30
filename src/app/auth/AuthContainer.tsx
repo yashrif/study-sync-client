@@ -85,7 +85,7 @@ const AuthContainer: React.FC<Props> = ({
       setTimeout(() => {
         if ((statusCode === 200 || statusCode === 201) && redirect)
           replace(redirect);
-        setStatus(Status.IDLE);
+          setStatus(Status.IDLE);
       }, 2500);
     }
   };
@@ -166,10 +166,14 @@ const AuthContainer: React.FC<Props> = ({
               type={"submit"}
               size={"lg"}
               status={status}
-              className="group col-span-2 bg-text hover:bg-primary text-accent hover:text-white"
-            >
-              {actionButton}
-            </IconButton>
+              alwaysIcons={true}
+              className="group col-span-2 hover:bg-secondary"
+              contentClassName="text-accent group-hover:text-white"
+              iconClassName="size-7"
+              contents={{
+                [Status.IDLE]: { type: "content-only", content: actionButton },
+              }}
+            />
             <div className="flex gap-2 items-center justify-center">
               <p className="text-medium font-medium">{altLink.title}</p>
               <Link

@@ -34,3 +34,24 @@ export type Button = React.ButtonHTMLAttributes<HTMLButtonElement> &
     contentClassName?: string;
     status?: Status;
   };
+
+export type ContentType = "icon-content" | "icon-only" | "content-only";
+
+export type Content =
+  | {
+      type: "icon-content";
+      Icon?: Icon;
+      content?: string;
+      iconClassName?: string;
+      contentClassName?: string;
+    }
+  | {
+      type: "icon-only";
+      Icon?: Icon;
+      iconClassName?: string;
+    }
+  | {
+      type: "content-only";
+      content?: string;
+      contentClassName?: string;
+    };

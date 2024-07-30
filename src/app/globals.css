@@ -258,7 +258,7 @@
   select.no-autofill-style:-webkit-autofill:focus {
     border: auto;
     -webkit-text-fill-color: hsl(var(--secondary-300));
-    -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255, 0) inset;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset;
     transition: background-color 5000s ease-in-out 0s;
   }
 

@@ -35,7 +35,7 @@ type Props = {
   order: number;
   form: UseFormReturn<
     {
-      [x: string]: string;
+      [x: string]: string | null | undefined;
     },
     any,
     undefined
@@ -56,7 +56,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
   const { handler: quizHandler } = useApiHandler<null, Quiz>({
     apiCall: useCallback(
       () => studySyncDB.get(`${dbEndpoints.quizzes}/${id}`),
-      [id],
+      [id]
     ),
     dispatch,
   });
@@ -73,7 +73,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
     apiCall: useCallback(
       (data, pathVariable) =>
         studySyncDB.patch(`${dbEndpoints.cqs}/${pathVariable}`, data),
-      [],
+      []
     ),
     dispatch: createDispatch,
   });
@@ -139,20 +139,22 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                           : "duration-300"
                       }
                       `}
-                      Icons={{
+                      contents={{
                         [Status.IDLE]: {
+                          type: "icon-only",
                           Icon: cq.isFlashcard
                             ? CheckmarkAnimated
                             : IconCirclePlus2,
-                          className: cq.isFlashcard
+                          iconClassName: cq.isFlashcard
                             ? "stroke-success"
                             : "stroke-primary",
                         },
                         [Status.SUCCESS]: {
+                          type: "icon-only",
                           Icon: cq.isFlashcard
                             ? CheckmarkAnimated
                             : IconCirclePlus2,
-                          className: "text-success stroke-success",
+                          iconClassName: "text-success stroke-success",
                         },
                       }}
                     />
@@ -185,7 +187,10 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
               <Textarea
                 placeholder={`Write the answer of the question no. ${order}`}
                 className="resize-y text-base text-text placeholder:text-text-200"
-                {...field}
+                {...form}
+                value={field?.value || ""}
+                onChange={field?.onChange || (() => {})}
+                defaultValue={field?.value || ""}
               />
             </div>
           </FormControl>

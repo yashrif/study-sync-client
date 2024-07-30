@@ -1,42 +1,60 @@
 import React from "react";
 
 import StatusContent from "@/components/StatusContent";
-import { Icon, Status, Button as TButton } from "@/types";
+import { Content, ContentType, Status, Button as TButton } from "@/types";
 import { Button } from "@components/ui/button";
 
 type Props = TButton & {
   isAnimation?: boolean;
-  Icons?: {
-    [key in Status]?: {
-      Icon?: Icon;
-      className?: string;
-    };
+  contents?: {
+    [key in Status]?: Content;
   };
   hidden?: boolean;
+  alwaysIcons?: boolean;
+  containerClassName?: string;
+  contentType?: ContentType;
 };
 
 const IconButton = React.forwardRef<HTMLButtonElement, Props>(
   (
-    { status, iconClassName, contentClassName, Icon, children, ...props },
-    ref,
+    {
+      status,
+      className,
+      iconClassName,
+      containerClassName,
+      contentType,
+      alwaysIcons = true,
+      contentClassName,
+      Icon,
+      children,
+      ...props
+    },
+    ref
   ) => {
     return (
-      <Button disabled={status === Status.PENDING} {...props} ref={ref}>
+      <Button
+        disabled={status === Status.PENDING}
+        className={className}
+        {...props}
+        ref={ref}
+      >
         <StatusContent
           status={status || Status.IDLE}
           iconClassName={iconClassName}
           contentClassName={`font-medium ${contentClassName}`}
-          {...props}
-          Icons={{
-            [Status.IDLE]: { Icon: Icon },
+          contents={{
+            [Status.IDLE]: { type: "icon-content", Icon: Icon },
           }}
-          alwaysIcons={true}
+          isAlwaysIcons={alwaysIcons}
+          className={containerClassName}
+          {...props}
+          type={contentType}
         >
-          {children}
+          {children || props.title ? <span>{props.title}</span> : undefined}
         </StatusContent>
       </Button>
     );
-  },
+  }
 );
 IconButton.displayName = "SubmitButton";
 

@@ -16,7 +16,7 @@ type Props = {
   order: number;
   form: UseFormReturn<
     {
-      [x: string]: string;
+      [x: string]: string | null | undefined;
     },
     any,
     undefined
@@ -45,9 +45,9 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
           </FormLabel>
           <FormControl>
             <RadioGroup
-              value={field.value}
-              onValueChange={field.onChange}
-              defaultValue={field.value}
+              value={field?.value || ""}
+              onValueChange={field?.onChange}
+              defaultValue={field?.value || ""}
               className="flex flex-col gap-3 !mt-0"
             >
               {mcq.choices.map((choice, index) => (
@@ -63,7 +63,7 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
                           Choices,
                           mcq.answers
                             .map((answer, index) => (answer ? index : null))
-                            .filter((x) => x !== null)[0],
+                            .filter((x) => x !== null)[0]
                         ) || ""
                       }
                     />

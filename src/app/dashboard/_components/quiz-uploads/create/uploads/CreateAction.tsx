@@ -57,7 +57,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
   const { handler } = useApiHandler<ServerQuizRequest, QuizResponseServer>({
     apiCall: useCallback(
       (data) => studySyncServer.post(serverEndpoints.quizzes, data),
-      [],
+      []
     ),
     dispatch: serverDispatch,
   });
@@ -86,7 +86,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
             });
           }
           return upload.id;
-        }),
+        })
       );
 
       const response = await handler({
@@ -139,8 +139,8 @@ const CreateAction: React.FC<Props> = ({ table }) => {
                                   ? field.onChange([...field.value, item.id])
                                   : field.onChange(
                                       field.value?.filter(
-                                        (value) => value !== item.id,
-                                      ),
+                                        (value) => value !== item.id
+                                      )
                                     );
                               }}
                               className="size-4"
@@ -164,6 +164,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
           className="size-12 p-0 rounded-full"
           Icon={IconArrowRight}
           iconClassName="!size-6 stroke-text-300 text-text-300"
+          contentType="icon-only"
           disabled={
             (table && table.getFilteredSelectedRowModel().rows.length === 0) ||
             Object.values(indexStatus).includes(Status.PENDING) ||
