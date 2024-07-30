@@ -171,8 +171,9 @@ export const actionButton: {
     Icon: IconReload,
     type: "reset",
     variant: "outline",
-    className: "text-destructive ring-destructive hover:bg-destructive/20",
-    iconClassName: "text-destructive",
+    className: "ring-destructive hover:bg-destructive/20",
+    iconClassName: "stroke-destructive",
+    contentClassName: "text-destructive",
   },
 };
 

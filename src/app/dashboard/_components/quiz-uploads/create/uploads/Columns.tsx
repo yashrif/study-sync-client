@@ -115,7 +115,8 @@ const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
           >
             <StatusContent
               status={indexStatus[data.id]}
-              alwaysIcons
+              isAlwaysIcons
+              type="icon-only"
               className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
                 indexStatus[data.id] === Status.PENDING
                   ? "animate-spin duration-1000"
@@ -129,8 +130,8 @@ const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
                         : ""
                   }
                   `}
-              Icons={{
-                [Status.PENDING]: { Icon: IconRefresh },
+              contents={{
+                [Status.PENDING]: { type: "icon-only", Icon: IconRefresh },
               }}
               isAnimation={!data.isIndexed}
               iconClassName={`stroke-primary ${
@@ -175,6 +176,6 @@ export const columns: ColumnDef<UploadShallow>[] = [
       actions: [...columnConfig.actions],
     } as ColumnConfig<UploadShallow>
   ).columns.map((column) =>
-    ColumnHeader({ column }),
+    ColumnHeader({ column })
   ) as ColumnDef<UploadShallow>[]),
 ];

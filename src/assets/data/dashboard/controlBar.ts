@@ -68,7 +68,8 @@ export const controlBar: {
     Icon: IconCircleX,
     variant: "outline",
     size: "sm",
-    className: "text-destructive ring-destructive hover:text-destructive",
+    className: "ring-destructive",
+    contentClassName: "text-destructive hover:text-destructive",
     iconClassName: "stroke-destructive",
   },
 };

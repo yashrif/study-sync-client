@@ -22,7 +22,7 @@ type DurationProps = {
 
 export const calculateDuration = ({ difficulty, cqs, mcqs }: DurationProps) => {
   return Math.round(
-    (mcqs * DURATION_PER_MCQ + cqs * DURATION_PER_CQ) /
-      difficultyValue(difficulty),
+    ((mcqs * DURATION_PER_MCQ + cqs * DURATION_PER_CQ) * 60) /
+      difficultyValue(difficulty)
   );
 };

@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import { useCallback } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
@@ -25,9 +25,10 @@ export const useApiHandler = <T, R>({
         });
 
         return response.data;
-      } catch (e) {
-        console.log(e);
+      } catch (err: AxiosError | any | unknown | Error) {
+        console.log(err);
         dispatch({ type: FetchActionType.FETCH_ERROR });
+        throw new Error(err.message);
       } finally {
         if (isReset)
           if (fetchType === "lazy")
@@ -39,7 +40,7 @@ export const useApiHandler = <T, R>({
           else dispatch({ type: FetchActionType.FETCH_IDLE });
       }
     },
-    [apiCall, dispatch],
+    [apiCall, dispatch]
   );
 
   return { handler };

@@ -48,7 +48,7 @@ const QuizDetails: React.FC = () => {
         <div className="flex gap-24 items-center">
           {isShowResults && (
             <span className="flex items-center gap-1.5 text-large text-primary font-medium">
-              {evaluateStatus !== Status.ERROR && <span>Obtained Points:</span>}
+              {evaluateStatus !== Status.ERROR && <span>Points:</span>}
               {evaluateStatus === Status.PENDING ? (
                 <Spinner className="!size-5" />
               ) : evaluateStatus === Status.SUCCESS ? (

@@ -2,7 +2,7 @@
 
 import { IconArrowRight } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
 import { controlBar } from "@/assets/data/dashboard/controlBar";
@@ -20,7 +20,7 @@ import {
 
 const CreateAction: React.FC = () => {
   const { push } = useRouter();
-  const [isSaved, setIsSaved] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const {
     state: { quiz, isFlashcard },
@@ -39,7 +39,7 @@ const CreateAction: React.FC = () => {
           requestType: RequestType.POST,
           data,
         }),
-      [],
+      []
     ),
     dispatch,
   });
@@ -47,6 +47,7 @@ const CreateAction: React.FC = () => {
   if (!quiz) return null;
 
   const onSubmit = async () => {
+    setIsProcessing(true);
     try {
       const updatedQuiz = {
         ...quiz,
@@ -56,18 +57,17 @@ const CreateAction: React.FC = () => {
         })),
       };
       await handler({ data: updatedQuiz, fetchType: "lazy", isReset: true });
-
-      setIsSaved(true);
     } catch (err) {
+      setTimeout(() => {
+        setIsProcessing(false);
+      }, 2000);
       console.log(err);
-      setIsSaved(false);
     }
   };
 
   return (
     <div className="w-full flex justify-end items-center gap-3">
       <IconButton
-        iconClassName="stroke-[2.5]"
         {...controlBar.close}
         onClick={() => {
           quizDispatch({
@@ -76,13 +76,8 @@ const CreateAction: React.FC = () => {
           });
         }}
       />
-      {!isSaved ? (
-        <IconButton
-          iconClassName="stroke-[2.5]"
-          {...controlBar.save}
-          onClick={onSubmit}
-          status={status}
-        />
+      {!isProcessing ? (
+        <IconButton {...controlBar.save} onClick={onSubmit} status={status} />
       ) : (
         <IconButton
           size="lg"
@@ -95,7 +90,7 @@ const CreateAction: React.FC = () => {
               push(
                 isFlashcard
                   ? links.dashboard.flashcard.review.href
-                  : links.dashboard.quiz.quizDetails(data.id).href,
+                  : links.dashboard.quiz.quizDetails(data.id).href
               );
           }}
           type="submit"

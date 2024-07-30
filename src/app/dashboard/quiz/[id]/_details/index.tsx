@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useImperativeHandle, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { z, ZodEnum, ZodNullable, ZodOptional, ZodString } from "zod";
 
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
@@ -89,16 +89,16 @@ const List: React.FC = () => {
             {
               rightAnswer: cq.answer,
               givenAnswer: data[cq.id],
-            },
+            }
           );
 
           return { [cq.id]: response.data as QuizEvaluateResponseServer };
-        }) || [],
+        }) || []
       );
 
       const cqEvaluation = evaluation.reduce(
         (acc, curr) => ({ ...acc, ...curr }),
-        {},
+        {}
       ) as { [key: string]: QuizEvaluateResponseServer };
 
       dispatch({
@@ -108,7 +108,7 @@ const List: React.FC = () => {
 
       let cqPoints = 0;
       Object.values(cqEvaluation).forEach((cq) => {
-        cqPoints += cq.correctness / 100;
+        cqPoints += (cq.correctness || 0) / 100;
       });
 
       dispatch({
@@ -169,21 +169,19 @@ const generateFormSchema = ({
   cqs: CqIntermediate[];
 }) => {
   let fields: {
-    [x: string]: z.ZodEnum<[string, ...string[]]> | z.ZodString;
+    [x: string]:
+      | ZodOptional<ZodNullable<ZodEnum<[string, ...string[]]>>>
+      | ZodOptional<ZodNullable<ZodString>>;
   } = {};
 
   mcqs.forEach((mcq) => {
-    fields[mcq.id] = z.enum(
-      [...(Object.values(Choices) as [string, ...string[]])],
-      {
-        required_error: "You need to chose one option.",
-      },
-    );
+    fields[mcq.id] = z
+      .enum([...(Object.values(Choices) as [string, ...string[]])])
+      .nullable()
+      .optional();
   });
   cqs.forEach((cq) => {
-    fields[cq.id] = z.string().min(1, {
-      message: "Answer cannot be empty",
-    });
+    fields[cq.id] = z.string().nullable().optional();
   });
 
   return z.object(fields);
