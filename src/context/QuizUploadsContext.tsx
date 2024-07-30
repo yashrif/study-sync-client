@@ -16,7 +16,7 @@ import {
 } from "@/types";
 
 const QuizUploadsContext = createContext<QuizUploadsContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 const initialState: QuizUploadsState = {
@@ -42,7 +42,7 @@ const generateIndexStatus = (uploads: UploadShallow[]) => {
 
 const quizUploadsReducer = (
   state: QuizUploadsState,
-  action: QuizUploadsAction,
+  action: QuizUploadsAction
 ): QuizUploadsState => {
   switch (action.type) {
     case FetchActionType.FETCH_START:
@@ -97,9 +97,7 @@ const quizUploadsReducer = (
       return {
         ...state,
         uploads: state.uploads.map((upload) =>
-          upload.id === action.payload
-            ? { ...upload, isIndexed: true }
-            : upload,
+          upload.id === action.payload ? { ...upload, isIndexed: true } : upload
         ),
       };
     case QuizUploadsActionType.SET_DEFAULT_QUIZ_TYPES:

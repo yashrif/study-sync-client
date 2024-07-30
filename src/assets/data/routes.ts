@@ -29,6 +29,7 @@ export const paths = {
   saved: "/saved",
   flashcard: "/flashcard",
   review: "/review",
+  planner: "/planner",
 };
 
 export const pathTitles = {
@@ -62,6 +63,7 @@ export const pathTitles = {
   saved: "Saved",
   flashcard: "Flashcard",
   review: "Review",
+  planner: "Planner",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -117,6 +119,12 @@ export const routes = {
       home: `${dashboardPath}${paths.flashcard}`,
       create: `${dashboardPath}${paths.flashcard}`,
       review: `${dashboardPath}${paths.flashcard}${paths.review}`,
+    },
+    planner: {
+      default: `${dashboardPath}${paths.planner}`,
+      home: `${dashboardPath}${paths.planner}`,
+      create: `${dashboardPath}${paths.planner}`,
+      saved: `${dashboardPath}${paths.planner}${paths.saved}`,
     },
   },
 };
@@ -207,6 +215,30 @@ export const links = {
         return {
           title: pathTitles.flashcard,
           href: `${routes.dashboard.flashcard.home}/${id}`,
+        };
+      },
+    },
+    planner: {
+      default: {
+        title: pathTitles.planner,
+        href: routes.dashboard.planner.default,
+      },
+      home: {
+        title: pathTitles.planner,
+        href: routes.dashboard.planner.home,
+      },
+      create: {
+        title: pathTitles.create,
+        href: routes.dashboard.planner.create,
+      },
+      saved: {
+        title: pathTitles.saved,
+        href: routes.dashboard.planner.saved,
+      },
+      plannerDetails(id: string) {
+        return {
+          title: pathTitles.planner,
+          href: `${routes.dashboard.planner.home}/${id}`,
         };
       },
     },

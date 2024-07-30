@@ -95,7 +95,7 @@ const FlashCard: React.FC = () => {
               {filteredFlashcards.length > 0 ? (
                 <>
                   <motion.div
-                    className="max-h-[280px] h-auto w-full flex flex-col gap-4 border border-primary/80 p-4 pt-6 rounded-md overflow-x-scroll overflow-y-contain"
+                    className="max-h-[280px] h-auto w-full flex flex-col gap-4 border border-primary/80 p-4 pt-6 rounded-md overflow-x-scroll overflow-y-hidden"
                     layout
                   >
                     <motion.div layout="position">

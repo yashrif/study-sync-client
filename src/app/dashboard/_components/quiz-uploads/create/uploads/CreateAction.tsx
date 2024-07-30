@@ -71,7 +71,6 @@ const CreateAction: React.FC<Props> = ({ table }) => {
   }, [defaultQuizTypes, form]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    let id: string | null = null;
     try {
       const uploads: UploadShallow[] = table
         .getFilteredSelectedRowModel()
@@ -101,7 +100,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
       if (response)
         dispatch({
           type: QuizUploadsActionType.SET_QUIZ,
-          payload: { ...response, title: uploads[0].title },
+          payload: { ...response, title: uploads[0].title, uploads },
         });
     } catch (err) {
       console.log(err);
