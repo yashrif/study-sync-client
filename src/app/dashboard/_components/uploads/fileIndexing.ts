@@ -3,11 +3,11 @@ import { Dispatch } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import studySyncServer from "@/api/studySyncServer";
 import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
-import { IndexActionType, QuizUploadsAction, UploadShallow } from "@allTypes";
+import { IndexAction, IndexActionType, UploadShallow } from "@allTypes";
 
 type Props = {
   data: UploadShallow;
-  dispatch: Dispatch<QuizUploadsAction>;
+  dispatch: Dispatch<IndexAction>;
 };
 
 export const fileIndexing = async ({ data, dispatch }: Props) => {

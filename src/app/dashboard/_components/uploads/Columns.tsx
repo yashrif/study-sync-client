@@ -1,14 +1,13 @@
 import { IconRefresh } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { memo } from "react";
+import { Dispatch, memo } from "react";
 
 import { fileTypeIcons } from "@/assets/data/dashboard/file";
 import { routes } from "@/assets/data/routes";
 import StatusContent from "@/components/StatusContent";
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
-import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import { Column, ColumnConfig, Status } from "@/types";
-import { UploadShallow } from "@/types/upload";
+import { IndexAction, IndexStatus, UploadShallow } from "@/types/upload";
 import { dateFormatter } from "@/utils/dateFormatter";
 import {
   Tooltip,
@@ -96,32 +95,35 @@ const isIndexedData: Column<UploadShallow> = {
 
 /* ---------------------------- IndexButton component ---------------------------- */
 
-const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
-  IndexButton.displayName = "IndexButton";
-  const {
-    state: { indexStatus },
-    dispatch,
-  } = useQuizUploadsContext();
+type IndexButtonProps = {
+  data: UploadShallow;
+  indexStatus: IndexStatus;
+  dispatch: Dispatch<IndexAction>;
+};
 
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div
-            className="pl-2"
-            onClick={async () => {
-              await fileIndexing({ data, dispatch });
-            }}
-          >
-            <StatusContent
-              status={indexStatus[data.id]}
-              isAlwaysIcons
-              type="icon-only"
-              className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
-                indexStatus[data.id] === Status.PENDING
-                  ? "animate-spin duration-1000"
-                  : "duration-300"
-              }
+const IndexButton: React.FC<IndexButtonProps> = memo(
+  ({ data, dispatch, indexStatus }) => {
+    IndexButton.displayName = "IndexButton";
+
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              className="pl-2"
+              onClick={async () => {
+                await fileIndexing({ data, dispatch });
+              }}
+            >
+              <StatusContent
+                status={indexStatus[data.id]}
+                isAlwaysIcons
+                type="icon-only"
+                className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
+                  indexStatus[data.id] === Status.PENDING
+                    ? "animate-spin duration-1000"
+                    : "duration-300"
+                }
                   ${
                     indexStatus[data.id] === Status.SUCCESS
                       ? "!text-success stroke-success"
@@ -130,35 +132,41 @@ const IndexButton: React.FC<{ data: UploadShallow }> = memo(({ data }) => {
                         : ""
                   }
                   `}
-              contents={{
-                [Status.PENDING]: { type: "icon-only", Icon: IconRefresh },
-              }}
-              isAnimation={!data.isIndexed}
-              iconClassName={`stroke-primary ${
-                indexStatus[data.id] === Status.SUCCESS
-                  ? "stroke-success"
-                  : indexStatus[data.id] === Status.ERROR
-                    ? "stroke-destructive"
-                    : ""
-              }`}
-            />
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className="text-small">
-            {indexStatus[data.id] === Status.SUCCESS
-              ? "Click to re-index"
-              : "Click to start indexing"}
-          </p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-});
+                contents={{
+                  [Status.PENDING]: { type: "icon-only", Icon: IconRefresh },
+                }}
+                isAnimation={!data.isIndexed}
+                iconClassName={`stroke-primary ${
+                  indexStatus[data.id] === Status.SUCCESS
+                    ? "stroke-success"
+                    : indexStatus[data.id] === Status.ERROR
+                      ? "stroke-destructive"
+                      : ""
+                }`}
+              />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-small">
+              {indexStatus[data.id] === Status.SUCCESS
+                ? "Click to re-index"
+                : "Click to start indexing"}
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+);
 
 /* ---------------------------- columns ---------------------------- */
 
-export const columns: ColumnDef<UploadShallow>[] = [
+type ColumnProps = {
+  indexStatus: IndexStatus;
+  dispatch: Dispatch<IndexAction>;
+};
+
+export const columns = (props: ColumnProps): ColumnDef<UploadShallow>[] => [
   {
     ...Checkbox(),
   },
@@ -169,7 +177,7 @@ export const columns: ColumnDef<UploadShallow>[] = [
         {
           ...isIndexedData,
           additionalElement(data) {
-            return <IndexButton data={data} />;
+            return <IndexButton data={data} {...props} />;
           },
         },
       ],

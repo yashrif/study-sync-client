@@ -13,7 +13,7 @@ import CreateAction from "../uploads/CreateAction";
 
 const Uploads = () => {
   const {
-    state: { uploads, status },
+    state: { uploads, status, indexStatus },
     dispatch,
   } = useQuizUploadsContext();
   const { handler } = useApiHandler({
@@ -23,7 +23,10 @@ const Uploads = () => {
 
   const { table } = useTable({
     data: uploads,
-    columns,
+    columns: columns({
+      indexStatus,
+      dispatch,
+    }),
   });
 
   return (
