@@ -19,7 +19,7 @@ const Overview: React.FC = () => {
     dispatch,
   } = useQuizContext();
   const difficulty = useQueryString().getQueryString(
-    queryParams.difficulty.name,
+    queryParams.difficulty.name
   ) as TDifficulty;
 
   const { mcq, cq, questions, duration } = quizDetails.properties.fields;
@@ -78,11 +78,13 @@ const Overview: React.FC = () => {
               },
               {
                 ...duration,
-                value: `${calculateDuration({
-                  difficulty,
-                  cqs: data.cqs?.length || 0,
-                  mcqs: data.mcqs?.length || 0,
-                })}m`,
+                value: `${
+                  calculateDuration({
+                    difficulty,
+                    cqs: data.cqs?.length || 0,
+                    mcqs: data.mcqs?.length || 0,
+                  }) / 60
+                }m`,
               },
             ].map((field) => {
               return (

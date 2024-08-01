@@ -11,6 +11,7 @@ export * from "./input";
 export * from "./link";
 export * from "./list";
 export * from "./mcq";
+export * from "./planner";
 export * from "./quiz";
 export * from "./role";
 export * from "./scroll";

@@ -29,7 +29,7 @@ import {
   Status,
   UploadShallow,
 } from "@/types";
-import { fileIndexing } from "./fileIndexing";
+import { fileIndexing } from "../../../uploads/fileIndexing";
 
 const FormSchema = z.object({
   types: z.array(z.string()).refine((value) => value.some((item) => item), {

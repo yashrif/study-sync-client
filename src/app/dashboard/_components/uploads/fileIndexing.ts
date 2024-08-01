@@ -3,11 +3,7 @@ import { Dispatch } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import studySyncServer from "@/api/studySyncServer";
 import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
-import {
-  QuizUploadsAction,
-  QuizUploadsActionType,
-  UploadShallow,
-} from "@allTypes";
+import { IndexActionType, QuizUploadsAction, UploadShallow } from "@allTypes";
 
 type Props = {
   data: UploadShallow;
@@ -17,7 +13,7 @@ type Props = {
 export const fileIndexing = async ({ data, dispatch }: Props) => {
   try {
     dispatch({
-      type: QuizUploadsActionType.INDEX_STATUS_START,
+      type: IndexActionType.INDEX_STATUS_START,
       payload: data.id,
     });
     await studySyncServer.post(serverEndpoints.index, data.name);
@@ -27,20 +23,20 @@ export const fileIndexing = async ({ data, dispatch }: Props) => {
     });
 
     dispatch({
-      type: QuizUploadsActionType.INDEX_STATUS_SUCCESS,
+      type: IndexActionType.INDEX_STATUS_SUCCESS,
       payload: data.id,
     });
 
     setTimeout(() => {
       dispatch({
-        type: QuizUploadsActionType.SET_UPLOAD_INDEX_TRUE,
+        type: IndexActionType.SET_UPLOAD_INDEX_TRUE,
         payload: data.id,
       });
     }, 2000);
   } catch (err) {
     console.log(err);
     dispatch({
-      type: QuizUploadsActionType.INDEX_STATUS_ERROR,
+      type: IndexActionType.INDEX_STATUS_ERROR,
       payload: data.id,
     });
   }

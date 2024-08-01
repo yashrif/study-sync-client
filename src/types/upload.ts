@@ -24,7 +24,9 @@ export type IndexStatus = {
   [key: string]: Status;
 };
 
-/* --------------------------------- Context -------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                                   context                                  */
+/* -------------------------------------------------------------------------- */
 
 export enum UploadsActionType {
   SET_UPLOADS = "SET_UPLOADS",
@@ -42,4 +44,26 @@ export type UploadsState = {
 export type UploadsContextProps = {
   state: UploadsState;
   dispatch: React.Dispatch<UploadsAction>;
+};
+
+/* -------------------------------- indexing -------------------------------- */
+
+export enum IndexActionType {
+  RESET_INDEX_STATUS = "RESET_INDEX_STATUS",
+  INDEX_STATUS_START = "INDEX_STATUS_START",
+  INDEX_STATUS_SUCCESS = "INDEX_STATUS_SUCCESS",
+  INDEX_STATUS_ERROR = "INDEX_STATUS_ERROR",
+  SET_UPLOAD_INDEX_TRUE = "SET_UPLOAD_INDEX_TRUE",
+}
+
+export type IndexAction =
+  | Action<IndexActionType.RESET_INDEX_STATUS>
+  | Action<IndexActionType.INDEX_STATUS_START, string>
+  | Action<IndexActionType.INDEX_STATUS_SUCCESS, string>
+  | Action<IndexActionType.INDEX_STATUS_ERROR, string>
+  | Action<IndexActionType.SET_UPLOAD_INDEX_TRUE, string>;
+
+export type IndexState = {
+  uploads: UploadShallow[];
+  indexStatus: IndexStatus;
 };

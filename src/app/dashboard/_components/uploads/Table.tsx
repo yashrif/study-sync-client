@@ -1,4 +1,7 @@
+"use client";
+
 import { flexRender, Table as TTable } from "@tanstack/react-table";
+import { useCallback } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
 import { search } from "@/assets/data/dashboard/quiz";
@@ -11,26 +14,26 @@ import {
   TableRow,
   Table as UITable,
 } from "@/components/ui/table";
-import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
-import {
-  Status,
-  TableControlTypes,
-  TTableControl,
-  UploadShallow,
-} from "@/types";
+import { Handler, Status, TableControlTypes, UploadShallow } from "@/types";
 import ControlBar from "@components/table/ControlBar";
 import { columns } from "./Columns";
 
 type Props = {
   table: TTable<UploadShallow>;
-
-  controlsConfig?: { [key in TableControlTypes]?: TTableControl };
+  handler: ({
+    data,
+    isUpdateStatus,
+    pathVariable,
+    fetchType,
+    isReset,
+  }: Handler<unknown>) => Promise<UploadShallow[] | undefined>;
+  status: Status;
 };
 
-const UploadsTable: React.FC<Props> = ({ table, controlsConfig }) => {
-  const {
-    state: { status },
-  } = useQuizUploadsContext();
+const UploadsTable: React.FC<Props> = ({ table, handler, status }) => {
+  const onUpload = useCallback(() => {
+    handler({});
+  }, [handler]);
 
   return (
     <>
@@ -38,7 +41,24 @@ const UploadsTable: React.FC<Props> = ({ table, controlsConfig }) => {
         table={table}
         searchKey={search.key}
         uploadEndpointDb={dbEndpoints.uploads}
-        controlsConfig={controlsConfig}
+        controlsConfig={{
+          [TableControlTypes.UPLOAD]: {
+            hidden: false,
+            order: 2,
+            variant: "outline",
+            onClick: onUpload,
+          },
+          [TableControlTypes.SEARCH]: {
+            hidden: false,
+            order: 1,
+            title: "Search Files",
+          },
+          [TableControlTypes.VIEW]: {
+            hidden: false,
+            order: 3,
+            variant: "outline",
+          },
+        }}
         className={`!justify-start gap-3`}
       />
       <div className="flex flex-col rounded-md overflow-hidden row-start-2 col-start-1">
@@ -53,7 +73,7 @@ const UploadsTable: React.FC<Props> = ({ table, controlsConfig }) => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -86,7 +106,7 @@ const UploadsTable: React.FC<Props> = ({ table, controlsConfig }) => {
                         <TableCell className="align-top">
                           {flexRender(
                             checkBox.column.columnDef.cell,
-                            checkBox.getContext(),
+                            checkBox.getContext()
                           )}
                         </TableCell>
 
@@ -94,7 +114,7 @@ const UploadsTable: React.FC<Props> = ({ table, controlsConfig }) => {
                           <span>
                             {flexRender(
                               title.column.columnDef.cell,
-                              title.getContext(),
+                              title.getContext()
                             )}
                           </span>
 
@@ -103,7 +123,7 @@ const UploadsTable: React.FC<Props> = ({ table, controlsConfig }) => {
                               <span key={cell.id}>
                                 {flexRender(
                                   cell.column.columnDef.cell,
-                                  cell.getContext(),
+                                  cell.getContext()
                                 )}
                               </span>
                             ))}

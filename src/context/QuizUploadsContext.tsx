@@ -2,9 +2,10 @@
 
 import { createContext, useReducer } from "react";
 
+import { generateIndexStatus, indexReducer } from "@/lib/indexReducer";
 import {
   FetchActionType,
-  IndexStatus,
+  IndexAction,
   QuizRequestDb,
   QuizTypes,
   QuizUploadsAction,
@@ -12,7 +13,6 @@ import {
   QuizUploadsContextProps,
   QuizUploadsState,
   Status,
-  UploadShallow,
 } from "@/types";
 
 const QuizUploadsContext = createContext<QuizUploadsContextProps | undefined>(
@@ -28,16 +28,6 @@ const initialState: QuizUploadsState = {
   isShowCheckbox: false,
   isShowRecentQuiz: false,
   isFlashcard: false,
-};
-
-const generateIndexStatus = (uploads: UploadShallow[]) => {
-  const newUploads: IndexStatus = {};
-
-  uploads.forEach((upload) => {
-    newUploads[upload.id] = upload.isIndexed ? Status.SUCCESS : Status.IDLE;
-  });
-
-  return newUploads;
 };
 
 const quizUploadsReducer = (
@@ -62,43 +52,6 @@ const quizUploadsReducer = (
       return {
         ...state,
         status: Status.ERROR,
-      };
-    case QuizUploadsActionType.RESET_INDEX_STATUS:
-      return {
-        ...state,
-        indexStatus:
-          state.uploads.length > 0 ? generateIndexStatus(state.uploads) : {},
-      };
-    case QuizUploadsActionType.INDEX_STATUS_START:
-      return {
-        ...state,
-        indexStatus: {
-          ...state.indexStatus,
-          [action.payload]: Status.PENDING,
-        },
-      };
-    case QuizUploadsActionType.INDEX_STATUS_SUCCESS:
-      return {
-        ...state,
-        indexStatus: {
-          ...state.indexStatus,
-          [action.payload]: Status.SUCCESS,
-        },
-      };
-    case QuizUploadsActionType.INDEX_STATUS_ERROR:
-      return {
-        ...state,
-        indexStatus: {
-          ...state.indexStatus,
-          [action.payload]: Status.ERROR,
-        },
-      };
-    case QuizUploadsActionType.SET_UPLOAD_INDEX_TRUE:
-      return {
-        ...state,
-        uploads: state.uploads.map((upload) =>
-          upload.id === action.payload ? { ...upload, isIndexed: true } : upload
-        ),
       };
     case QuizUploadsActionType.SET_DEFAULT_QUIZ_TYPES:
       return {
@@ -126,7 +79,7 @@ const quizUploadsReducer = (
         isFlashcard: action.payload,
       };
     default:
-      return state;
+      return { ...state, ...indexReducer(state, action as IndexAction) };
   }
 };
 
