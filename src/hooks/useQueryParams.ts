@@ -13,8 +13,12 @@ export const useQueryParams = () => {
       pathname + "?" + value.map((v) => setQueryString(name, v)).join("&"),
       {
         scroll: false,
-      },
+      }
     );
+  };
+
+  const getQueryString = (name: string, value: string[]) => {
+    return "?" + value.map((v) => setQueryString(name, v)).join("&");
   };
 
   const appendQueryParams = (name: string, value: string) => {
@@ -42,6 +46,7 @@ export const useQueryParams = () => {
   };
 
   return {
+    getQueryString,
     setParams,
     setQueryParams,
     updateQueryParams,

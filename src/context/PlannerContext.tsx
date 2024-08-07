@@ -7,6 +7,7 @@ import {
   FetchActionType,
   IndexAction,
   PlannerAction,
+  PlannerActionType,
   PlannerContextProps,
   PlannerState,
   Status,
@@ -18,6 +19,7 @@ const PlannerContext = createContext<PlannerContextProps | undefined>(
 
 const initialState: PlannerState = {
   uploads: [],
+  topics: undefined,
   status: Status.IDLE,
   indexStatus: {},
 };
@@ -44,6 +46,11 @@ const plannerReducer = (
       return {
         ...state,
         status: Status.ERROR,
+      };
+    case PlannerActionType.SET_TOPICS:
+      return {
+        ...state,
+        topics: action.payload,
       };
     default:
       return { ...state, ...indexReducer(state, action as IndexAction) };

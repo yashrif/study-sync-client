@@ -30,6 +30,7 @@ export const paths = {
   flashcard: "/flashcard",
   review: "/review",
   planner: "/planner",
+  topics: "/topics",
 };
 
 export const pathTitles = {
@@ -64,6 +65,7 @@ export const pathTitles = {
   flashcard: "Flashcard",
   review: "Review",
   planner: "Planner",
+  topics: "Topics",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -125,6 +127,8 @@ export const routes = {
       home: `${dashboardPath}${paths.planner}`,
       create: `${dashboardPath}${paths.planner}`,
       saved: `${dashboardPath}${paths.planner}${paths.saved}`,
+      topics: `${dashboardPath}${paths.planner}${paths.topics}`,
+      review: `${dashboardPath}${paths.planner}${paths.review}`,
     },
   },
 };
@@ -240,6 +244,14 @@ export const links = {
           title: pathTitles.planner,
           href: `${routes.dashboard.planner.home}/${id}`,
         };
+      },
+      topics: {
+        title: pathTitles.topics,
+        href: routes.dashboard.planner.topics,
+      },
+      review: {
+        title: pathTitles.review,
+        href: routes.dashboard.planner.review,
       },
     },
   },

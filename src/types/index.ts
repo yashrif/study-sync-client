@@ -18,5 +18,6 @@ export * from "./scroll";
 export * from "./setting";
 export * from "./status";
 export * from "./table";
+export * from "./topic";
 export * from "./upload";
 export * from "./user";

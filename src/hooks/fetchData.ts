@@ -1,3 +1,5 @@
+import { AxiosInstance } from "axios";
+import _ from "lodash";
 import { Dispatch, useCallback, useEffect, useReducer } from "react";
 
 import { FetchAction, FetchActionType, RequestType, Status } from "@/types";
@@ -54,32 +56,41 @@ export const useFetchState = <T>(initialStatus?: Status) => {
   return { state, dispatch };
 };
 
-type FetchDataState = { endpoint: string; requestType?: RequestType };
+type FetchDataState<T> =
+  | {
+      endpoint: string;
+      requestType?: RequestType.DELETE | RequestType.GET;
+      axiosInstance?: AxiosInstance;
+    }
+  | {
+      endpoint: string;
+      requestType?: RequestType.PATCH | RequestType.POST | RequestType.PUT;
+      axiosInstance?: AxiosInstance;
+      data: T;
+    };
 
-export const useFetchDataState = <T, R>({
-  endpoint,
-  requestType = RequestType.GET,
-}: FetchDataState) => {
+export const useFetchDataState = <T, R>(props: FetchDataState<T>) => {
   const { state, dispatch } = useFetchState<R>(Status.PENDING);
 
   useFetchData<T, R>({
-    endpoint,
     dispatch,
-    requestType,
+    ...props,
   });
 
   return { state, dispatch };
 };
 
-type FetchData<T> = FetchDataState & {
-  dispatch: Dispatch<FetchAction<T>>;
+type FetchData<T, R> = FetchDataState<T> & {
+  dispatch: Dispatch<FetchAction<R>>;
 };
 
 export const useFetchData = <T, R>({
   endpoint,
   dispatch,
   requestType = RequestType.GET,
-}: FetchData<R>) => {
+  axiosInstance,
+  ...props
+}: FetchData<T, R>) => {
   const { handler } = useApiHandler<T, R>({
     apiCall: useCallback(
       (data) =>
@@ -87,13 +98,28 @@ export const useFetchData = <T, R>({
           endpoint,
           requestType,
           data,
+          axiosInstance,
         }),
-      [endpoint, requestType],
+      [axiosInstance, endpoint, requestType]
     ),
     dispatch,
   });
 
   useEffect(() => {
-    handler({});
+    if (
+      (requestType === RequestType.PATCH ||
+        requestType === RequestType.POST ||
+        requestType === RequestType.PUT) &&
+      "data" in props &&
+      props?.data &&
+      !_.isNull(props?.data)
+    ) {
+      handler({ data: props.data });
+    } else if (
+      requestType === RequestType.DELETE ||
+      requestType === RequestType.GET
+    )
+      handler({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handler]);
 };
