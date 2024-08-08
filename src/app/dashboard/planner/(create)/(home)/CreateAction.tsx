@@ -2,9 +2,8 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { Table } from "@tanstack/react-table";
 
 import { create, queryKeys } from "@/assets/data/dashboard/planner";
-import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
-import { usePlannerContext } from "@/hooks/usePlannerContext";
+import { usePlannerUploadsContext } from "@/hooks/usePlannerUploadsContext";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IndexStatus, Status, UploadShallow } from "@allTypes";
 import { useRouter } from "next/navigation";
@@ -19,7 +18,7 @@ const CreateAction: React.FC<Props> = ({ table, indexStatus }) => {
   const { getQueryString: getParams } = useQueryParams();
   const {
     state: { status },
-  } = usePlannerContext();
+  } = usePlannerUploadsContext();
 
   return (
     <IconButton

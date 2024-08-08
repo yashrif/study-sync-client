@@ -6,7 +6,7 @@ import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { create } from "@/assets/data/dashboard/planner";
 import { useApiHandler } from "@/hooks/useApiHandler";
-import { usePlannerContext } from "@/hooks/usePlannerContext";
+import { usePlannerUploadsContext } from "@/hooks/usePlannerUploadsContext";
 import { useTable } from "@/hooks/useTable";
 import SectionHeading from "../../../_components/SectionHeading";
 import { columns } from "../../../_components/uploads/Columns";
@@ -17,7 +17,7 @@ const CreateQuiz = () => {
   const {
     state: { uploads, indexStatus, status },
     dispatch,
-  } = usePlannerContext();
+  } = usePlannerUploadsContext();
   const { handler } = useApiHandler({
     apiCall: useCallback(() => studySyncDB.get(dbEndpoints.uploads), []),
     dispatch,

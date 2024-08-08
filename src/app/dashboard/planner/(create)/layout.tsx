@@ -1,22 +1,22 @@
-import { home } from "@/assets/data/dashboard/planner";
 import { Suspense } from "react";
+
+import { home } from "@/assets/data/dashboard/planner";
+import { PlannerUploadsProvider } from "@/context/PlannerUploadsContext";
 import PageHeading from "../../_components/PageHeading";
 
 type Props = {
   children: React.ReactNode;
 };
 
-const CreateQuizLayout: React.FC<Readonly<Props>> = ({ children }) => {
+const CreatePlannerLayout: React.FC<Readonly<Props>> = ({ children }) => {
   return (
     <div>
-      <PageHeading
-        title={home.create.title}
-        description={home.create.description}
-        Icon={home.create.Icon}
-      />
-      <Suspense>{children}</Suspense>
+      <PageHeading {...home.create} />
+      <PlannerUploadsProvider>
+        <Suspense>{children}</Suspense>
+      </PlannerUploadsProvider>
     </div>
   );
 };
 
-export default CreateQuizLayout;
+export default CreatePlannerLayout;

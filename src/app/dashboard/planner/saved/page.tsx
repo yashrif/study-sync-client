@@ -3,18 +3,18 @@
 import { Suspense } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
-import { home, search } from "@/assets/data/dashboard/quiz";
+import { home, search } from "@/assets/data/dashboard/planner";
 import Spinner from "@/components/spinner/Spinner";
 import DataTable from "@/components/table";
 import { useFetchDataState } from "@/hooks/fetchData";
 import { useTable } from "@/hooks/useTable";
-import { QuizShallow, Status } from "@allTypes";
+import { PlannerShallow, Status } from "@allTypes";
 import PageHeading from "../../_components/PageHeading";
 import { columns } from "./Columns";
 
-const GenerateQuiz: React.FC = () => {
-  const { state } = useFetchDataState<null, QuizShallow[]>({
-    endpoint: dbEndpoints.quizzes,
+const SavedPlans: React.FC = () => {
+  const { state } = useFetchDataState<null, PlannerShallow[]>({
+    endpoint: dbEndpoints.planner,
   });
 
   const { table } = useTable({
@@ -24,11 +24,7 @@ const GenerateQuiz: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <PageHeading
-        title={home.saved.title}
-        description={home.saved.description}
-        Icon={home.saved.Icon}
-      />
+      <PageHeading {...home.saved} />
       <Suspense fallback={<Spinner />}>
         <DataTable
           table={table}
@@ -36,6 +32,7 @@ const GenerateQuiz: React.FC = () => {
           loading={state.status === Status.PENDING}
           searchKey={search.key}
           uploadEndpointDb={dbEndpoints.uploads}
+          isDivider
           controlsConfig={{
             DELETE: {
               hidden: false,
@@ -56,4 +53,4 @@ const GenerateQuiz: React.FC = () => {
   );
 };
 
-export default GenerateQuiz;
+export default SavedPlans;

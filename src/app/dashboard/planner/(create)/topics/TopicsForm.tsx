@@ -8,10 +8,10 @@ import { z } from "zod";
 import { create, queryKeys, topics } from "@/assets/data/dashboard/planner";
 import IconButton from "@/components/button/IconButton";
 import { Form } from "@/components/ui/form";
-import { usePlannerContext } from "@/hooks/usePlannerContext";
+import { usePlannerUploadsContext } from "@/hooks/usePlannerUploadsContext";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useQueryString } from "@/hooks/useQueryString";
-import { PlannerActionType, TopicsResponseServer } from "@/types";
+import { PlannerUploadsActionType, TopicsResponseServer } from "@/types";
 import TopicField from "./TopicField";
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 const TopicsForm: React.FC<Props> = ({ data }) => {
   const { push } = useRouter();
   const { getQueryString: getParams } = useQueryParams();
-  const { dispatch } = usePlannerContext();
+  const { dispatch } = usePlannerUploadsContext();
   const { getAllQueryString } = useQueryString();
 
   const selectedUploads = useMemo(() => {
@@ -57,7 +57,7 @@ const TopicsForm: React.FC<Props> = ({ data }) => {
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
     dispatch({
-      type: PlannerActionType.SET_TOPICS,
+      type: PlannerUploadsActionType.SET_TOPICS,
       payload: data.topics,
     });
     push(

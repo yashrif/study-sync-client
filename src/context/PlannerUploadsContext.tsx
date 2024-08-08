@@ -6,18 +6,18 @@ import { generateIndexStatus, indexReducer } from "@/lib/indexReducer";
 import {
   FetchActionType,
   IndexAction,
-  PlannerAction,
-  PlannerActionType,
-  PlannerContextProps,
-  PlannerState,
+  PlannerUploadsAction,
+  PlannerUploadsActionType,
+  PlannerUploadsContextProps,
+  PlannerUploadsState,
   Status,
 } from "@/types";
 
-const PlannerContext = createContext<PlannerContextProps | undefined>(
+const PlannerUploadsContext = createContext<PlannerUploadsContextProps | undefined>(
   undefined
 );
 
-const initialState: PlannerState = {
+const initialState: PlannerUploadsState = {
   uploads: [],
   topics: undefined,
   status: Status.IDLE,
@@ -25,9 +25,9 @@ const initialState: PlannerState = {
 };
 
 const plannerReducer = (
-  state: PlannerState,
-  action: PlannerAction
-): PlannerState => {
+  state: PlannerUploadsState,
+  action: PlannerUploadsAction
+): PlannerUploadsState => {
   switch (action.type) {
     case FetchActionType.FETCH_START:
       return {
@@ -47,7 +47,7 @@ const plannerReducer = (
         ...state,
         status: Status.ERROR,
       };
-    case PlannerActionType.SET_TOPICS:
+    case PlannerUploadsActionType.SET_TOPICS:
       return {
         ...state,
         topics: action.payload,
@@ -61,14 +61,14 @@ type Props = {
   children: React.ReactNode;
 };
 
-const PlannerProvider: React.FC<Props> = ({ children }) => {
+const PlannerUploadsProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(plannerReducer, initialState);
 
   return (
-    <PlannerContext.Provider value={{ state, dispatch }}>
+    <PlannerUploadsContext.Provider value={{ state, dispatch }}>
       {children}
-    </PlannerContext.Provider>
+    </PlannerUploadsContext.Provider>
   );
 };
 
-export { PlannerContext, PlannerProvider };
+export { PlannerUploadsContext, PlannerUploadsProvider };

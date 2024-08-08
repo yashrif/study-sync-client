@@ -25,6 +25,7 @@ type DataTableProps<TData, TValue> = {
   showPagination?: boolean;
   table: TTable<TData>;
   uploadEndpointDb: string | undefined;
+  isDivider?: boolean;
 };
 
 const DataTable = <TData, TValue>({
@@ -37,6 +38,7 @@ const DataTable = <TData, TValue>({
   showPagination = true,
   table,
   uploadEndpointDb,
+  isDivider = false,
 }: DataTableProps<TData, TValue>) => {
   return (
     <div className={`flex flex-col gap-8 ${className}`}>
@@ -60,7 +62,7 @@ const DataTable = <TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             )}
                       </TableHead>
                     );
@@ -86,11 +88,11 @@ const DataTable = <TData, TValue>({
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        className="pb-0 pt-2.5 group-last:pb-4"
+                        className={`py-3 group-last:pb-4 ${isDivider ? "border-b group-last:border-b-0" : ""}`}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </TableCell>
                     ))}

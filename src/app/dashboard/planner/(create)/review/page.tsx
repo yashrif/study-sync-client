@@ -12,7 +12,7 @@ import { links } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
-import { usePlannerContext } from "@/hooks/usePlannerContext";
+import { usePlannerUploadsContext } from "@/hooks/usePlannerUploadsContext";
 import { useQueryString } from "@/hooks/useQueryString";
 import { PlannerRequestDBPost, PlannerResponseDBPost } from "@/types";
 import Title from "./Title";
@@ -29,7 +29,7 @@ const PlannerReview = () => {
 
   const {
     state: { topics, uploads },
-  } = usePlannerContext();
+  } = usePlannerUploadsContext();
   const { state, dispatch } = useFetchState<PlannerResponseDBPost>();
 
   const { handler } = useApiHandler<
@@ -61,7 +61,9 @@ const PlannerReview = () => {
         },
       });
       if (response)
-        replace(links.dashboard.planner.plannerDetails(response.id).href);
+        setTimeout(() => {
+          replace(links.dashboard.planner.plannerDetails(response.id).href);
+        }, 2500);
     } catch (err) {
       console.error(err);
     }

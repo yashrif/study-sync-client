@@ -12,7 +12,26 @@ export type PlannerResponseDBPost = {
   createDate: string;
 };
 
-/* --------------------------------- Context -------------------------------- */
+/* --------------------------------- Planner -------------------------------- */
+
+export type PlannerTopic = {
+  id: string;
+  name: string;
+  color: string;
+};
+
+export type PlannerShallow = {
+  id: string;
+  title: string;
+  topics: PlannerTopic[];
+  createDate: string;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                   Context                                  */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------- Planner Uploads ---------------------------- */
 
 import {
   Action,
@@ -21,9 +40,31 @@ import {
   IndexStatus,
   Status,
   Topic,
-  TopicResponseAi,
   UploadShallow,
 } from "@allTypes";
+
+export enum PlannerUploadsActionType {
+  SET_TOPICS = "SET_TOPICS",
+}
+
+export type PlannerUploadsAction =
+  | FetchAction<UploadShallow[]>
+  | IndexAction
+  | Action<PlannerUploadsActionType.SET_TOPICS, Topic[]>;
+
+export type PlannerUploadsState = {
+  uploads: UploadShallow[];
+  topics: Topic[] | undefined;
+  status: Status;
+  indexStatus: IndexStatus;
+};
+
+export type PlannerUploadsContextProps = {
+  state: PlannerUploadsState;
+  dispatch: React.Dispatch<PlannerUploadsAction>;
+};
+
+/* --------------------------------- Planner -------------------------------- */
 
 export enum PlannerActionType {
   SET_TOPICS = "SET_TOPICS",

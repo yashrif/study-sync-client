@@ -1,28 +1,27 @@
 import {
-  IconCalendarWeek,
   IconCategory,
   IconCategoryPlus,
   IconCircleDashedCheck,
   IconDeviceFloppy,
   IconFileText,
   IconRoute,
-  IconTextSize
+  IconTextSize,
 } from "@tabler/icons-react";
 
 import { Button, FormField, IconList } from "@/types";
 import { routes } from "../routes";
 
-export const home: { create: IconList; review: IconList } = {
+export const home: { create: IconList; saved: IconList } = {
   create: {
-    title: "Generate Roadmap",
+    title: "Generate Plan",
     Icon: IconRoute,
     description:
       "Plan your study schedule here! Generate a roadmap to keep track of your progress.",
   },
-  review: {
-    title: "Saved Roadmaps",
-    Icon: IconCalendarWeek,
-    description: "View all the roadmaps you generated here!",
+  saved: {
+    title: "Saved Plans",
+    Icon: IconRoute,
+    description: "View all the plans you generated here!",
   },
 };
 
@@ -128,4 +127,11 @@ export const review: {
     Icon: IconCategory,
     description: "Review all the selected topics here!",
   },
+};
+
+export const saved = {};
+
+export const search = {
+  key: "name",
+  placeholder: "Search by name",
 };

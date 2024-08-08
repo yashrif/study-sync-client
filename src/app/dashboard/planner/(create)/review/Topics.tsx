@@ -1,13 +1,13 @@
 import ScopeHeading from "@/app/dashboard/_components/ScopeHeading";
 import { review } from "@/assets/data/dashboard/planner";
 import { Badge } from "@/components/ui/badge";
-import { usePlannerContext } from "@/hooks/usePlannerContext";
+import { usePlannerUploadsContext } from "@/hooks/usePlannerUploadsContext";
 import { tintGenerator } from "@/utils/tintGenerator";
 
 const Topics = () => {
   const {
     state: { topics },
-  } = usePlannerContext();
+  } = usePlannerUploadsContext();
 
   return (
     <div className="flex flex-col gap-8 pt-8">
