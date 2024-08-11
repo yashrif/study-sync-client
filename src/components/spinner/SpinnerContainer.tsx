@@ -2,21 +2,19 @@ import React from "react";
 import Spinner from "./Spinner";
 
 type Props = {
-  height?: number;
-  width?: number;
-  className?: string;
+  containerClassName?: string;
+  spinnerClassName?: string;
 };
 
-const SpinnerContainer: React.FC<Props> = ({ className, height, width }) => {
+const SpinnerContainer: React.FC<Props> = ({
+  containerClassName,
+  spinnerClassName,
+}) => {
   return (
     <div
-      className="flex justify-center items-center"
-      style={{
-        height: height || "100%",
-        width: width || "100%",
-      }}
+      className={`w-full h-full flex justify-center items-center ${containerClassName}`}
     >
-      <Spinner className={className} />
+      <Spinner className={spinnerClassName} />
     </div>
   );
 };

@@ -8,3 +8,6 @@ export const uploads = `/uploads`;
 export const index = `/index`;
 export const quizzes = `/quizzes`;
 export const evaluate = `/evaluate`;
+
+export const extract = `/extract`;
+export const topics = `${extract}/topics`;

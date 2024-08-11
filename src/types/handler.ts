@@ -11,11 +11,13 @@ export enum RequestType {
   DELETE,
 }
 
+export type ApiCall<T> = (
+  data: T | null,
+  pathVariable?: string | null
+) => Promise<AxiosResponse<any, any>>;
+
 export type ApiHandler<T, R> = {
-  apiCall: (
-    data: T | null,
-    pathVariable?: string | null,
-  ) => Promise<AxiosResponse<any, any>>;
+  apiCall: ApiCall<T>;
   dispatch: Dispatch<FetchAction<R>>;
 };
 

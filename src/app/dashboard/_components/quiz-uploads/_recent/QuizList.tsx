@@ -33,7 +33,10 @@ const QuizList = () => {
   return (
     <div className="max-h-400px overflow-y-scroll">
       {status === Status.PENDING ? (
-        <SpinnerContainer className="size-10" height={250} />
+        <SpinnerContainer
+          spinnerClassName="size-10"
+          containerClassName="h-[250px]"
+        />
       ) : (
         <div className="flex flex-col gap-3">
           {data?.slice(0, 5).map((quiz) => (
@@ -60,7 +63,7 @@ const QuizList = () => {
                       ...recent.actions.delete,
                       onClick: async () => {
                         await studySyncDB.delete(
-                          `${dbEndpoints.quizzes}/${quiz.id}`,
+                          `${dbEndpoints.quizzes}/${quiz.id}`
                         );
 
                         handler({ isUpdateStatus: false });

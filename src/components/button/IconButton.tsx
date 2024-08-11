@@ -10,7 +10,7 @@ type Props = TButton & {
     [key in Status]?: Content;
   };
   hidden?: boolean;
-  alwaysIcons?: boolean;
+  isAlwaysIcons?: boolean;
   containerClassName?: string;
   contentType?: ContentType;
 };
@@ -23,7 +23,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, Props>(
       iconClassName,
       containerClassName,
       contentType,
-      alwaysIcons = true,
+      isAlwaysIcons = true,
       contentClassName,
       Icon,
       children,
@@ -45,7 +45,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, Props>(
           contents={{
             [Status.IDLE]: { type: "icon-content", Icon: Icon },
           }}
-          isAlwaysIcons={alwaysIcons}
+          isAlwaysIcons={isAlwaysIcons}
           className={containerClassName}
           {...props}
           type={contentType}

@@ -1,7 +1,7 @@
-import { Dispatch, useCallback, useEffect, useReducer } from "react";
+import { Dispatch, useEffect, useReducer } from "react";
 
-import { FetchAction, FetchActionType, RequestType, Status } from "@/types";
-import { requestHandler, useApiHandler } from "@hooks/useApiHandler";
+import { ApiCall, FetchAction, FetchActionType, Status } from "@/types";
+import { useApiHandler } from "@hooks/useApiHandler";
 
 const quizReducer = <T, R>(state: T, action: FetchAction<R>): T => {
   switch (action.type) {
@@ -54,46 +54,34 @@ export const useFetchState = <T>(initialStatus?: Status) => {
   return { state, dispatch };
 };
 
-type FetchDataState = { endpoint: string; requestType?: RequestType };
+type FetchDataState<T> = { apiCall: ApiCall<T>; data?: T | null };
 
-export const useFetchDataState = <T, R>({
-  endpoint,
-  requestType = RequestType.GET,
-}: FetchDataState) => {
+export const useFetchDataState = <T, R>(props: FetchDataState<T>) => {
   const { state, dispatch } = useFetchState<R>(Status.PENDING);
 
   useFetchData<T, R>({
-    endpoint,
     dispatch,
-    requestType,
+    ...props,
   });
 
   return { state, dispatch };
 };
 
-type FetchData<T> = FetchDataState & {
-  dispatch: Dispatch<FetchAction<T>>;
+type FetchData<T, R> = FetchDataState<T> & {
+  dispatch: Dispatch<FetchAction<R>>;
 };
 
 export const useFetchData = <T, R>({
-  endpoint,
+  apiCall,
   dispatch,
-  requestType = RequestType.GET,
-}: FetchData<R>) => {
+  data,
+}: FetchData<T, R>) => {
   const { handler } = useApiHandler<T, R>({
-    apiCall: useCallback(
-      (data) =>
-        requestHandler<T>({
-          endpoint,
-          requestType,
-          data,
-        }),
-      [endpoint, requestType],
-    ),
+    apiCall,
     dispatch,
   });
 
   useEffect(() => {
-    handler({});
-  }, [handler]);
+    handler({ data });
+  }, [data, handler]);
 };
