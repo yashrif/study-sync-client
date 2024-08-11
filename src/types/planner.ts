@@ -2,7 +2,7 @@
 
 export type PlannerRequestDBPost = {
   title: string;
-  topics: Topic[];
+  topics: TopicSimple[];
   uploads: UploadShallow[];
 };
 
@@ -27,6 +27,11 @@ export type PlannerShallow = {
   createDate: string;
 };
 
+export type Planner = Omit<PlannerShallow, "topics"> & {
+  topics: Topic[];
+  uploads: UploadShallow[];
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                   Context                                  */
 /* -------------------------------------------------------------------------- */
@@ -40,6 +45,7 @@ import {
   IndexStatus,
   Status,
   Topic,
+  TopicSimple,
   UploadShallow,
 } from "@allTypes";
 
@@ -50,11 +56,11 @@ export enum PlannerUploadsActionType {
 export type PlannerUploadsAction =
   | FetchAction<UploadShallow[]>
   | IndexAction
-  | Action<PlannerUploadsActionType.SET_TOPICS, Topic[]>;
+  | Action<PlannerUploadsActionType.SET_TOPICS, TopicSimple[]>;
 
 export type PlannerUploadsState = {
   uploads: UploadShallow[];
-  topics: Topic[] | undefined;
+  topics: TopicSimple[] | undefined;
   status: Status;
   indexStatus: IndexStatus;
 };
@@ -67,19 +73,16 @@ export type PlannerUploadsContextProps = {
 /* --------------------------------- Planner -------------------------------- */
 
 export enum PlannerActionType {
-  SET_TOPICS = "SET_TOPICS",
+  SET_PLANNER = "SET_PLANNER",
 }
 
 export type PlannerAction =
-  | FetchAction<UploadShallow[]>
-  | IndexAction
-  | Action<PlannerActionType.SET_TOPICS, Topic[]>;
+  | FetchAction<Planner>
+  | Action<PlannerActionType.SET_PLANNER, Planner>;
 
 export type PlannerState = {
-  uploads: UploadShallow[];
-  topics: Topic[] | undefined;
+  planner: Planner;
   status: Status;
-  indexStatus: IndexStatus;
 };
 
 export type PlannerContextProps = {

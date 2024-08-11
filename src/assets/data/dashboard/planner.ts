@@ -11,7 +11,7 @@ import {
 import { Button, FormField, IconList } from "@/types";
 import { routes } from "../routes";
 
-export const home: { create: IconList; saved: IconList } = {
+export const home: { create: IconList; saved: IconList; details: IconList } = {
   create: {
     title: "Generate Plan",
     Icon: IconRoute,
@@ -22,6 +22,11 @@ export const home: { create: IconList; saved: IconList } = {
     title: "Saved Plans",
     Icon: IconRoute,
     description: "View all the plans you generated here!",
+  },
+  details: {
+    title: "Plan Details",
+    Icon: IconRoute,
+    description: "View the details of the plan here!",
   },
 };
 
@@ -128,8 +133,6 @@ export const review: {
     description: "Review all the selected topics here!",
   },
 };
-
-export const saved = {};
 
 export const search = {
   key: "name",

@@ -23,4 +23,4 @@ export const users = `/users`;
 export const changePassword = `${users}/change-password`;
 
 export const topics = `/topics`;
-export const planner = `/planners`;
+export const planners = `/planners`;

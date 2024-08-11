@@ -69,6 +69,7 @@ export const requestHandler = <T>({
     case RequestType.PUT:
       return axiosInstance.post(endpoint, data);
     default:
+      if (data) return axiosInstance.get(`${endpoint}${data}`);
       return axiosInstance.get(endpoint);
   }
 };
