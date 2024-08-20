@@ -11,6 +11,7 @@ export const qna = `${generate}/qna`;
 export const cqna = `${generate}/cqna`;
 export const indxFile = `/indexFile`;
 export const evaluate = `${generate}/compare_answer`;
+export const queryFile = `${generate}/queryIndexedFile`;
 
 export const extract = "/extract";
 export const topics = `${extract}/topics`;

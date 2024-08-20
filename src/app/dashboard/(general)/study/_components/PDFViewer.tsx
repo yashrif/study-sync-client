@@ -1,13 +1,15 @@
 'use client';
 import { useEffect, useRef } from 'react';
+
 import { useStudyContext } from '@/hooks/useStudyContext';
 import { StudyActionType } from '@/types/study';
-import { ChatAI } from './ChatAI';
 import { api, downloadFile } from '@/assets/data/api/ai';
+import ChatResponse from './ChatResponse';
+import ChatAI from './ChatAI';
 
 export default function PDFViewer() {
   const {
-    state: { currentStudy },
+    state: { currentStudy, showChatResponse },
     dispatch,
   } = useStudyContext();
 
@@ -54,7 +56,7 @@ export default function PDFViewer() {
         ref={containerRef}
         className='h-screen w-full absolute top-0 right-0'></div>
       <div className='absolute bottom-0 left-0 right-0  z-10 flex justify-center'>
-        <ChatAI />
+        {showChatResponse ? <ChatResponse /> : <ChatAI />}
       </div>
     </>
   );

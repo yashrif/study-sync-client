@@ -1,6 +1,7 @@
 'use client';
-
 import { Suspense, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 import studySyncDB from '@/api/studySyncDB';
 import { dbEndpoints } from '@/assets/data/api';
 import { home, search } from '@/assets/data/dashboard/study';
@@ -14,7 +15,7 @@ import { useColumns } from './Columns';
 import { StudyActionType, StudyShallow } from '@/types/study';
 import { useStudyContext } from '@/hooks/useStudyContext';
 import PDFViewer from './_components/PDFViewer';
-import { useSearchParams } from 'next/navigation';
+
 const Study: React.FC = () => {
   const {
     state: { uploads, status, currentStudy },

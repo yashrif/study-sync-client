@@ -17,6 +17,8 @@ const initialState: StudyState = {
   status: Status.IDLE,
   currentStudy: '',
   selectedText: '',
+  showChatResponse: false,
+  chatResponse: '',
 };
 
 const studyReducer = (state: StudyState, action: StudyAction): StudyState => {
@@ -42,11 +44,21 @@ const studyReducer = (state: StudyState, action: StudyAction): StudyState => {
         ...state,
         currentStudy: action.payload,
       };
-      case StudyActionType.SET_SELECTED_TEXT:
-        return {
-          ...state,
-          selectedText: action.payload,
-        };
+    case StudyActionType.SET_SELECTED_TEXT:
+      return {
+        ...state,
+        selectedText: action.payload,
+      };
+    case StudyActionType.SET_CHAT_RESPONSE:
+      return {
+        ...state,
+        chatResponse: action.payload,
+      };
+    case StudyActionType.SET_SHOW_RESPONSE:
+      return {
+        ...state,
+        showChatResponse: action.payload,
+      };
     default:
       return state;
   }

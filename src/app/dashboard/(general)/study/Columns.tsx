@@ -1,33 +1,27 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { fileTypeIcons } from '@/assets/data/dashboard/file';
-import { routes } from '@/assets/data/routes';
-import {
-  Actions,
-  Checkbox,
-  ColumnHeader,
-} from '@/components/table/ColumnTools';
-import { Column, TableAction } from '@allTypes';
-import { StudyActionType, StudyShallow } from '@/types/study';
-import { useStudyContext } from '@/hooks/useStudyContext';
 import { useRouter } from 'next/navigation';
+
+import { fileTypeIcons } from '@/assets/data/dashboard/file';
+import { Actions, ColumnHeader } from '@/components/table/ColumnTools';
+import { Column, TableAction } from '@allTypes';
+import { StudyShallow } from '@/types/study';
+import { routes } from '@/assets/data/routes';
 
 const useColumnConfig = (): {
   columns: Column<StudyShallow>[];
   actions: TableAction<StudyShallow>[];
 } => {
-   const { push } = useRouter();
+  const { push } = useRouter();
 
   return {
     columns: [
       {
-        type: 'link',
+        type: 'no_link',
         accessorKey: 'title',
         title: 'Title',
         formatter: (title) => {
           return title as string;
         },
-        linkKey: 'id',
-        path: routes.dashboard.study,
         Icon(props) {
           return fileTypeIcons({
             key: 'type',
@@ -58,7 +52,8 @@ const useColumnConfig = (): {
     actions: [
       {
         title: 'Study',
-        onClick: (data) => push(`/dashboard/study?content=${data?.id}`),
+        onClick: (data) =>
+          push(`${routes.dashboard.study}?content=${data?.id}`),
       },
     ],
   };

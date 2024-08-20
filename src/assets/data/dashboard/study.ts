@@ -18,8 +18,17 @@ export const search = {
   placeholder: "Search by title",
 };
 
-export const actions: string[] = [
-  'Explain',
-  'Summarize',
-  'Example'
+export const actions: any[] = [
+  {
+    name: 'Explain',
+    instruction: 'Explain the text below given context:\n\n'
+  },
+  {
+    name: 'Summarize',
+    instruction: 'Summarize the text below given context:\n\n'
+  },
+  {
+    name: 'Example',
+    instruction: 'Give Example, similar to the text below given context:\n\n'
+  }
 ]
