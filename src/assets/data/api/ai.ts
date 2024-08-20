@@ -14,3 +14,5 @@ export const evaluate = `${generate}/compare_answer`;
 
 export const extract = "/extract";
 export const topics = `${extract}/topics`;
+
+export const downloadFile = '/downloadFile'

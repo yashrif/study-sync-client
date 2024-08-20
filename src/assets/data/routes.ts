@@ -31,6 +31,7 @@ export const paths = {
   review: "/review",
   planner: "/planner",
   topics: "/topics",
+  study: "/study"
 };
 
 export const pathTitles = {
@@ -66,6 +67,7 @@ export const pathTitles = {
   review: "Review",
   planner: "Planner",
   topics: "Topics",
+  study: "Study"
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -104,6 +106,7 @@ export const routes = {
   dashboard: {
     default: dashboardPath,
     home: dashboardPath,
+    study: `${dashboardPath}${paths.study}`,
     settings: {
       home: `${dashboardPath}${paths.settings}`,
       default: `${dashboardPath}${paths.settings}${paths.profile}`,
@@ -168,6 +171,7 @@ export const links = {
   dashboard: {
     default: { title: pathTitles.dashboard, href: routes.dashboard.default },
     home: { title: pathTitles.home, href: routes.dashboard.home },
+    study: {title: pathTitles.study, href: routes.dashboard.study },
     settings: {
       home: {
         title: pathTitles.settings,

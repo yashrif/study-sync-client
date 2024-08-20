@@ -6,6 +6,7 @@ import {
   IconRoute,
   IconSettings,
   IconUserCircle,
+  IconBook
 } from "@tabler/icons-react";
 
 import { Quiz } from "@/components/icons";
@@ -26,6 +27,10 @@ export const sidebarLinks: SidebarLink[][] = [
     {
       ...links.dashboard.uploads,
       Icon: IconFileUpload,
+    },
+    {
+      ...links.dashboard.study,
+      Icon: IconBook,
     },
     {
       ...links.dashboard.quiz.home,
