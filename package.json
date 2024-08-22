@@ -9,7 +9,7 @@
     "lint": "next lint",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "cp-pspdfkit": "copy .\\node_modules\\pspdfkit\\dist\\pspdfkit-lib public\\pspdfkit-lib >NUL"
+    "cp-pspdfkit": "xcopy .\\node_modules\\pspdfkit\\dist\\pspdfkit-lib public\\pspdfkit-lib\\ /E/H/Q"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
