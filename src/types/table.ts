@@ -14,7 +14,7 @@ export type ColumnNoLink<T> = {
   header?: (data: string) => JSX.Element;
   showSort?: boolean;
   headerClassName?: string;
-  formatter?: (field: T[keyof T], row?: T) => string | number | React.ReactNode;
+  formatter?: (field: T[keyof T], row: T) => string | number | React.ReactNode;
   Icon?: (props: FileIcon<T>) => Icon;
   className?: (props: boolean) => string;
   iconClassName?: (props: boolean) => string;
