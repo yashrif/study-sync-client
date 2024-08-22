@@ -45,7 +45,7 @@ const QuizList = () => {
               className="flex justify-between gap-16 items-center"
             >
               <Link
-                href={links.dashboard.quiz.quizDetails(quiz.id).href}
+                href={links.dashboard.quiz.details(quiz.id).href}
                 className="anchor text-text-400 flex gap-2 items-center"
               >
                 <IconNotes className="size-4 text-primary stroke-[2.5]" />

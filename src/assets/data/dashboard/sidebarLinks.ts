@@ -1,12 +1,12 @@
 import {
   IconBolt,
+  IconBook,
   IconFileUpload,
   IconHome,
   IconLogout2,
   IconRoute,
   IconSettings,
   IconUserCircle,
-  IconBook
 } from "@tabler/icons-react";
 
 import { Quiz } from "@/components/icons";
@@ -25,11 +25,11 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: IconHome,
     },
     {
-      ...links.dashboard.uploads,
+      ...links.dashboard.uploads.home,
       Icon: IconFileUpload,
     },
     {
-      ...links.dashboard.study,
+      ...links.dashboard.study.home,
       Icon: IconBook,
     },
     {

@@ -90,7 +90,7 @@ const CreateAction: React.FC = () => {
               push(
                 isFlashcard
                   ? links.dashboard.flashcard.review.href
-                  : links.dashboard.quiz.quizDetails(data.id).href
+                  : links.dashboard.quiz.details(data.id).href
               );
           }}
           type="submit"

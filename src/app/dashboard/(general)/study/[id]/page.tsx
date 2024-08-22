@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
 import { api, downloadFile } from "@/assets/data/api/ai";
+import { useFetchState } from "@/hooks/fetchData";
+import { useApiHandler } from "@/hooks/useApiHandler";
 import { useUploadsContext } from "@/hooks/useUploadsContext";
-import { UploadsActionType } from "@/types";
+import { Preference, UploadsActionType } from "@/types";
 import ChatAI from "./_components/ChatAI";
 import ChatResponse from "./_components/ChatResponse";
 
@@ -56,6 +60,19 @@ const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
       });
     }
   }, [dispatch, id]);
+
+  const { dispatch: patchDispatch } = useFetchState<Preference>();
+  const { handler } = useApiHandler<{ studyId: string }, Preference>({
+    apiCall: useCallback(
+      (data) => studySyncDB.patch(dbEndpoints.preferences, data),
+      []
+    ),
+    dispatch: patchDispatch,
+  });
+
+  useEffect(() => {
+    if (id) handler({ data: { studyId: id } });
+  }, [handler, id]);
 
   return (
     <>

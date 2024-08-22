@@ -62,7 +62,7 @@ const PlannerReview = () => {
       });
       if (response)
         setTimeout(() => {
-          replace(links.dashboard.planner.plannerDetails(response.id).href);
+          replace(links.dashboard.planner.details(response.id).href);
         }, 2500);
     } catch (err) {
       console.error(err);
