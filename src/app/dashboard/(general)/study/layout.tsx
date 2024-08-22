@@ -1,11 +1,11 @@
-import { StudyProvider } from '@/context/StudyContext';
+import { UploadsProvider } from "@/context/UploadsContext";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const StudyLayout: React.FC<Readonly<Props>> = ({ children }) => {
-  return <StudyProvider>{children}</StudyProvider>;
+  return <UploadsProvider>{children}</UploadsProvider>;
 };
 
 export default StudyLayout;

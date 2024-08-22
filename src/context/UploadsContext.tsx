@@ -12,17 +12,21 @@ import {
 } from "@/types";
 
 const UploadsContext = createContext<UploadsContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 const initialState: UploadsState = {
   uploads: [],
   status: Status.IDLE,
+  currentStudy: "",
+  selectedText: "",
+  showChatResponse: false,
+  chatResponse: "",
 };
 
 const uploadsReducer = (
   state: UploadsState,
-  action: UploadsAction,
+  action: UploadsAction
 ): UploadsState => {
   switch (action.type) {
     case FetchActionType.FETCH_START:
@@ -45,6 +49,26 @@ const uploadsReducer = (
       return {
         ...state,
         uploads: action.payload,
+      };
+    case UploadsActionType.SET_STUDY:
+      return {
+        ...state,
+        currentStudy: action.payload,
+      };
+    case UploadsActionType.SET_SELECTED_TEXT:
+      return {
+        ...state,
+        selectedText: action.payload,
+      };
+    case UploadsActionType.SET_CHAT_RESPONSE:
+      return {
+        ...state,
+        chatResponse: action.payload,
+      };
+    case UploadsActionType.SET_SHOW_RESPONSE:
+      return {
+        ...state,
+        showChatResponse: action.payload,
       };
     default:
       return state;

@@ -30,15 +30,27 @@ export type IndexStatus = {
 
 export enum UploadsActionType {
   SET_UPLOADS = "SET_UPLOADS",
+  SET_STUDY = "SET_STUDY",
+  SET_SELECTED_TEXT = "SET_SELECTED_TEXT",
+  SET_CHAT_RESPONSE = "SET_CHAT_RESPONSE",
+  SET_SHOW_RESPONSE = "SET_SHOW_RESPONSE",
 }
 
 export type UploadsAction =
   | FetchAction<UploadShallow[]>
-  | Action<UploadsActionType.SET_UPLOADS, UploadShallow[]>;
+  | Action<UploadsActionType.SET_UPLOADS, UploadShallow[]>
+  | Action<UploadsActionType.SET_STUDY, string>
+  | Action<UploadsActionType.SET_SELECTED_TEXT, string>
+  | Action<UploadsActionType.SET_CHAT_RESPONSE, string>
+  | Action<UploadsActionType.SET_SHOW_RESPONSE, boolean>;
 
 export type UploadsState = {
   uploads: UploadShallow[];
   status: Status;
+  currentStudy: string;
+  selectedText: string;
+  showChatResponse: boolean;
+  chatResponse: string;
 };
 
 export type UploadsContextProps = {

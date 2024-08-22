@@ -38,7 +38,7 @@ const useColumnConfig = (): {
           return title as string;
         },
         linkKey: "id",
-        path: routes.dashboard.uploads,
+        path: routes.dashboard.study,
         Icon(props) {
           return fileTypeIcons({
             key: "type",
@@ -76,7 +76,7 @@ const useColumnConfig = (): {
         onClick: async (data) => {
           try {
             await studySyncServer.delete(
-              `${serverEndpoints.uploads}/${data?.name}`,
+              `${serverEndpoints.uploads}/${data?.name}`
             );
             await studySyncDB.delete(`${dbEndpoints.uploads}/${data?.id}`);
             dispatch({
@@ -104,7 +104,7 @@ const useColumnConfig = (): {
 
 export const useColumns = (): ColumnDef<UploadShallow>[] => {
   const columnHeaders = useColumnConfig().columns.map((column) =>
-    ColumnHeader<UploadShallow>({ column }),
+    ColumnHeader<UploadShallow>({ column })
   );
 
   return [
