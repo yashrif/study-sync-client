@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn run cp-pspdfkit && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "cp-pspdfkit": "copy .\\node_modules\\pspdfkit\\dist\\pspdfkit-lib public\\pspdfkit-lib >NUL"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
