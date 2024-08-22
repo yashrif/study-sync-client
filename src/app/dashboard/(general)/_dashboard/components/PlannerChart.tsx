@@ -1,3 +1,4 @@
+import { IconCalendarFilled } from "@tabler/icons-react";
 import {
   Line,
   LineChart,
@@ -9,7 +10,6 @@ import {
 
 import { addAlphaToHex } from "@/utils/colorGenerator";
 import { dateFormatter } from "@/utils/dateFormatter";
-import { IconCalendarFilled } from "@tabler/icons-react";
 import { Color } from "../type";
 
 type Data = { name: string; value: number; date: string };
@@ -21,28 +21,41 @@ type Props = {
 
 const PlannerChart: React.FC<Props> = ({ data, color }) => {
   return (
-    <ResponsiveContainer width="100%" height="90%" className="self-end">
-      <LineChart
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
+    <div className="w-full h-full flex flex-col gap-1 items-center justify-end">
+      <ResponsiveContainer width="100%" height="75%">
+        <LineChart
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <XAxis dataKey="name" stroke={color.text} strokeWidth={2.5} />
+          <YAxis stroke={color.text} strokeWidth={2.5} />
+          <Tooltip content={<CustomTooltip />} />
+          <Line
+            type="monotone"
+            dataKey="value"
+            stroke={color.text}
+            strokeWidth={2.5}
+            activeDot={{ r: 8 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+      <div
+        className="flex gap-1 items-center text-medium font-medium"
+        style={{
+          color: color.text,
         }}
       >
-        <XAxis dataKey="name" stroke={color.text} strokeWidth={2.5} />
-        <YAxis stroke={color.text} strokeWidth={2.5} />
-        <Tooltip content={<CustomTooltip />} />
-        <Line
-          type="monotone"
-          dataKey="value"
-          stroke={color.text}
-          strokeWidth={2.5}
-          activeDot={{ r: 8 }}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+        <IconCalendarFilled className="size-[18px] stroke-2" />
+        <span className="text-medium pt-[1px] font-medium">
+          Activity of last 7 days
+        </span>
+      </div>
+    </div>
   );
 };
 
