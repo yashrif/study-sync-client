@@ -9,6 +9,7 @@ export type User = {
   lastName: string;
   email: string;
   role: UserRoles;
+  createDate: string;
 };
 
 /* --------------------------------- Request -------------------------------- */

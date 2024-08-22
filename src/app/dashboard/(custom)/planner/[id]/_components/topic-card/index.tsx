@@ -1,5 +1,5 @@
 import { Topic } from "@/types";
-import { shadeGenerator } from "@/utils/shadeGenerator";
+import { shadeGenerator } from "@/utils/colorGenerator";
 import Status from "./Status";
 import Streak from "./Streak";
 

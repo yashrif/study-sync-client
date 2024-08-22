@@ -59,6 +59,8 @@ export type QuizShallow = {
   id: string;
   title: string;
   createDate: string;
+  cqs: number;
+  mcqs: number;
 };
 
 export type QuizIntermediate = QuizShallow & {

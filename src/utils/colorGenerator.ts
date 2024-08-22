@@ -41,3 +41,22 @@ export const shadeGenerator = (
 
   return colorCode;
 };
+
+export const addAlphaToHex = (hex: string, alpha: number): string => {
+  if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+    throw new Error("Invalid hex color format. Expected format: #RRGGBB");
+  }
+
+  if (alpha < 0 || alpha > 100) {
+    throw new Error("Alpha value must be between 0 and 100");
+  }
+
+  const alphaHex = Math.round((alpha / 100) * 255)
+    .toString(16)
+    .padStart(2, "0")
+    .toUpperCase();
+
+  console.log(`${hex}${alphaHex}`);
+
+  return `${hex}${alphaHex}`;
+};

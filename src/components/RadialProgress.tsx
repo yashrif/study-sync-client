@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import { shadeGenerator } from "@/utils/shadeGenerator";
+import { shadeGenerator } from "@/utils/colorGenerator";
 
 type Props = {
   value: number;
@@ -8,6 +8,9 @@ type Props = {
   radius?: number;
   stroke?: string;
   isShowPercentage?: boolean;
+  isShowPath?: boolean;
+  pathColor?: string;
+  className?: string;
 };
 
 const RadialProgress: React.FC<Props> = ({
@@ -16,6 +19,9 @@ const RadialProgress: React.FC<Props> = ({
   radius = 50,
   stroke = "#8B5FBF",
   isShowPercentage = true,
+  pathColor,
+  className,
+  isShowPath = true,
 }) => {
   const percentage = Math.min(Math.max(value, 0.1), 100);
   const width = radius * 2 + 20;
@@ -24,7 +30,13 @@ const RadialProgress: React.FC<Props> = ({
 
   const offset = circumference - (percentage / 100) * circumference;
   return (
-    <div className="relative">
+    <div
+      className={`relative ${className}`}
+      style={{
+        width: width,
+        height: width,
+      }}
+    >
       <svg
         width={width}
         height={width}
@@ -33,7 +45,7 @@ const RadialProgress: React.FC<Props> = ({
       >
         <defs>
           <radialGradient
-            id="circle-progress"
+            id={`circle-progress-${stroke}`}
             cx="0"
             cy="0"
             r="1"
@@ -56,13 +68,26 @@ const RadialProgress: React.FC<Props> = ({
             strokeWidth: `${strokeWidth}px`,
           }}
         />
+        {isShowPath && (
+          <circle
+            cx={width / 2}
+            cy={width / 2}
+            r={radius}
+            strokeLinecap="round"
+            className="fill-none"
+            style={{
+              strokeWidth: `${strokeWidth}px`,
+              stroke: pathColor || shadeGenerator(stroke, 25),
+            }}
+          />
+        )}
 
         <motion.circle
           cx={radius + 10}
           cy={radius + 10}
           r={radius}
           strokeLinecap="round"
-          className="fill-none stroke-[url('#circle-progress')]"
+          className="fill-none"
           initial={{
             strokeDashoffset: circumference,
             strokeDasharray: circumference,
@@ -77,19 +102,20 @@ const RadialProgress: React.FC<Props> = ({
           }}
           style={{
             strokeWidth: `${strokeWidth}px`,
+            stroke: `url("#circle-progress-${stroke}")`,
           }}
         />
       </svg>
       {isShowPercentage && (
-        <span
+        <div
           className="absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 font-semibold"
           style={{
             color: stroke,
-            fontSize: `${radius / 2}px`,
+            fontSize: `${radius / 2.5}px`,
           }}
         >
-          {value.toPrecision(3)}%
-        </span>
+          <span>{value.toPrecision(3)}%</span>
+        </div>
       )}
     </div>
   );

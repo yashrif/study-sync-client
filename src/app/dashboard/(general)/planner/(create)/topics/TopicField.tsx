@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { TopicSimple } from "@/types";
-import { shadeGenerator } from "@/utils/shadeGenerator";
+import { shadeGenerator } from "@/utils/colorGenerator";
 
 type Props = {
   topic: TopicSimple;

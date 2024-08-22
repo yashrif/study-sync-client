@@ -2,7 +2,7 @@ import ScopeHeading from "@/app/dashboard/_components/ScopeHeading";
 import { review } from "@/assets/data/dashboard/planner";
 import { Badge } from "@/components/ui/badge";
 import { usePlannerUploadsContext } from "@/hooks/usePlannerUploadsContext";
-import { shadeGenerator } from "@/utils/shadeGenerator";
+import { shadeGenerator } from "@/utils/colorGenerator";
 
 const Topics = () => {
   const {
