@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import { shadeGenerator } from "@/utils/shadeGenerator";
+import { shadeGenerator } from "@/utils/colorGenerator";
 
 type Props = {
   value: number;

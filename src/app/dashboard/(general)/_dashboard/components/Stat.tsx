@@ -25,7 +25,7 @@ const Stat: React.FC<Props> = ({
   supplementaryLabel,
 }) => {
   return (
-    <div className="w-auto flex flex-col gap-4">
+    <div className="min-w-[200px] flex flex-col gap-4">
       <StatsHeading
         {...heading}
         style={{

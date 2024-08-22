@@ -10,7 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Column, PlannerShallow, TableAction } from "@/types";
 import { MAX_TOPICS_PER_ROW } from "@/utils/constants";
-import { shadeGenerator } from "@/utils/shadeGenerator";
+import { shadeGenerator } from "@/utils/colorGenerator";
 
 /* ---------------------------- fields and values ---------------------------- */
 

@@ -6,13 +6,9 @@ import { useCallback } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { useFetchDataState } from "@/hooks/fetchData";
-import {
-  Flashcard,
-  FlashcardStatus,
-  QuizShallow,
-  UploadShallow,
-} from "@/types";
+import { Flashcard, QuizShallow, UploadShallow } from "@/types";
 import { Quiz } from "@icons";
+import Divider from "./components/Divider";
 import Stat from "./components/Stat";
 import { Color } from "./type";
 
@@ -78,17 +74,8 @@ const Stats = () => {
       : 0,
   };
 
-  const Divider: React.FC<{ bg: string }> = ({ bg }) => (
-    <div
-      className="w-[3px] h-[60%] my-auto rounded-full"
-      style={{
-        backgroundColor: bg,
-      }}
-    />
-  );
-
   return (
-    <div className="flex gap-x-8 gap-y-8 p-8 rounded-md bg-[#fcf0ce] shadow-sm">
+    <div className="flex gap-x-8 gap-y-8 p-8 justify-evenly rounded-md bg-[#fcf0ce] shadow-sm">
       <Stat
         heading={{ Icon: IconFileUpload, title: "Uploads" }}
         color={colors.seaGreen}
