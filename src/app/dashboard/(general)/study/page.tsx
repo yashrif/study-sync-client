@@ -11,7 +11,7 @@ import { routes } from "@/assets/data/routes";
 import Spinner from "@/components/spinner/Spinner";
 import { useFetchData, useFetchDataState } from "@/hooks/fetchData";
 import { useUploadsContext } from "@/hooks/useUploadsContext";
-import { Preference, UploadShallow } from "@/types";
+import { Preference, Status, UploadShallow } from "@/types";
 import PageHeading from "../../_components/PageHeading";
 
 const Study: React.FC = () => {
@@ -29,10 +29,11 @@ const Study: React.FC = () => {
   });
 
   useEffect(() => {
-    if (state.data?.studyId && uploads.uploads.length) {
+    if (state.status === Status.SUCCESS && uploads.status === Status.SUCCESS) {
       setTimeout(() => {
         if (
           state.data?.studyId &&
+          uploads.uploads.length > 0 &&
           _.chain(uploads.uploads)
             .map("id")
             .includes(state.data?.studyId || "")
@@ -42,7 +43,13 @@ const Study: React.FC = () => {
         else replace(routes.dashboard.uploads.home);
       }, 1000);
     }
-  }, [replace, state.data?.studyId, uploads.uploads]);
+  }, [
+    replace,
+    state.data?.studyId,
+    state.status,
+    uploads.status,
+    uploads.uploads,
+  ]);
 
   return (
     <div className="w-full h-full flex flex-col">
