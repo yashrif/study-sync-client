@@ -20,6 +20,7 @@ export const controlBar: {
   search: Button;
   save: Button;
   close: Button;
+  study: Button;
 } = {
   upload: {
     title: "Upload",
@@ -41,6 +42,12 @@ export const controlBar: {
   },
   view: {
     title: "View",
+    Icon: IconAdjustmentsHorizontal,
+    variant: "outline",
+    size: "sm",
+  },
+  study: {
+    title: "Study",
     Icon: IconAdjustmentsHorizontal,
     variant: "outline",
     size: "sm",

@@ -136,7 +136,7 @@ const useColumnConfig = (): {
           return title as string;
         },
         linkKey: "id",
-        path: routes.dashboard.uploads,
+        path: routes.dashboard.study.home,
         Icon(props) {
           return fileTypeIcons({
             key: "type",

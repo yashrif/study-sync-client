@@ -31,6 +31,7 @@ export const paths = {
   review: "/review",
   planner: "/planner",
   topics: "/topics",
+  study: "/study",
 };
 
 export const pathTitles = {
@@ -66,6 +67,7 @@ export const pathTitles = {
   review: "Review",
   planner: "Planner",
   topics: "Topics",
+  study: "Study",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -104,23 +106,35 @@ export const routes = {
   dashboard: {
     default: dashboardPath,
     home: dashboardPath,
+    study: {
+      home: `${dashboardPath}${paths.study}`,
+      details(id: string) {
+        return `${routes.dashboard.study.home}/${id}`;
+      },
+    },
     settings: {
       home: `${dashboardPath}${paths.settings}`,
       default: `${dashboardPath}${paths.settings}${paths.profile}`,
       profile: `${dashboardPath}${paths.settings}${paths.profile}`,
     },
-    uploads: `${dashboardPath}${paths.uploads}`,
+    uploads: { home: `${dashboardPath}${paths.uploads}` },
     quiz: {
       home: `${dashboardPath}${paths.quiz}`,
       default: `${dashboardPath}${paths.quiz}`,
       create: `${dashboardPath}${paths.quiz}`,
       saved: `${dashboardPath}${paths.quiz}${paths.saved}`,
+      details(id: string) {
+        return `${dashboardPath}${paths.quiz}/${id}`;
+      },
     },
     flashcard: {
       default: `${dashboardPath}${paths.flashcard}`,
       home: `${dashboardPath}${paths.flashcard}`,
       create: `${dashboardPath}${paths.flashcard}`,
       review: `${dashboardPath}${paths.flashcard}${paths.review}`,
+      details(id: string) {
+        return `${dashboardPath}${paths.flashcard}/${id}`;
+      },
     },
     planner: {
       default: `${dashboardPath}${paths.planner}`,
@@ -129,6 +143,9 @@ export const routes = {
       saved: `${dashboardPath}${paths.planner}${paths.saved}`,
       topics: `${dashboardPath}${paths.planner}${paths.topics}`,
       review: `${dashboardPath}${paths.planner}${paths.review}`,
+      details(id: string) {
+        return `${dashboardPath}${paths.planner}/${id}`;
+      },
     },
   },
 };
@@ -168,6 +185,15 @@ export const links = {
   dashboard: {
     default: { title: pathTitles.dashboard, href: routes.dashboard.default },
     home: { title: pathTitles.home, href: routes.dashboard.home },
+    study: {
+      home: { title: pathTitles.study, href: routes.dashboard.study.home },
+      details(id: string) {
+        return {
+          title: pathTitles.study,
+          href: routes.dashboard.study.details(id),
+        };
+      },
+    },
     settings: {
       home: {
         title: pathTitles.settings,
@@ -183,18 +209,20 @@ export const links = {
       },
     },
     uploads: {
-      title: pathTitles.uploads,
-      href: routes.dashboard.uploads,
+      home: {
+        title: pathTitles.uploads,
+        href: routes.dashboard.uploads.home,
+      },
     },
     quiz: {
       default: { title: pathTitles.quiz, href: routes.dashboard.quiz.default },
       home: { title: pathTitles.quiz, href: routes.dashboard.quiz.home },
       create: { title: pathTitles.create, href: routes.dashboard.quiz.create },
       saved: { title: pathTitles.saved, href: routes.dashboard.quiz.saved },
-      quizDetails(id: string) {
+      details(id: string) {
         return {
           title: pathTitles.quiz,
-          href: `${routes.dashboard.quiz.home}/${id}`,
+          href: routes.dashboard.quiz.details(id),
         };
       },
     },
@@ -215,10 +243,10 @@ export const links = {
         title: pathTitles.review,
         href: routes.dashboard.flashcard.review,
       },
-      flashcardDetails(id: string) {
+      details(id: string) {
         return {
           title: pathTitles.flashcard,
-          href: `${routes.dashboard.flashcard.home}/${id}`,
+          href: routes.dashboard.flashcard.details(id),
         };
       },
     },
@@ -239,10 +267,10 @@ export const links = {
         title: pathTitles.saved,
         href: routes.dashboard.planner.saved,
       },
-      plannerDetails(id: string) {
+      details(id: string) {
         return {
           title: pathTitles.planner,
-          href: `${routes.dashboard.planner.home}/${id}`,
+          href: routes.dashboard.planner.details(id),
         };
       },
       topics: {

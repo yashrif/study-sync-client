@@ -44,6 +44,7 @@ export enum TableControlTypes {
   DELETE = "DELETE",
   SEARCH = "SEARCH",
   VIEW = "VIEW",
+  STUDY = "STUDY"
 }
 
 export type TTableControl = {

@@ -143,6 +143,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
                                     );
                               }}
                               className="size-4"
+                              disabled={state.status === Status.PENDING}
                             />
                           </FormControl>
                           <FormLabel className="font-normal text-medium">

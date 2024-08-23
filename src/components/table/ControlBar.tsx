@@ -53,6 +53,12 @@ const ControlBar = <TData, TValue>({
       variant: controlBar.view.variant,
       title: controlBar.view.title,
     },
+    [TableControlTypes.STUDY]: {
+      hidden: false,
+      order: 5,
+      variant: controlBar.study.variant,
+      title: controlBar.study.title,
+    },
   },
   className,
 }: Props<TData, TValue>) => {

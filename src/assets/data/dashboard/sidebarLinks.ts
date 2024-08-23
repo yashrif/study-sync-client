@@ -1,5 +1,6 @@
 import {
   IconBolt,
+  IconBook,
   IconFileUpload,
   IconHome,
   IconLogout2,
@@ -24,8 +25,12 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: IconHome,
     },
     {
-      ...links.dashboard.uploads,
+      ...links.dashboard.uploads.home,
       Icon: IconFileUpload,
+    },
+    {
+      ...links.dashboard.study.home,
+      Icon: IconBook,
     },
     {
       ...links.dashboard.quiz.home,
