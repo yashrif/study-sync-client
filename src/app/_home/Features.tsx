@@ -32,7 +32,7 @@ const Features: React.FC = () => {
     >
       <div className="max-w-[800px] flex flex-col gap-6">
         <div className="flex flex-col gap-4">
-          <h4>{sectionName}</h4>
+          <p className="heading-section">{sectionName}</p>
           <h1>{title}</h1>
         </div>
         <p className="text-center text-large">{description}</p>

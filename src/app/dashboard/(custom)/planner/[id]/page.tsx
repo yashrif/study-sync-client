@@ -11,7 +11,7 @@ import { useFetchData } from "@/hooks/fetchData";
 import { usePlannerContext } from "@/hooks/usePlannerContext";
 import { Planner } from "@/types";
 import Grid from "./_components/Grid";
-import { statusPoints } from "./_utils/statusPoint";
+import { statusPoints } from "../../../../../utils/statusPoint";
 
 type Props = {
   params: {
