@@ -1,15 +1,16 @@
-import { Dispatch, SetStateAction } from "react";
 
 import { preview } from "@/assets/data/dashboard/quiz";
+import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
+import { QuizUploadsActionType } from "@/types";
 import { Input } from "@components/ui/input";
 
-type Props = {
-  title: string | undefined;
-  setTitle: Dispatch<SetStateAction<string | undefined>>;
-};
+const Title: React.FC = () => {
+  const {
+    state: { quiz },
+    dispatch,
+  } = useQuizUploadsContext();
 
-const Title: React.FC<Props> = ({ title, setTitle }) => {
-  return (
+  return quiz ? (
     <Input
       type={preview.fields.title.type}
       id={preview.fields.title.id}
@@ -17,11 +18,16 @@ const Title: React.FC<Props> = ({ title, setTitle }) => {
       required={preview.fields.title.required}
       dimension={"sm"}
       Icon={preview.fields.title.Icon}
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
+      value={quiz?.title}
+      onChange={(e) => {
+        dispatch({
+          type: QuizUploadsActionType.SET_QUIZ,
+          payload: { ...quiz, title: e.target.value },
+        });
+      }}
       className="min-w-[320px] w-full rounded-sm border-primary placeholder:text-muted-foreground/70"
     />
-  );
+  ) : null;
 };
 
 export default Title;

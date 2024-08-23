@@ -7,7 +7,6 @@ import {
   Renderable,
   Table as TTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
 
 import { controlBar } from "@/assets/data/dashboard/controlBar";
 import IconButton from "@/components/button/IconButton";
@@ -36,8 +35,6 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
     dispatch,
   } = useQuizUploadsContext();
 
-  const [title, setTitle] = useState(quiz?.title);
-
   const onDelete = () => {
     if (quiz) {
       const [selectedCqs, selectedMcqs] = [
@@ -52,12 +49,12 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
           cqs: _.differenceWith(
             _.map(tableCqs.getRowModel().rows, (row) => row.original),
             selectedCqs,
-            _.isEqual,
+            _.isEqual
           ),
           mcqs: _.differenceWith(
             _.map(tableMcqs.getRowModel().rows, (row) => row.original),
             selectedMcqs,
-            _.isEqual,
+            _.isEqual
           ),
         },
       });
@@ -69,7 +66,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <Title title={title} setTitle={setTitle} />
+        <Title  />
         <IconButton
           title={controlBar.delete.title}
           Icon={controlBar.delete.Icon}
@@ -96,7 +93,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
                       {flexRender(
                         tableMcqs.getHeaderGroups()[0].headers[0].column
                           .columnDef.header,
-                        tableMcqs.getHeaderGroups()[0].headers[0].getContext(),
+                        tableMcqs.getHeaderGroups()[0].headers[0].getContext()
                       )}
                       <span>MCQs</span>
                     </div>
@@ -108,7 +105,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
                       {flexRender(
                         tableCqs.getHeaderGroups()[0].headers[0].column
                           .columnDef.header,
-                        tableCqs.getHeaderGroups()[0].headers[0].getContext(),
+                        tableCqs.getHeaderGroups()[0].headers[0].getContext()
                       )}
                       <span>CQs</span>
                     </div>
@@ -121,7 +118,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -166,7 +163,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
                                   | CellContext<CqRequest, unknown>
                                   | CellContext<McqRequest, unknown>
                                 >,
-                                checkBox.getContext(),
+                                checkBox.getContext()
                               )}
                             </TableCell>
 
@@ -179,7 +176,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
                                       | CellContext<CqRequest, unknown>
                                       | CellContext<McqRequest, unknown>
                                     >,
-                                    title.getContext(),
+                                    title.getContext()
                                   )}
                                 </span>
                               </div>
@@ -195,7 +192,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
                                         | CellContext<McqRequest, unknown>
                                         | CellContext<CqRequest, unknown>
                                       >,
-                                      cell.getContext(),
+                                      cell.getContext()
                                     )}
                                   </div>
                                 ))}
@@ -217,7 +214,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
                   </TableBody>
                 </UITable>
               </>
-            ) : null,
+            ) : null
           )}
         </div>
       </div>
