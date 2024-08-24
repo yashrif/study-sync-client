@@ -2,6 +2,7 @@ import { profile } from "@/assets/data/dashboard/settings";
 import SectionHeading from "../../../_components/SectionHeading";
 import ChangePassword from "./ChangePassword";
 import PersonalInfo from "./PersonalInfo";
+import GoogleOAuth from "./GoogleOAuth";
 
 const Profile = () => {
   return (
@@ -14,6 +15,7 @@ const Profile = () => {
 
       <div className="flex flex-col gap-24">
         <PersonalInfo />
+        <GoogleOAuth/>
         <ChangePassword />
       </div>
     </section>

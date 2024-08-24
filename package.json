@@ -25,6 +25,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "@react-oauth/google": "^0.12.1",
     "@tabler/icons-react": "^3.6.0",
     "@tanstack/react-table": "^8.19.2",
     "axios": "^1.7.2",
