@@ -23,7 +23,7 @@ const CreateAction: React.FC<Props> = ({ table, indexStatus }) => {
   return (
     <IconButton
       size="lg"
-      className="size-12 p-0 rounded-full row-start-2 col-start-2"
+      className="size-12 p-0 rounded-full row-start-3 col-start-1 justify-self-center"
       Icon={IconArrowRight}
       iconClassName="!size-6 stroke-text-300 text-text-300"
       contentType="icon-only"

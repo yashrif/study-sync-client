@@ -114,7 +114,7 @@ const RadialProgress: React.FC<Props> = ({
             fontSize: `${radius / 2.5}px`,
           }}
         >
-          <span>{value.toPrecision(3)}%</span>
+          <span>{(value || 0).toPrecision(3)}%</span>
         </div>
       )}
     </div>

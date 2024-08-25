@@ -23,6 +23,7 @@ const initialState: QuizState = {
   cqEvaluation: {},
   evaluateStatus: Status.IDLE,
   isShowOverview: true,
+  isTimerActive: false,
 };
 
 const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
@@ -84,6 +85,11 @@ const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
       return {
         ...state,
         isShowOverview: action.payload,
+      };
+    case QuizActionType.SET_IS_TIMER_ACTIVE:
+      return {
+        ...state,
+        isTimerActive: action.payload,
       };
     default:
       return state;

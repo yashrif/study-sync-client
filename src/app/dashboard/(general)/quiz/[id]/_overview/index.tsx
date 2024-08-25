@@ -78,13 +78,13 @@ const Overview: React.FC = () => {
               },
               {
                 ...duration,
-                value: `${
+                value: `${Math.ceil(
                   calculateDuration({
                     difficulty,
                     cqs: data.cqs?.length || 0,
                     mcqs: data.mcqs?.length || 0,
                   }) / 60
-                }m`,
+                )}m`,
               },
             ].map((field) => {
               return (

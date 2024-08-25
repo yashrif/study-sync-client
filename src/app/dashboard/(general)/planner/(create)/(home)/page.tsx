@@ -34,7 +34,7 @@ const CreateQuiz = () => {
   return (
     <div className="flex flex-col gap-8">
       <SectionHeading {...create.steps[1]} />
-      <div className="grid grid-cols-[minmax(700px,1fr),1fr] items-center gap-x-24 gap-y-8">
+      <div className="grid grid-cols-[minmax(600px,1fr),1fr] items-center gap-x-24 gap-y-8">
         <UploadsTable handler={handler} table={table} status={status} />
         <CreateAction table={table} indexStatus={indexStatus} />
       </div>
