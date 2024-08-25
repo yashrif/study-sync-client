@@ -1,15 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 import { sidebarLinks, signOut } from "@/assets/data/dashboard/sidebarLinks";
 import { routes } from "@/assets/data/routes";
 import Logo from "@/components/Logo";
 import Spinner from "@/components/spinner/Spinner";
-import { Suspense } from "react";
+import { removeTokens } from "@/utils/auth";
 import NavLink from "./NavLink";
 
 const SideBar: React.FC = () => {
+  const { push } = useRouter();
+
   return (
     <div className="max-w-52 w-full h-full">
       <div className="w-full h-full bg-white bg-opacity-[0.85] backdrop-blur-xl backdrop-saturate-[180%]">
@@ -41,6 +45,10 @@ const SideBar: React.FC = () => {
                       title={signOut.title}
                       href=""
                       Icon={signOut.Icon}
+                      onClick={() => {
+                        removeTokens();
+                        push(routes.home.home);
+                      }}
                     ></NavLink>
                   </Suspense>
                 )}
