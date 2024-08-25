@@ -35,6 +35,9 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
     dispatch,
   } = useQuizUploadsContext();
 
+  tableMcqs.getState().pagination.pageSize = 1000;
+  tableCqs.getState().pagination.pageSize = 1000;
+
   const onDelete = () => {
     if (quiz) {
       const [selectedCqs, selectedMcqs] = [
@@ -66,7 +69,7 @@ const PreviewTable: React.FC<Props> = ({ tableCqs, tableMcqs }) => {
   return (
     <>
       <div className="flex items-center justify-between">
-        <Title  />
+        <Title />
         <IconButton
           title={controlBar.delete.title}
           Icon={controlBar.delete.Icon}

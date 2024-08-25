@@ -39,6 +39,10 @@ export type QuizEvaluateResponseServer = {
 
 /* ----------------------------------- AI ----------------------------------- */
 
+// export type QuizRequestAi = {
+//   collection:
+// }
+
 export type QuizEvaluateRequestAi = QuizEvaluateRequestServer;
 
 export type QuizEvaluateResponseAi = {

@@ -1,5 +1,19 @@
 import { QuizIntermediate } from "./quiz";
 
+/* ----------------------------------- AI ----------------------------------- */
+
+export type McqResponseAi = {
+  question: string;
+  choice: string[] | number[];
+  isChoiceAnswer: boolean[];
+};
+
+export type McqsResponseAi = {
+  collection: McqResponseAi[][];
+};
+
+/* ----------------------------------- DB ----------------------------------- */
+
 export type McqRequest = {
   id?: string;
   question: string;

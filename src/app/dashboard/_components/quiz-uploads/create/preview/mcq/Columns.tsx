@@ -22,7 +22,7 @@ const columnConfig: ColumnConfig<McqRequest> = {
         return (
           <div className="flex flex-col gap-y-2.5 gap-x-12">
             {obj?.choices.map((choice, index) => (
-              <div key={index} className="flex gap-1.5 items-center">
+              <div key={index} className="grid grid-cols-[auto,1fr] gap-1.5 items-center">
                 <div
                   className={`size-4 rounded-full text-primary ${
                     index === answer

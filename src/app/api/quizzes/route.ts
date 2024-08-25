@@ -1,10 +1,16 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import _ from "lodash";
 import { NextRequest, NextResponse } from "next/server";
 
 import studySyncAI from "@/api/studySyncAI";
 import { aiEndpoints } from "@/assets/data/api";
-import { QuizTypes } from "@/types";
+import {
+  CqResponseAi,
+  CqsResponseAi,
+  McqResponseAi,
+  McqsResponseAi,
+  QuizTypes,
+} from "@/types";
 
 export async function POST(request: NextRequest) {
   const {
@@ -16,41 +22,44 @@ export async function POST(request: NextRequest) {
   } = await request.json();
 
   try {
-    let mcqs = [],
-      cqs = [];
+    let mcqs: McqResponseAi[] = [],
+      cqs: CqResponseAi[] = [];
     if (types.includes(QuizTypes.MCQ)) {
-      const response = await studySyncAI.post(aiEndpoints.qna, ids);
-      mcqs = response.data.collection[0];
+      const response: AxiosResponse<McqsResponseAi> = await studySyncAI.post(
+        aiEndpoints.qna,
+        ids
+      );
+
+      mcqs = _.flatten(response.data.collection);
     }
     if (types.includes(QuizTypes.CQ)) {
-      const response = await studySyncAI.post(aiEndpoints.cqna, ids);
-      cqs = response.data.collection[0];
+      const response: AxiosResponse<CqsResponseAi> = await studySyncAI.post(
+        aiEndpoints.cqna,
+        ids
+      );
+      cqs = _.flatten(response.data.collection);
     }
 
     return NextResponse.json(
       {
-        mcqs: _.chain(mcqs)
-          .map((data) => ({
-            question: data.question,
-            choices: data.choice,
-            answers: data.isChoiceAnswer,
-          }))
-          .value(),
-        cqs: _.chain(cqs)
-          .map((data) => ({
-            question: data.question,
-            answer: data.answer,
-          }))
-          .value(),
+        mcqs: _.map(mcqs, (data) => ({
+          question: data.question,
+          choices: data.choice,
+          answers: data.isChoiceAnswer,
+        })),
+        cqs: _.map(cqs, (data) => ({
+          question: data.question,
+          answer: data.answer,
+        })),
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (e: AxiosError | any | unknown | Error) {
     return NextResponse.json(
       {
         message: e.message.message || e.message || "An error occurred",
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 }
