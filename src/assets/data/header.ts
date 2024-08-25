@@ -6,7 +6,7 @@ export const button = {
     title: "Login",
   },
   dashboard: {
-    href: routes.dashboard,
+    href: routes.dashboard.home,
     title: "Dashboard",
   },
 };

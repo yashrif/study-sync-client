@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
-import { button, home, navLinks } from "@assets/data/header";
+import { home, navLinks } from "@assets/data/header";
 import Logo from "@components/Logo";
-import { Button } from "@components/ui/button";
+import Spinner from "../spinner/Spinner";
+import ActionButton from "./ActionButton";
 
 const Header: React.FC = () => {
   return (
@@ -17,11 +19,9 @@ const Header: React.FC = () => {
           </Link>
         ))}
       </nav>
-      <Link href={button.login.href}>
-        <Button size={"lg"}>
-          <span className="text-nav-link">{button.login.title}</span>
-        </Button>
-      </Link>
+      <Suspense fallback={<Spinner />}>
+        <ActionButton />
+      </Suspense>
     </header>
   );
 };
