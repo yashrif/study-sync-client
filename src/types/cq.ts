@@ -1,5 +1,18 @@
 import { FlashcardStatus } from "@allTypes";
 
+/* ----------------------------------- AI ----------------------------------- */
+
+export type CqResponseAi = {
+  question: string;
+  answer: string;
+};
+
+export type CqsResponseAi = {
+  collection: CqResponseAi[][];
+};
+
+/* ----------------------------------- DB ----------------------------------- */
+
 export type CqRequest = {
   id?: string;
   question: string;

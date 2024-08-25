@@ -89,20 +89,16 @@ const IndexButton: React.FC<IndexButtonProps> = ({ data }) => {
                 }
               }}
             >
-              {data.isIndexed ? (
-                <CircleCheck className="size-4 text-success hover:scale-125 duration-300" />
-              ) : state.status === Status.SUCCESS ? (
+              {state.status === Status.SUCCESS ? (
                 <CheckmarkAnimated className="size-4 pointer-events-none" />
               ) : state.status === Status.ERROR ? (
                 <IconXboxX className="size-4 text-destructive pointer-events-none" />
+              ) : state.status === Status.PENDING ? (
+                <IconRefresh className="size-4 text-primary animate-spin duration-1000" />
+              ) : data.isIndexed ? (
+                <CircleCheck className="size-4 text-success hover:scale-125 duration-300" />
               ) : (
-                <IconRefresh
-                  className={`size-4 text-primary ${
-                    state.status === Status.PENDING
-                      ? "animate-spin duration-1000"
-                      : "hover:scale-125 duration-300"
-                  }`}
-                />
+                <IconRefresh className="size-4 text-primary hover:scale-125 duration-300" />
               )}
             </div>
           </TooltipTrigger>
