@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useFetchDataState } from "@/hooks/fetchData";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { User } from "@allTypes";
-import Avatar from "./components/Avatar";
+import Avatar from "../../../../components/Avatar";
 import StatsHeading from "./components/StatsHeading";
 
 const UserInfo = () => {

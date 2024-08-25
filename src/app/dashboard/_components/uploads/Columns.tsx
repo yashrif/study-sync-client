@@ -29,7 +29,7 @@ const columnConfig: ColumnConfig<UploadShallow> = {
         return title as string;
       },
       linkKey: "id",
-      path: routes.dashboard.uploads.home,
+      path: routes.dashboard.study.home,
       className() {
         return "text-base no-underline font-semibold";
       },

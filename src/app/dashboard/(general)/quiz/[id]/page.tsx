@@ -70,12 +70,20 @@ const QuizDetails: React.FC = () => {
               {...actionButton.submit}
               onClick={() => {
                 formRef.current?.submit();
+                dispatch({
+                  type: QuizActionType.SET_IS_TIMER_ACTIVE,
+                  payload: false,
+                });
               }}
             />
             <IconButton
               {...actionButton.reset}
               onClick={() => {
                 formRef.current?.clear();
+                dispatch({
+                  type: QuizActionType.SET_IS_TIMER_ACTIVE,
+                  payload: false,
+                });
               }}
             />
           </div>

@@ -1,27 +1,23 @@
-import {
-  IconPlayerPauseFilled,
-  IconPlayerPlayFilled,
-  IconSquareFilled,
-} from "@tabler/icons-react";
+import { IconPlayerPlayFilled, IconSquareFilled } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
 import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { Difficulty } from "@/types";
+import { Difficulty, QuizActionType } from "@/types";
 import Heading from "../../_components/Heading";
 import { calculateDuration } from "../difficultyValue";
 
 const Timer = () => {
   const {
-    state: { quiz, formRef },
+    state: { quiz, formRef, isTimerActive },
+    dispatch,
   } = useQuizContext();
   const difficulty = useQueryString().getQueryString(
     queryParams.difficulty.name
   ) as Difficulty;
 
   const [seconds, setSeconds] = useState(0);
-  const [isActive, setIsActive] = useState(false);
 
   const duration = useMemo(() => {
     return {
@@ -32,19 +28,22 @@ const Timer = () => {
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined = undefined;
-    if (isActive) {
+    if (isTimerActive) {
       if (seconds === 0) {
         formRef.current?.submit();
-        setIsActive(false);
+        dispatch({
+          type: QuizActionType.SET_IS_TIMER_ACTIVE,
+          payload: false,
+        });
       }
       interval = setInterval(() => {
         setSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
-    } else if (!isActive && seconds !== 0) {
+    } else if (!isTimerActive && seconds !== 0) {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [formRef, isActive, seconds]);
+  }, [dispatch, formRef, isTimerActive, seconds]);
 
   const resetTimer = useCallback(() => {
     setSeconds(
@@ -57,8 +56,8 @@ const Timer = () => {
   }, [difficulty, quiz.cqs?.length, quiz.mcqs?.length]);
 
   useEffect(() => {
-    resetTimer();
-  }, [resetTimer]);
+    if (!isTimerActive) resetTimer();
+  }, [isTimerActive, resetTimer]);
 
   return (
     <Heading
@@ -69,33 +68,32 @@ const Timer = () => {
     >
       <div className="w-full flex gap-4 justify-center items-center px-8 py-4 ring-2 ring-inset ring-secondary rounded-xl">
         <div className="text-2xl font-secondary text-secondary font-semibold flex gap-0.5 items-center">
-          {/* <span>{toTwoDigits(duration.hours)}</span>
-          <span>:</span> */}
           <span>{toTwoDigits(duration.minutes)}</span>
           <span>:</span>
           <span>{toTwoDigits(duration.seconds)}</span>
         </div>
 
-        {seconds === 0 ? (
+        {seconds === 0 || isTimerActive ? (
           <IconSquareFilled
-            className="fill-secondary size-6 cursor-pointer"
+            className="fill-destructive size-6 cursor-pointer"
             onClick={() => {
               resetTimer();
               formRef.current?.clear();
-            }}
-          />
-        ) : isActive ? (
-          <IconPlayerPauseFilled
-            className="fill-secondary size-6 cursor-pointer"
-            onClick={() => {
-              setIsActive(false);
+              dispatch({
+                type: QuizActionType.SET_IS_TIMER_ACTIVE,
+                payload: false,
+              });
             }}
           />
         ) : (
           <IconPlayerPlayFilled
             className="fill-secondary size-6 cursor-pointer"
             onClick={() => {
-              setIsActive(true);
+              formRef.current?.clear();
+              dispatch({
+                type: QuizActionType.SET_IS_TIMER_ACTIVE,
+                payload: true,
+              });
             }}
           />
         )}

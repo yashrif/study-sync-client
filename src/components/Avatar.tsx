@@ -9,7 +9,7 @@ type Size = "default" | "sm" | "lg" | "xl";
 
 type Props = {
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   variant?: Variant;
   size?: Size;
   style?: React.CSSProperties;

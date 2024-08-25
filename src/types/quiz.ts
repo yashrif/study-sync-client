@@ -101,6 +101,7 @@ export enum QuizActionType {
   QUIZ_EVALUATE_SUCCESS = "QUIZ_EVALUATE_SUCCESS",
   QUIZ_EVALUATE_ERROR = "QUIZ_EVALUATE_ERROR",
   SET_IS_SHOW_OVERVIEW = "QUIZ_IS_SHOW_OVERVIEW",
+  SET_IS_TIMER_ACTIVE = "SET_IS_TIMER_ACTIVE",
 }
 
 export type QuizAction =
@@ -117,7 +118,8 @@ export type QuizAction =
       }
     >
   | Action<QuizActionType.QUIZ_EVALUATE_ERROR>
-  | Action<QuizActionType.SET_IS_SHOW_OVERVIEW, boolean>;
+  | Action<QuizActionType.SET_IS_SHOW_OVERVIEW, boolean>
+  | Action<QuizActionType.SET_IS_TIMER_ACTIVE, boolean>;
 
 export type QuizState = {
   quiz: Quiz;
@@ -130,6 +132,7 @@ export type QuizState = {
   };
   isShowOverview: boolean;
   evaluateStatus: Status;
+  isTimerActive: boolean;
 };
 
 export type QuizContextProps = {

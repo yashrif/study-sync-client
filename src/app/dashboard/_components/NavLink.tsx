@@ -1,14 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 
+import Spinner from "@/components/spinner/Spinner";
 import { usePath } from "@/hooks/usePath";
-import { IconLink } from "@/types";
+import { IconLink, Icon as TIcon } from "@/types";
 import SubNavLink from "./SubNavLink";
 
-type Props = IconLink & { links?: IconLink[]; subLinks?: IconLink[] };
+type Props = IconLink & {
+  links?: IconLink[];
+  subLinks?: IconLink[];
+  onClick?: () => void;
+};
 
-const NavLink: React.FC<Props> = ({ href, title, Icon, links, subLinks }) => {
+const NavLink: React.FC<Props> = ({
+  href,
+  title,
+  Icon,
+  links,
+  subLinks,
+  onClick,
+}) => {
+  const [isPending, setIsPending] = useState(false);
+
   const currentPath = usePath().path;
   let isActive = usePath().isCurrentPath(href);
 
@@ -29,25 +44,32 @@ const NavLink: React.FC<Props> = ({ href, title, Icon, links, subLinks }) => {
     }
   }
 
+  const className = `group w-full flex gap-3 items-center px-4 py-3 rounded-sm hover:bg-background hover:shadow-[inset_0_0_0_1.5px_rgba(139,95,191,0.1)] transition-all duration-300`;
+
   return (
     <div className="w-full flex flex-col">
-      <Link
-        href={href}
-        className={`group w-full flex gap-3 items-center px-4 py-3 rounded-sm hover:bg-background hover:shadow-[inset_0_0_0_1.5px_rgba(139,95,191,0.1)] transition-all duration-300`}
-      >
-        <Icon
-          className={`text-text-200 group-hover:text-primary size-5 stroke-[1.75] transition-colors duration-300 ${
-            isActive ? "!text-primary" : ""
-          }`}
-        />
-        <span
-          className={`text-nav-link-medium group-hover:text-primary transition-colors duration-300 ${
-            isActive ? "text-primary" : ""
-          }`}
+      {onClick ? (
+        <button
+          className={className}
+          onClick={() => {
+            setIsPending(true);
+            onClick();
+          }}
         >
-          {title}
-        </span>
-      </Link>
+          {
+            <Content
+              title={title}
+              Icon={Icon}
+              isActive={isActive}
+              isPending={isPending}
+            />
+          }
+        </button>
+      ) : (
+        <Link href={href} className={className}>
+          {<Content title={title} Icon={Icon} isActive={isActive} />}
+        </Link>
+      )}
       {isActive && subLinks && subLinks?.length > 0 && (
         <div className="pl-8 grid grid-cols-[auto,1fr] items-start">
           <div
@@ -74,3 +96,36 @@ const NavLink: React.FC<Props> = ({ href, title, Icon, links, subLinks }) => {
 };
 
 export default NavLink;
+
+type ContentProps = {
+  Icon: TIcon;
+  title: string;
+  isActive: boolean;
+  isPending?: boolean;
+};
+
+const Content: React.FC<ContentProps> = ({
+  Icon,
+  title,
+  isActive,
+  isPending,
+}) => (
+  <>
+    {isPending ? (
+      <Spinner className="size-5" />
+    ) : (
+      <Icon
+        className={`text-text-200 group-hover:text-primary size-5 stroke-[1.75] transition-colors duration-300 ${
+          isActive ? "!text-primary" : ""
+        }`}
+      />
+    )}
+    <span
+      className={`text-nav-link-medium group-hover:text-primary transition-colors duration-300 ${
+        isActive ? "text-primary" : ""
+      }`}
+    >
+      {title}
+    </span>
+  </>
+);

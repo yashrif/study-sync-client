@@ -1,9 +1,9 @@
-import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Header from "@/components/header";
 import Benefits from "./_home/Benefits";
 import Cta from "./_home/Cta";
 import Features from "./_home/Features";
 import Hero from "./_home/Hero";
-import Footer from "@/components/Footer";
 
 const Home: React.FC = () => {
   return (

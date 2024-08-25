@@ -111,7 +111,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={`w-full flex ${isShowCheckbox ? "justify-between" : "justify-center"} items-center gap-16`}
+        className={`w-full flex ${isShowCheckbox ? "justify-between" : "justify-center"} gap-16`}
       >
         {isShowCheckbox && (
           <FormField
@@ -128,7 +128,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
                       return (
                         <FormItem
                           key={item.id}
-                          className="flex flex-row items-start space-x-3 space-y-0 !mt-0"
+                          className="flex flex-row items-center space-x-3 space-y-0 !mt-0"
                         >
                           <FormControl>
                             <Checkbox
@@ -142,11 +142,11 @@ const CreateAction: React.FC<Props> = ({ table }) => {
                                       )
                                     );
                               }}
-                              className="size-4"
+                              className="size-5 border-2"
                               disabled={state.status === Status.PENDING}
                             />
                           </FormControl>
-                          <FormLabel className="font-normal text-medium">
+                          <FormLabel className="font-normal text-medium text-lg text-primary">
                             {item.label}
                           </FormLabel>
                         </FormItem>
