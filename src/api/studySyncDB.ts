@@ -1,7 +1,12 @@
 import axios from "axios";
 
 import { dbEndpoints as studySync } from "@/assets/data/api";
-import { getAuthToken, getRefreshToken, setTokens } from "@/utils/auth";
+import {
+  getAuthToken,
+  getRefreshToken,
+  removeTokens,
+  setTokens,
+} from "@/utils/auth";
 
 const studySyncDB = axios.create({
   baseURL: studySync.api,
@@ -20,7 +25,7 @@ studySyncDB.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 studySyncDB.interceptors.response.use(
@@ -45,8 +50,10 @@ studySyncDB.interceptors.response.use(
       }
     }
 
+    removeTokens();
+    window.location.replace("/");
     return Promise.reject(error);
-  },
+  }
 );
 
 export default studySyncDB;
