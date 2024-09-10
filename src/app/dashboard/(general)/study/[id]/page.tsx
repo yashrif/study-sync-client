@@ -1,14 +1,34 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { IconRefresh, IconXboxX } from "@tabler/icons-react";
+import _ from "lodash";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
-import { dbEndpoints } from "@/assets/data/api";
+import studySyncServer from "@/api/studySyncServer";
+import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
 import { api, downloadFile } from "@/assets/data/api/ai";
-import { useFetchState } from "@/hooks/fetchData";
-import { useApiHandler } from "@/hooks/useApiHandler";
+import { indexDialog } from "@/assets/data/dashboard/study";
+import IconButton from "@/components/button/IconButton";
+import { CheckmarkAnimated } from "@/components/icons";
+import SpinnerContainer from "@/components/spinner/SpinnerContainer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useFetchDataState, useFetchState } from "@/hooks/fetchData";
 import { useUploadsContext } from "@/hooks/useUploadsContext";
-import { Preference, UploadsActionType } from "@/types";
+import {
+  FetchActionType,
+  Preference,
+  Status,
+  Upload,
+  UploadsActionType,
+} from "@/types";
+import { dateFormatter } from "@/utils/dateFormatter";
 import ChatAI from "./_components/ChatAI";
 import ChatResponse from "./_components/ChatResponse";
 
@@ -19,12 +39,12 @@ type Props = {
 };
 
 const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [showDialog, setShowDialog] = useState(false);
   const {
-    state: { showChatResponse },
+    state: { showChatResponse, uploads },
     dispatch,
   } = useUploadsContext();
-
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -61,28 +81,133 @@ const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
     }
   }, [dispatch, id]);
 
-  const { dispatch: patchDispatch } = useFetchState<Preference>();
-  const { handler } = useApiHandler<{ studyId: string }, Preference>({
+  useFetchDataState<null, Preference>({
     apiCall: useCallback(
-      (data) => studySyncDB.patch(dbEndpoints.preferences, data),
-      []
+      () => studySyncDB.patch(dbEndpoints.preferences, { studyId: id }),
+      [id]
     ),
-    dispatch: patchDispatch,
   });
 
+  const {
+    state: { data: upload, status },
+  } = useFetchDataState<null, Upload>({
+    apiCall: useCallback(
+      () => studySyncDB.get(`${dbEndpoints.uploads}/${id}`),
+      [id]
+    ),
+  });
+
+  const { state, dispatch: indexDispatch } = useFetchState(Status.IDLE);
+
   useEffect(() => {
-    if (id) handler({ data: { studyId: id } });
-  }, [handler, id]);
+    if (!_.isEmpty(upload)) {
+      if (!upload.isIndexed) setShowDialog(true);
+    }
+  }, [upload]);
 
   return (
     <>
       <div
         ref={containerRef}
         className="h-screen w-full absolute top-0 right-0"
-      ></div>
-      <div className="absolute bottom-0 left-0 right-0  z-10 flex justify-center">
-        {showChatResponse ? <ChatResponse /> : <ChatAI />}
-      </div>
+      />
+
+      {status !== Status.PENDING && status !== Status.IDLE ? (
+        showDialog ? (
+          <>
+            <Dialog defaultOpen>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>{indexDialog.title}</DialogTitle>
+                  <DialogDescription>
+                    {indexDialog.description}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="flex flex-col gap-6 mt-2">
+                  <div className="flex flex-col gap-1.5">
+                    {[
+                      { label: "id", value: upload?.id },
+                      { label: "name", value: upload?.name },
+                      {
+                        label: "Create Date",
+                        value: dateFormatter(upload?.createDate || ""),
+                      },
+                    ].map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex gap-2 items-center text-sm"
+                      >
+                        <span className="font-semibold capitalize">
+                          {item.label}:{" "}
+                        </span>
+                        <span className="line-clamp-1">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <IconButton
+                    size={"sm"}
+                    status={state.status}
+                    isAlwaysIcons
+                    iconClassName="size-4"
+                    className="mr-auto"
+                    contents={{
+                      [Status.IDLE]: {
+                        type: "icon-content",
+                        Icon: IconRefresh,
+                        content: indexDialog.button,
+                      },
+                      [Status.SUCCESS]: {
+                        type: "icon-only",
+                        Icon: CheckmarkAnimated,
+                      },
+                      [Status.ERROR]: {
+                        type: "icon-only",
+                        Icon: IconXboxX,
+                      },
+                    }}
+                    onClick={async () => {
+                      try {
+                        indexDispatch({
+                          type: FetchActionType.FETCH_START,
+                        });
+                        await studySyncServer.post(
+                          serverEndpoints.index,
+                          upload?.name
+                        );
+                        await studySyncDB.patch(
+                          `${dbEndpoints.uploads}/${upload?.id}`,
+                          {
+                            isIndexed: true,
+                          }
+                        );
+                        indexDispatch({
+                          type: FetchActionType.FETCH_SUCCESS,
+                          payload: { ...upload, isIndexed: true },
+                        });
+                        setTimeout(() => {
+                          setShowDialog(false);
+                        }, 2500);
+                      } catch (err) {
+                        console.log(err);
+                        indexDispatch({
+                          type: FetchActionType.FETCH_ERROR,
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          </>
+        ) : (
+          <div className="absolute bottom-0 left-0 right-0  z-10 flex justify-center">
+            {showChatResponse ? <ChatResponse /> : <ChatAI />}
+          </div>
+        )
+      ) : (
+        <SpinnerContainer containerClassName="absolute h-28 bottom-0 left-0 right-0  z-10 flex justify-center" />
+      )}
     </>
   );
 };

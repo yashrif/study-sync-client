@@ -1,6 +1,9 @@
+import { cva } from "class-variance-authority";
+import _ from "lodash";
 import React from "react";
 
 import StatusContent from "@/components/StatusContent";
+import { cn } from "@/lib/utils";
 import { Content, ContentType, Status, Button as TButton } from "@/types";
 import { Button } from "@components/ui/button";
 
@@ -15,6 +18,8 @@ type Props = TButton & {
   contentType?: ContentType;
 };
 
+const successIconVariants = cva("stroke-white");
+
 const IconButton = React.forwardRef<HTMLButtonElement, Props>(
   (
     {
@@ -27,6 +32,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, Props>(
       contentClassName,
       Icon,
       children,
+      contents,
       ...props
     },
     ref
@@ -42,9 +48,32 @@ const IconButton = React.forwardRef<HTMLButtonElement, Props>(
           status={status || Status.IDLE}
           iconClassName={iconClassName}
           contentClassName={`font-medium ${contentClassName}`}
-          contents={{
-            [Status.IDLE]: { type: "icon-content", Icon: Icon },
-          }}
+          contents={
+            _.isEmpty(contents)
+              ? {
+                  [Status.IDLE]: { type: "icon-content", Icon: Icon },
+                }
+              : {
+                  ...contents,
+                  [Status.SUCCESS]: _.isEmpty(contents[Status.SUCCESS])
+                    ? {
+                        type: "icon-only",
+                        iconClassName: "stroke-white",
+                      }
+                    : contents[Status.SUCCESS].type === "content-only"
+                      ? {
+                          ...contents[Status.SUCCESS],
+                        }
+                      : {
+                          ...contents[Status.SUCCESS],
+                          iconClassName: cn(
+                            successIconVariants({
+                              className: contents[Status.SUCCESS],
+                            })
+                          ),
+                        },
+                }
+          }
           isAlwaysIcons={isAlwaysIcons}
           className={containerClassName}
           {...props}
@@ -56,6 +85,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, Props>(
     );
   }
 );
+
 IconButton.displayName = "SubmitButton";
 
 export default IconButton;

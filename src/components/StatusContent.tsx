@@ -57,7 +57,7 @@ const iconVariants = cva("size-4 stroke-2", {
 });
 
 const containerVariants = cva(
-  "flex gap-1.5 items-center justify-center transition-all duration-300"
+  "inline-flex gap-1.5 items-center justify-center transition-all duration-300"
 );
 
 type Props = {
@@ -211,7 +211,7 @@ const Content: React.FC<ContentProps> = ({
         return (
           <>
             {renderedAlwaysIcon({ ...content, type: "icon-only" })}
-            {children &&
+            {(children || content.content) &&
               renderedAlwaysIcon({ ...content, type: "content-only" })}
           </>
         );

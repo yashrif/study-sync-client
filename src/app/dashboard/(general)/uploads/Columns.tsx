@@ -1,5 +1,6 @@
 import { IconRefresh, IconXboxX } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 
 import studySyncDB from "@/api/studySyncDB";
 import studySyncServer from "@/api/studySyncServer";
@@ -30,7 +31,6 @@ import {
   TooltipTrigger,
 } from "@components/ui/tooltip";
 import { CircleCheck } from "@icons";
-import { useRouter } from "next/navigation";
 
 type IndexButtonProps = {
   data: UploadShallow;
@@ -97,7 +97,7 @@ const IndexButton: React.FC<IndexButtonProps> = ({ data }) => {
               ) : state.status === Status.PENDING ? (
                 <IconRefresh className="size-4 text-primary animate-spin duration-1000" />
               ) : data.isIndexed ? (
-                <CircleCheck className="size-4 text-success hover:scale-125 duration-300" />
+                <CircleCheck className="size-4 stroke-success hover:scale-125 duration-300" />
               ) : (
                 <IconRefresh className="size-4 text-primary hover:scale-125 duration-300" />
               )}
