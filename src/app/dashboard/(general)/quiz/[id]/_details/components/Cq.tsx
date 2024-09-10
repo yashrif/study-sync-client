@@ -130,6 +130,7 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
               </div>
               <h6 className="text-wrap">{cq.question}</h6>
             </FormLabel>
+
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -147,12 +148,13 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                   >
                     <StatusContent
                       status={createStatus}
-                      className={`!size-4 hover:scale-[1.2] transition cursor-pointer ${
+                      className={`hover:scale-[1.2] transition cursor-pointer ${
                         createStatus === Status.PENDING
                           ? "animate-spin duration-1000"
                           : "duration-300"
                       }
                       `}
+                      iconClassName="size-5 stroke-[2.5px]"
                       contents={{
                         [Status.IDLE]: {
                           type: "icon-only",
@@ -168,7 +170,9 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                           Icon: cq.isFlashcard
                             ? CheckmarkAnimated
                             : IconCirclePlus2,
-                          iconClassName: "text-success stroke-success",
+                          iconClassName: cq.isFlashcard
+                            ? "stroke-success text-success"
+                            : "!stroke-primary",
                         },
                       }}
                     />
