@@ -24,6 +24,7 @@ import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import {
+  QuizRequestDb,
   QuizResponseServer,
   QuizUploadsActionType,
   Status,
@@ -72,6 +73,10 @@ const CreateAction: React.FC<Props> = ({ table }) => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
+      dispatch({
+        type: QuizUploadsActionType.SET_QUIZ,
+        payload: {} as QuizRequestDb,
+      });
       const uploads: UploadShallow[] = table
         .getFilteredSelectedRowModel()
         .rows.map((row) => row.original);
