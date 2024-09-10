@@ -1,3 +1,4 @@
+import { IconRefresh, IconXboxX } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 
 import studySyncDB from "@/api/studySyncDB";
@@ -28,8 +29,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@components/ui/tooltip";
-import { IconRefresh, IconXboxX } from "@tabler/icons-react";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck } from "@icons";
+import { useRouter } from "next/navigation";
 
 type IndexButtonProps = {
   data: UploadShallow;
@@ -117,6 +118,7 @@ const useColumnConfig = (): {
   columns: Column<UploadShallow>[];
   actions: TableAction<UploadShallow>[];
 } => {
+  const { push } = useRouter();
   const {
     state: { uploads },
     dispatch,
@@ -171,7 +173,8 @@ const useColumnConfig = (): {
     actions: [
       {
         title: "View",
-        onClick: () => console.log("View"),
+        onClick: (data) =>
+          data ? push(routes.dashboard.study.details(data.id)) : null,
       },
       {
         title: "Delete",
