@@ -6,7 +6,7 @@ import {
   getRefreshToken,
   removeTokens,
   setTokens,
-} from "@/utils/auth";
+} from "@/lib/auth";
 
 const studySyncDB = axios.create({
   baseURL: studySync.api,

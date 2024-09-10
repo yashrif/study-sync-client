@@ -8,7 +8,7 @@ import { sidebarLinks, signOut } from "@/assets/data/dashboard/sidebarLinks";
 import { routes } from "@/assets/data/routes";
 import Logo from "@/components/Logo";
 import Spinner from "@/components/spinner/Spinner";
-import { removeTokens } from "@/utils/auth";
+import { removeTokens } from "@/lib/auth";
 import NavLink from "./NavLink";
 
 const SideBar: React.FC = () => {

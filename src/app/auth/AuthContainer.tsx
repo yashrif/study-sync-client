@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { setTokens } from "@/lib/auth";
 import {
   Link as LinkType,
   SignInField,
@@ -28,7 +29,6 @@ import {
   SignUpField,
   SignUpSchema,
 } from "@/types";
-import { setTokens } from "@/utils/auth";
 import { Status } from "@allTypes";
 
 const MotionFormItem = motion(FormItem);
@@ -77,7 +77,9 @@ const AuthContainer: React.FC<Props> = ({
       setStatus(Status.SUCCESS);
       const { access_token, refresh_token } = response.data;
       statusCode = response.status;
-      setTokens(access_token, refresh_token);
+      "remember" in values && values.remember
+        ? setTokens(access_token, refresh_token, "duration")
+        : setTokens(access_token, refresh_token, "session");
     } catch (err) {
       console.log(err);
       setStatus(Status.ERROR);
@@ -85,7 +87,7 @@ const AuthContainer: React.FC<Props> = ({
       setTimeout(() => {
         if ((statusCode === 200 || statusCode === 201) && redirect)
           replace(redirect);
-          setStatus(Status.IDLE);
+        setStatus(Status.IDLE);
       }, 2500);
     }
   };
