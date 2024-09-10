@@ -26,7 +26,7 @@ import Mcq from "./components/Mcq";
 const List: React.FC = () => {
   const { checkQueryString } = useQueryString();
   const {
-    state: { quiz, formRef: ref },
+    state: { quiz, formRef: ref, isShowResults },
     dispatch,
   } = useQuizContext();
   const { mcqs, cqs } = useMemo(() => {
@@ -52,7 +52,11 @@ const List: React.FC = () => {
         payload: false,
       });
 
-      form.reset(initialState(mcqs || []));
+      form.reset(initialState([]));
+      dispatch({
+        type: QuizActionType.SET_CQ_EVALUATION,
+        payload: {},
+      });
     },
   }));
 
@@ -134,7 +138,13 @@ const List: React.FC = () => {
             <div className="flex flex-col gap-8">
               <Heading title={quizDetails.mcq.title} />
               {mcqs?.map((mcq, index) => (
-                <Mcq key={mcq.id} mcq={mcq} form={form} order={index + 1} />
+                <Mcq
+                  key={mcq.id}
+                  mcq={mcq}
+                  form={form}
+                  order={index + 1}
+                  isDisabled={isShowResults}
+                />
               ))}
             </div>
           )}
@@ -142,7 +152,13 @@ const List: React.FC = () => {
             <div className="flex flex-col gap-8 pt-16 first:pt-0">
               <Heading title={quizDetails.cq.title} />
               {cqs?.map((cq, index) => (
-                <Cq key={cq.id} cq={cq} form={form} order={index + 1} />
+                <Cq
+                  key={cq.id}
+                  cq={cq}
+                  form={form}
+                  order={index + 1}
+                  isDisabled={isShowResults}
+                />
               ))}
             </div>
           )}

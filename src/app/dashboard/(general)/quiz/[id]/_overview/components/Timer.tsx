@@ -4,11 +4,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
 import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { Difficulty, QuizActionType } from "@/types";
+import { Difficulty, QuizActionType, QuizTypes } from "@/types";
 import Heading from "../../_components/Heading";
 import { calculateDuration } from "../difficultyValue";
 
 const Timer = () => {
+  const { checkQueryString } = useQueryString();
+
+  const isMcqs = checkQueryString(queryParams.types.key, QuizTypes.MCQ);
+  const isCqs = checkQueryString(queryParams.types.key, QuizTypes.CQ);
+
   const {
     state: { quiz, formRef, isTimerActive },
     dispatch,
@@ -49,11 +54,11 @@ const Timer = () => {
     setSeconds(
       calculateDuration({
         difficulty,
-        cqs: quiz.cqs?.length || 0,
-        mcqs: quiz.mcqs?.length || 0,
+        cqs: isCqs ? quiz.cqs?.length || 0 : 0,
+        mcqs: isMcqs ? quiz.mcqs?.length || 0 : 0,
       })
     );
-  }, [difficulty, quiz.cqs?.length, quiz.mcqs?.length]);
+  }, [difficulty, isCqs, isMcqs, quiz.cqs?.length, quiz.mcqs?.length]);
 
   useEffect(() => {
     if (!isTimerActive) resetTimer();

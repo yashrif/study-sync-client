@@ -40,9 +40,10 @@ type Props = {
     any,
     undefined
   >;
+  isDisabled?: boolean;
 };
 
-const Cq: React.FC<Props> = ({ cq, order, form }) => {
+const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
   const { id } = useParams();
   const {
     state: { cqEvaluation, status, isShowResults, evaluateStatus },
@@ -84,38 +85,51 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
       name={cq.id}
       render={({ field }) => (
         <FormItem className="flex flex-col gap-6">
-          <FormLabel className="grid grid-cols-[40px,1fr,auto] gap-x-10 items-center">
-            <div
-              className={`size-10 flex items-center justify-center rounded-full
+          <div className="grid grid-cols-[1fr,auto] gap-x-10 items-start">
+            <FormLabel className="grid grid-cols-[40px,1fr] gap-x-10 items-center">
+              <div
+                className={`size-10 flex items-center justify-center rounded-full
                 ${
                   form.formState.errors[cq.id] ||
-                  (result.correctness < 50 && result.correctness >= 0)
+                  (result.correctness < 50 && result.correctness >= 0) ||
+                  (!result.correctness &&
+                    isShowResults &&
+                    evaluateStatus === Status.SUCCESS)
                     ? "ring-destructive"
                     : "ring-primary"
                 }
                 ${
-                  result.correctness >= 50
-                    ? result.correctness >= 80
-                      ? "bg-success ring-success"
-                      : "bg-blue-500 ring-blue-500"
-                    : result.correctness >= 0
+                  result.correctness
+                    ? result.correctness >= 50
+                      ? result.correctness >= 80
+                        ? "bg-success ring-success"
+                        : "bg-blue-500 ring-blue-500"
+                      : result.correctness >= 0
+                        ? "bg-destructive"
+                        : ""
+                    : isShowResults && evaluateStatus === Status.SUCCESS
                       ? "bg-destructive"
                       : ""
                 } ring-2 ring-inset`}
-            >
-              <span
-                className={`text-large ${
-                  form.formState.errors[cq.id]
-                    ? "text-destructive"
-                    : result.correctness <= 50 && result.correctness >= 0
-                      ? "text-text-300"
-                      : "text-primary"
-                }  font-secondary font-semibold`}
               >
-                {order}
-              </span>
-            </div>
-            <h6 className="text-wrap">{cq.question}</h6>
+                <span
+                  className={`text-large ${
+                    form.formState.errors[cq.id]
+                      ? "text-destructive"
+                      : result.correctness
+                        ? result.correctness <= 50 && result.correctness >= 0
+                          ? "text-text-300"
+                          : "text-primary"
+                        : isShowResults && evaluateStatus === Status.SUCCESS
+                          ? "text-white"
+                          : "text-primary"
+                  }  font-secondary font-semibold`}
+                >
+                  {order}
+                </span>
+              </div>
+              <h6 className="text-wrap">{cq.question}</h6>
+            </FormLabel>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -180,7 +194,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          </FormLabel>
+          </div>
           <FormControl>
             <div className="grid grid-cols-[40px_1fr] gap-10 items-center !mt-0">
               <div />
@@ -191,6 +205,7 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                 value={field?.value || ""}
                 onChange={field?.onChange || (() => {})}
                 defaultValue={field?.value || ""}
+                disabled={isDisabled}
               />
             </div>
           </FormControl>
@@ -204,12 +219,16 @@ const Cq: React.FC<Props> = ({ cq, order, form }) => {
                     <span className="text-primary font-medium">
                       Correctness:{" "}
                     </span>
-                    {result.correctness}
+                    {result.correctness || 0}
                   </p>
-                  <p className="text-text-200 text-medium">
-                    <span className="text-primary font-medium">Comment: </span>
-                    {result.comment}
-                  </p>
+                  {result?.comment?.length > 0 && (
+                    <p className="text-text-200 text-medium">
+                      <span className="text-primary font-medium">
+                        Comment:{" "}
+                      </span>
+                      {result.comment}
+                    </p>
+                  )}
                 </div>
               </FormDescription>
             )}

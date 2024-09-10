@@ -7,17 +7,23 @@ import { Suspense, useCallback } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import PageHeading from "@/app/dashboard/_components/PageHeading";
 import { serverEndpoints } from "@/assets/data/api";
-import { actionButton, quizDetails } from "@/assets/data/dashboard/quiz";
+import {
+  actionButton,
+  queryParams,
+  quizDetails,
+} from "@/assets/data/dashboard/quiz";
 import IconButton from "@/components/button/IconButton";
 import Spinner from "@/components/spinner/Spinner";
 import { useFetchData } from "@/hooks/fetchData";
+import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { Quiz, QuizActionType, Status } from "@allTypes";
+import { Quiz, QuizActionType, QuizTypes, Status } from "@allTypes";
 import List from "./_details";
 import Overview from "./_overview";
 
 const QuizDetails: React.FC = () => {
   const { id } = useParams();
+  const { checkQueryString } = useQueryString();
 
   const {
     state: {
@@ -40,6 +46,9 @@ const QuizDetails: React.FC = () => {
     dispatch,
   });
 
+  const isMcqs = checkQueryString(queryParams.types.key, QuizTypes.MCQ);
+  const isCqs = checkQueryString(queryParams.types.key, QuizTypes.CQ);
+
   if (status === Status.ERROR) return notFound();
 
   return (
@@ -58,7 +67,9 @@ const QuizDetails: React.FC = () => {
                 <Spinner className="!size-5" />
               ) : evaluateStatus === Status.SUCCESS ? (
                 <span>
-                  {points}/{(quiz.mcqs?.length || 0) + (quiz.cqs?.length || 0)}
+                  {points}/
+                  {(isMcqs ? quiz.mcqs?.length || 0 : 0) +
+                    (isCqs ? quiz.cqs?.length || 0 : 0)}
                 </span>
               ) : (
                 <IconWifiOff className="size-6 text-destructive" />
