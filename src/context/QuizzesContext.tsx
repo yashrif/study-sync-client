@@ -5,13 +5,14 @@ import { createContext, useReducer } from "react";
 import {
   FetchActionType,
   QuizzesAction,
+  QuizzesActionType,
   QuizzesContextProps,
   QuizzesState,
   Status,
 } from "@/types";
 
 const QuizzesContext = createContext<QuizzesContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 const initialState: QuizzesState = {
@@ -22,7 +23,7 @@ const initialState: QuizzesState = {
 
 const quizzesReducer = (
   state: QuizzesState,
-  action: QuizzesAction,
+  action: QuizzesAction
 ): QuizzesState => {
   switch (action.type) {
     case FetchActionType.FETCH_START:
@@ -40,6 +41,11 @@ const quizzesReducer = (
       return {
         ...state,
         status: Status.ERROR,
+      };
+    case QuizzesActionType.SET_QUIZZES:
+      return {
+        ...state,
+        quizzes: action.payload,
       };
     default:
       return state;

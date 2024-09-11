@@ -149,9 +149,13 @@ export type QuizContextProps = {
 
 /* -------------------------- QuizzesContext.tsx --------------------------- */
 
-export enum QuizzesActionType {}
+export enum QuizzesActionType {
+  SET_QUIZZES = "SET_QUIZZES",
+}
 
-export type QuizzesAction = FetchAction<QuizShallow[]>;
+export type QuizzesAction =
+  | FetchAction<QuizShallow[]>
+  | Action<QuizzesActionType.SET_QUIZZES, QuizShallow[]>;
 
 export type QuizzesState = {
   quizzes: QuizShallow[];

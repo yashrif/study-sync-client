@@ -7,6 +7,7 @@ import { dbEndpoints } from "@/assets/data/api";
 import { home, search } from "@/assets/data/dashboard/uploads";
 import Spinner from "@/components/spinner/Spinner";
 import DataTable from "@/components/table";
+import { toast } from "@/components/ui/use-toast";
 import { useFetchData, useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useTable } from "@/hooks/useTable";
@@ -36,7 +37,7 @@ const Uploads: React.FC = () => {
     columns: useColumns(),
   });
 
-  const { state, dispatch: uploadPost } = useFetchState<null>();
+  const { state, dispatch: uploadDelete } = useFetchState<null>();
   const { handler } = useApiHandler<null, null>({
     apiCall: useCallback(
       (_, pathVariable) =>
@@ -44,7 +45,7 @@ const Uploads: React.FC = () => {
       []
     ),
 
-    dispatch: uploadPost,
+    dispatch: uploadDelete,
   });
 
   const { handler: refreshHandler } = useApiHandler({
@@ -75,8 +76,18 @@ const Uploads: React.FC = () => {
       });
 
       table.resetRowSelection();
+      toast({
+        title: "Deleted Successfully!",
+        description: `Selected files are successfully deleted.`,
+        duration: 5000,
+      });
     } catch (err) {
       console.log(err);
+      toast({
+        title: "Action failed!",
+        description: `Failed to delete the selected files.`,
+        duration: 5000,
+      });
     }
   };
 
