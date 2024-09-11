@@ -22,9 +22,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFetchDataState } from "@/hooks/fetchData";
-import { FetchActionType, Flashcard, Status } from "@/types";
-import { Dialog, DialogContent } from "@components/ui/dialog";
-import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { FetchActionType, Flashcard, FlashcardStatus, Status } from "@/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@components/ui/dialog";
 
 const FlashCard: React.FC = () => {
   const [index, setIndex] = useState(0);
@@ -41,8 +45,12 @@ const FlashCard: React.FC = () => {
 
   const filteredFlashcards = useMemo(() => {
     return isPreview
-      ? flashcards || []
-      : flashcards?.filter((item) => item.status === null) || [];
+      ? flashcards
+        ? [...flashcards]
+        : []
+      : flashcards?.filter(
+          (item) => item.status !== FlashcardStatus.REMEMBERED
+        ) || [];
   }, [flashcards, isPreview]);
 
   return (
@@ -137,12 +145,24 @@ const FlashCard: React.FC = () => {
                           {
                             ...review.buttons.reset,
                             onClick: async () => {
-                              await studySyncDB.patch(
-                                `${dbEndpoints.cqs}/${filteredFlashcards?.[index].id}`,
-                                {
-                                  status: null,
-                                }
-                              );
+                              try {
+                                await studySyncDB.patch(
+                                  `${dbEndpoints.cqs}/${filteredFlashcards?.[index].id}`,
+                                  {
+                                    status: FlashcardStatus.FORGOTTEN,
+                                  }
+                                );
+                                filteredFlashcards?.splice(index, 1, {
+                                  ...filteredFlashcards?.[index],
+                                  status: FlashcardStatus.FORGOTTEN,
+                                });
+                                dispatch({
+                                  type: FetchActionType.FETCH_RESET,
+                                  payload: filteredFlashcards,
+                                });
+                              } catch (err) {
+                                console.error(err);
+                              }
                             },
                           },
                         ].map((button) => (
@@ -169,21 +189,28 @@ const FlashCard: React.FC = () => {
                             Icon={button.Icon}
                             size={"sm"}
                             onClick={async () => {
+                              const currentStatus = flashcardStatus(
+                                filteredFlashcards?.[index].status,
+                                button.status
+                              );
+
                               await studySyncDB.patch(
                                 `${dbEndpoints.cqs}/${filteredFlashcards?.[index].id}`,
                                 {
-                                  status: button.status,
+                                  status: currentStatus,
                                 }
                               );
                               setIsOpen(false);
-                              let theData = _.cloneDeep(filteredFlashcards);
-                              theData?.splice(index, 1, {
+                              const theFlashcard = {
                                 ...filteredFlashcards?.[index],
-                                status: button.status,
-                              });
+                                status: currentStatus,
+                              };
+                              filteredFlashcards
+                                ?.splice(index, 1)
+                                .push(theFlashcard);
                               dispatch({
                                 type: FetchActionType.FETCH_RESET,
-                                payload: theData,
+                                payload: filteredFlashcards,
                               });
                               setIndex(0);
                             }}
@@ -217,3 +244,26 @@ const FlashCard: React.FC = () => {
 };
 
 export default FlashCard;
+
+const flashcardStatus = (
+  prevStatus: FlashcardStatus | null,
+  currentStatus: FlashcardStatus
+) => {
+  switch (currentStatus) {
+    case FlashcardStatus.FORGOTTEN:
+      return FlashcardStatus.FORGOTTEN;
+    case FlashcardStatus.TOOK_A_WHILE_TO_REMEMBER:
+      return FlashcardStatus.TOOK_A_WHILE_TO_REMEMBER;
+    case FlashcardStatus.REMEMBERED:
+      switch (prevStatus) {
+        case FlashcardStatus.FORGOTTEN:
+          return FlashcardStatus.TOOK_A_WHILE_TO_REMEMBER;
+        case FlashcardStatus.TOOK_A_WHILE_TO_REMEMBER:
+          return FlashcardStatus.REMEMBERED;
+        default:
+          return FlashcardStatus.REMEMBERED;
+      }
+    default:
+      return FlashcardStatus.FORGOTTEN;
+  }
+};
