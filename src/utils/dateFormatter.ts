@@ -1,10 +1,10 @@
 export const dateFormatter = (
   date: Date | string,
-  mode: "long" | "numeric" = "long"
+  mode: "long" | "numeric" | "short" = "long"
 ) =>
   new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
-    month: mode === "long" ? "long" : "numeric",
+    month: mode === "long" ? "long" : mode === "short" ? "short" : "2-digit",
     day: mode === "long" ? "numeric" : "2-digit",
   });
 

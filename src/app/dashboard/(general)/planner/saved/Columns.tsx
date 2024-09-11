@@ -1,5 +1,12 @@
-import { IconBook2, IconExternalLink, IconTrash } from "@tabler/icons-react";
+import {
+  IconBook2,
+  IconExternalLink,
+  IconProgress,
+  IconProgressCheck,
+  IconTrash,
+} from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { cva } from "class-variance-authority";
 
 import { routes } from "@/assets/data/routes";
 import {
@@ -8,9 +15,10 @@ import {
   ColumnHeader,
 } from "@/components/table/ColumnTools";
 import { Badge } from "@/components/ui/badge";
-import { Column, PlannerShallow, TableAction } from "@/types";
-import { MAX_TOPICS_PER_ROW } from "@/utils/constants";
+import { cn } from "@/lib/utils";
+import { Column, Icon, PlannerShallow, TableAction } from "@/types";
 import { shadeGenerator } from "@/utils/colorGenerator";
+import { MAX_TOPICS_PER_ROW } from "@/utils/constants";
 
 /* ---------------------------- fields and values ---------------------------- */
 
@@ -54,7 +62,8 @@ const saved: {
         formatter: (topics) => {
           return (
             <div className="flex flex-wrap gap-x-4 gap-y-2">
-              {typeof topics !== "string" &&
+              {topics &&
+                typeof topics !== "string" &&
                 topics.slice(0, MAX_TOPICS_PER_ROW).map((topic) => (
                   <Badge
                     key={topic.id}
@@ -67,10 +76,45 @@ const saved: {
                     {topic.name}
                   </Badge>
                 ))}
-              {topics.length > MAX_TOPICS_PER_ROW && (
-                <Badge>+ {topics.length - 9}</Badge>
+              {topics && topics.length > MAX_TOPICS_PER_ROW && (
+                <Badge>+ {topics.length - MAX_TOPICS_PER_ROW}</Badge>
               )}
             </div>
+          );
+        },
+      },
+      {
+        type: "no_link",
+        accessorKey: "endDate",
+        title: "Status",
+        formatter: (date) => {
+          const Status: React.FC<{
+            label: string;
+            Icon: Icon;
+            iconClassName?: string;
+          }> = ({ label, Icon, iconClassName }) => {
+            const containerVariants = cva("size-4 stroke-primary");
+
+            return (
+              <div className="flex gap-2 items-center whitespace-nowrap">
+                <Icon
+                  className={cn(
+                    containerVariants({ className: iconClassName })
+                  )}
+                />
+                <span>{label}</span>
+              </div>
+            );
+          };
+
+          return date ? (
+            <Status
+              label="Completed"
+              Icon={IconProgressCheck}
+              iconClassName="stroke-success"
+            />
+          ) : (
+            <Status label={"In Progress"} Icon={IconProgress} />
           );
         },
       },

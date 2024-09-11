@@ -51,7 +51,7 @@ const Grid = () => {
           <Fragment key={generateUUID()}>
             <TopicCard {...topic} />
             {dates.map((date) => (
-              <RecordCard key={generateUUID()} date={date} topicShallow={topic} />
+              <RecordCard key={generateUUID()} date={date} topic={topic} />
             ))}
           </Fragment>
         ))}
