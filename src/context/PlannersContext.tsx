@@ -4,27 +4,25 @@ import { createContext, useReducer } from "react";
 
 import {
   FetchActionType,
-  QuizzesAction,
-  QuizzesActionType,
-  QuizzesContextProps,
-  QuizzesState,
+  PlannersAction,
+  PlannersContextProps,
+  PlannersState,
   Status,
 } from "@/types";
 
-const QuizzesContext = createContext<QuizzesContextProps | undefined>(
+const PlannersContext = createContext<PlannersContextProps | undefined>(
   undefined
 );
 
-const initialState: QuizzesState = {
-  quizzes: [],
+const initialState: PlannersState = {
+  planners: [],
   status: Status.IDLE,
-  indexStatus: {},
 };
 
-const quizzesReducer = (
-  state: QuizzesState,
-  action: QuizzesAction
-): QuizzesState => {
+const plannersReducer = (
+  state: PlannersState,
+  action: PlannersAction
+): PlannersState => {
   switch (action.type) {
     case FetchActionType.FETCH_START:
       return {
@@ -35,17 +33,18 @@ const quizzesReducer = (
       return {
         ...state,
         status: Status.SUCCESS,
-        quizzes: action.payload,
+        planners: action.payload,
       };
     case FetchActionType.FETCH_ERROR:
       return {
         ...state,
         status: Status.ERROR,
       };
-    case QuizzesActionType.SET_QUIZZES:
+    case FetchActionType.FETCH_RESET:
       return {
         ...state,
-        quizzes: action.payload,
+        status: Status.IDLE,
+        planners: action.payload || [],
       };
     default:
       return state;
@@ -56,14 +55,14 @@ type Props = {
   children: React.ReactNode;
 };
 
-const QuizzesProvider: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(quizzesReducer, initialState);
+const PlannersProvider: React.FC<Props> = ({ children }) => {
+  const [state, dispatch] = useReducer(plannersReducer, initialState);
 
   return (
-    <QuizzesContext.Provider value={{ state, dispatch }}>
+    <PlannersContext.Provider value={{ state, dispatch }}>
       {children}
-    </QuizzesContext.Provider>
+    </PlannersContext.Provider>
   );
 };
 
-export { QuizzesContext, QuizzesProvider };
+export { PlannersContext, PlannersProvider };

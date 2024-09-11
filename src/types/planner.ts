@@ -25,6 +25,7 @@ export type PlannerShallow = {
   title: string;
   topics: PlannerTopic[];
   createDate: string;
+  endDate: string | null;
 };
 
 export type Planner = Omit<PlannerShallow, "topics"> & {
@@ -88,4 +89,20 @@ export type PlannerState = {
 export type PlannerContextProps = {
   state: PlannerState;
   dispatch: React.Dispatch<PlannerAction>;
+};
+
+/* --------------------------------- Planners -------------------------------- */
+
+export enum PlannersActionType {}
+
+export type PlannersAction = FetchAction<PlannerShallow[]>;
+
+export type PlannersState = {
+  planners: PlannerShallow[];
+  status: Status;
+};
+
+export type PlannersContextProps = {
+  state: PlannersState;
+  dispatch: React.Dispatch<PlannersAction>;
 };

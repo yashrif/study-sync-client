@@ -1,32 +1,32 @@
+import { IconBook2 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
 import { routes } from "@/assets/data/routes";
 import {
   Actions,
   Checkbox,
   ColumnHeader,
 } from "@/components/table/ColumnTools";
-import { Column, QuizShallow, TableAction } from "@/types";
-import { IconBook2 } from "@tabler/icons-react";
+import { toast } from "@/components/ui/use-toast";
+import { useQuizzesContext } from "@/hooks/useQuizzesContext";
+import { Column, QuizShallow, QuizzesActionType, TableAction } from "@/types";
 
 /* ---------------------------- fields and values ---------------------------- */
 
-const saved: {
-  search: {
-    key: string;
-    placeholder: string;
-  };
-  columnConfig: {
-    columns: Column<QuizShallow>[];
-    actions: TableAction<QuizShallow>[];
-  };
-} = {
-  search: {
-    key: "title",
-    placeholder: "Search by title",
-  },
+const useColumnConfig = (): {
+  columns: Column<QuizShallow>[];
+  actions: TableAction<QuizShallow>[];
+} => {
+  const { push } = useRouter();
+  const {
+    state: { quizzes },
+    dispatch,
+  } = useQuizzesContext();
 
-  columnConfig: {
+  return {
     columns: [
       {
         type: "link",
@@ -56,29 +56,51 @@ const saved: {
     actions: [
       {
         title: "View",
-        onClick: () => console.log("View"),
+        onClick: (data) =>
+          data ? push(routes.dashboard.quiz.details(data.id)) : null,
       },
       {
         title: "Delete",
-        onClick: () => console.log("Delete"),
+        onClick: async (data) => {
+          try {
+            await studySyncDB.delete(`${dbEndpoints.quizzes}/${data?.id}`);
+            dispatch({
+              type: QuizzesActionType.SET_QUIZZES,
+              payload: quizzes?.filter((quiz) => quiz.id !== data?.id),
+            });
+            toast({
+              title: "Deleted Successfully!",
+              description: `Quiz with id: ${data?.id} is successfully deleted.`,
+              duration: 5000,
+            });
+          } catch (err) {
+            console.log(err);
+            toast({
+              title: "Action failed!",
+              description: `Failed to delete quiz with the id: ${data?.id}.`,
+              duration: 5000,
+            });
+          }
+        },
       },
     ],
-  },
+  };
 };
 
-const columnHeaders = saved.columnConfig.columns.map((column) =>
-  ColumnHeader<QuizShallow>({ column }),
-);
+export const useColumns = (): ColumnDef<QuizShallow>[] => {
+  const columnHeaders = useColumnConfig().columns.map((column) =>
+    ColumnHeader<QuizShallow>({ column })
+  );
 
-export const columns: ColumnDef<QuizShallow>[] = [
-  {
-    ...Checkbox(),
-  },
-  ...columnHeaders,
-  {
-    ...Actions<QuizShallow>({
-      actions: saved.columnConfig.actions,
-      copyId: true,
-    }),
-  },
-];
+  return [
+    {
+      ...Checkbox(),
+    },
+    ...columnHeaders,
+    {
+      ...Actions<QuizShallow>({
+        actions: useColumnConfig().actions,
+      }),
+    },
+  ];
+};

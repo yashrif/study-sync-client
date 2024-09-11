@@ -54,7 +54,11 @@ export const useFetchState = <T>(initialStatus?: Status) => {
   return { state, dispatch };
 };
 
-type FetchDataState<T> = { apiCall: ApiCall<T>; data?: T | null };
+type FetchDataState<T> = {
+  apiCall: ApiCall<T>;
+  data?: T | null;
+  fetchType?: "lazy" | "eager";
+};
 
 export const useFetchDataState = <T, R>(props: FetchDataState<T>) => {
   const { state, dispatch } = useFetchState<R>(Status.PENDING);
@@ -75,6 +79,7 @@ export const useFetchData = <T, R>({
   apiCall,
   dispatch,
   data,
+  fetchType = "eager",
 }: FetchData<T, R>) => {
   const { handler } = useApiHandler<T, R>({
     apiCall,
@@ -82,6 +87,6 @@ export const useFetchData = <T, R>({
   });
 
   useEffect(() => {
-    handler({ data });
-  }, [data, handler]);
+    handler({ data, fetchType });
+  }, [data, fetchType, handler]);
 };

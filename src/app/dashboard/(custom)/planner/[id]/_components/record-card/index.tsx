@@ -1,3 +1,5 @@
+"use client";
+
 import {
   IconCalendarFilled,
   IconPointFilled,
@@ -54,8 +56,9 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
 
   const { handler } = useApiHandler<{ records: TopicRecord[] }, TopicShallow>({
     apiCall: useCallback(
-      (data) => studySyncDB.patch(`${dbEndpoints.topics}/${topic.id}`, data),
-      [topic.id]
+      (data, pathVariable) =>
+        studySyncDB.patch(`${dbEndpoints.topics}/${pathVariable}`, data),
+      []
     ),
     dispatch,
   });
@@ -66,7 +69,7 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
         compareIsoDates(record?.date, date)
       );
     } else return undefined;
-  }, [date, topic.records]);
+  }, [date, topic?.records]);
 
   const MotionIconButton = motion(IconButton);
 
@@ -83,12 +86,15 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
 
     const sortedRecords = _.sortBy(newRecords, "date");
 
+    console.log(topic);
+
     handler({
       data: {
         records: sortedRecords,
       },
       fetchType: "lazy",
       isReset: true,
+      pathVariable: topic.id,
     });
 
     plannerDispatch({
@@ -134,6 +140,10 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
                       type: "icon-only",
                       Icon: IconX,
                       iconClassName: "stroke-destructive",
+                    },
+                    [Status.SUCCESS]: {
+                      type: "icon-only",
+                      iconClassName: "!text-success !stroke-success",
                     },
                   }}
                   status={fetchStatus}
@@ -232,7 +242,7 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
                     }}
                   >
                     <IconCalendarFilled className="size-4" />
-                    <p className="text-small">{dateFormatter(date, "long")}</p>
+                    <p className="text-small">{dateFormatter(date, "short")}</p>
                   </div>
                 </div>
               )

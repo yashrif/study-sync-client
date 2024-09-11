@@ -263,9 +263,9 @@
   }
 
   /* ---------------------------------- focus --------------------------------- */
-  /* *:focus {
+  *:focus {
     @apply !ring-offset-0 !ring-0;
-  } */
+  }
 }
 
 @tailwind components;

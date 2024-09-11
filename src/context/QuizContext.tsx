@@ -65,6 +65,11 @@ const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
         ...state,
         isShowResults: action.payload,
       };
+    case QuizActionType.SET_CQ_EVALUATION:
+      return {
+        ...state,
+        cqEvaluation: action.payload,
+      };
     case QuizActionType.QUIZ_EVALUATE_START:
       return {
         ...state,

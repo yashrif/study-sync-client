@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { getAuthToken } from "@/utils/auth";
+import { getAuthToken } from "@/lib/auth";
 import { button } from "@assets/data/header";
 import { Button } from "@components/ui/button";
 import ProfileButton from "./ProfileButton";

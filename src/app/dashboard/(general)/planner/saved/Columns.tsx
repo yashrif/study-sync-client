@@ -1,6 +1,16 @@
-import { IconBook2, IconExternalLink, IconTrash } from "@tabler/icons-react";
+import {
+  IconBook2,
+  IconExternalLink,
+  IconProgress,
+  IconProgressCheck,
+  IconTrash,
+} from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { cva } from "class-variance-authority";
+import { useRouter } from "next/navigation";
 
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
 import { routes } from "@/assets/data/routes";
 import {
   Actions,
@@ -8,28 +18,37 @@ import {
   ColumnHeader,
 } from "@/components/table/ColumnTools";
 import { Badge } from "@/components/ui/badge";
-import { Column, PlannerShallow, TableAction } from "@/types";
-import { MAX_TOPICS_PER_ROW } from "@/utils/constants";
+import { toast } from "@/components/ui/use-toast";
+import { usePlannersContext } from "@/hooks/usePlannersContext";
+import { cn } from "@/lib/utils";
+import {
+  Column,
+  FetchActionType,
+  Icon,
+  PlannerShallow,
+  TableAction,
+} from "@/types";
 import { shadeGenerator } from "@/utils/colorGenerator";
+import { MAX_TOPICS_PER_ROW } from "@/utils/constants";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@components/ui/hover-card";
 
 /* ---------------------------- fields and values ---------------------------- */
 
-const saved: {
-  search: {
-    key: string;
-    placeholder: string;
-  };
-  columnConfig: {
-    columns: Column<PlannerShallow>[];
-    actions: TableAction<PlannerShallow>[];
-  };
-} = {
-  search: {
-    key: "title",
-    placeholder: "Search by title",
-  },
+const useColumnConfig = (): {
+  columns: Column<PlannerShallow>[];
+  actions: TableAction<PlannerShallow>[];
+} => {
+  const { push } = useRouter();
+  const {
+    state: { planners },
+    dispatch,
+  } = usePlannersContext();
 
-  columnConfig: {
+  return {
     columns: [
       {
         type: "link",
@@ -54,7 +73,8 @@ const saved: {
         formatter: (topics) => {
           return (
             <div className="flex flex-wrap gap-x-4 gap-y-2">
-              {typeof topics !== "string" &&
+              {topics &&
+                typeof topics !== "string" &&
                 topics.slice(0, MAX_TOPICS_PER_ROW).map((topic) => (
                   <Badge
                     key={topic.id}
@@ -67,10 +87,70 @@ const saved: {
                     {topic.name}
                   </Badge>
                 ))}
-              {topics.length > MAX_TOPICS_PER_ROW && (
-                <Badge>+ {topics.length - 9}</Badge>
-              )}
+              {topics &&
+                typeof topics !== "string" &&
+                topics.length > MAX_TOPICS_PER_ROW && (
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <div>
+                        <Badge className="cursor-default">
+                          + {topics.length - MAX_TOPICS_PER_ROW}
+                        </Badge>
+                      </div>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <ul className="list-disc flex flex-col gap-1 justify-between px-4">
+                        {topics.slice(MAX_TOPICS_PER_ROW).map((topic) => (
+                          <li
+                            key={topic.id}
+                            className="font-medium"
+                            style={{
+                              color: topic.color,
+                            }}
+                          >
+                            {topic.name}
+                          </li>
+                        ))}
+                      </ul>
+                    </HoverCardContent>
+                  </HoverCard>
+                )}
             </div>
+          );
+        },
+      },
+      {
+        type: "no_link",
+        accessorKey: "endDate",
+        title: "Status",
+        formatter: (date) => {
+          const Status: React.FC<{
+            label: string;
+            Icon: Icon;
+            iconClassName?: string;
+          }> = ({ label, Icon, iconClassName }) => {
+            const containerVariants = cva("size-4 stroke-primary");
+
+            return (
+              <div className="flex gap-2 items-center whitespace-nowrap">
+                <Icon
+                  className={cn(
+                    containerVariants({ className: iconClassName })
+                  )}
+                />
+                <span>{label}</span>
+              </div>
+            );
+          };
+
+          return date ? (
+            <Status
+              label="Completed"
+              Icon={IconProgressCheck}
+              iconClassName="stroke-success"
+            />
+          ) : (
+            <Status label={"In Progress"} Icon={IconProgress} />
           );
         },
       },
@@ -87,30 +167,54 @@ const saved: {
       {
         title: "View",
         Icon: IconExternalLink,
-        onClick: () => console.log("View"),
+        className: "text-primary",
+        onClick: (data) =>
+          data ? push(routes.dashboard.planner.details(data.id)) : null,
       },
       {
         title: "Delete",
         Icon: IconTrash,
         className: "text-destructive",
-        onClick: () => console.log("Delete"),
+        onClick: async (data) => {
+          try {
+            await studySyncDB.delete(`${dbEndpoints.planners}/${data?.id}`);
+            dispatch({
+              type: FetchActionType.FETCH_RESET,
+              payload: planners?.filter((planner) => planner.id !== data?.id),
+            });
+            toast({
+              title: "Deleted Successfully!",
+              description: `Plan with id: ${data?.id} is successfully deleted.`,
+              duration: 5000,
+            });
+          } catch (err) {
+            console.log(err);
+            toast({
+              title: "Action failed!",
+              description: `Failed to delete plan with the id: ${data?.id}.`,
+              duration: 5000,
+            });
+          }
+        },
       },
     ],
-  },
+  };
 };
 
-const columnHeaders = saved.columnConfig.columns.map((column) =>
-  ColumnHeader<PlannerShallow>({ column })
-);
+export const useColumns = (): ColumnDef<PlannerShallow>[] => {
+  const columnHeaders = useColumnConfig().columns.map((column) =>
+    ColumnHeader<PlannerShallow>({ column })
+  );
 
-export const columns: ColumnDef<PlannerShallow>[] = [
-  {
-    ...Checkbox(),
-  },
-  ...columnHeaders,
-  {
-    ...Actions<PlannerShallow>({
-      actions: saved.columnConfig.actions,
-    }),
-  },
-];
+  return [
+    {
+      ...Checkbox(),
+    },
+    ...columnHeaders,
+    {
+      ...Actions<PlannerShallow>({
+        actions: useColumnConfig().actions,
+      }),
+    },
+  ];
+};

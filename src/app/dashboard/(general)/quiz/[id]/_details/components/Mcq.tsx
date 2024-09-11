@@ -21,9 +21,10 @@ type Props = {
     any,
     undefined
   >;
+  isDisabled?: boolean;
 };
 
-const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
+const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
   return (
     <FormField
       key={mcq.id}
@@ -49,6 +50,7 @@ const Mcq: React.FC<Props> = ({ mcq, order, form }) => {
               onValueChange={field?.onChange}
               defaultValue={field?.value || ""}
               className="flex flex-col gap-3 !mt-0"
+              disabled={isDisabled}
             >
               {mcq.choices.map((choice, index) => (
                 <FormItem

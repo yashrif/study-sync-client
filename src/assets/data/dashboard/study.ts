@@ -20,15 +20,21 @@ export const search = {
 
 export const actions: any[] = [
   {
-    name: 'Explain',
-    instruction: 'Explain the text below given context:\n\n'
+    name: "Explain",
+    instruction: "Explain the text below given context:\n\n",
   },
   {
-    name: 'Summarize',
-    instruction: 'Summarize the text below given context:\n\n'
+    name: "Summarize",
+    instruction: "Summarize the text below given context:\n\n",
   },
   {
-    name: 'Example',
-    instruction: 'Give Example, similar to the text below given context:\n\n'
-  }
-]
+    name: "Example",
+    instruction: "Give Example, similar to the text below given context:\n\n",
+  },
+];
+
+export const indexDialog = {
+  title: "Index file",
+  description: "Indexing the file will allow you to search the file content.",
+  button: "Index",
+};

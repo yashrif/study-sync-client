@@ -44,7 +44,6 @@ export type TopicIntermediate = TopicShallow & {
   lastModified: string | null;
   createdBy: string;
   lastModifiedBy: string | null;
-  planner: string;
   status: TopicStatus;
 };
 

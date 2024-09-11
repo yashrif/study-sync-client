@@ -10,10 +10,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { useQueryString } from "@/hooks/useQueryString";
+import { useQuizContext } from "@/hooks/useQuizContext";
 import { QuizTypes } from "@/types";
 import Property from "../../_components/Property";
 
 const Type: React.FC = () => {
+  const {
+    state: { quiz },
+  } = useQuizContext();
+
   const { getQueryString, checkQueryString } = useQueryString();
   const { updateQueryParams, setParams } = useQueryParams();
 
@@ -36,22 +41,26 @@ const Type: React.FC = () => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[120px]">
-          <DropdownMenuCheckboxItem
-            checked={checkQueryString(queryParams.types.key, QuizTypes.MCQ)}
-            onCheckedChange={() => {
-              updateQueryParams(queryParams.types.key, QuizTypes.MCQ);
-            }}
-          >
-            MCQ
-          </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem
-            checked={checkQueryString(queryParams.types.key, QuizTypes.CQ)}
-            onCheckedChange={() => {
-              updateQueryParams(queryParams.types.key, QuizTypes.CQ);
-            }}
-          >
-            CQ
-          </DropdownMenuCheckboxItem>
+          {quiz?.mcqs?.length > 0 && (
+            <DropdownMenuCheckboxItem
+              checked={checkQueryString(queryParams.types.key, QuizTypes.MCQ)}
+              onCheckedChange={() => {
+                updateQueryParams(queryParams.types.key, QuizTypes.MCQ);
+              }}
+            >
+              MCQ
+            </DropdownMenuCheckboxItem>
+          )}
+          {quiz?.cqs?.length > 0 && (
+            <DropdownMenuCheckboxItem
+              checked={checkQueryString(queryParams.types.key, QuizTypes.CQ)}
+              onCheckedChange={() => {
+                updateQueryParams(queryParams.types.key, QuizTypes.CQ);
+              }}
+            >
+              CQ
+            </DropdownMenuCheckboxItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

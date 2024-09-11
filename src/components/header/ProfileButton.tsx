@@ -9,7 +9,7 @@ import { dbEndpoints } from "@/assets/data/api";
 import { pathTitles, routes } from "@/assets/data/routes";
 import { useFetchDataState } from "@/hooks/fetchData";
 import { User } from "@/types";
-import { removeTokens } from "@/utils/auth";
+import { removeTokens } from "@/lib/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,

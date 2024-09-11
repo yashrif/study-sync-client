@@ -102,6 +102,7 @@ export enum QuizActionType {
   QUIZ_EVALUATE_ERROR = "QUIZ_EVALUATE_ERROR",
   SET_IS_SHOW_OVERVIEW = "QUIZ_IS_SHOW_OVERVIEW",
   SET_IS_TIMER_ACTIVE = "SET_IS_TIMER_ACTIVE",
+  SET_CQ_EVALUATION = "SET_CQ_EVALUATION",
 }
 
 export type QuizAction =
@@ -118,6 +119,12 @@ export type QuizAction =
       }
     >
   | Action<QuizActionType.QUIZ_EVALUATE_ERROR>
+  | Action<
+      QuizActionType.SET_CQ_EVALUATION,
+      {
+        [key: string]: QuizEvaluateResponseServer;
+      }
+    >
   | Action<QuizActionType.SET_IS_SHOW_OVERVIEW, boolean>
   | Action<QuizActionType.SET_IS_TIMER_ACTIVE, boolean>;
 
@@ -142,9 +149,13 @@ export type QuizContextProps = {
 
 /* -------------------------- QuizzesContext.tsx --------------------------- */
 
-export enum QuizzesActionType {}
+export enum QuizzesActionType {
+  SET_QUIZZES = "SET_QUIZZES",
+}
 
-export type QuizzesAction = FetchAction<QuizShallow[]>;
+export type QuizzesAction =
+  | FetchAction<QuizShallow[]>
+  | Action<QuizzesActionType.SET_QUIZZES, QuizShallow[]>;
 
 export type QuizzesState = {
   quizzes: QuizShallow[];

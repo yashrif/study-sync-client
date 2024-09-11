@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import randomColor from "randomcolor";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -23,6 +23,7 @@ const TopicsForm: React.FC<Props> = ({ data }) => {
   const { getQueryString: getParams } = useQueryParams();
   const { dispatch } = usePlannerUploadsContext();
   const { getAllQueryString } = useQueryString();
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedUploads = useMemo(() => {
     return getAllQueryString(queryKeys.uploads.key);
@@ -56,6 +57,7 @@ const TopicsForm: React.FC<Props> = ({ data }) => {
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    setIsLoading(true);
     dispatch({
       type: PlannerUploadsActionType.SET_TOPICS,
       payload: data.topics,
@@ -96,7 +98,11 @@ const TopicsForm: React.FC<Props> = ({ data }) => {
               });
             }}
           />
-          <IconButton {...topics.buttons.submit} type="submit" />
+          <IconButton
+            {...topics.buttons.submit}
+            type="submit"
+            disabled={isLoading}
+          />
         </div>
       </form>
     </Form>

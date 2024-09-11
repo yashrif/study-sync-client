@@ -4,13 +4,13 @@ import { DURATION_PER_CQ, DURATION_PER_MCQ } from "@/utils/constants";
 export const difficultyValue = (difficulty: Difficulty) => {
   switch (difficulty) {
     case Difficulty.EASY:
-      return 0.5;
+      return 1;
     case Difficulty.MEDIUM:
-      return 1;
+      return 2;
     case Difficulty.HARD:
-      return 1.5;
+      return 3;
     default:
-      return 1;
+      return 2;
   }
 };
 

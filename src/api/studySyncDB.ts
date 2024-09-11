@@ -6,7 +6,7 @@ import {
   getRefreshToken,
   removeTokens,
   setTokens,
-} from "@/utils/auth";
+} from "@/lib/auth";
 
 const studySyncDB = axios.create({
   baseURL: studySync.api,
@@ -50,8 +50,8 @@ studySyncDB.interceptors.response.use(
       }
     }
 
-    removeTokens();
-    window.location.replace("/");
+    // removeTokens();
+    // window.location.replace("/");
     return Promise.reject(error);
   }
 );
