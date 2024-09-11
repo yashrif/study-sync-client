@@ -5,9 +5,11 @@ import {
   IconCategory,
   IconClock,
   IconDeviceFloppy,
+  IconFileExport,
   IconHistory,
   IconListCheck,
   IconMessages,
+  IconMist,
   IconNotes,
   IconReload,
   IconSquarePlus2,
@@ -89,7 +91,7 @@ export const quizDetails = {
 
   properties: {
     title: "Properties",
-    Icon: IconTools,
+    Icon: IconMist,
     fields: {
       mcq: {
         title: "MCQs",
@@ -139,6 +141,17 @@ export const quizDetails = {
   },
   cq: {
     title: "Short Questions",
+  },
+
+  utils: {
+    title: "Utils",
+    Icon: IconTools,
+    buttons: {
+      export: {
+        title: "Export",
+        Icon: IconFileExport,
+      },
+    },
   },
 };
 

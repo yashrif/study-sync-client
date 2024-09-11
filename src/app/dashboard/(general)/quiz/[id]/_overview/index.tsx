@@ -1,13 +1,15 @@
 "use client";
 
+import { IconX } from "@tabler/icons-react";
+
 import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
 import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { QuizActionType, Difficulty as TDifficulty } from "@/types";
-import { IconX } from "@tabler/icons-react";
 import Heading from "../_components/Heading";
 import Property from "../_components/Property";
 import Difficulty from "./components/Difficulty";
+import PdfViewer from "./components/pdf";
 import Timer from "./components/Timer";
 import Title from "./components/Title";
 import Type from "./components/Type";
@@ -104,6 +106,8 @@ const Overview: React.FC = () => {
       </div>
 
       <Timer />
+
+      <PdfViewer />
     </div>
   );
 };

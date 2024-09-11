@@ -50,8 +50,8 @@ studySyncDB.interceptors.response.use(
       }
     }
 
-    // removeTokens();
-    // window.location.replace("/");
+    removeTokens();
+    window.location.replace("/");
     return Promise.reject(error);
   }
 );
