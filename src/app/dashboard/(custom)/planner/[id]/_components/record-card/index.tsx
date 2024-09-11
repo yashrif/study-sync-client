@@ -1,3 +1,5 @@
+"use client";
+
 import {
   IconCalendarFilled,
   IconPointFilled,
@@ -10,7 +12,7 @@ import { useCallback, useMemo, useState } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import IconButton from "@/components/button/IconButton";
-import { useFetchState } from "@/hooks/fetchData";
+import { useFetchDataState, useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { usePlannerContext } from "@/hooks/usePlannerContext";
 import {
@@ -38,11 +40,11 @@ import {
 import StatusCard from "../topic-card/Status";
 
 type Props = {
-  topic: Topic;
+  topicShallow: TopicShallow;
   date: string;
 };
 
-const RecordCard: React.FC<Props> = ({ topic, date }) => {
+const RecordCard: React.FC<Props> = ({ topicShallow: topicShallow, date }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -52,10 +54,20 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
     dispatch,
   } = useFetchState<TopicShallow>();
 
+  const {
+    state: { data: topic },
+  } = useFetchDataState<null, Topic>({
+    apiCall: useCallback(
+      () => studySyncDB.get(`${dbEndpoints.topics}/${topicShallow.id}`),
+      [topicShallow]
+    ),
+  });
+
   const { handler } = useApiHandler<{ records: TopicRecord[] }, TopicShallow>({
     apiCall: useCallback(
-      (data) => studySyncDB.patch(`${dbEndpoints.topics}/${topic.id}`, data),
-      [topic.id]
+      (data) =>
+        studySyncDB.patch(`${dbEndpoints.topics}/${topicShallow.id}`, data),
+      [topicShallow.id]
     ),
     dispatch,
   });
@@ -66,7 +78,7 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
         compareIsoDates(record?.date, date)
       );
     } else return undefined;
-  }, [date, topic.records]);
+  }, [date, topic?.records]);
 
   const MotionIconButton = motion(IconButton);
 
@@ -77,7 +89,9 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
     if (e) e.stopPropagation();
 
     const newRecords =
-      topic?.records?.filter((rec) => !compareIsoDates(rec.date, date)) || [];
+      topic?.records?.filter(
+        (rec) => !compareIsoDates(rec.date, date)
+      ) || [];
 
     if (data) newRecords.push(data);
 
@@ -96,7 +110,7 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
       payload: {
         ...state.planner,
         topics: state.planner.topics.map((theTopic) =>
-          theTopic.id === topic.id
+          theTopic.id === topicShallow.id
             ? {
                 ...theTopic,
                 records: sortedRecords,
@@ -117,7 +131,7 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
               ${record ? backgroundColor(record.status) : ""}`}
             style={{
               boxShadow: isHovered
-                ? `0 0 4px 1px ${topic.color}`
+                ? `0 0 4px 1px ${topicShallow.color}`
                 : `0 6px 12px rgba(0, 0, 0, 0.08)`,
             }}
             onMouseEnter={() => setIsHovered(true)}
@@ -134,6 +148,10 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
                       type: "icon-only",
                       Icon: IconX,
                       iconClassName: "stroke-destructive",
+                    },
+                    [Status.SUCCESS]: {
+                      type: "icon-only",
+                      iconClassName: "!text-success !stroke-success",
                     },
                   }}
                   status={fetchStatus}
@@ -228,7 +246,7 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
                   <div
                     className="flex gap-1.5 items-center "
                     style={{
-                      color: topic.color,
+                      color: topicShallow.color,
                     }}
                   >
                     <IconCalendarFilled className="size-4" />
@@ -246,23 +264,25 @@ const RecordCard: React.FC<Props> = ({ topic, date }) => {
                 <IconPointFilled
                   className="size-4"
                   style={{
-                    fill: topic.color,
+                    fill: topicShallow.color,
                   }}
                 />
                 <h4
                   className="text-sm font-semibold"
                   style={{
-                    color: topic.color,
+                    color: topicShallow.color,
                   }}
                 >
-                  {topic.name}
+                  {topicShallow.name}
                 </h4>
               </div>
-              <p className="text-sm text-wrap pl-[22px]">{topic.description}</p>
+              <p className="text-sm text-wrap pl-[22px]">
+                {topicShallow.description}
+              </p>
               <div
                 className="flex gap-1.5 items-center pt-2"
                 style={{
-                  color: topic.color,
+                  color: topicShallow.color,
                 }}
               >
                 <IconCalendarFilled className="size-4" />

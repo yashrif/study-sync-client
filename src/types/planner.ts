@@ -25,6 +25,7 @@ export type PlannerShallow = {
   title: string;
   topics: PlannerTopic[];
   createDate: string;
+  endDate: string | null;
 };
 
 export type Planner = Omit<PlannerShallow, "topics"> & {

@@ -6,7 +6,7 @@ import Streak from "./Streak";
 const TopicCard: React.FC<Topic> = (topic) => {
   return (
     <div
-      className="h-full py-3 px-4 border-l-4 rounded-r-sm flex flex-col justify-center gap-2.5 shadow-[0_6px_12px_rgba(0,0,0,0.05)]"
+      className="h-full max-w-[400px] py-3 px-4 border-l-4 rounded-r-sm flex flex-col justify-center gap-2.5 shadow-[0_6px_12px_rgba(0,0,0,0.05)]"
       style={{
         borderColor: topic.color,
         backgroundColor: shadeGenerator(topic.color, 20),
