@@ -90,3 +90,19 @@ export type PlannerContextProps = {
   state: PlannerState;
   dispatch: React.Dispatch<PlannerAction>;
 };
+
+/* --------------------------------- Planners -------------------------------- */
+
+export enum PlannersActionType {}
+
+export type PlannersAction = FetchAction<PlannerShallow[]>;
+
+export type PlannersState = {
+  planners: PlannerShallow[];
+  status: Status;
+};
+
+export type PlannersContextProps = {
+  state: PlannersState;
+  dispatch: React.Dispatch<PlannersAction>;
+};

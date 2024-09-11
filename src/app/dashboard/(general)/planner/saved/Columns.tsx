@@ -7,7 +7,10 @@ import {
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { cva } from "class-variance-authority";
+import { useRouter } from "next/navigation";
 
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
 import { routes } from "@/assets/data/routes";
 import {
   Actions,
@@ -15,29 +18,37 @@ import {
   ColumnHeader,
 } from "@/components/table/ColumnTools";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/components/ui/use-toast";
+import { usePlannersContext } from "@/hooks/usePlannersContext";
 import { cn } from "@/lib/utils";
-import { Column, Icon, PlannerShallow, TableAction } from "@/types";
+import {
+  Column,
+  FetchActionType,
+  Icon,
+  PlannerShallow,
+  TableAction,
+} from "@/types";
 import { shadeGenerator } from "@/utils/colorGenerator";
 import { MAX_TOPICS_PER_ROW } from "@/utils/constants";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@components/ui/hover-card";
 
 /* ---------------------------- fields and values ---------------------------- */
 
-const saved: {
-  search: {
-    key: string;
-    placeholder: string;
-  };
-  columnConfig: {
-    columns: Column<PlannerShallow>[];
-    actions: TableAction<PlannerShallow>[];
-  };
-} = {
-  search: {
-    key: "title",
-    placeholder: "Search by title",
-  },
+const useColumnConfig = (): {
+  columns: Column<PlannerShallow>[];
+  actions: TableAction<PlannerShallow>[];
+} => {
+  const { push } = useRouter();
+  const {
+    state: { planners },
+    dispatch,
+  } = usePlannersContext();
 
-  columnConfig: {
+  return {
     columns: [
       {
         type: "link",
@@ -76,9 +87,34 @@ const saved: {
                     {topic.name}
                   </Badge>
                 ))}
-              {topics && topics.length > MAX_TOPICS_PER_ROW && (
-                <Badge>+ {topics.length - MAX_TOPICS_PER_ROW}</Badge>
-              )}
+              {topics &&
+                typeof topics !== "string" &&
+                topics.length > MAX_TOPICS_PER_ROW && (
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <div>
+                        <Badge className="cursor-default">
+                          + {topics.length - MAX_TOPICS_PER_ROW}
+                        </Badge>
+                      </div>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <ul className="list-disc flex flex-col gap-1 justify-between px-4">
+                        {topics.slice(MAX_TOPICS_PER_ROW).map((topic) => (
+                          <li
+                            key={topic.id}
+                            className="font-medium"
+                            style={{
+                              color: topic.color,
+                            }}
+                          >
+                            {topic.name}
+                          </li>
+                        ))}
+                      </ul>
+                    </HoverCardContent>
+                  </HoverCard>
+                )}
             </div>
           );
         },
@@ -131,30 +167,54 @@ const saved: {
       {
         title: "View",
         Icon: IconExternalLink,
-        onClick: () => console.log("View"),
+        className: "text-primary",
+        onClick: (data) =>
+          data ? push(routes.dashboard.planner.details(data.id)) : null,
       },
       {
         title: "Delete",
         Icon: IconTrash,
         className: "text-destructive",
-        onClick: () => console.log("Delete"),
+        onClick: async (data) => {
+          try {
+            await studySyncDB.delete(`${dbEndpoints.planners}/${data?.id}`);
+            dispatch({
+              type: FetchActionType.FETCH_RESET,
+              payload: planners?.filter((planner) => planner.id !== data?.id),
+            });
+            toast({
+              title: "Deleted Successfully!",
+              description: `Plan with id: ${data?.id} is successfully deleted.`,
+              duration: 5000,
+            });
+          } catch (err) {
+            console.log(err);
+            toast({
+              title: "Action failed!",
+              description: `Failed to delete plan with the id: ${data?.id}.`,
+              duration: 5000,
+            });
+          }
+        },
       },
     ],
-  },
+  };
 };
 
-const columnHeaders = saved.columnConfig.columns.map((column) =>
-  ColumnHeader<PlannerShallow>({ column })
-);
+export const useColumns = (): ColumnDef<PlannerShallow>[] => {
+  const columnHeaders = useColumnConfig().columns.map((column) =>
+    ColumnHeader<PlannerShallow>({ column })
+  );
 
-export const columns: ColumnDef<PlannerShallow>[] = [
-  {
-    ...Checkbox(),
-  },
-  ...columnHeaders,
-  {
-    ...Actions<PlannerShallow>({
-      actions: saved.columnConfig.actions,
-    }),
-  },
-];
+  return [
+    {
+      ...Checkbox(),
+    },
+    ...columnHeaders,
+    {
+      ...Actions<PlannerShallow>({
+        actions: useColumnConfig().actions,
+      }),
+    },
+  ];
+};

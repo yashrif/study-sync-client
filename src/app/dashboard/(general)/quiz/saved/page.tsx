@@ -99,6 +99,7 @@ const GenerateQuiz: React.FC = () => {
               hidden: false,
               order: 3,
               onClick: onDelete,
+              status: state.status,
             },
             SEARCH: {
               hidden: false,
