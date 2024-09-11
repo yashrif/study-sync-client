@@ -1,12 +1,15 @@
+"use client";
+
 import { IconArrowRight } from "@tabler/icons-react";
 import { Table } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { create, queryKeys } from "@/assets/data/dashboard/planner";
 import IconButton from "@/components/button/IconButton";
 import { usePlannerUploadsContext } from "@/hooks/usePlannerUploadsContext";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IndexStatus, Status, UploadShallow } from "@allTypes";
-import { useRouter } from "next/navigation";
 
 type Props = {
   table: Table<UploadShallow>;
@@ -19,6 +22,7 @@ const CreateAction: React.FC<Props> = ({ table, indexStatus }) => {
   const {
     state: { status },
   } = usePlannerUploadsContext();
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <IconButton
@@ -30,14 +34,16 @@ const CreateAction: React.FC<Props> = ({ table, indexStatus }) => {
       disabled={
         (table && table.getFilteredSelectedRowModel().rows.length === 0) ||
         Object.values(indexStatus).includes(Status.PENDING) ||
-        status === Status.PENDING
+        status === Status.PENDING ||
+        isLoading
       }
       status={
-        Object.values(indexStatus).includes(Status.PENDING)
+        Object.values(indexStatus).includes(Status.PENDING) || isLoading
           ? Status.PENDING
           : Status.IDLE
       }
       onClick={() => {
+        setIsLoading(true);
         push(
           create.steps[2].path +
             getParams(

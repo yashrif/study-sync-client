@@ -10,8 +10,8 @@ import RadialProgress from "@/components/RadialProgress";
 import { useFetchData } from "@/hooks/fetchData";
 import { usePlannerContext } from "@/hooks/usePlannerContext";
 import { Planner } from "@/types";
-import Grid from "./_components/Grid";
 import { statusPoints } from "../../../../../utils/statusPoint";
+import Grid from "./_components/Grid";
 
 type Props = {
   params: {
@@ -42,7 +42,7 @@ const PlannerDetails: React.FC<Props> = ({ params: { id } }) => {
   }, [state.planner]);
 
   return (
-    <div className="whitespace-nowrap">
+    <div className="whitespace-nowrap h-screen grid grid-cols-1 grid-rows-[auto,1fr] gap-0">
       <PageHeading {...home.details} className="pr-12">
         <RadialProgress value={progress} radius={30} strokeWidth={8} />
       </PageHeading>

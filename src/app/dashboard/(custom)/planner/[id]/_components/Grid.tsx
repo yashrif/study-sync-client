@@ -27,7 +27,7 @@ const Grid = () => {
 
   return (
     <div
-      className="grid gap-x-12 gap-y-8 pb-8 pr-12 overflow-x-scroll"
+      className="h-full grid gap-x-12 gap-y-8 pb-8 pr-12 overflow-x-scroll"
       style={{
         gridTemplateColumns: `320px repeat(${dates?.length}, 160px)`,
         gridTemplateRows: `auto repeat(${planner?.topics?.length - 1}, 1fr)`,
