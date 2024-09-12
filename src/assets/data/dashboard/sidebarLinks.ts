@@ -34,7 +34,7 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: IconBook,
     },
     {
-      ...links.dashboard.quiz.home,
+      ...links.dashboard.quiz.create,
       Icon: Quiz,
       subLinks: [
         {
@@ -48,7 +48,7 @@ export const sidebarLinks: SidebarLink[][] = [
       ],
     },
     {
-      ...links.dashboard.flashcard.home,
+      ...links.dashboard.flashcard.create,
       Icon: IconBolt,
       subLinks: [
         {
@@ -62,7 +62,7 @@ export const sidebarLinks: SidebarLink[][] = [
       ],
     },
     {
-      ...links.dashboard.planner.home,
+      ...links.dashboard.planner.create,
       Icon: IconRoute,
       subLinks: [
         {
@@ -76,7 +76,7 @@ export const sidebarLinks: SidebarLink[][] = [
       ],
     },
     {
-      ...links.dashboard.slides.home,
+      ...links.dashboard.slides.create,
       Icon: IconFileDelta,
       subLinks: [
         {
@@ -92,7 +92,7 @@ export const sidebarLinks: SidebarLink[][] = [
   ],
   [
     {
-      ...links.dashboard.settings.home,
+      ...links.dashboard.settings.profile,
       Icon: IconSettings,
       subLinks: [
         {
