@@ -70,7 +70,7 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
                       }
                     />
                   </FormControl>
-                  <FormLabel className="text-base text-text-200 !mt-0">
+                  <FormLabel className="text-base font-normal text-text-200 !mt-0">
                     {choice}
                   </FormLabel>
                 </FormItem>

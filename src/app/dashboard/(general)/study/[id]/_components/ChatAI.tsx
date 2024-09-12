@@ -7,6 +7,7 @@ import studySyncAI from "@/api/studySyncAI";
 import { queryFile } from "@/assets/data/api/ai";
 import { actions } from "@/assets/data/dashboard/study";
 import IconButton from "@/components/button/IconButton";
+import Dictaphone from "@/components/dictaphone";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -77,7 +78,7 @@ const ChatAI = () => {
         )}
 
         <div className="flex justify-between">
-          <div className="flex gap-x-4">
+          <div className="flex gap-x-4 items-center">
             {actions.map((item) => (
               <button
                 onClick={() => submitChat(item.instruction + selectedText)}
@@ -93,14 +94,17 @@ const ChatAI = () => {
             ))}
           </div>
 
-          {!selectedText && (
-            <IconButton
-              Icon={IconSend2}
-              onClick={() => submitChat(text)}
-              className="size-9 rounded-full"
-              status={status}
-            />
-          )}
+          <div className="flex gap-x-4 items-center">
+            <Dictaphone setTranscript={setText} />
+            {!selectedText && (
+              <IconButton
+                Icon={IconSend2}
+                onClick={() => submitChat(text)}
+                className="size-9 rounded-full"
+                status={status}
+              />
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

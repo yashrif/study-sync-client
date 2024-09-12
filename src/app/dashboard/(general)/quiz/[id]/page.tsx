@@ -14,6 +14,7 @@ import {
 } from "@/assets/data/dashboard/quiz";
 import IconButton from "@/components/button/IconButton";
 import Spinner from "@/components/spinner/Spinner";
+import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import { useFetchData } from "@/hooks/fetchData";
 import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
@@ -129,7 +130,7 @@ const QuizDetails: React.FC = () => {
           className={`w-full flex justify-center ${isShowOverview ? "pl-16" : ""}`}
         >
           {!isShowOverview && <div className="w-12" />}
-          <Suspense fallback={<Spinner />}>
+          <Suspense fallback={<SpinnerContainer />}>
             <List />
           </Suspense>
         </div>

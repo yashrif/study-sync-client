@@ -8,6 +8,7 @@ import { z, ZodEnum, ZodNullable, ZodOptional, ZodString } from "zod";
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
 import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
+import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import { Form } from "@/components/ui/form";
 import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
@@ -18,6 +19,7 @@ import {
   QuizActionType,
   QuizEvaluateResponseServer,
   QuizTypes,
+  Status,
 } from "@/types";
 import Heading from "../_components/Heading";
 import Cq from "./components/Cq";
@@ -26,7 +28,7 @@ import Mcq from "./components/Mcq";
 const List: React.FC = () => {
   const { checkQueryString } = useQueryString();
   const {
-    state: { quiz, formRef: ref, isShowResults },
+    state: { quiz, status, formRef: ref, isShowResults },
     dispatch,
   } = useQuizContext();
   const { mcqs, cqs } = useMemo(() => {
@@ -133,36 +135,43 @@ const List: React.FC = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-16 max-w-[940px]"
       >
-        <div className="flex flex-col gap-16 divide-y-2">
-          {mcqs?.length > 0 && (
-            <div className="flex flex-col gap-8">
-              <Heading title={quizDetails.mcq.title} />
-              {mcqs?.map((mcq, index) => (
-                <Mcq
-                  key={mcq.id}
-                  mcq={mcq}
-                  form={form}
-                  order={index + 1}
-                  isDisabled={isShowResults}
-                />
-              ))}
-            </div>
-          )}
-          {cqs?.length > 0 && (
-            <div className="flex flex-col gap-8 pt-16 first:pt-0">
-              <Heading title={quizDetails.cq.title} />
-              {cqs?.map((cq, index) => (
-                <Cq
-                  key={cq.id}
-                  cq={cq}
-                  form={form}
-                  order={index + 1}
-                  isDisabled={isShowResults}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        {status === Status.PENDING ? (
+          <SpinnerContainer
+            containerClassName="h-[50vh]"
+            spinnerClassName="size-10"
+          />
+        ) : (
+          <div className="flex flex-col gap-16 divide-y-2">
+            {mcqs?.length > 0 && (
+              <div className="flex flex-col gap-8">
+                <Heading title={quizDetails.mcq.title} />
+                {mcqs?.map((mcq, index) => (
+                  <Mcq
+                    key={mcq.id}
+                    mcq={mcq}
+                    form={form}
+                    order={index + 1}
+                    isDisabled={isShowResults}
+                  />
+                ))}
+              </div>
+            )}
+            {cqs?.length > 0 && (
+              <div className="flex flex-col gap-8 pt-16 first:pt-0">
+                <Heading title={quizDetails.cq.title} />
+                {cqs?.map((cq, index) => (
+                  <Cq
+                    key={cq.id}
+                    cq={cq}
+                    form={form}
+                    order={index + 1}
+                    isDisabled={isShowResults}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </form>
     </Form>
   );

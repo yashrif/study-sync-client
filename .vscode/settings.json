@@ -5,6 +5,7 @@
     "mcqs",
     "qnas",
     "Roadmaps",
+    "Speechly",
     "tabler"
   ],
   "typescript.tsdk": "node_modules\\typescript\\lib"
