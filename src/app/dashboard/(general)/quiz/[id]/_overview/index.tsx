@@ -5,7 +5,7 @@ import { IconX } from "@tabler/icons-react";
 import { queryParams, quizDetails } from "@/assets/data/dashboard/quiz";
 import { useQueryString } from "@/hooks/useQueryString";
 import { useQuizContext } from "@/hooks/useQuizContext";
-import { QuizActionType, Difficulty as TDifficulty } from "@/types";
+import { QuizActionType, QuizTypes, Difficulty as TDifficulty } from "@/types";
 import Heading from "../_components/Heading";
 import Property from "../_components/Property";
 import Difficulty from "./components/Difficulty";
@@ -16,6 +16,11 @@ import Type from "./components/Type";
 import { calculateDuration } from "./difficultyValue";
 
 const Overview: React.FC = () => {
+  const { checkQueryString } = useQueryString();
+
+  const isMcqs = checkQueryString(queryParams.types.key, QuizTypes.MCQ);
+  const isCqs = checkQueryString(queryParams.types.key, QuizTypes.CQ);
+
   const {
     state: { quiz: data },
     dispatch,
@@ -83,8 +88,8 @@ const Overview: React.FC = () => {
                 value: `${Math.ceil(
                   calculateDuration({
                     difficulty,
-                    cqs: data.cqs?.length || 0,
-                    mcqs: data.mcqs?.length || 0,
+                    cqs: isCqs ? data.cqs?.length || 0 : 0,
+                    mcqs: isMcqs ? data.mcqs?.length || 0 : 0,
                   }) / 60
                 )}m`,
               },
