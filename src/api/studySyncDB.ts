@@ -50,8 +50,13 @@ studySyncDB.interceptors.response.use(
       }
     }
 
-    removeTokens();
-    window.location.replace("/");
+    if (
+      (error.response.status === 401 || error.response.status === 403) &&
+      originalRequest._retry
+    ) {
+      removeTokens();
+      window.location.replace("/");
+    }
     return Promise.reject(error);
   }
 );

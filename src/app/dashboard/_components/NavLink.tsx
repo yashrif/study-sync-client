@@ -9,8 +9,9 @@ import { IconLink, Icon as TIcon } from "@/types";
 import SubNavLink from "./SubNavLink";
 
 type Props = IconLink & {
-  links?: IconLink[];
+  links?: (IconLink & { home: string })[];
   subLinks?: IconLink[];
+  home: string;
   onClick?: () => void;
 };
 
@@ -20,21 +21,22 @@ const NavLink: React.FC<Props> = ({
   Icon,
   links,
   subLinks,
+  home,
   onClick,
 }) => {
   const [isPending, setIsPending] = useState(false);
 
   const currentPath = usePath().path;
-  let isActive = usePath().isCurrentPath(href);
+  let isActive = usePath().isCurrentPath(home);
 
   if (!isActive && links) {
-    const check = links?.some((link) => currentPath === link.href);
+    const check = links?.some((link) => currentPath === link.home);
 
     if (!check) {
       const paths = currentPath.split("/");
       for (let i = 1; i < paths.length; i++) {
         const slicedPath = paths.slice(0, paths.length - i).join("/");
-        if (href === slicedPath) {
+        if (home === slicedPath) {
           isActive = true;
           break;
         } else if (links.some((link) => slicedPath === link.href)) {

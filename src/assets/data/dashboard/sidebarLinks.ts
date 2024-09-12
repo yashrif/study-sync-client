@@ -16,25 +16,29 @@ import { links, pathTitles, routes } from "../routes";
 
 type SidebarLink = IconLink & {
   subLinks?: (IconLink & { altHref?: string })[];
-  altHref?: string;
+  home: string;
 };
 
 export const sidebarLinks: SidebarLink[][] = [
   [
     {
-      ...links.dashboard.home,
+      ...links.dashboard.default,
+      home: routes.dashboard.home,
       Icon: IconHome,
     },
     {
-      ...links.dashboard.uploads.home,
+      ...links.dashboard.uploads.default,
+      home: routes.dashboard.uploads.home,
       Icon: IconFileUpload,
     },
     {
-      ...links.dashboard.study.home,
+      ...links.dashboard.study.default,
+      home: routes.dashboard.study.home,
       Icon: IconBook,
     },
     {
-      ...links.dashboard.quiz.create,
+      ...links.dashboard.quiz.default,
+      home: routes.dashboard.quiz.home,
       Icon: Quiz,
       subLinks: [
         {
@@ -48,7 +52,8 @@ export const sidebarLinks: SidebarLink[][] = [
       ],
     },
     {
-      ...links.dashboard.flashcard.create,
+      ...links.dashboard.flashcard.default,
+      home: routes.dashboard.flashcard.home,
       Icon: IconBolt,
       subLinks: [
         {
@@ -62,7 +67,8 @@ export const sidebarLinks: SidebarLink[][] = [
       ],
     },
     {
-      ...links.dashboard.planner.create,
+      ...links.dashboard.planner.default,
+      home: routes.dashboard.planner.home,
       Icon: IconRoute,
       subLinks: [
         {
@@ -76,7 +82,8 @@ export const sidebarLinks: SidebarLink[][] = [
       ],
     },
     {
-      ...links.dashboard.slides.create,
+      ...links.dashboard.slides.default,
+      home: routes.dashboard.slides.home,
       Icon: IconFileDelta,
       subLinks: [
         {
@@ -92,7 +99,8 @@ export const sidebarLinks: SidebarLink[][] = [
   ],
   [
     {
-      ...links.dashboard.settings.profile,
+      ...links.dashboard.settings.default,
+      home: routes.dashboard.settings.home,
       Icon: IconSettings,
       subLinks: [
         {

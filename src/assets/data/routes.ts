@@ -80,10 +80,11 @@ const changePasswordPath = `${authPath}${paths.changePassword}`;
 const dashboardPath = `${paths.dashboard}`;
 const users = `${dashboardPath}${paths.users}`;
 
-/* ----------------------------------- End ---------------------------------- */
+/* --------------------------------- Routes --------------------------------- */
 
 export const routes = {
   home: {
+    default: paths.home,
     home: paths.home,
     benefits: `${paths.home}${paths.benefits}`,
     features: `${paths.home}${paths.features}`,
@@ -105,19 +106,21 @@ export const routes = {
   privacy: `${paths.privacy}`,
   cookies: `${paths.cookies}`,
   dashboard: {
+    default: dashboardPath,
     home: dashboardPath,
     study: {
+      default: `${dashboardPath}${paths.study}`,
       home: `${dashboardPath}${paths.study}`,
       details(id: string) {
         return `${routes.dashboard.study.home}/${id}`;
       },
     },
-    settings: {
-      home: `${dashboardPath}${paths.settings}`,
-      profile: `${dashboardPath}${paths.settings}${paths.profile}`,
+    uploads: {
+      default: `${dashboardPath}${paths.uploads}`,
+      home: `${dashboardPath}${paths.uploads}`,
     },
-    uploads: { home: `${dashboardPath}${paths.uploads}` },
     quiz: {
+      default: `${dashboardPath}${paths.quiz}${paths.create}`,
       home: `${dashboardPath}${paths.quiz}`,
       create: `${dashboardPath}${paths.quiz}${paths.create}`,
       saved: `${dashboardPath}${paths.quiz}`,
@@ -126,14 +129,16 @@ export const routes = {
       },
     },
     flashcard: {
+      default: `${dashboardPath}${paths.flashcard}${paths.create}`,
       home: `${dashboardPath}${paths.flashcard}`,
-      create: `${dashboardPath}${paths.flashcard}${paths.create}`,
+      create: `${dashboardPath}${paths.flashcard}`,
       review: `${dashboardPath}${paths.flashcard}${paths.review}`,
       details(id: string) {
         return `${dashboardPath}${paths.flashcard}/${id}`;
       },
     },
     planner: {
+      default: `${dashboardPath}${paths.planner}${paths.create}`,
       home: `${dashboardPath}${paths.planner}`,
       create: `${dashboardPath}${paths.planner}${paths.create}`,
       saved: `${dashboardPath}${paths.planner}`,
@@ -144,6 +149,7 @@ export const routes = {
       },
     },
     slides: {
+      default: `${dashboardPath}${paths.slides}${paths.create}`,
       home: `${dashboardPath}${paths.slides}`,
       create: `${dashboardPath}${paths.slides}${paths.create}`,
       saved: `${dashboardPath}${paths.slides}`,
@@ -151,12 +157,18 @@ export const routes = {
         return `${dashboardPath}${paths.slides}/${id}`;
       },
     },
+    settings: {
+      default: `${dashboardPath}${paths.settings}${paths.profile}`,
+      home: `${dashboardPath}${paths.settings}`,
+      profile: `${dashboardPath}${paths.settings}${paths.profile}`,
+    },
   },
 };
 
 export const links = {
   home: {
-    home: { title: pathTitles.home, href: routes.home.home },
+    home: { title: pathTitles.home, href: routes.home.default },
+    default: { title: pathTitles.home, href: routes.home.default },
     benefits: { title: pathTitles.benefits, href: routes.home.benefits },
     features: { title: pathTitles.features, href: routes.home.features },
     howItWorks: { title: pathTitles.howItWorks, href: routes.home.howItWorks },
@@ -186,8 +198,13 @@ export const links = {
   privacy: { title: pathTitles.privacy, href: routes.privacy },
   cookies: { title: pathTitles.cookies, href: routes.cookies },
   dashboard: {
+    default: { title: pathTitles.dashboard, href: routes.dashboard.default },
     home: { title: pathTitles.home, href: routes.dashboard.home },
     study: {
+      default: {
+        title: pathTitles.study,
+        href: routes.dashboard.study.default,
+      },
       home: { title: pathTitles.study, href: routes.dashboard.study.home },
       details(id: string) {
         return {
@@ -196,23 +213,18 @@ export const links = {
         };
       },
     },
-    settings: {
-      home: {
-        title: pathTitles.settings,
-        href: routes.dashboard.settings.home,
-      },
-      profile: {
-        title: pathTitles.profile,
-        href: routes.dashboard.settings.profile,
-      },
-    },
     uploads: {
+      default: {
+        title: pathTitles.uploads,
+        href: routes.dashboard.uploads.default,
+      },
       home: {
         title: pathTitles.uploads,
         href: routes.dashboard.uploads.home,
       },
     },
     quiz: {
+      default: { title: pathTitles.quiz, href: routes.dashboard.quiz.default },
       home: { title: pathTitles.quiz, href: routes.dashboard.quiz.home },
       create: { title: pathTitles.create, href: routes.dashboard.quiz.create },
       saved: { title: pathTitles.saved, href: routes.dashboard.quiz.saved },
@@ -224,6 +236,10 @@ export const links = {
       },
     },
     flashcard: {
+      default: {
+        title: pathTitles.flashcard,
+        href: routes.dashboard.flashcard.default,
+      },
       home: {
         title: pathTitles.flashcard,
         href: routes.dashboard.flashcard.home,
@@ -244,6 +260,10 @@ export const links = {
       },
     },
     planner: {
+      default: {
+        title: pathTitles.planner,
+        href: routes.dashboard.planner.default,
+      },
       home: {
         title: pathTitles.planner,
         href: routes.dashboard.planner.home,
@@ -272,6 +292,10 @@ export const links = {
       },
     },
     slides: {
+      default: {
+        title: pathTitles.slides,
+        href: routes.dashboard.slides.default,
+      },
       home: {
         title: pathTitles.slides,
         href: routes.dashboard.slides.home,
@@ -289,6 +313,20 @@ export const links = {
           title: pathTitles.slides,
           href: routes.dashboard.slides.details(id),
         };
+      },
+    },
+    settings: {
+      default: {
+        title: pathTitles.settings,
+        href: routes.dashboard.settings.default,
+      },
+      home: {
+        title: pathTitles.settings,
+        href: routes.dashboard.settings.home,
+      },
+      profile: {
+        title: pathTitles.profile,
+        href: routes.dashboard.settings.profile,
       },
     },
   },
