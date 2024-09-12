@@ -16,6 +16,7 @@ export * from "./preference";
 export * from "./quiz";
 export * from "./role";
 export * from "./scroll";
+import * from "./select";
 export * from "./setting";
 export * from "./status";
 export * from "./table";
