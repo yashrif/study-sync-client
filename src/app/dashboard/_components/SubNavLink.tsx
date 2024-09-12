@@ -20,7 +20,9 @@ const SubNavLink: React.FC<Props> = ({ href, title, Icon, links }) => {
     }
   }, []);
 
-  let isActive = usePath().isCurrentPath(href) || hashPath.split("#").at(-1);
+  let isActive =
+    usePath().isCurrentPath(href) ||
+    hashPath.split("#").at(-1) === href.split("#").at(-1);
 
   if (!isActive && links) {
     const check = links?.some((link) => currentPath === link.href);
