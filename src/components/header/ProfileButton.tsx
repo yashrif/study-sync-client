@@ -42,7 +42,7 @@ const ProfileButton: React.FC<{
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="cursor-pointer flex gap-1.5 items-center"
+          className="cursor-pointer flex gap-1.5 items-center text-muted-foreground"
           onClick={() => {
             push(routes.dashboard.home);
           }}
@@ -51,7 +51,7 @@ const ProfileButton: React.FC<{
           <span>{pathTitles.dashboard}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="cursor-pointer flex gap-1.5 items-center"
+          className="cursor-pointer flex gap-1.5 items-center text-muted-foreground"
           onClick={() => {
             removeTokens();
             setIsAuthenticated(false);

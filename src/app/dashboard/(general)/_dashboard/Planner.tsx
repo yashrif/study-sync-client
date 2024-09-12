@@ -134,7 +134,7 @@ const Planner = () => {
   }, [plannerDetailed]);
 
   return (
-    <div className="w-full flex gap-x-8 gap-y-8 p-8 rounded-md bg-[#fde4de] shadow-sm col-span-2">
+    <div className="w-full flex gap-x-8 gap-y-8 p-8 rounded-md border border-[#f37658]/50 shadow-sm col-span-2 bg-gradient-to-br from-transparent from-50% to-[#f37658]/25">
       <div className="w-full grid grid-cols-[repeat(4,auto)] gap-x-8">
         <Stat
           heading={{

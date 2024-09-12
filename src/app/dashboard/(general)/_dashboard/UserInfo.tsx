@@ -22,7 +22,7 @@ const UserInfo = () => {
   });
 
   return (
-    <div className="min-w-[280px] w-auto flex flex-col items-center p-8 rounded-md bg-primary/15 shadow-sm">
+    <div className="min-w-[280px] w-auto flex flex-col items-center p-8 rounded-md border border-primary/50 shadow-sm bg-gradient-to-br from-transparent from-25% to-primary/25">
       <StatsHeading
         Icon={IconUser}
         title="User"

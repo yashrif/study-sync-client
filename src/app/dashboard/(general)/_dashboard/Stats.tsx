@@ -75,7 +75,7 @@ const Stats = () => {
   };
 
   return (
-    <div className="flex gap-x-8 gap-y-8 p-8 justify-evenly rounded-md bg-[#fcf0ce] shadow-sm">
+    <div className="flex gap-x-8 gap-y-8 p-8 justify-evenly rounded-md border border-[#ffa31e]/50 shadow-sm bg-gradient-to-br from-transparent from-50% to-[#ffa31e]/25">
       <Stat
         heading={{ Icon: IconFileUpload, title: "Uploads" }}
         color={colors.seaGreen}
