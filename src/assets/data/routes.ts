@@ -120,7 +120,7 @@ export const routes = {
       home: `${dashboardPath}${paths.uploads}`,
     },
     quiz: {
-      default: `${dashboardPath}${paths.quiz}${paths.create}`,
+      default: `${dashboardPath}${paths.quiz}`,
       home: `${dashboardPath}${paths.quiz}`,
       create: `${dashboardPath}${paths.quiz}${paths.create}`,
       saved: `${dashboardPath}${paths.quiz}`,
@@ -129,27 +129,27 @@ export const routes = {
       },
     },
     flashcard: {
-      default: `${dashboardPath}${paths.flashcard}${paths.create}`,
+      default: `${dashboardPath}${paths.flashcard}`,
       home: `${dashboardPath}${paths.flashcard}`,
-      create: `${dashboardPath}${paths.flashcard}`,
-      review: `${dashboardPath}${paths.flashcard}${paths.review}`,
+      create: `${dashboardPath}${paths.flashcard}${paths.create}`,
+      review: `${dashboardPath}${paths.flashcard}`,
       details(id: string) {
         return `${dashboardPath}${paths.flashcard}/${id}`;
       },
     },
     planner: {
-      default: `${dashboardPath}${paths.planner}${paths.create}`,
+      default: `${dashboardPath}${paths.planner}`,
       home: `${dashboardPath}${paths.planner}`,
       create: `${dashboardPath}${paths.planner}${paths.create}`,
       saved: `${dashboardPath}${paths.planner}`,
-      topics: `${dashboardPath}${paths.planner}${paths.topics}`,
-      review: `${dashboardPath}${paths.planner}${paths.review}`,
+      topics: `${dashboardPath}${paths.planner}${paths.create}${paths.topics}`,
+      review: `${dashboardPath}${paths.planner}${paths.create}${paths.review}`,
       details(id: string) {
         return `${dashboardPath}${paths.planner}/${id}`;
       },
     },
     slides: {
-      default: `${dashboardPath}${paths.slides}${paths.create}`,
+      default: `${dashboardPath}${paths.slides}`,
       home: `${dashboardPath}${paths.slides}`,
       create: `${dashboardPath}${paths.slides}${paths.create}`,
       saved: `${dashboardPath}${paths.slides}`,

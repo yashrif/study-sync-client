@@ -42,11 +42,11 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: Quiz,
       subLinks: [
         {
-          ...links.dashboard.quiz.create,
+          ...links.dashboard.quiz.saved,
           Icon: Quiz,
         },
         {
-          ...links.dashboard.quiz.saved,
+          ...links.dashboard.quiz.create,
           Icon: Quiz,
         },
       ],
@@ -57,11 +57,11 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: IconBolt,
       subLinks: [
         {
-          ...links.dashboard.flashcard.create,
+          ...links.dashboard.flashcard.review,
           Icon: IconBolt,
         },
         {
-          ...links.dashboard.flashcard.review,
+          ...links.dashboard.flashcard.create,
           Icon: IconBolt,
         },
       ],
@@ -72,11 +72,11 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: IconRoute,
       subLinks: [
         {
-          ...links.dashboard.planner.create,
+          ...links.dashboard.planner.saved,
           Icon: IconRoute,
         },
         {
-          ...links.dashboard.planner.saved,
+          ...links.dashboard.planner.create,
           Icon: IconRoute,
         },
       ],
@@ -87,11 +87,11 @@ export const sidebarLinks: SidebarLink[][] = [
       Icon: IconFileDelta,
       subLinks: [
         {
-          ...links.dashboard.slides.create,
+          ...links.dashboard.slides.saved,
           Icon: IconFileDelta,
         },
         {
-          ...links.dashboard.slides.saved,
+          ...links.dashboard.slides.create,
           Icon: IconFileDelta,
         },
       ],
