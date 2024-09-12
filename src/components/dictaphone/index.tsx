@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Dispatch, SetStateAction, Suspense } from "react";
 import "regenerator-runtime/runtime";
 
 import Spinner from "@/components/spinner/Spinner";
@@ -9,13 +9,13 @@ const Dictaphone = dynamic(() => import("./Dictaphone"), {
 });
 
 type Props = {
-  setTranscript: (transcript: string) => void;
+  setTranscript: Dispatch<SetStateAction<string>>;
 };
 
-const HomePage = () => {
+const HomePage: React.FC<Props> = (props) => {
   return (
     <Suspense fallback={<Spinner />}>
-      <Dictaphone />
+      <Dictaphone {...props} />
     </Suspense>
   );
 };

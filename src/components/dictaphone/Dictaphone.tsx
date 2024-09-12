@@ -1,20 +1,24 @@
 "use client";
 
-import IconButton from "@/components/button/IconButton";
 import "@babel/polyfill";
 import {
-  IconInfoCircleFilled,
   IconMicrophone,
   IconMicrophoneOff,
   IconSquareFilled,
 } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import "regenerator-runtime/runtime";
 
-const Dictaphone = () => {
+import IconButton from "@/components/button/IconButton";
+
+type Props = {
+  setTranscript: Dispatch<SetStateAction<string>>;
+};
+
+const DictaphoneComponent: React.FC<Props> = ({ setTranscript }) => {
   const [isBrowser, setIsBrowser] = useState(false);
   const [hasMicrophoneAccess, setHasMicrophoneAccess] = useState(false);
   const { transcript, listening } = useSpeechRecognition();
@@ -43,44 +47,44 @@ const Dictaphone = () => {
     }
   }, [isBrowser]);
 
+  useEffect(() => {
+    setTranscript(transcript);
+  }, [setTranscript, transcript]);
+
   if (!isBrowser || !SpeechRecognition.browserSupportsSpeechRecognition()) {
     return (
-      <div className="flex items-center gap-2">
-        <IconInfoCircleFilled className="size-[18px] fill-destructive" />
-        <span className="text-lg font-medium">
-          Sorry, your browser does not support speech recognition.
-        </span>
-      </div>
+      <IconButton
+        contentType="icon-only"
+        Icon={IconMicrophoneOff}
+        variant={"ghost"}
+        className="size-9 rounded-full pointer-events-none"
+        iconClassName="size-6 stroke-destructive"
+      />
     );
   }
 
   return (
-    <div>
-      <IconButton
-        contentType="icon-only"
-        Icon={
-          hasMicrophoneAccess
-            ? listening
-              ? IconSquareFilled
-              : IconMicrophone
-            : IconMicrophoneOff
+    <IconButton
+      contentType="icon-only"
+      Icon={
+        hasMicrophoneAccess
+          ? listening
+            ? IconSquareFilled
+            : IconMicrophone
+          : IconMicrophoneOff
+      }
+      variant={listening ? "default" : "ghost"}
+      className="size-9 rounded-full"
+      iconClassName={listening ? "size-4 fill-white" : "size-6 stroke-primary"}
+      onClick={() => {
+        if (listening) {
+          stopListening();
+        } else {
+          startListening();
         }
-        variant={listening ? "default" : "ghost"}
-        className="size-10 rounded-full"
-        iconClassName={
-          listening ? "size-4 fill-white" : "size-6 stroke-primary"
-        }
-        onClick={() => {
-          if (listening) {
-            stopListening();
-          } else {
-            startListening();
-          }
-        }}
-      />
-      <p>{transcript}</p>
-    </div>
+      }}
+    />
   );
 };
 
-export default Dictaphone;
+export default DictaphoneComponent;
