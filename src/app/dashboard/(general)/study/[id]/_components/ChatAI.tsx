@@ -1,12 +1,13 @@
 "use client";
 
-import { IconSend2 } from "@tabler/icons-react";
+import { IconSend2, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 
 import studySyncAI from "@/api/studySyncAI";
 import { queryFile } from "@/assets/data/api/ai";
 import { actions } from "@/assets/data/dashboard/study";
-import Spinner from "@/components/spinner/Spinner";
+import IconButton from "@/components/button/IconButton";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
@@ -49,7 +50,7 @@ const ChatAI = () => {
 
   return (
     <Card className="bg-transparent backdrop-blur-md flex-1 space-y-2 max-w-4xl  mb-2 shadow-xl mx-12 pt-6">
-      <CardContent className="flex flex-col space-y-2">
+      <CardContent className="flex flex-col gap-4">
         {!selectedText ? (
           <Textarea
             className="p-2 text-md bg-transparent backdrop-blur-3xl"
@@ -58,35 +59,47 @@ const ChatAI = () => {
           />
         ) : (
           <ScrollArea className="max-h-48 overflow-auto bg-transparent backdrop-blur-3xl">
-            <p className="text-md">“{selectedText}”</p>
+            <p className="text-md pt-8">“{selectedText}”</p>
+            <Button
+              size="icon"
+              variant={"outline"}
+              className="absolute right-0 top-0 size-6 rounded-full ring-destructive hover:bg-destructive/20"
+              onClick={() => {
+                dispatch({
+                  type: UploadsActionType.SET_SELECTED_TEXT,
+                  payload: "",
+                });
+              }}
+            >
+              <IconX className="size-4 stroke-destructive" />
+            </Button>
           </ScrollArea>
         )}
 
         <div className="flex justify-between">
           <div className="flex gap-x-4">
             {actions.map((item) => (
-              <p
+              <button
                 onClick={() => submitChat(item.instruction + selectedText)}
                 key={item.name}
-                className={
-                  "text-sm font-semibold hover:text-foreground cursor-default" +
-                  (selectedText ? " cursor-pointer text-primary" : "")
-                }
+                className={`text-[15px] nav-links px-0.5 ${
+                  selectedText
+                    ? "text-primary"
+                    : "text-muted-foreground pointer-events-none"
+                }`}
               >
                 {item.name}
-              </p>
+              </button>
             ))}
           </div>
 
-          {status == Status.IDLE ? (
-            !selectedText && (
-              <IconSend2
-                className="size-7 text-primary cursor-pointer hover:text-foreground"
-                onClick={() => submitChat(text)}
-              />
-            )
-          ) : (
-            <Spinner />
+          {!selectedText && (
+            <IconButton
+              Icon={IconSend2}
+              onClick={() => submitChat(text)}
+              className="size-9 rounded-full"
+              status={status}
+            />
           )}
         </div>
       </CardContent>
