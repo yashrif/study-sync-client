@@ -32,6 +32,7 @@ export const paths = {
   planner: "/planner",
   topics: "/topics",
   study: "/study",
+  slides: "/slides",
 };
 
 export const pathTitles = {
@@ -68,6 +69,7 @@ export const pathTitles = {
   planner: "Planner",
   topics: "Topics",
   study: "Study",
+  slides: "Slides",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -145,6 +147,15 @@ export const routes = {
       review: `${dashboardPath}${paths.planner}${paths.review}`,
       details(id: string) {
         return `${dashboardPath}${paths.planner}/${id}`;
+      },
+    },
+    slides: {
+      default: `${dashboardPath}${paths.slides}`,
+      home: `${dashboardPath}${paths.slides}`,
+      create: `${dashboardPath}${paths.slides}`,
+      saved: `${dashboardPath}${paths.slides}${paths.saved}`,
+      details(id: string) {
+        return `${dashboardPath}${paths.slides}/${id}`;
       },
     },
   },
@@ -280,6 +291,30 @@ export const links = {
       review: {
         title: pathTitles.review,
         href: routes.dashboard.planner.review,
+      },
+    },
+    slides: {
+      default: {
+        title: pathTitles.slides,
+        href: routes.dashboard.slides.default,
+      },
+      home: {
+        title: pathTitles.slides,
+        href: routes.dashboard.slides.home,
+      },
+      create: {
+        title: pathTitles.create,
+        href: routes.dashboard.slides.create,
+      },
+      saved: {
+        title: pathTitles.saved,
+        href: routes.dashboard.slides.saved,
+      },
+      details(id: string) {
+        return {
+          title: pathTitles.slides,
+          href: routes.dashboard.slides.details(id),
+        };
       },
     },
   },

@@ -1,6 +1,7 @@
 import {
   IconBolt,
   IconBook,
+  IconFileDelta,
   IconFileUpload,
   IconHome,
   IconLogout2,
@@ -71,6 +72,20 @@ export const sidebarLinks: SidebarLink[][] = [
         {
           ...links.dashboard.planner.saved,
           Icon: IconRoute,
+        },
+      ],
+    },
+    {
+      ...links.dashboard.slides.home,
+      Icon: IconFileDelta,
+      subLinks: [
+        {
+          ...links.dashboard.slides.create,
+          Icon: IconFileDelta,
+        },
+        {
+          ...links.dashboard.slides.saved,
+          Icon: IconFileDelta,
         },
       ],
     },
