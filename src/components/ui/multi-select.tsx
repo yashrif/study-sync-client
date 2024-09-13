@@ -2,10 +2,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import {
   CheckIcon,
   ChevronDown,
+  CircleDot,
+  PlusIcon,
   WandSparkles,
   XCircle,
   XIcon,
 } from "lucide-react";
+import randomColor from "randomcolor";
 import * as React from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +29,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { shadeGenerator } from "@/utils/colorGenerator";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -72,6 +76,8 @@ interface MultiSelectProps
   options: MultiSelectElement[];
 
   setOptions: React.Dispatch<React.SetStateAction<MultiSelectElement[]>>;
+
+  addOption?: boolean;
 
   /**
    * Callback function triggered when the selected values change.
@@ -129,6 +135,7 @@ export const MultiSelect = React.forwardRef<
       options,
       setOptions,
       onValueChange,
+      addOption = false,
       variant,
       defaultValue = [],
       placeholder = "Select options",
@@ -226,7 +233,14 @@ export const MultiSelect = React.forwardRef<
                           isAnimating ? "animate-bounce" : "",
                           multiSelectVariants({ variant })
                         )}
-                        style={{ animationDuration: `${animation}s` }}
+                        style={{
+                          animationDuration: `${animation}s`,
+                          color: option?.color || "white",
+                          backgroundColor: option?.color
+                            ? shadeGenerator(option.color, 20)
+                            : "hsl(var(--primary))",
+                          borderColor: option?.color,
+                        }}
                       >
                         {IconComponent && (
                           <IconComponent className="h-4 w-4 mr-2" />
@@ -302,17 +316,36 @@ export const MultiSelect = React.forwardRef<
             <CommandList>
               <CommandEmpty className="flex flex-col gap-4 items-center justify-center py-4">
                 <span>No results found.</span>
-                <Button
-                  size={"sm"}
-                  onClick={() => {
-                    const newValue = { label: searchKey, value: searchKey };
-                    setOptions([...options, newValue]);
-                    setSelectedValues([...selectedValues, searchKey]);
-                    setSearchKey("");
-                  }}
-                >
-                  + Add option
-                </Button>
+                {addOption && (
+                  <Button
+                    size={"sm"}
+                    onClick={() => {
+                      const searchKeyCapitalize = searchKey
+                        .split(" ")
+                        .map((s) => s[0].toUpperCase() + s.slice(1))
+                        .join(" ");
+                      const newOption: MultiSelectElement = {
+                        label: searchKeyCapitalize,
+                        value: searchKey,
+                      };
+
+                      if ("color" in options[0])
+                        newOption.color = randomColor({ luminosity: "light" });
+                      if ("icon" in options[0]) newOption.icon = CircleDot;
+
+                      setOptions([...options, newOption]);
+                      setSelectedValues([
+                        ...selectedValues,
+                        searchKeyCapitalize,
+                      ]);
+                      setSearchKey("");
+                    }}
+                    className="flex gap-1.5 items-center text-xs h-8"
+                  >
+                    <PlusIcon className="size-3 stroke-2" />
+                    <span>Add option</span>
+                  </Button>
+                )}
               </CommandEmpty>
               <CommandGroup>
                 <CommandItem
@@ -389,8 +422,8 @@ export const MultiSelect = React.forwardRef<
         {animation > 0 && selectedValues.length > 0 && (
           <WandSparkles
             className={cn(
-              "cursor-pointer my-2 text-foreground bg-background w-3 h-3",
-              isAnimating ? "" : "text-muted-foreground"
+              "cursor-pointer my-2 text-foreground bg-background size-3",
+              isAnimating ? "stroke-primary" : "text-muted-foreground"
             )}
             onClick={() => setIsAnimating(!isAnimating)}
           />

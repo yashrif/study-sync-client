@@ -1,1 +1,6 @@
-export type SelectElement = { value: string; label: string; color?: string };
+export type SelectElement = {
+  value: string;
+  label: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  color?: string;
+};

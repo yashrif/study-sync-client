@@ -1,4 +1,8 @@
-import { IconFileDelta } from "@tabler/icons-react";
+import {
+  IconCategory2,
+  IconFileDelta,
+  IconFileUpload,
+} from "@tabler/icons-react";
 
 import { IconList } from "@/types";
 
@@ -18,5 +22,23 @@ export const home: { create: IconList; saved: IconList; details: IconList } = {
     title: "View Slide",
     Icon: IconFileDelta,
     description: "View the details of the slide here!",
+  },
+};
+
+export const create = {
+  topics: {
+    title: "Select Topics",
+    description: "Select the topics you want to include in your slide.",
+    icon: IconCategory2,
+  },
+  uploads: {
+    title: "Select Uploads",
+    description: "Select the uploads you want to include in your slide.",
+    icon: IconFileUpload,
+  },
+  prompt: {
+    title: "Custom Prompt",
+    description: "Write a custom prompt to generate more relevant slide.",
+    icon: IconFileUpload,
   },
 };

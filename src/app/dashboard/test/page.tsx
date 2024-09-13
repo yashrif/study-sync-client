@@ -1,5 +1,3 @@
-// src/app/page.tsx
-
 "use client";
 
 import { MultiSelect } from "@/components/ui/multi-select";
@@ -8,7 +6,7 @@ import { useState } from "react";
 
 function Home() {
   const [frameworksList, setFrameworksList] = useState<SelectElement[]>([
-    { value: "react", label: "React" },
+    { value: "react", label: "React", color: "#f00000" },
     { value: "angular", label: "Angular" },
     { value: "vue", label: "Vue" },
     { value: "svelte", label: "Svelte" },
