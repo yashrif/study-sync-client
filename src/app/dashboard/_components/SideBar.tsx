@@ -27,15 +27,9 @@ const SideBar: React.FC = () => {
                 key={index}
                 className="w-full flex flex-col gap-2 items-start"
               >
-                {navLink.map(({ href, title, Icon, subLinks }) => (
-                  <Suspense fallback={<Spinner />} key={title}>
-                    <NavLink
-                      title={title}
-                      href={href}
-                      Icon={Icon}
-                      links={navLink}
-                      subLinks={subLinks}
-                    />
+                {navLink.map((item) => (
+                  <Suspense fallback={<Spinner />} key={item.title}>
+                    <NavLink {...item} links={navLink} />
                   </Suspense>
                 ))}
 
@@ -44,6 +38,7 @@ const SideBar: React.FC = () => {
                     <NavLink
                       title={signOut.title}
                       href=""
+                      home=""
                       Icon={signOut.Icon}
                       onClick={() => {
                         removeTokens();

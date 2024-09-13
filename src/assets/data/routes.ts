@@ -32,6 +32,7 @@ export const paths = {
   planner: "/planner",
   topics: "/topics",
   study: "/study",
+  slides: "/slides",
 };
 
 export const pathTitles = {
@@ -68,6 +69,7 @@ export const pathTitles = {
   planner: "Planner",
   topics: "Topics",
   study: "Study",
+  slides: "Slides",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -78,12 +80,12 @@ const changePasswordPath = `${authPath}${paths.changePassword}`;
 const dashboardPath = `${paths.dashboard}`;
 const users = `${dashboardPath}${paths.users}`;
 
-/* ----------------------------------- End ---------------------------------- */
+/* --------------------------------- Routes --------------------------------- */
 
 export const routes = {
   home: {
-    home: paths.home,
     default: paths.home,
+    home: paths.home,
     benefits: `${paths.home}${paths.benefits}`,
     features: `${paths.home}${paths.features}`,
     howItWorks: `${paths.home}${paths.howItWorks}`,
@@ -107,22 +109,21 @@ export const routes = {
     default: dashboardPath,
     home: dashboardPath,
     study: {
+      default: `${dashboardPath}${paths.study}`,
       home: `${dashboardPath}${paths.study}`,
       details(id: string) {
         return `${routes.dashboard.study.home}/${id}`;
       },
     },
-    settings: {
-      home: `${dashboardPath}${paths.settings}`,
-      default: `${dashboardPath}${paths.settings}${paths.profile}`,
-      profile: `${dashboardPath}${paths.settings}${paths.profile}`,
+    uploads: {
+      default: `${dashboardPath}${paths.uploads}`,
+      home: `${dashboardPath}${paths.uploads}`,
     },
-    uploads: { home: `${dashboardPath}${paths.uploads}` },
     quiz: {
-      home: `${dashboardPath}${paths.quiz}`,
       default: `${dashboardPath}${paths.quiz}`,
-      create: `${dashboardPath}${paths.quiz}`,
-      saved: `${dashboardPath}${paths.quiz}${paths.saved}`,
+      home: `${dashboardPath}${paths.quiz}`,
+      create: `${dashboardPath}${paths.quiz}${paths.create}`,
+      saved: `${dashboardPath}${paths.quiz}`,
       details(id: string) {
         return `${dashboardPath}${paths.quiz}/${id}`;
       },
@@ -130,8 +131,8 @@ export const routes = {
     flashcard: {
       default: `${dashboardPath}${paths.flashcard}`,
       home: `${dashboardPath}${paths.flashcard}`,
-      create: `${dashboardPath}${paths.flashcard}`,
-      review: `${dashboardPath}${paths.flashcard}${paths.review}`,
+      create: `${dashboardPath}${paths.flashcard}${paths.create}`,
+      review: `${dashboardPath}${paths.flashcard}`,
       details(id: string) {
         return `${dashboardPath}${paths.flashcard}/${id}`;
       },
@@ -139,13 +140,27 @@ export const routes = {
     planner: {
       default: `${dashboardPath}${paths.planner}`,
       home: `${dashboardPath}${paths.planner}`,
-      create: `${dashboardPath}${paths.planner}`,
-      saved: `${dashboardPath}${paths.planner}${paths.saved}`,
-      topics: `${dashboardPath}${paths.planner}${paths.topics}`,
-      review: `${dashboardPath}${paths.planner}${paths.review}`,
+      create: `${dashboardPath}${paths.planner}${paths.create}`,
+      saved: `${dashboardPath}${paths.planner}`,
+      topics: `${dashboardPath}${paths.planner}${paths.create}${paths.topics}`,
+      review: `${dashboardPath}${paths.planner}${paths.create}${paths.review}`,
       details(id: string) {
         return `${dashboardPath}${paths.planner}/${id}`;
       },
+    },
+    slides: {
+      default: `${dashboardPath}${paths.slides}`,
+      home: `${dashboardPath}${paths.slides}`,
+      create: `${dashboardPath}${paths.slides}${paths.create}`,
+      saved: `${dashboardPath}${paths.slides}`,
+      details(id: string) {
+        return `${dashboardPath}${paths.slides}/${id}`;
+      },
+    },
+    settings: {
+      default: `${dashboardPath}${paths.settings}${paths.profile}`,
+      home: `${dashboardPath}${paths.settings}`,
+      profile: `${dashboardPath}${paths.settings}${paths.profile}`,
     },
   },
 };
@@ -186,6 +201,10 @@ export const links = {
     default: { title: pathTitles.dashboard, href: routes.dashboard.default },
     home: { title: pathTitles.home, href: routes.dashboard.home },
     study: {
+      default: {
+        title: pathTitles.study,
+        href: routes.dashboard.study.default,
+      },
       home: { title: pathTitles.study, href: routes.dashboard.study.home },
       details(id: string) {
         return {
@@ -194,21 +213,11 @@ export const links = {
         };
       },
     },
-    settings: {
-      home: {
-        title: pathTitles.settings,
-        href: routes.dashboard.settings.home,
-      },
-      default: {
-        title: pathTitles.settings,
-        href: routes.dashboard.settings.default,
-      },
-      profile: {
-        title: pathTitles.profile,
-        href: routes.dashboard.settings.profile,
-      },
-    },
     uploads: {
+      default: {
+        title: pathTitles.uploads,
+        href: routes.dashboard.uploads.default,
+      },
       home: {
         title: pathTitles.uploads,
         href: routes.dashboard.uploads.home,
@@ -280,6 +289,44 @@ export const links = {
       review: {
         title: pathTitles.review,
         href: routes.dashboard.planner.review,
+      },
+    },
+    slides: {
+      default: {
+        title: pathTitles.slides,
+        href: routes.dashboard.slides.default,
+      },
+      home: {
+        title: pathTitles.slides,
+        href: routes.dashboard.slides.home,
+      },
+      create: {
+        title: pathTitles.create,
+        href: routes.dashboard.slides.create,
+      },
+      saved: {
+        title: pathTitles.saved,
+        href: routes.dashboard.slides.saved,
+      },
+      details(id: string) {
+        return {
+          title: pathTitles.slides,
+          href: routes.dashboard.slides.details(id),
+        };
+      },
+    },
+    settings: {
+      default: {
+        title: pathTitles.settings,
+        href: routes.dashboard.settings.default,
+      },
+      home: {
+        title: pathTitles.settings,
+        href: routes.dashboard.settings.home,
+      },
+      profile: {
+        title: pathTitles.profile,
+        href: routes.dashboard.settings.profile,
       },
     },
   },

@@ -89,7 +89,7 @@ const TopicField: React.FC<Props> = forwardRef<HTMLDivElement, Props>(
                     backgroundColor: shadeGenerator(field?.value || "", 20),
                   }}
                   onClick={() => {
-                    field.onChange(randomColor());
+                    field.onChange(randomColor({ luminosity: "bright" }));
                   }}
                 >
                   <IconRefresh

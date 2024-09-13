@@ -6,13 +6,13 @@ import {
   IconLetterA,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { review } from "@/assets/data/dashboard/flashcard";
+import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import {
@@ -35,7 +35,7 @@ const FlashCard: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
 
-  const { back } = useRouter();
+  const { replace } = useRouter();
   const {
     state: { data: flashcards, status },
     dispatch,
@@ -57,7 +57,7 @@ const FlashCard: React.FC = () => {
     <Dialog
       defaultOpen
       onOpenChange={() => {
-        back();
+        replace(routes.dashboard.flashcard.create);
       }}
     >
       <DialogContent className="max-w-[700px] h-[450px] bg-background">

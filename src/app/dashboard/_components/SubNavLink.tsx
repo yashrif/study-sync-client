@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { usePath } from "@/hooks/usePath";
 import { IconLink } from "@/types";
@@ -11,7 +12,17 @@ type Props = IconLink & {
 
 const SubNavLink: React.FC<Props> = ({ href, title, Icon, links }) => {
   const currentPath = usePath().path;
-  let isActive = usePath().isCurrentPath(href);
+  const [hashPath, setHashPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setHashPath(window.location.href);
+    }
+  }, []);
+
+  let isActive =
+    usePath().isCurrentPath(href) ||
+    hashPath.split("#").at(-1) === href.split("#").at(-1);
 
   if (!isActive && links) {
     const check = links?.some((link) => currentPath === link.href);
