@@ -6,18 +6,23 @@ import { useCallback, useEffect, useState } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import { create } from "@/assets/data/dashboard/slides";
+import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useFetchData } from "@/hooks/fetchData";
 import { useCreateSlideContext } from "@/hooks/useCreateSlideContext";
-import { SelectElement, Status, TopicShallow } from "@allTypes";
-import SpinnerContainer from "@/components/spinner/SpinnerContainer";
+import {
+  CreateSlideActionType,
+  SelectElement,
+  Status,
+  TopicShallow,
+} from "@allTypes";
 
 const TopicSelect: React.FC = () => {
   const [options, setOptions] = useState<SelectElement[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const {
-    state: { status, topics },
+    state: { status, topics, data },
     dispatch,
   } = useCreateSlideContext();
 
@@ -40,6 +45,17 @@ const TopicSelect: React.FC = () => {
       );
   }, [topics]);
 
+  useEffect(() => {
+    dispatch({
+      type: CreateSlideActionType.SET_SLIDE_DATA,
+      payload: {
+        ...data,
+        topics: selectedOptions,
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, selectedOptions]);
+
   return (
     <>
       <div className="flex gap-1.5 items-center whitespace-nowrap">
@@ -49,20 +65,23 @@ const TopicSelect: React.FC = () => {
         </span>
       </div>
       {status === Status.PENDING ? (
-        <SpinnerContainer containerClassName="max-w-xl h-10" />
+        <SpinnerContainer containerClassName="max-w-lg h-10" />
       ) : (
-        <MultiSelect
-          className="max-w-xl"
-          options={options}
-          setOptions={setOptions}
-          addOption
-          onValueChange={setSelectedOptions}
-          defaultValue={selectedOptions}
-          placeholder="Select topics"
-          variant="inverted"
-          animation={2}
-          maxCount={3}
-        />
+        <div className="flex items-center gap-8">
+          <MultiSelect
+            className="max-w-lg"
+            options={options}
+            setOptions={setOptions}
+            addOption
+            onValueChange={setSelectedOptions}
+            defaultValue={selectedOptions}
+            placeholder="Select topics"
+            variant="inverted"
+            animation={2}
+            maxCount={3}
+            maxCharacters={25}
+          />
+        </div>
       )}
     </>
   );

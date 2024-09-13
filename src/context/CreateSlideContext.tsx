@@ -4,9 +4,11 @@ import { createContext, useReducer } from "react";
 
 import {
   CreateSlideAction,
+  CreateSlideActionType,
   CreateSlideContextProps,
   CreateSlideState,
   FetchActionType,
+  SlideData,
   Status,
   TopicShallow,
   UploadShallow,
@@ -19,6 +21,7 @@ const CreateSlideContext = createContext<CreateSlideContextProps | undefined>(
 const initialState: CreateSlideState = {
   topics: [],
   uploads: [],
+  data: {} as SlideData,
   status: Status.IDLE,
 };
 
@@ -68,6 +71,11 @@ const createSlideReducer = (
           )
             ? (action.payload as TopicShallow[])
             : state.topics,
+      };
+    case CreateSlideActionType.SET_SLIDE_DATA:
+      return {
+        ...state,
+        data: action.payload,
       };
     default:
       return state;

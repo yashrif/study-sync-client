@@ -10,14 +10,19 @@ import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useFetchData } from "@/hooks/fetchData";
 import { useCreateSlideContext } from "@/hooks/useCreateSlideContext";
-import { SelectElement, Status, UploadShallow } from "@allTypes";
+import {
+  CreateSlideActionType,
+  SelectElement,
+  Status,
+  UploadShallow,
+} from "@allTypes";
 
 const UploadSelect: React.FC = () => {
   const [options, setOptions] = useState<SelectElement[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const {
-    state: { status, uploads },
+    state: { status, uploads, data },
     dispatch,
   } = useCreateSlideContext();
 
@@ -39,6 +44,17 @@ const UploadSelect: React.FC = () => {
       );
   }, [uploads]);
 
+  useEffect(() => {
+    dispatch({
+      type: CreateSlideActionType.SET_SLIDE_DATA,
+      payload: {
+        ...data,
+        uploads: selectedOptions,
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, selectedOptions]);
+
   return (
     <>
       <div className="flex gap-1.5 items-center whitespace-nowrap">
@@ -48,19 +64,22 @@ const UploadSelect: React.FC = () => {
         </span>
       </div>
       {status === Status.PENDING ? (
-        <SpinnerContainer containerClassName="max-w-xl h-10" />
+        <SpinnerContainer containerClassName="max-w-lg h-10" />
       ) : (
-        <MultiSelect
-          className="max-w-xl"
-          options={options}
-          setOptions={setOptions}
-          onValueChange={setSelectedOptions}
-          defaultValue={selectedOptions}
-          placeholder="Select files"
-          variant="inverted"
-          animation={2}
-          maxCount={3}
-        />
+        <div className="flex items-center gap-8">
+          <MultiSelect
+            className="max-w-lg"
+            options={options}
+            setOptions={setOptions}
+            onValueChange={setSelectedOptions}
+            defaultValue={selectedOptions}
+            placeholder="Select files"
+            variant="inverted"
+            animation={2}
+            maxCount={3}
+            maxCharacters={25}
+          />
+        </div>
       )}
     </>
   );

@@ -6,6 +6,7 @@ import PageHeading from "../../../_components/PageHeading";
 import CustomPrompt from "./_components/CustomPrompt";
 import TopicSelect from "./_components/TopicSelect";
 import UploadSelect from "./_components/UploadSelect";
+import Options from "./_components/Options";
 
 const CreateSlides = () => {
   return (
@@ -13,10 +14,11 @@ const CreateSlides = () => {
       <PageHeading {...home.create} />
 
       <Suspense fallback={<SpinnerContainer />}>
-        <div className="grid grid-cols-[auto,1fr] gap-x-12 gap-y-8 items-center">
+        <div className="grid grid-cols-[auto,1fr] gap-x-12 gap-y-10 items-center">
           <TopicSelect />
           <UploadSelect />
           <CustomPrompt />
+          <Options />
         </div>
       </Suspense>
     </div>

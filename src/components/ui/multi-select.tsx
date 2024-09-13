@@ -124,6 +124,8 @@ interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
+
+  maxCharacters?: number;
 }
 
 export const MultiSelect = React.forwardRef<
@@ -144,6 +146,7 @@ export const MultiSelect = React.forwardRef<
       modalPopover = false,
       asChild = false,
       className,
+      maxCharacters,
       ...props
     },
     ref
@@ -245,7 +248,10 @@ export const MultiSelect = React.forwardRef<
                         {IconComponent && (
                           <IconComponent className="h-4 w-4 mr-2" />
                         )}
-                        {option?.label}
+                        {maxCharacters &&
+                        (option?.label?.length ?? 0) > maxCharacters
+                          ? `${option?.label.slice(0, maxCharacters)}...`
+                          : option?.label}
                         <XCircle
                           className="ml-2 h-4 w-4 cursor-pointer"
                           onClick={(event) => {
