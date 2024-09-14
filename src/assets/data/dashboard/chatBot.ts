@@ -1,9 +1,10 @@
 export enum Commands {
-  "create-quiz" = "create-quiz",
-  "create-planner" = "create-planner",
-  "create-flashcard" = "create-flashcard",
-  "create-slide" = "create-slide",
-  "select-file" = "select-file",
+  "slash" = "/",
+  "create-quiz" = "/Create Quiz",
+  "create-planner" = "/Create Planner",
+  "create-flashcard" = "/Create Flashcard",
+  "create-slide" = "/Create Slide",
+  "select-file" = "/Select File",
 }
 
 export const commandsLvl1 = [
@@ -17,10 +18,12 @@ export const commandsLvl1 = [
   },
   {
     value: Commands["create-flashcard"],
-    label: "/Create-Flashcard",
+    label: "/Create Flashcard",
   },
   {
     value: Commands["create-slide"],
     label: "/Create Slide",
   },
 ];
+
+export const commandLabels = commandsLvl1.map((item) => item.label);
