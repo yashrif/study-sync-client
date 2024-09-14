@@ -41,6 +41,7 @@ import {
   QuizRequestServer,
   QuizResponseServer,
   QuizTypes,
+  Status,
   UploadShallow,
 } from "@/types";
 import { generateUUID } from "@/utils/generateUUID";
@@ -205,6 +206,27 @@ const ChatBotInput = () => {
     }
   };
 
+  /* ----------------------------- Request Status ----------------------------- */
+
+  const requestStatus = (): Status => {
+    switch (true) {
+      case quizServerRequestStatus === Status.IDLE &&
+        quizDbRequestStatus === Status.IDLE:
+        return Status.IDLE;
+      case quizServerRequestStatus === Status.PENDING ||
+        quizDbRequestStatus === Status.PENDING:
+        return Status.PENDING;
+      case quizServerRequestStatus === Status.SUCCESS &&
+        quizDbRequestStatus === Status.SUCCESS:
+        return Status.SUCCESS;
+      case quizServerRequestStatus === Status.ERROR ||
+        quizDbRequestStatus === Status.ERROR:
+        return Status.ERROR;
+      default:
+        return Status.IDLE;
+    }
+  };
+
   /* --------------------------------- Component -------------------------------- */
 
   const CommandBlock: React.FC<{ text: string }> = ({ text }) => (
@@ -298,7 +320,8 @@ const ChatBotInput = () => {
           }}
           onScroll={handleScroll}
           className="relative w-full h-full text-sm caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
-        />
+          disabled={requestStatus() === Status.PENDING}
+      />
 
         {/* ------------------------------ Submit Button ----------------------------- */}
 
@@ -308,7 +331,7 @@ const ChatBotInput = () => {
           className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
           iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
           variant={"ghost"}
-          status={quizDbRequestStatus}
+          status={requestStatus()}
         />
 
         <Commands text={text} setText={setText} focusTextArea={focusTextArea} />
