@@ -18,6 +18,7 @@ import {
   commandLabels,
   commandsLvl1,
 } from "@/assets/data/dashboard/chatBot";
+import IconButton from "@/components/button/IconButton";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -27,12 +28,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select-custom";
-import { Textarea } from "@/components/ui/textarea";
+import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
 import { ChatBotActionType, UploadShallow } from "@/types";
 import { generateUUID } from "@/utils/generateUUID";
-import { IconFileTypePdf, IconX } from "@tabler/icons-react";
+import { IconFileTypePdf, IconSend2, IconX } from "@tabler/icons-react";
 
 const BADGE_TITLE_MAX_LENGTH = 20;
 
@@ -133,21 +134,22 @@ const ChatBotInput = () => {
           </Badge>
         ))}
       </div>
+
+      {/* -------------------------------- Text Area ------------------------------- */}
+
       <div className="overflow-hidden relative">
         <div
           ref={textDivRef}
-          className="absolute top-0 left-0 p-2 leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
+          className="absolute top-0 left-0 p-2 pr-12 border border-transparent leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
         >
           {text.length > 1 ? (
             (() => {
               const highlightedTexts = commandLabels;
-
               const styledText = highlightedTexts
                 .map((item, index) => {
                   const splitText = text
                     .toLowerCase()
                     .split(item.toLowerCase());
-
                   if (
                     splitText.length > 1 &&
                     (splitText[1].trim().length <= 0 ||
@@ -172,7 +174,6 @@ const ChatBotInput = () => {
                   }
                 })
                 .filter((item) => item);
-
               return styledText.length > 0 ? styledText.pop() : text;
             })()
           ) : text === ECommands["slash"] ? (
@@ -181,15 +182,27 @@ const ChatBotInput = () => {
             text
           )}
         </div>
-
-        <Textarea
+        <AutosizeTextarea
+          //@ts-ignore
           ref={textareaRef}
+          minHeight={36}
           value={text}
           onChange={(e) => {
             setText(e.target.value);
           }}
           onScroll={handleScroll}
-          className="w-full h-full text-sm caret-primary text-transparent bg-transparent relative no-scrollbar z-10 p-2 leading-[150%] whitespace-pre-wrap"
+          className="relative w-full h-full text-sm caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
+        />
+
+        {/* ------------------------------ Submit Button ----------------------------- */}
+
+        <IconButton
+          Icon={IconSend2}
+          // onClick={() => submitChat(text)}
+          className="absolute size-6 right-2 bottom-2.5 z-20 hover:bg-transparent"
+          iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
+          variant={"ghost"}
+          // status={status}
         />
 
         <Commands text={text} setText={setText} focusTextArea={focusTextArea} />
