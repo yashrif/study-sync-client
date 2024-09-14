@@ -1,7 +1,9 @@
 "use client";
+
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import { useImperativeHandle } from "react";
+
+import { cn } from "@/lib/utils";
 
 interface UseAutosizeTextAreaProps {
   textAreaRef: HTMLTextAreaElement | null;
@@ -38,6 +40,7 @@ export const useAutosizeTextArea = ({
         textAreaRef.style.height = `${scrollHeight + offsetBorder}px`;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [textAreaRef, triggerAutoSize]);
 };
 

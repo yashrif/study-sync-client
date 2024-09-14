@@ -23,7 +23,7 @@ const initialState: ChatBotState = {
   uploads: [],
   quiz: {
     ids: [],
-    type: [QuizTypes.CQ, QuizTypes.MCQ],
+    types: [QuizTypes.CQ, QuizTypes.MCQ],
   },
   status: Status.IDLE,
 };

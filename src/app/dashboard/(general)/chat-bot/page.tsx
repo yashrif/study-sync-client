@@ -12,12 +12,14 @@ import {
 } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
-import { dbEndpoints } from "@/assets/data/api";
+import studySyncServer from "@/api/studySyncServer";
+import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
 import {
   Commands as ECommands,
   commandLabels,
   commandsLvl1,
 } from "@/assets/data/dashboard/chatBot";
+import { links } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -30,14 +32,26 @@ import {
 } from "@/components/ui/select-custom";
 import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
-import { useFetchData } from "@/hooks/fetchData";
-import { ChatBotActionType, UploadShallow } from "@/types";
+import { useFetchData, useFetchState } from "@/hooks/fetchData";
+import { useApiHandler } from "@/hooks/useApiHandler";
+import {
+  ChatBotActionType,
+  Quiz,
+  QuizRequestDb,
+  QuizRequestServer,
+  QuizResponseServer,
+  QuizTypes,
+  UploadShallow,
+} from "@/types";
 import { generateUUID } from "@/utils/generateUUID";
 import { IconFileTypePdf, IconSend2, IconX } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 const BADGE_TITLE_MAX_LENGTH = 20;
 
 const ChatBotInput = () => {
+  const { push } = useRouter();
+
   const [text, setText] = useState("");
   const textDivRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -50,7 +64,7 @@ const ChatBotInput = () => {
   });
 
   const filteredUploads = useMemo(
-    () => state.uploads?.filter((item) => state.quiz.ids.includes(item.name)),
+    () => state.uploads?.filter((item) => state.quiz.ids.includes(item.id)),
     [state.quiz.ids, state.uploads]
   );
 
@@ -101,6 +115,98 @@ const ChatBotInput = () => {
     }
   };
 
+  /* -------------------------------------------------------------------------- */
+  /*                                  Handlers                                  */
+  /* -------------------------------------------------------------------------- */
+
+  /* ---------------------------------- Quiz ---------------------------------- */
+
+  const {
+    state: { status: quizServerRequestStatus },
+    dispatch: quizServerRequestDispatch,
+  } = useFetchState<QuizResponseServer>();
+  const { handler: quizServerRequestHandler } = useApiHandler<
+    QuizRequestServer,
+    QuizResponseServer
+  >({
+    apiCall: useCallback(
+      (data) => studySyncServer.post(serverEndpoints.quizzes, data),
+      []
+    ),
+    dispatch: quizServerRequestDispatch,
+  });
+
+  const {
+    state: { status: quizDbRequestStatus },
+    dispatch: quizDbRequestDispatch,
+  } = useFetchState<Quiz>();
+  const { handler: quizDbRequestHandler } = useApiHandler<QuizRequestDb, Quiz>({
+    apiCall: useCallback(
+      (data) => studySyncDB.post(dbEndpoints.quizzes, data),
+      []
+    ),
+
+    dispatch: quizDbRequestDispatch,
+  });
+
+  /* ------------------------------ Submit Function ----------------------------- */
+
+  const onSubmit = async () => {
+    switch (true) {
+      case text.toLowerCase().includes(ECommands["create-quiz"].toLowerCase()):
+        if (state.quiz.ids.length > 0) {
+          try {
+            const serverResponse = await quizServerRequestHandler({
+              data: {
+                ids: state.quiz.ids,
+                types: state.quiz.types as QuizTypes[],
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+
+            if (serverResponse) {
+              const dbRequest: QuizRequestDb = {
+                ...serverResponse,
+                title: filteredUploads[0].title,
+                uploads: filteredUploads,
+              };
+
+              const dbResponse = await quizDbRequestHandler({
+                data: dbRequest,
+                fetchType: "lazy",
+                isReset: true,
+              });
+
+              if (dbResponse)
+                push(links.dashboard.quiz.details(dbResponse.id).href);
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
+
+        break;
+      case text
+        .toLowerCase()
+        .includes(ECommands["create-planner"].toLowerCase()):
+        console.log("Create Planner");
+        break;
+      case text.toLowerCase().includes(ECommands["create-slide"].toLowerCase()):
+        console.log("Create Slide");
+        break;
+      case text
+        .toLowerCase()
+        .includes(ECommands["create-flashcard"].toLowerCase()):
+        console.log("Create Flashcard");
+        break;
+      default:
+        console.log("No command found");
+    }
+  };
+
+  /* --------------------------------- Component -------------------------------- */
+
   const CommandBlock: React.FC<{ text: string }> = ({ text }) => (
     <span className="text-primary bg-accent rounded-xs">{text}</span>
   );
@@ -126,7 +232,7 @@ const ChatBotInput = () => {
                   type: ChatBotActionType.SET_QUIZ_DATA,
                   payload: {
                     ...state.quiz,
-                    ids: state.quiz.ids.filter((id) => id !== upload.name),
+                    ids: state.quiz.ids.filter((id) => id !== upload.id),
                   },
                 });
               }}
@@ -198,11 +304,11 @@ const ChatBotInput = () => {
 
         <IconButton
           Icon={IconSend2}
-          // onClick={() => submitChat(text)}
-          className="absolute size-6 right-2 bottom-2.5 z-20 hover:bg-transparent"
+          onClick={onSubmit}
+          className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
           iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
           variant={"ghost"}
-          // status={status}
+          status={quizDbRequestStatus}
         />
 
         <Commands text={text} setText={setText} focusTextArea={focusTextArea} />
@@ -241,7 +347,7 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
             prev +
             (data.type === "commands"
               ? _.find(data.data, ["value", e])?.label.slice(1)
-              : "using the books 📕 " + _.find(data.data, ["name", e])?.title) +
+              : "using the books 📕 " + _.find(data.data, ["id", e])?.title) +
             " "
         );
         if (setData) {
@@ -267,12 +373,12 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
               key={
                 data.type === "commands"
                   ? (item as (typeof commandsLvl1)[0]).value
-                  : (item as UploadShallow).name
+                  : (item as UploadShallow).id
               }
               value={
                 data.type === "commands"
                   ? (item as (typeof commandsLvl1)[0]).value
-                  : (item as UploadShallow).name
+                  : (item as UploadShallow).id
               }
               className="text-xs text-muted-foreground px-3"
             >

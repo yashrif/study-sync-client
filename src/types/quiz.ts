@@ -20,7 +20,7 @@ export enum QuizTypes {
 
 /* --------------------------------- Server --------------------------------- */
 
-export type QuizRequestServer = { ids: string[]; type: QuizTypes[] };
+export type QuizRequestServer = { ids: string[]; types: QuizTypes[] };
 
 export type QuizResponseServer = {
   mcqs: McqRequest[];

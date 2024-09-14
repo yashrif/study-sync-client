@@ -2,7 +2,7 @@
 
 import { IconArrowRight } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
 import { controlBar } from "@/assets/data/dashboard/controlBar";
@@ -45,6 +45,8 @@ const CreateAction: React.FC = () => {
   });
 
   if (!quiz) return null;
+
+  /* -------------------------------- on submit ------------------------------- */
 
   const onSubmit = async () => {
     setIsProcessing(true);
