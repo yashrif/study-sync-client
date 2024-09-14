@@ -1,63 +1,32 @@
 "use client";
 
-import _ from "lodash";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
-import studySyncServer from "@/api/studySyncServer";
-import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
+import { dbEndpoints } from "@/assets/data/api";
 import {
   Commands as ECommands,
   commandLabels,
-  commandsLvl1,
 } from "@/assets/data/dashboard/chatBot";
-import { links } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select-custom";
 import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
-import { useFetchData, useFetchState } from "@/hooks/fetchData";
-import { useApiHandler } from "@/hooks/useApiHandler";
-import {
-  ChatBotActionType,
-  Quiz,
-  QuizRequestDb,
-  QuizRequestServer,
-  QuizResponseServer,
-  QuizTypes,
-  Status,
-  UploadShallow,
-} from "@/types";
-import { generateUUID } from "@/utils/generateUUID";
+import { useFetchData } from "@/hooks/fetchData";
+import { ChatBotActionType, Status, UploadShallow } from "@/types";
 import { IconFileTypePdf, IconSend2, IconX } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
+import Commands from "./Commands";
+import { useOnSubmit } from "./onSubmit";
 
 const BADGE_TITLE_MAX_LENGTH = 20;
 
 const ChatBotInput = () => {
-  const { push } = useRouter();
-
   const [text, setText] = useState("");
   const textDivRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { state, dispatch } = useChatBotContext();
+  const { onSubmit } = useOnSubmit();
 
   useFetchData<null, UploadShallow[]>({
     apiCall: useCallback(() => studySyncDB.get(dbEndpoints.uploads), []),
@@ -113,117 +82,6 @@ const ChatBotInput = () => {
   const handleScroll = () => {
     if (textDivRef.current && textareaRef.current) {
       textDivRef.current.scrollTop = textareaRef.current.scrollTop;
-    }
-  };
-
-  /* -------------------------------------------------------------------------- */
-  /*                                  Handlers                                  */
-  /* -------------------------------------------------------------------------- */
-
-  /* ---------------------------------- Quiz ---------------------------------- */
-
-  const {
-    state: { status: quizServerRequestStatus },
-    dispatch: quizServerRequestDispatch,
-  } = useFetchState<QuizResponseServer>();
-  const { handler: quizServerRequestHandler } = useApiHandler<
-    QuizRequestServer,
-    QuizResponseServer
-  >({
-    apiCall: useCallback(
-      (data) => studySyncServer.post(serverEndpoints.quizzes, data),
-      []
-    ),
-    dispatch: quizServerRequestDispatch,
-  });
-
-  const {
-    state: { status: quizDbRequestStatus },
-    dispatch: quizDbRequestDispatch,
-  } = useFetchState<Quiz>();
-  const { handler: quizDbRequestHandler } = useApiHandler<QuizRequestDb, Quiz>({
-    apiCall: useCallback(
-      (data) => studySyncDB.post(dbEndpoints.quizzes, data),
-      []
-    ),
-
-    dispatch: quizDbRequestDispatch,
-  });
-
-  /* ------------------------------ Submit Function ----------------------------- */
-
-  const onSubmit = async () => {
-    switch (true) {
-      case text.toLowerCase().includes(ECommands["create-quiz"].toLowerCase()):
-        if (state.quiz.ids.length > 0) {
-          try {
-            const serverResponse = await quizServerRequestHandler({
-              data: {
-                ids: state.quiz.ids,
-                types: state.quiz.types as QuizTypes[],
-              },
-              fetchType: "lazy",
-              isReset: true,
-            });
-
-            if (serverResponse) {
-              const dbRequest: QuizRequestDb = {
-                ...serverResponse,
-                title: filteredUploads[0].title,
-                uploads: filteredUploads,
-              };
-
-              const dbResponse = await quizDbRequestHandler({
-                data: dbRequest,
-                fetchType: "lazy",
-                isReset: true,
-              });
-
-              if (dbResponse)
-                push(links.dashboard.quiz.details(dbResponse.id).href);
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        }
-
-        break;
-      case text
-        .toLowerCase()
-        .includes(ECommands["create-planner"].toLowerCase()):
-        console.log("Create Planner");
-        break;
-      case text.toLowerCase().includes(ECommands["create-slide"].toLowerCase()):
-        console.log("Create Slide");
-        break;
-      case text
-        .toLowerCase()
-        .includes(ECommands["create-flashcard"].toLowerCase()):
-        console.log("Create Flashcard");
-        break;
-      default:
-        console.log("No command found");
-    }
-  };
-
-  /* ----------------------------- Request Status ----------------------------- */
-
-  const requestStatus = (): Status => {
-    switch (true) {
-      case quizServerRequestStatus === Status.IDLE &&
-        quizDbRequestStatus === Status.IDLE:
-        return Status.IDLE;
-      case quizServerRequestStatus === Status.PENDING ||
-        quizDbRequestStatus === Status.PENDING:
-        return Status.PENDING;
-      case quizServerRequestStatus === Status.SUCCESS &&
-        quizDbRequestStatus === Status.SUCCESS:
-        return Status.SUCCESS;
-      case quizServerRequestStatus === Status.ERROR ||
-        quizDbRequestStatus === Status.ERROR:
-        return Status.ERROR;
-      default:
-        return Status.IDLE;
     }
   };
 
@@ -320,18 +178,18 @@ const ChatBotInput = () => {
           }}
           onScroll={handleScroll}
           className="relative w-full h-full text-sm caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
-          disabled={requestStatus() === Status.PENDING}
-      />
+          disabled={state.requestStatus === Status.PENDING}
+        />
 
         {/* ------------------------------ Submit Button ----------------------------- */}
 
         <IconButton
           Icon={IconSend2}
-          onClick={onSubmit}
+          onClick={() => onSubmit({ text })}
           className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
           iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
           variant={"ghost"}
-          status={requestStatus()}
+          status={state.requestStatus}
         />
 
         <Commands text={text} setText={setText} focusTextArea={focusTextArea} />
@@ -341,141 +199,3 @@ const ChatBotInput = () => {
 };
 
 export default ChatBotInput;
-
-/* ---------------------------- Select Component ---------------------------- */
-
-type Data =
-  | { type: "commands"; data: typeof commandsLvl1 }
-  | { type: "uploads"; data: UploadShallow[] };
-
-type SelectContainerProps = {
-  setText: Dispatch<SetStateAction<string>>;
-  data: Data;
-  setData?: (data: string) => void;
-  focusTextArea: () => void;
-};
-
-const SelectContainer: React.FC<SelectContainerProps> = ({
-  setText,
-  data,
-  setData,
-  focusTextArea,
-}) => {
-  return (
-    <Select
-      defaultOpen
-      onValueChange={(e) => {
-        setText(
-          (prev) =>
-            prev +
-            (data.type === "commands"
-              ? _.find(data.data, ["value", e])?.label.slice(1)
-              : "using the books 📕 " + _.find(data.data, ["id", e])?.title) +
-            " "
-        );
-        if (setData) {
-          setData(e);
-        }
-
-        focusTextArea();
-      }}
-      onOpenChange={() => {
-        focusTextArea();
-      }}
-    >
-      <SelectTrigger
-        className="invisible absolute top-0 left-0 max-w-60 w-full z-10 rounded-md animate-in"
-        onFocus={() => focusTextArea()}
-      >
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {data.data.map((item) => (
-            <SelectItem
-              key={
-                data.type === "commands"
-                  ? (item as (typeof commandsLvl1)[0]).value
-                  : (item as UploadShallow).id
-              }
-              value={
-                data.type === "commands"
-                  ? (item as (typeof commandsLvl1)[0]).value
-                  : (item as UploadShallow).id
-              }
-              className="text-xs text-muted-foreground px-3"
-            >
-              {data.type === "commands"
-                ? (item as (typeof commandsLvl1)[0]).label
-                : (item as UploadShallow).title}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
-};
-
-/* -------------------------------- Commands -------------------------------- */
-
-type CommandsProps = {
-  text: string;
-  setText: Dispatch<SetStateAction<string>>;
-  focusTextArea: () => void;
-};
-
-const Commands: React.FC<CommandsProps> = (data) => {
-  const {
-    state: { quiz, uploads },
-    dispatch,
-  } = useChatBotContext();
-
-  const slashCommands = useMemo(
-    () =>
-      commandsLvl1.filter((item) =>
-        item.label.toLowerCase().includes(data.text.toLowerCase())
-      ),
-    [data.text]
-  );
-
-  const SelectFile: React.FC = () => (
-    <SelectContainer
-      key={generateUUID()}
-      setText={data.setText}
-      data={{ type: "uploads", data: uploads }}
-      setData={(data) => {
-        dispatch({
-          type: ChatBotActionType.SET_QUIZ_DATA,
-          payload: {
-            ...quiz,
-            ids: [...quiz.ids, data],
-          },
-        });
-      }}
-      focusTextArea={data.focusTextArea}
-    />
-  );
-
-  switch (data.text.trim().toLowerCase()) {
-    case ECommands["create-quiz"].toLowerCase():
-    case ECommands["create-planner"].toLowerCase():
-    case ECommands["create-slide"].toLowerCase():
-    case ECommands["create-flashcard"].toLowerCase():
-      return <SelectFile />;
-    case ECommands["slash"]:
-      return (
-        <SelectContainer
-          key={generateUUID()}
-          setText={data.setText}
-          data={{ type: "commands", data: slashCommands }}
-          focusTextArea={data.focusTextArea}
-        />
-      );
-    default:
-      if (
-        data.text.toLowerCase().includes(ECommands["select-file"].toLowerCase())
-      )
-        return <SelectFile />;
-      return null;
-  }
-};

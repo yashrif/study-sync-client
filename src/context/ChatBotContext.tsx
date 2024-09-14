@@ -26,6 +26,7 @@ const initialState: ChatBotState = {
     types: [QuizTypes.CQ, QuizTypes.MCQ],
   },
   status: Status.IDLE,
+  requestStatus: Status.IDLE,
 };
 
 const createSlideReducer = (
@@ -79,6 +80,11 @@ const createSlideReducer = (
       return {
         ...state,
         quiz: action.payload,
+      };
+    case ChatBotActionType.SET_REQUEST_STATUS:
+      return {
+        ...state,
+        requestStatus: action.payload,
       };
     default:
       return state;
