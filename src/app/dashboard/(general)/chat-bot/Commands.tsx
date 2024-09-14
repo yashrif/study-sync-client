@@ -1,14 +1,17 @@
 "use client";
 
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import {
+  commandLabels,
   commandsLvl1,
+  commandsLvl2,
   Commands as ECommands,
 } from "@/assets/data/dashboard/chatBot";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { ChatBotActionType } from "@/types";
 import { generateUUID } from "@/utils/generateUUID";
+import { replaceAll } from "@/utils/string";
 import SelectContainer from "./SelectContainer";
 
 /* -------------------------------- Commands -------------------------------- */
@@ -24,13 +27,10 @@ const Commands: React.FC<CommandsProps> = (data) => {
     dispatch,
   } = useChatBotContext();
 
-  const slashCommands = useMemo(
-    () =>
-      commandsLvl1.filter((item) =>
-        item.label.toLowerCase().includes(data.text.toLowerCase())
-      ),
-    [data.text]
-  );
+  let textLvl1CommandStriped = data.text;
+  commandLabels.forEach((item) => {
+    textLvl1CommandStriped = replaceAll(textLvl1CommandStriped, item, "");
+  });
 
   const SelectFile: React.FC = () => (
     <SelectContainer
@@ -61,16 +61,32 @@ const Commands: React.FC<CommandsProps> = (data) => {
         <SelectContainer
           key={generateUUID()}
           setText={data.setText}
-          data={{ type: "commands", data: slashCommands }}
+          data={{ type: "commands", data: commandsLvl1 }}
           focusTextArea={data.focusTextArea}
         />
       );
     default:
-      if (
-        data.text.toLowerCase().includes(ECommands["select-file"].toLowerCase())
-      )
-        return <SelectFile />;
-      return null;
+      switch (true) {
+        case commandLabels.some(
+          (command) =>
+            data.text.toLowerCase().includes(command.toLowerCase()) &&
+            textLvl1CommandStriped.endsWith("/")
+        ):
+          return (
+            <SelectContainer
+              key={generateUUID()}
+              setText={data.setText}
+              data={{ type: "commands", data: commandsLvl2 }}
+              focusTextArea={data.focusTextArea}
+            />
+          );
+        case data.text
+          .toLowerCase()
+          .includes(ECommands["select-file"].toLowerCase()):
+          return <SelectFile />;
+        default:
+          return null;
+      }
   }
 };
 

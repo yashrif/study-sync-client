@@ -52,7 +52,7 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
       }}
       onOpenChange={() => {
         focusTextArea();
-        setText((prev) => replaceAll(prev, Commands["select-file"], " "));
+        setText((prev) => replaceAll(prev, Commands["select-file"], ""));
       }}
     >
       <SelectTrigger

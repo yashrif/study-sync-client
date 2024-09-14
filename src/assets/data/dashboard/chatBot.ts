@@ -26,4 +26,11 @@ export const commandsLvl1 = [
   },
 ];
 
+export const commandsLvl2 = [
+  {
+    value: Commands["select-file"],
+    label: "/Select File",
+  },
+];
+
 export const commandLabels = commandsLvl1.map((item) => item.label);
