@@ -3,7 +3,7 @@
 import _ from "lodash";
 import { Dispatch, SetStateAction } from "react";
 
-import { commandsLvl1 } from "@/assets/data/dashboard/chatBot";
+import { Commands, commandsLvl1 } from "@/assets/data/dashboard/chatBot";
 import {
   Select,
   SelectContent,
@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select-custom";
 import { UploadShallow } from "@/types";
+import { replaceAll } from "@/utils/string";
 
 type Data =
   | { type: "commands"; data: typeof commandsLvl1 }
@@ -51,6 +52,7 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
       }}
       onOpenChange={() => {
         focusTextArea();
+        setText((prev) => replaceAll(prev, Commands["select-file"], " "));
       }}
     >
       <SelectTrigger

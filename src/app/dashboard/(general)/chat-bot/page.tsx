@@ -1,5 +1,6 @@
 "use client";
 
+import { IconFileTypePdf, IconSend2, IconX } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
@@ -10,11 +11,11 @@ import {
 } from "@/assets/data/dashboard/chatBot";
 import IconButton from "@/components/button/IconButton";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
 import { ChatBotActionType, Status, UploadShallow } from "@/types";
-import { IconFileTypePdf, IconSend2, IconX } from "@tabler/icons-react";
 import Commands from "./Commands";
 import { useOnSubmit } from "./onSubmit";
 
@@ -92,34 +93,53 @@ const ChatBotInput = () => {
   );
 
   return (
-    <div className="m-40 max-w-lg flex flex-col gap-2">
-      <div className="flex flex-wrap-reverse gap-x-2 gap-y-1.5">
-        {filteredUploads.map((upload) => (
-          <Badge
-            key={upload.id}
-            className="rounded-sm flex items-center gap-1.5"
-          >
-            <IconFileTypePdf className="stroke-white size-3 stroke-[2.5px]" />
-            <span className="whitespace-nowrap">
-              {upload.title.length > BADGE_TITLE_MAX_LENGTH
-                ? `${upload.title.slice(0, BADGE_TITLE_MAX_LENGTH - 3)}...`
-                : upload.title}
-            </span>
-            <IconX
-              className="stroke-white size-3 stroke-[2.5px] hover:scale-125 hover:stroke-[#ffa8a8] cursor-pointer transition-all duration-300"
-              onClick={() => {
-                dispatch({
-                  type: ChatBotActionType.SET_QUIZ_DATA,
-                  payload: {
-                    ...state.quiz,
-                    ids: state.quiz.ids.filter((id) => id !== upload.id),
-                  },
-                });
-              }}
-            />
-          </Badge>
-        ))}
-      </div>
+    <div className="m-40 max-w-md h-[450px] grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-md rounded-md p-4 border">
+      <ScrollArea className="">
+        <p className=" pb-4 text-base">
+          shut look potatoes exercise whole crew equator fruit desk instrument
+          freedom lack related laugh distant vessels physical milk drove
+          disappear something half off plant shut look potatoes exercise whole
+          crew equator fruit desk instrument freedom lack related laugh distant
+          vessels physical milk drove disappear something half off plant shut
+          look potatoes exercise whole crew equator fruit desk instrument
+          freedom lack related laugh distant vessels physical milk drove
+          disappear something half off plant shut look potatoes exercise whole
+          crew equator fruit desk instrument freedom lack related laugh distant
+          vessels physical milk drove disappear something half off plant shut
+          look potatoes exercise whole crew equator fruit desk instrument
+          freedom lack related laugh distant vessels physical milk drove
+          disappear something half off plant
+        </p>
+        {filteredUploads.length > 0 && (
+          <div className="sticky bottom-0 inset-0 pt-2 bg-background flex flex-wrap-reverse gap-x-2 gap-y-1.5">
+            {filteredUploads.map((upload) => (
+              <Badge
+                key={upload.id}
+                className="rounded-sm flex items-center gap-1.5"
+              >
+                <IconFileTypePdf className="stroke-white size-3 stroke-[2.5px]" />
+                <span className="whitespace-nowrap">
+                  {upload.title.length > BADGE_TITLE_MAX_LENGTH
+                    ? `${upload.title.slice(0, BADGE_TITLE_MAX_LENGTH - 3)}...`
+                    : upload.title}
+                </span>
+                <IconX
+                  className="stroke-white size-3 stroke-[2.5px] hover:scale-125 hover:stroke-[#ffa8a8] cursor-pointer transition-all duration-300"
+                  onClick={() => {
+                    dispatch({
+                      type: ChatBotActionType.SET_QUIZ_DATA,
+                      payload: {
+                        ...state.quiz,
+                        ids: state.quiz.ids.filter((id) => id !== upload.id),
+                      },
+                    });
+                  }}
+                />
+              </Badge>
+            ))}
+          </div>
+        )}
+      </ScrollArea>
 
       {/* -------------------------------- Text Area ------------------------------- */}
 
