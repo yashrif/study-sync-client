@@ -10,7 +10,7 @@ import {
   FetchActionType,
   Status,
   TopicShallow,
-  UploadShallow
+  UploadShallow,
 } from "@/types";
 
 const ChatBotContext = createContext<ChatBotContextProps | undefined>(
@@ -42,7 +42,7 @@ const createSlideReducer = (
         uploads: action.payload.every(
           (item) => "type" in item || "isIndexed" in item
         )
-          ? (action.payload as UploadShallow[])
+          ? (action.payload as UploadShallow[]).filter((item) => item.isIndexed)
           : state.uploads,
         topics: action.payload.every(
           (item) => !("type" in item) && !("isIndexed" in item)

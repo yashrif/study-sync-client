@@ -15,6 +15,8 @@ import {
 import { UploadShallow } from "@/types";
 import { replaceAll } from "@/utils/string";
 
+const MAX_ITEM_LENGTH = 50;
+
 type Data =
   | { type: "commands"; data: typeof commandsLvl1 }
   | { type: "uploads"; data: UploadShallow[] };
@@ -56,7 +58,7 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
       }}
     >
       <SelectTrigger
-        className="invisible absolute top-0 left-0 max-w-60 w-full z-10 rounded-md animate-in"
+        className="invisible absolute top-0 left-0 max-w-60 z-10 rounded-md animate-in"
         onFocus={() => focusTextArea()}
       >
         <SelectValue placeholder="Select a fruit" />
@@ -78,8 +80,19 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
               className="text-xs text-muted-foreground px-3"
             >
               {data.type === "commands"
-                ? (item as (typeof commandsLvl1)[0]).label
-                : (item as UploadShallow).title}
+                ? (item as (typeof commandsLvl1)[0]).label.length >
+                  MAX_ITEM_LENGTH
+                  ? (item as (typeof commandsLvl1)[0]).label.slice(
+                      0,
+                      MAX_ITEM_LENGTH - 3
+                    ) + "..."
+                  : (item as (typeof commandsLvl1)[0]).label
+                : (item as UploadShallow).title.length > MAX_ITEM_LENGTH
+                  ? (item as UploadShallow).title.slice(
+                      0,
+                      MAX_ITEM_LENGTH - 3
+                    ) + "..."
+                  : (item as UploadShallow).title}
             </SelectItem>
           ))}
         </SelectGroup>
