@@ -93,9 +93,9 @@ const ChatBotInput = () => {
   );
 
   return (
-    <div className="m-40 max-w-md h-[450px] grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-md rounded-md p-4 border">
-      <ScrollArea className="">
-        <p className=" pb-4 text-base">
+    <div className="m-40 max-w-md h-[450px] grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-md rounded-md p-2 border">
+      <ScrollArea className="p-2 pb-0">
+        <p className="pb-4 text-base">
           shut look potatoes exercise whole crew equator fruit desk instrument
           freedom lack related laugh distant vessels physical milk drove
           disappear something half off plant shut look potatoes exercise whole
@@ -143,76 +143,79 @@ const ChatBotInput = () => {
 
       {/* -------------------------------- Text Area ------------------------------- */}
 
-      <div className="overflow-hidden relative">
-        <div
-          ref={textDivRef}
-          className="absolute top-0 left-0 p-2 pr-12 border border-transparent leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
-        >
-          {text.length > 1 ? (
-            (() => {
-              const highlightedTexts = commandLabels;
-              const styledText = highlightedTexts
-                .map((item, index) => {
-                  const splitText = text
-                    .toLowerCase()
-                    .split(item.toLowerCase());
-                  if (
-                    splitText.length > 1 &&
-                    (splitText[1].trim().length <= 0 ||
-                      (splitText[1].trim().length > 0 &&
-                        state.quiz.ids.length > 0))
-                  ) {
-                    return (
-                      <>
-                        {text.slice(0, splitText[0].length)}
-                        <CommandBlock
-                          key={index}
-                          text={text.slice(
-                            splitText[0].length,
-                            text.length -
-                              splitText[1].length -
-                              splitText[0].length
-                          )}
-                        />
-                        {text.slice(text.length - splitText[1].length)}
-                      </>
-                    );
-                  }
-                })
-                .filter((item) => item);
-              return styledText.length > 0 ? styledText.pop() : text;
-            })()
-          ) : text === ECommands["slash"] ? (
-            <CommandBlock text={text} />
-          ) : (
-            text
-          )}
+      <div className="p-2 pt-0">
+        <div className="overflow-hidden relative">
+          <div
+            ref={textDivRef}
+            className="absolute top-0 left-0 p-2 pr-12 border border-transparent leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
+          >
+            {text.length > 1 ? (
+              (() => {
+                const highlightedTexts = commandLabels;
+                const styledText = highlightedTexts
+                  .map((item, index) => {
+                    const splitText = text
+                      .toLowerCase()
+                      .split(item.toLowerCase());
+                    if (
+                      splitText.length > 1 &&
+                      (splitText[1].trim().length <= 0 ||
+                        (splitText[1].trim().length > 0 &&
+                          state.quiz.ids.length > 0))
+                    ) {
+                      return (
+                        <>
+                          {text.slice(0, splitText[0].length)}
+                          <CommandBlock
+                            key={index}
+                            text={text.slice(
+                              splitText[0].length,
+                              text.length -
+                                splitText[1].length -
+                                splitText[0].length
+                            )}
+                          />
+                          {text.slice(text.length - splitText[1].length)}
+                        </>
+                      );
+                    }
+                  })
+                  .filter((item) => item);
+                return styledText.length > 0 ? styledText.pop() : text;
+              })()
+            ) : text === ECommands["slash"] ? (
+              <CommandBlock text={text} />
+            ) : (
+              text
+            )}
+          </div>
+          <AutosizeTextarea
+            //@ts-ignore
+            ref={textareaRef}
+            minHeight={36}
+            value={text}
+            onChange={(e) => {
+              setText(e.target.value);
+            }}
+            onScroll={handleScroll}
+            className="relative w-full h-full text-sm caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
+            disabled={state.requestStatus === Status.PENDING}
+          />
+          {/* ------------------------------ Submit Button ----------------------------- */}
+          <IconButton
+            Icon={IconSend2}
+            onClick={() => onSubmit({ text })}
+            className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
+            iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
+            variant={"ghost"}
+            status={state.requestStatus}
+          />
+          <Commands
+            text={text}
+            setText={setText}
+            focusTextArea={focusTextArea}
+          />
         </div>
-        <AutosizeTextarea
-          //@ts-ignore
-          ref={textareaRef}
-          minHeight={36}
-          value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-          }}
-          onScroll={handleScroll}
-          className="relative w-full h-full text-sm caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
-          disabled={state.requestStatus === Status.PENDING}
-        />
-
-        {/* ------------------------------ Submit Button ----------------------------- */}
-
-        <IconButton
-          Icon={IconSend2}
-          onClick={() => onSubmit({ text })}
-          className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
-          iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
-          variant={"ghost"}
-          status={state.requestStatus}
-        />
-
-        <Commands text={text} setText={setText} focusTextArea={focusTextArea} />
       </div>
     </div>
   );
