@@ -24,6 +24,10 @@ export const commandsLvl1 = [
     value: Commands["create-slide"],
     label: "/Create Slide",
   },
+  {
+    value: Commands["select-file"],
+    label: "/Select File",
+  },
 ];
 
 export const commandsLvl2 = [

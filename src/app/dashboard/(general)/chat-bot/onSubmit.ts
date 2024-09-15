@@ -20,19 +20,20 @@ export const useOnSubmit = () => {
   const { quizServerRequestHandler, quizDbRequestHandler } = useHandlers();
 
   const filteredUploads = useMemo(
-    () => state.uploads?.filter((item) => state.quiz.ids.includes(item.id)),
-    [state.quiz.ids, state.uploads]
+    () =>
+      state.uploads?.filter((item) => state.selectedUploads.includes(item.id)),
+    [state.selectedUploads, state.uploads]
   );
 
   const onSubmit = async ({ text }: Props) => {
     switch (true) {
       case text.toLowerCase().includes(Commands["create-quiz"].toLowerCase()):
-        if (state.quiz.ids.length > 0) {
+        if (state.selectedUploads.length > 0) {
           try {
             const serverResponse = await quizServerRequestHandler({
               data: {
-                ids: state.quiz.ids,
-                types: state.quiz.types as QuizTypes[],
+                ids: state.selectedUploads,
+                types: [QuizTypes.CQ, QuizTypes.MCQ],
               },
               fetchType: "lazy",
               isReset: true,

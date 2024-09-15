@@ -35,8 +35,9 @@ const ChatBotInput = () => {
   });
 
   const filteredUploads = useMemo(
-    () => state.uploads?.filter((item) => state.quiz.ids.includes(item.id)),
-    [state.quiz.ids, state.uploads]
+    () =>
+      state.uploads?.filter((item) => state.selectedUploads.includes(item.id)),
+    [state.selectedUploads, state.uploads]
   );
 
   /* ---------------------------------- Utils --------------------------------- */
@@ -46,23 +47,6 @@ const ChatBotInput = () => {
       textareaRef.current.focus();
     }
   }, []);
-
-  useEffect(() => {
-    if (
-      !commandLabels.some((command) =>
-        text.toLowerCase().includes(command.toLowerCase())
-      ) &&
-      state.quiz.ids.length > 0
-    ) {
-      dispatch({
-        type: ChatBotActionType.SET_QUIZ_DATA,
-        payload: {
-          ...state.quiz,
-          ids: [],
-        },
-      });
-    }
-  }, [dispatch, state.quiz, state.quiz.ids.length, text]);
 
   /* ------------------------------ Input overlay ----------------------------- */
 
@@ -127,11 +111,10 @@ const ChatBotInput = () => {
                   className="stroke-white size-3 stroke-[2.5px] hover:scale-125 hover:stroke-[#ffa8a8] cursor-pointer transition-all duration-300"
                   onClick={() => {
                     dispatch({
-                      type: ChatBotActionType.SET_QUIZ_DATA,
-                      payload: {
-                        ...state.quiz,
-                        ids: state.quiz.ids.filter((id) => id !== upload.id),
-                      },
+                      type: ChatBotActionType.SET_SELECTED_UPLOADS,
+                      payload: state.selectedUploads.filter(
+                        (id) => id !== upload.id
+                      ),
                     });
                   }}
                 />
@@ -161,7 +144,7 @@ const ChatBotInput = () => {
                       splitText.length > 1 &&
                       (splitText[1].trim().length <= 0 ||
                         (splitText[1].trim().length > 0 &&
-                          state.quiz.ids.length > 0))
+                          state.selectedUploads.length > 0))
                     ) {
                       return (
                         <>
@@ -209,6 +192,7 @@ const ChatBotInput = () => {
             iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
             variant={"ghost"}
             status={state.requestStatus}
+            disabled={text.length <= 0}
           />
           <Commands
             text={text}

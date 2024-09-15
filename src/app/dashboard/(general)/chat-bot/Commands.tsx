@@ -23,7 +23,7 @@ type CommandsProps = {
 
 const Commands: React.FC<CommandsProps> = (data) => {
   const {
-    state: { quiz, uploads },
+    state: { selectedUploads, uploads },
     dispatch,
   } = useChatBotContext();
 
@@ -39,11 +39,8 @@ const Commands: React.FC<CommandsProps> = (data) => {
       data={{ type: "uploads", data: uploads }}
       setData={(data) => {
         dispatch({
-          type: ChatBotActionType.SET_QUIZ_DATA,
-          payload: {
-            ...quiz,
-            ids: [...quiz.ids, data],
-          },
+          type: ChatBotActionType.SET_SELECTED_UPLOADS,
+          payload: [...selectedUploads, data],
         });
       }}
       focusTextArea={data.focusTextArea}
@@ -67,11 +64,7 @@ const Commands: React.FC<CommandsProps> = (data) => {
       );
     default:
       switch (true) {
-        case commandLabels.some(
-          (command) =>
-            data.text.toLowerCase().includes(command.toLowerCase()) &&
-            textLvl1CommandStriped.endsWith("/")
-        ):
+        case textLvl1CommandStriped.endsWith("/"):
           return (
             <SelectContainer
               key={generateUUID()}

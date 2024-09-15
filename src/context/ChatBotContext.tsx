@@ -8,10 +8,9 @@ import {
   ChatBotContextProps,
   ChatBotState,
   FetchActionType,
-  QuizTypes,
   Status,
   TopicShallow,
-  UploadShallow,
+  UploadShallow
 } from "@/types";
 
 const ChatBotContext = createContext<ChatBotContextProps | undefined>(
@@ -21,10 +20,7 @@ const ChatBotContext = createContext<ChatBotContextProps | undefined>(
 const initialState: ChatBotState = {
   topics: [],
   uploads: [],
-  quiz: {
-    ids: [],
-    types: [QuizTypes.CQ, QuizTypes.MCQ],
-  },
+  selectedUploads: [],
   status: Status.IDLE,
   requestStatus: Status.IDLE,
 };
@@ -76,10 +72,10 @@ const createSlideReducer = (
             ? (action.payload as TopicShallow[])
             : state.topics,
       };
-    case ChatBotActionType.SET_QUIZ_DATA:
+    case ChatBotActionType.SET_SELECTED_UPLOADS:
       return {
         ...state,
-        quiz: action.payload,
+        selectedUploads: action.payload,
       };
     case ChatBotActionType.SET_REQUEST_STATUS:
       return {
