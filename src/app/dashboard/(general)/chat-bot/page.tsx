@@ -24,9 +24,11 @@ const BADGE_TITLE_MAX_LENGTH = 20;
 const ChatBotInput = () => {
   const [text, setText] = useState("");
   const textDivRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { state, dispatch } = useChatBotContext();
+  const {
+    state: { uploads, selectedUploads, requestStatus, textareaRef },
+    dispatch,
+  } = useChatBotContext();
   const { onSubmit } = useOnSubmit();
 
   useFetchData<null, UploadShallow[]>({
@@ -35,18 +37,9 @@ const ChatBotInput = () => {
   });
 
   const filteredUploads = useMemo(
-    () =>
-      state.uploads?.filter((item) => state.selectedUploads.includes(item.id)),
-    [state.selectedUploads, state.uploads]
+    () => uploads?.filter((item) => selectedUploads.includes(item.id)),
+    [selectedUploads, uploads]
   );
-
-  /* ---------------------------------- Utils --------------------------------- */
-
-  const focusTextArea = useCallback(() => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  }, []);
 
   /* ------------------------------ Input overlay ----------------------------- */
 
@@ -62,7 +55,7 @@ const ChatBotInput = () => {
       textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
       textDivRef.current.scrollTop = textDivRef.current.scrollHeight;
     }
-  }, [text]);
+  }, [text, textareaRef]);
 
   const handleScroll = () => {
     if (textDivRef.current && textareaRef.current) {
@@ -112,9 +105,7 @@ const ChatBotInput = () => {
                   onClick={() => {
                     dispatch({
                       type: ChatBotActionType.SET_SELECTED_UPLOADS,
-                      payload: state.selectedUploads.filter(
-                        (id) => id !== upload.id
-                      ),
+                      payload: selectedUploads.filter((id) => id !== upload.id),
                     });
                   }}
                 />
@@ -144,7 +135,7 @@ const ChatBotInput = () => {
                       splitText.length > 1 &&
                       (splitText[1].trim().length <= 0 ||
                         (splitText[1].trim().length > 0 &&
-                          state.selectedUploads.length > 0))
+                          selectedUploads.length > 0))
                     ) {
                       return (
                         <>
@@ -173,7 +164,7 @@ const ChatBotInput = () => {
             )}
           </div>
           <AutosizeTextarea
-            //@ts-ignore
+            // @ts-ignore
             ref={textareaRef}
             minHeight={36}
             value={text}
@@ -182,7 +173,7 @@ const ChatBotInput = () => {
             }}
             onScroll={handleScroll}
             className="relative w-full h-full text-sm caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
-            disabled={state.requestStatus === Status.PENDING}
+            disabled={requestStatus === Status.PENDING}
           />
           {/* ------------------------------ Submit Button ----------------------------- */}
           <IconButton
@@ -191,14 +182,10 @@ const ChatBotInput = () => {
             className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
             iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
             variant={"ghost"}
-            status={state.requestStatus}
+            status={requestStatus}
             disabled={text.length <= 0}
           />
-          <Commands
-            text={text}
-            setText={setText}
-            focusTextArea={focusTextArea}
-          />
+          <Commands text={text} setText={setText} />
         </div>
       </div>
     </div>

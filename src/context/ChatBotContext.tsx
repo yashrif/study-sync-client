@@ -21,6 +21,8 @@ const initialState: ChatBotState = {
   topics: [],
   uploads: [],
   selectedUploads: [],
+  prompt: "",
+  textareaRef: { current: null },
   status: Status.IDLE,
   requestStatus: Status.IDLE,
 };
@@ -81,6 +83,16 @@ const createSlideReducer = (
       return {
         ...state,
         requestStatus: action.payload,
+      };
+    case ChatBotActionType.SET_PROMPT:
+      return {
+        ...state,
+        prompt: action.payload,
+      };
+    case ChatBotActionType.SET_TEXTAREA_REF:
+      return {
+        ...state,
+        textareaRef: action.payload,
       };
     default:
       return state;

@@ -19,12 +19,11 @@ import Uploads from "./command-items/Uploads";
 type CommandsProps = {
   text: string;
   setText: Dispatch<SetStateAction<string>>;
-  focusTextArea: () => void;
 };
 
 const Commands: React.FC<CommandsProps> = (data) => {
   const {
-    state: { selectedUploads, uploads },
+    state: { selectedUploads, uploads, textareaRef },
     dispatch,
   } = useChatBotContext();
 
@@ -44,7 +43,6 @@ const Commands: React.FC<CommandsProps> = (data) => {
           payload: [...selectedUploads, data],
         });
       }}
-      focusTextArea={data.focusTextArea}
     >
       <Uploads />
     </SelectContainer>
@@ -62,7 +60,6 @@ const Commands: React.FC<CommandsProps> = (data) => {
           key={generateUUID()}
           setText={data.setText}
           data={{ type: "commands", data: commandsLvl1 }}
-          focusTextArea={data.focusTextArea}
         >
           <CommandItems commands={commandsLvl1} />
         </SelectContainer>
@@ -75,7 +72,6 @@ const Commands: React.FC<CommandsProps> = (data) => {
               key={generateUUID()}
               setText={data.setText}
               data={{ type: "commands", data: commandsLvl2 }}
-              focusTextArea={data.focusTextArea}
             >
               <CommandItems commands={commandsLvl2} />
             </SelectContainer>

@@ -1,7 +1,7 @@
 "use client";
 
 import _ from "lodash";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
 import { Commands, commandsLvl1 } from "@/assets/data/dashboard/chatBot";
 import {
@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select-custom";
+import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { UploadShallow } from "@/types";
 import { replaceAll } from "@/utils/string";
 
@@ -21,7 +22,6 @@ type SelectContainerProps = {
   setText: Dispatch<SetStateAction<string>>;
   data: Data;
   setData?: (data: string) => void;
-  focusTextArea: () => void;
   children: React.ReactNode;
 };
 
@@ -29,9 +29,20 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
   setText,
   data,
   setData,
-  focusTextArea,
   children,
 }) => {
+  const {
+    state: { textareaRef },
+  } = useChatBotContext();
+
+  /* ---------------------------- on textarea focus --------------------------- */
+
+  const focusTextArea = useCallback(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [textareaRef]);
+
   return (
     <Select
       defaultOpen
