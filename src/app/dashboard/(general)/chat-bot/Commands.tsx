@@ -46,13 +46,13 @@ const Commands: React.FC<CommandsProps> = (data) => {
     <SelectContainer
       key={generateUUID()}
       onValueChange={(e) => {
-        data.setText(
-          (prev) =>
-            prev +
-            "using the books 📕 " +
-            _.find(uploads, ["id", e])?.title +
-            " "
-        );
+        // data.setText(
+        //   (prev) =>
+        //     prev +
+        //     "using the books 📕 " +
+        //     _.find(uploads, ["id", e])?.title +
+        //     " "
+        // );
         dispatch({
           type: ChatBotActionType.SET_SELECTED_UPLOADS,
           payload: [...selectedUploads, e],

@@ -23,6 +23,7 @@ const initialState: ChatBotState = {
   selectedUploads: [],
   prompt: "",
   textareaRef: { current: null },
+  conversation: [],
   status: Status.IDLE,
   requestStatus: Status.IDLE,
 };
@@ -93,6 +94,29 @@ const createSlideReducer = (
       return {
         ...state,
         textareaRef: action.payload,
+      };
+    case ChatBotActionType.SET_CONVERSATION:
+      return {
+        ...state,
+        conversation: action.payload,
+      };
+    case ChatBotActionType.ADD_CONVERSATION:
+      return {
+        ...state,
+        conversation: [...state.conversation, ...action.payload],
+      };
+    case ChatBotActionType.POP_CONVERSATION:
+      return {
+        ...state,
+        conversation: state.conversation.slice(0, -1),
+      };
+    case ChatBotActionType.REPLACE_LAST_CONVERSATION:
+      return {
+        ...state,
+        conversation: [
+          ...state.conversation.slice(0, state.conversation.length - 1),
+          action.payload,
+        ],
       };
     default:
       return state;

@@ -26,7 +26,13 @@ const ChatBotInput = () => {
   const textDivRef = useRef<HTMLDivElement>(null);
 
   const {
-    state: { uploads, selectedUploads, requestStatus, textareaRef },
+    state: {
+      uploads,
+      selectedUploads,
+      requestStatus,
+      textareaRef,
+      conversation,
+    },
     dispatch,
   } = useChatBotContext();
   const { onSubmit } = useOnSubmit();
@@ -70,23 +76,20 @@ const ChatBotInput = () => {
   );
 
   return (
-    <div className="m-40 max-w-md h-[450px] grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-md rounded-md p-2 border">
+    <div className="m-40 max-w-md h-[450px] grid grid-cols-1 grid-rows-[1fr,auto] items-end gap-2 shadow-md rounded-md p-2 border">
       <ScrollArea className="p-2 pb-0">
-        <p className="pb-4 text-base">
-          shut look potatoes exercise whole crew equator fruit desk instrument
-          freedom lack related laugh distant vessels physical milk drove
-          disappear something half off plant shut look potatoes exercise whole
-          crew equator fruit desk instrument freedom lack related laugh distant
-          vessels physical milk drove disappear something half off plant shut
-          look potatoes exercise whole crew equator fruit desk instrument
-          freedom lack related laugh distant vessels physical milk drove
-          disappear something half off plant shut look potatoes exercise whole
-          crew equator fruit desk instrument freedom lack related laugh distant
-          vessels physical milk drove disappear something half off plant shut
-          look potatoes exercise whole crew equator fruit desk instrument
-          freedom lack related laugh distant vessels physical milk drove
-          disappear something half off plant
-        </p>
+        <div className="pb-4 flex flex-col gap-4">
+          {conversation.map((item, index) => (
+            <div
+              key={index}
+              className={`max-w-[75%] text-foreground py-2 px-4 rounded-lg ${
+                item.type === "prompt" ? "self-end bg-accent-300" : "self-start"
+              }`}
+            >
+              {item.data}
+            </div>
+          ))}
+        </div>
         {filteredUploads.length > 0 && (
           <div className="sticky bottom-0 inset-0 pt-2 bg-background flex flex-wrap-reverse gap-x-2 gap-y-1.5">
             {filteredUploads.map((upload) => (
@@ -167,12 +170,13 @@ const ChatBotInput = () => {
             // @ts-ignore
             ref={textareaRef}
             minHeight={36}
+            maxHeight={120}
             value={text}
             onChange={(e) => {
               setText(e.target.value);
             }}
             onScroll={handleScroll}
-            className="relative w-full h-full text-sm caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
+            className="relative w-full h-full text-sm rounded-lg caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
             disabled={requestStatus === Status.PENDING}
           />
           {/* ------------------------------ Submit Button ----------------------------- */}

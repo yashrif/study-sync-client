@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select-custom";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { Status } from "@/types";
 
 type SelectContainerProps = {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
   onOpenChange,
 }) => {
   const {
-    state: { textareaRef },
+    state: { textareaRef, requestStatus },
   } = useChatBotContext();
 
   /* ---------------------------- on textarea focus --------------------------- */
@@ -54,7 +55,14 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
       >
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
-      <SelectContent>{children}</SelectContent>
+      <SelectContent
+        className="max-h-60"
+        style={{
+          visibility: requestStatus === Status.PENDING ? "hidden" : "visible",
+        }}
+      >
+        {children}
+      </SelectContent>
     </Select>
   );
 };
