@@ -7,15 +7,11 @@ import { Commands, commandsLvl1 } from "@/assets/data/dashboard/chatBot";
 import {
   Select,
   SelectContent,
-  SelectGroup,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select-custom";
 import { UploadShallow } from "@/types";
 import { replaceAll } from "@/utils/string";
-
-const MAX_ITEM_LENGTH = 50;
 
 type Data =
   | { type: "commands"; data: typeof commandsLvl1 }
@@ -26,6 +22,7 @@ type SelectContainerProps = {
   data: Data;
   setData?: (data: string) => void;
   focusTextArea: () => void;
+  children: React.ReactNode;
 };
 
 const SelectContainer: React.FC<SelectContainerProps> = ({
@@ -33,6 +30,7 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
   data,
   setData,
   focusTextArea,
+  children,
 }) => {
   return (
     <Select
@@ -63,40 +61,7 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
       >
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {data.data.map((item) => (
-            <SelectItem
-              key={
-                data.type === "commands"
-                  ? (item as (typeof commandsLvl1)[0]).value
-                  : (item as UploadShallow).id
-              }
-              value={
-                data.type === "commands"
-                  ? (item as (typeof commandsLvl1)[0]).value
-                  : (item as UploadShallow).id
-              }
-              className="text-xs text-muted-foreground px-3"
-            >
-              {data.type === "commands"
-                ? (item as (typeof commandsLvl1)[0]).label.length >
-                  MAX_ITEM_LENGTH
-                  ? (item as (typeof commandsLvl1)[0]).label.slice(
-                      0,
-                      MAX_ITEM_LENGTH - 3
-                    ) + "..."
-                  : (item as (typeof commandsLvl1)[0]).label
-                : (item as UploadShallow).title.length > MAX_ITEM_LENGTH
-                  ? (item as UploadShallow).title.slice(
-                      0,
-                      MAX_ITEM_LENGTH - 3
-                    ) + "..."
-                  : (item as UploadShallow).title}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
+      <SelectContent>{children}</SelectContent>
     </Select>
   );
 };

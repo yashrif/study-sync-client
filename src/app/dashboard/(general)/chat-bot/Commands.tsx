@@ -13,8 +13,9 @@ import { ChatBotActionType } from "@/types";
 import { generateUUID } from "@/utils/generateUUID";
 import { replaceAll } from "@/utils/string";
 import SelectContainer from "./SelectContainer";
+import CommandItems from "./command-items/Commands";
+import Uploads from "./command-items/Uploads";
 
-/* -------------------------------- Commands -------------------------------- */
 type CommandsProps = {
   text: string;
   setText: Dispatch<SetStateAction<string>>;
@@ -44,7 +45,9 @@ const Commands: React.FC<CommandsProps> = (data) => {
         });
       }}
       focusTextArea={data.focusTextArea}
-    />
+    >
+      <Uploads />
+    </SelectContainer>
   );
 
   switch (data.text.trim().toLowerCase()) {
@@ -60,7 +63,9 @@ const Commands: React.FC<CommandsProps> = (data) => {
           setText={data.setText}
           data={{ type: "commands", data: commandsLvl1 }}
           focusTextArea={data.focusTextArea}
-        />
+        >
+          <CommandItems commands={commandsLvl1} />
+        </SelectContainer>
       );
     default:
       switch (true) {
@@ -71,7 +76,9 @@ const Commands: React.FC<CommandsProps> = (data) => {
               setText={data.setText}
               data={{ type: "commands", data: commandsLvl2 }}
               focusTextArea={data.focusTextArea}
-            />
+            >
+              <CommandItems commands={commandsLvl2} />
+            </SelectContainer>
           );
         case data.text
           .toLowerCase()
