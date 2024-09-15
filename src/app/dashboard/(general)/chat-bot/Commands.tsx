@@ -1,6 +1,7 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import _ from "lodash";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
 import {
   commandLabels,
@@ -32,17 +33,32 @@ const Commands: React.FC<CommandsProps> = (data) => {
     textLvl1CommandStriped = replaceAll(textLvl1CommandStriped, item, "");
   });
 
+  /* ---------------------------------- utils --------------------------------- */
+
+  const onOpenChange = useCallback(
+    (e: boolean) => {
+      data.setText((prev) => replaceAll(prev, ECommands["select-file"], ""));
+    },
+    [data]
+  );
+
   const SelectFile: React.FC = () => (
     <SelectContainer
       key={generateUUID()}
-      setText={data.setText}
-      data={{ type: "uploads", data: uploads }}
-      setData={(data) => {
+      onValueChange={(e) => {
+        data.setText(
+          (prev) =>
+            prev +
+            "using the books 📕 " +
+            _.find(uploads, ["id", e])?.title +
+            " "
+        );
         dispatch({
           type: ChatBotActionType.SET_SELECTED_UPLOADS,
-          payload: [...selectedUploads, data],
+          payload: [...selectedUploads, e],
         });
       }}
+      onOpenChange={onOpenChange}
     >
       <Uploads />
     </SelectContainer>
@@ -58,8 +74,13 @@ const Commands: React.FC<CommandsProps> = (data) => {
       return (
         <SelectContainer
           key={generateUUID()}
-          setText={data.setText}
-          data={{ type: "commands", data: commandsLvl1 }}
+          onValueChange={(e) => {
+            data.setText(
+              (prev) =>
+                prev + _.find(commandsLvl1, ["value", e])?.label.slice(1) + " "
+            );
+          }}
+          onOpenChange={onOpenChange}
         >
           <CommandItems commands={commandsLvl1} />
         </SelectContainer>
@@ -70,8 +91,15 @@ const Commands: React.FC<CommandsProps> = (data) => {
           return (
             <SelectContainer
               key={generateUUID()}
-              setText={data.setText}
-              data={{ type: "commands", data: commandsLvl2 }}
+              onValueChange={(e) => {
+                data.setText(
+                  (prev) =>
+                    prev +
+                    _.find(commandsLvl2, ["value", e])?.label.slice(1) +
+                    " "
+                );
+              }}
+              onOpenChange={onOpenChange}
             >
               <CommandItems commands={commandsLvl2} />
             </SelectContainer>

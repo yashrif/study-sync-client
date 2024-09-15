@@ -1,9 +1,7 @@
 "use client";
 
-import _ from "lodash";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { useCallback } from "react";
 
-import { Commands, commandsLvl1 } from "@/assets/data/dashboard/chatBot";
 import {
   Select,
   SelectContent,
@@ -11,25 +9,17 @@ import {
   SelectValue,
 } from "@/components/ui/select-custom";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
-import { UploadShallow } from "@/types";
-import { replaceAll } from "@/utils/string";
-
-type Data =
-  | { type: "commands"; data: typeof commandsLvl1 }
-  | { type: "uploads"; data: UploadShallow[] };
 
 type SelectContainerProps = {
-  setText: Dispatch<SetStateAction<string>>;
-  data: Data;
-  setData?: (data: string) => void;
   children: React.ReactNode;
+  onValueChange: (e: string) => void;
+  onOpenChange?: (e: boolean) => void;
 };
 
 const SelectContainer: React.FC<SelectContainerProps> = ({
-  setText,
-  data,
-  setData,
   children,
+  onValueChange,
+  onOpenChange,
 }) => {
   const {
     state: { textareaRef },
@@ -47,23 +37,15 @@ const SelectContainer: React.FC<SelectContainerProps> = ({
     <Select
       defaultOpen
       onValueChange={(e) => {
-        setText(
-          (prev) =>
-            prev +
-            (data.type === "commands"
-              ? _.find(data.data, ["value", e])?.label.slice(1)
-              : "using the books 📕 " + _.find(data.data, ["id", e])?.title) +
-            " "
-        );
-        if (setData) {
-          setData(e);
+        if (onValueChange) {
+          onValueChange(e);
         }
 
         focusTextArea();
       }}
-      onOpenChange={() => {
+      onOpenChange={(e) => {
+        if (onOpenChange) onOpenChange(e);
         focusTextArea();
-        setText((prev) => replaceAll(prev, Commands["select-file"], ""));
       }}
     >
       <SelectTrigger
