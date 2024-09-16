@@ -7,11 +7,14 @@ const Uploads: React.FC = () => {
     state: { uploads, selectedUploads },
   } = useChatBotContext();
 
+  const filteredUploads = uploads.filter(
+    (upload) => !selectedUploads.includes(upload.id)
+  );
+
   return (
     <SelectGroup>
-      {uploads
-        .filter((upload) => !selectedUploads.includes(upload.id))
-        .map((item) => (
+      {filteredUploads.length > 0 ? (
+        filteredUploads.map((item) => (
           <SelectItem
             key={item.id}
             value={item.id}
@@ -19,7 +22,12 @@ const Uploads: React.FC = () => {
           >
             {sliceLabel(item.title)}
           </SelectItem>
-        ))}
+        ))
+      ) : (
+        <div className="text-xs text-muted-foreground px-3 cursor-pointer h-8 flex items-center justify-center">
+          No uploads available
+        </div>
+      )}
     </SelectGroup>
   );
 };
