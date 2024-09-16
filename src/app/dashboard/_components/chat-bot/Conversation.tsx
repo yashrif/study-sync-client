@@ -40,14 +40,17 @@ const Conversation: React.FC = () => {
               </div>
             ))
           ) : (
-            <div className="h-full flex flex-col gap-4 items-center justify-center px-8">
-              <div className="size-16 bg-accent flex items-center justify-center rounded-full">
+            <div className="h-full flex flex-col items-center justify-center px-8">
+              <div className="size-16 bg-accent flex items-center justify-center rounded-full mb-4">
                 <IconMessage className="size-8 stroke-primary stroke-2" />
               </div>
-              <span className="text-lg text-primary font-medium text-center leading-7">
+              <p className="text-lg text-primary font-medium text-center leading-6 mb-4">
                 Start a conversation with the bot by typing in the message box
                 below.
-              </span>
+              </p>
+              <p className="text-base text-center text-muted-foreground">
+                Type / to see a list of available commands.
+              </p>
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { IconMessageChatbot, IconX } from "@tabler/icons-react";
+import { IconMessageChatbot } from "@tabler/icons-react";
 import { useState } from "react";
 
 import IconButton from "@/components/button/IconButton";
@@ -22,7 +22,7 @@ const ChatBot: React.FC = () => {
       {isOpen && (
         <>
           <ChatBotInput />
-          <IconButton
+          {/* <IconButton
             Icon={IconX}
             onClick={() => {
               setIsOpen((prev) => !prev);
@@ -30,7 +30,7 @@ const ChatBot: React.FC = () => {
             variant="outline"
             className="size-8 rounded-full"
             iconClassName="size-4 stroke-primary text-primary"
-          />
+          /> */}
         </>
       )}
     </div>

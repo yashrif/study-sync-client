@@ -8,6 +8,7 @@ import { sidebarLinks, signOut } from "@/assets/data/dashboard/sidebarLinks";
 import { routes } from "@/assets/data/routes";
 import Logo from "@/components/Logo";
 import Spinner from "@/components/spinner/Spinner";
+import { ScrollArea } from "@/components/ui/scroll-area-no-scrollbar";
 import { removeTokens } from "@/lib/auth";
 import NavLink from "./NavLink";
 
@@ -21,33 +22,32 @@ const SideBar: React.FC = () => {
           <Link href={routes.home.home}>
             <Logo className="h-8 w-auto" />
           </Link>
-          <div className="w-full h-full flex flex-col items-start justify-between gap-16">
+          <div className="w-full h-full grid grid-cols-1 grid-rows-[1fr,auto] items-between justify-center gap-12 overflow-hidden">
             {sidebarLinks.map((navLink, index, navLinks) => (
-              <div
-                key={index}
-                className="w-full flex flex-col gap-2 items-start"
-              >
-                {navLink.map((item) => (
-                  <Suspense fallback={<Spinner />} key={item.title}>
-                    <NavLink {...item} links={navLink} />
-                  </Suspense>
-                ))}
+              <ScrollArea key={index} className="w-full h-full">
+                <div className="w-full flex flex-col gap-2 items-start">
+                  {navLink.map((item) => (
+                    <Suspense fallback={<Spinner />} key={item.title}>
+                      <NavLink {...item} links={navLink} />
+                    </Suspense>
+                  ))}
 
-                {index === navLinks.length - 1 && (
-                  <Suspense fallback={<Spinner />}>
-                    <NavLink
-                      title={signOut.title}
-                      href=""
-                      home=""
-                      Icon={signOut.Icon}
-                      onClick={() => {
-                        removeTokens();
-                        push(routes.home.home);
-                      }}
-                    ></NavLink>
-                  </Suspense>
-                )}
-              </div>
+                  {index === navLinks.length - 1 && (
+                    <Suspense fallback={<Spinner />}>
+                      <NavLink
+                        title={signOut.title}
+                        href=""
+                        home=""
+                        Icon={signOut.Icon}
+                        onClick={() => {
+                          removeTokens();
+                          push(routes.home.home);
+                        }}
+                      ></NavLink>
+                    </Suspense>
+                  )}
+                </div>
+              </ScrollArea>
             ))}
           </div>
         </div>
