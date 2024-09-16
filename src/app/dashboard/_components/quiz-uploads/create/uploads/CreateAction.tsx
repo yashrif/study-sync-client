@@ -25,7 +25,9 @@ import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import {
   QuizRequestDb,
+  QuizRequestServer,
   QuizResponseServer,
+  QuizTypes,
   QuizUploadsActionType,
   Status,
   UploadShallow,
@@ -42,11 +44,6 @@ type Props = {
   table: Table<UploadShallow>;
 };
 
-type ServerQuizRequest = {
-  ids: string[];
-  types: string[];
-};
-
 const CreateAction: React.FC<Props> = ({ table }) => {
   const {
     state: { status, indexStatus, defaultQuizTypes, isShowCheckbox },
@@ -55,7 +52,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
 
   const { state, dispatch: serverDispatch } =
     useFetchState<QuizResponseServer>();
-  const { handler } = useApiHandler<ServerQuizRequest, QuizResponseServer>({
+  const { handler } = useApiHandler<QuizRequestServer, QuizResponseServer>({
     apiCall: useCallback(
       (data) => studySyncServer.post(serverEndpoints.quizzes, data),
       []
@@ -96,7 +93,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
       const response = await handler({
         data: {
           ids,
-          types: data.types,
+          types: data.types as QuizTypes[],
         },
         fetchType: "lazy",
         isReset: true,

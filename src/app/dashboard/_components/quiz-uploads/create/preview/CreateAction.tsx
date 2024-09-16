@@ -2,7 +2,7 @@
 
 import { IconArrowRight } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { dbEndpoints } from "@/assets/data/api";
 import { controlBar } from "@/assets/data/dashboard/controlBar";
@@ -12,10 +12,13 @@ import { useFetchState } from "@/hooks/fetchData";
 import { requestHandler, useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizUploadsContext } from "@/hooks/useQuizUploadsContext";
 import {
+  Cq,
+  CqRequest,
   Quiz,
   QuizRequestDb,
   QuizUploadsActionType,
   RequestType,
+  Status,
 } from "@/types";
 
 const CreateAction: React.FC = () => {
@@ -27,11 +30,9 @@ const CreateAction: React.FC = () => {
     dispatch: quizDispatch,
   } = useQuizUploadsContext();
 
-  const {
-    state: { data, status },
-    dispatch,
-  } = useFetchState<Quiz>();
-  const { handler } = useApiHandler<QuizRequestDb, Quiz>({
+  const { state: quizRequestState, dispatch: quizRequestDispatch } =
+    useFetchState<Quiz>();
+  const { handler: quizRequestHandler } = useApiHandler<QuizRequestDb, Quiz>({
     apiCall: useCallback(
       (data) =>
         requestHandler<QuizRequestDb>({
@@ -41,10 +42,27 @@ const CreateAction: React.FC = () => {
         }),
       []
     ),
-    dispatch,
+    dispatch: quizRequestDispatch,
+  });
+
+  const { state: flashcardRequestState, dispatch: flashcardRequestDispatch } =
+    useFetchState<Cq>();
+  const { handler: flashcardRequestHandler } = useApiHandler<CqRequest, Cq>({
+    apiCall: useCallback(
+      (data) =>
+        requestHandler<CqRequest>({
+          endpoint: dbEndpoints.cqs,
+          requestType: RequestType.POST,
+          data,
+        }),
+      []
+    ),
+    dispatch: flashcardRequestDispatch,
   });
 
   if (!quiz) return null;
+
+  /* -------------------------------- on submit ------------------------------- */
 
   const onSubmit = async () => {
     setIsProcessing(true);
@@ -56,7 +74,23 @@ const CreateAction: React.FC = () => {
           isFlashcard,
         })),
       };
-      await handler({ data: updatedQuiz, fetchType: "lazy", isReset: true });
+
+      if (isFlashcard)
+        Promise.all(
+          updatedQuiz.cqs.map(async (cq) => {
+            await flashcardRequestHandler({
+              data: cq,
+              fetchType: "lazy",
+              isReset: true,
+            });
+          })
+        );
+      else
+        await quizRequestHandler({
+          data: updatedQuiz,
+          fetchType: "lazy",
+          isReset: true,
+        });
     } catch (err) {
       setTimeout(() => {
         setIsProcessing(false);
@@ -77,20 +111,41 @@ const CreateAction: React.FC = () => {
         }}
       />
       {!isProcessing ? (
-        <IconButton {...controlBar.save} onClick={onSubmit} status={status} />
+        <IconButton
+          {...controlBar.save}
+          onClick={onSubmit}
+          status={quizRequestState.status}
+        />
       ) : (
         <IconButton
           size="lg"
           className="size-12 p-0 rounded-full"
           Icon={IconArrowRight}
           iconClassName="!size-6 stroke-text-300 text-text-300"
-          status={status}
+          status={(() => {
+            switch (true) {
+              case quizRequestState.status === Status.IDLE &&
+                flashcardRequestState.status === Status.IDLE:
+                return Status.IDLE;
+              case quizRequestState.status === Status.PENDING ||
+                flashcardRequestState.status === Status.PENDING:
+                return Status.PENDING;
+              case quizRequestState.status === Status.SUCCESS &&
+                flashcardRequestState.status === Status.SUCCESS:
+                return Status.SUCCESS;
+              case quizRequestState.status === Status.ERROR ||
+                flashcardRequestState.status === Status.ERROR:
+                return Status.ERROR;
+              default:
+                return Status.IDLE;
+            }
+          })()}
           onClick={() => {
-            if (data)
+            if (quizRequestState.data)
               push(
                 isFlashcard
                   ? links.dashboard.flashcard.review.href
-                  : links.dashboard.quiz.details(data.id).href
+                  : links.dashboard.quiz.details(quizRequestState.data.id).href
               );
           }}
           type="submit"

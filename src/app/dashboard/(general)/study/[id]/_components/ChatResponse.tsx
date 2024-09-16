@@ -18,7 +18,7 @@ const ChatResponse = () => {
     <Card className="bg-transparent backdrop-blur-md flex-1 space-y-2 max-w-4xl  mb-2 shadow-xl mx-12 pt-6">
       <CardContent className="flex flex-col space-y-2 items-center">
         <ScrollArea className="max-h-56 overflow-auto w-full">
-          <Markdown>{chatResponse}</Markdown>
+          <Markdown className="markdown">{chatResponse}</Markdown>
         </ScrollArea>
         <Button
           className="w-48"

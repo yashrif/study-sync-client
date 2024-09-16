@@ -1,6 +1,7 @@
 export * from "./api";
 export * from "./auth";
 export * from "./button";
+export * from "./chatBot";
 export * from "./context";
 export * from "./cq";
 export * from "./flashcard";
@@ -14,6 +15,7 @@ export * from "./mcq";
 export * from "./planner";
 export * from "./preference";
 export * from "./quiz";
+export * from "./response";
 export * from "./role";
 export * from "./scroll";
 export * from "./select";

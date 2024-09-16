@@ -38,6 +38,8 @@ import {
 
 /* ---------------------------- fields and values ---------------------------- */
 
+const TITLE_MAX_SIZE = 25;
+
 const useColumnConfig = (): {
   columns: Column<PlannerShallow>[];
   actions: TableAction<PlannerShallow>[];
@@ -55,7 +57,13 @@ const useColumnConfig = (): {
         accessorKey: "title",
         title: "Title",
         formatter: (title) => {
-          return title as string;
+          return (
+            title
+              ? title?.length > TITLE_MAX_SIZE
+                ? `${title.slice(0, TITLE_MAX_SIZE - 3)}...`
+                : title
+              : title
+          ) as string;
         },
         linkKey: "id",
         path: routes.dashboard.planner.home,
