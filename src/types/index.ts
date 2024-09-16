@@ -15,6 +15,7 @@ export * from "./mcq";
 export * from "./planner";
 export * from "./preference";
 export * from "./quiz";
+export * from "./response";
 export * from "./role";
 export * from "./scroll";
 export * from "./select";

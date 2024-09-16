@@ -12,12 +12,7 @@ export async function POST(request: NextRequest) {
       params: { prompt },
     });
 
-    return NextResponse.json(
-      {
-        ...response.data,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json(response.data, { status: 200 });
   } catch (e: AxiosError | any | unknown | Error) {
     return NextResponse.json(
       {

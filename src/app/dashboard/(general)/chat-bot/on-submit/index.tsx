@@ -15,6 +15,7 @@ import { useHandlers } from "../useHandlers";
 import useFlashcardConversation from "./useFlashcardConversation";
 import usePlannerConversation from "./usePlannerConversation";
 import useQuizConversation from "./useQuizConversation";
+import useResponseConversation from "./useResponseConversation";
 
 type Props = {
   text: string;
@@ -30,10 +31,12 @@ export const useOnSubmit = () => {
     flashcardDbRequestHandler,
     plannerServerRequestHandler,
     plannerDbRequestHandler,
+    responseRequestHandler,
   } = useHandlers();
   const quizConversations = useQuizConversation();
   const flashcardConversations = useFlashcardConversation();
   const plannerConversations = usePlannerConversation();
+  const responseConversations = useResponseConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -207,8 +210,37 @@ export const useOnSubmit = () => {
         }
         break;
 
+      /* -------------------------------- Response -------------------------------- */
+
       default:
-        console.log("No command found");
+        try {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              responseConversations.responseCreatePrompt(text),
+              responseConversations.responseCrateStart(),
+            ],
+          });
+
+          setText("");
+
+          const response = await responseRequestHandler({
+            data: text,
+            fetchType: "lazy",
+            isReset: true,
+          });
+
+          dispatch({
+            type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+            payload: responseConversations.responseCreateSuccess(response),
+          });
+        } catch (err) {
+          console.log(err);
+          dispatch({
+            type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+            payload: responseConversations.responseCreateError(),
+          });
+        }
     }
   };
 
