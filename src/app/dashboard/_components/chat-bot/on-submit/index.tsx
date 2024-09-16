@@ -89,7 +89,7 @@ export const useOnSubmit = () => {
               if (dbResponse)
                 dispatch({
                   type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-                  payload: quizConversations.quizCreateSuccess(dbResponse.id),
+                  payload: quizConversations.quizCreateSuccess(dbResponse),
                 });
             }
           } catch (err) {
@@ -153,7 +153,9 @@ export const useOnSubmit = () => {
 
               dispatch({
                 type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-                payload: flashcardConversations.flashcardCreateSuccess(),
+                payload: flashcardConversations.flashcardCreateSuccess(
+                  serverResponse.cqs.length
+                ),
               });
             }
           } catch (err) {
@@ -215,9 +217,8 @@ export const useOnSubmit = () => {
               if (dbResponse)
                 dispatch({
                   type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-                  payload: plannerConversations.plannerCreateSuccess(
-                    dbResponse.id
-                  ),
+                  payload:
+                    plannerConversations.plannerCreateSuccess(dbResponse),
                 });
             }
           } catch (err) {

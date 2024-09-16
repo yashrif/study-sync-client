@@ -55,13 +55,29 @@ const useFlashcardConversation = () => {
     ),
   });
 
-  const flashcardCreateSuccess = (): TConversation => ({
+  const flashcardCreateSuccess = (flashcards: number): TConversation => ({
     type: "response",
     data: (
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2.5">
         <p className="text-sm">Flashcards created successfully!</p>
+
+        <div className="flex flex-col gap-1.5">
+          <div className="text-base text-primary font-medium">
+            <IconBolt className="size-4 stroke-2 stroke-primary inline-block pb-[1px] mr-1" />
+            Flashcards info:
+          </div>
+          <ul className="flex flex-col gap-1 list-disc pl-6">
+            <li className="text-sm">
+              <span className="text-muted-foreground">
+                Number of flashcards:
+              </span>{" "}
+              <span className="text-primary">{flashcards}</span>
+            </li>
+          </ul>
+        </div>
+
         <div className="text-sm">
-          <span className="align-top">To review flashcards, click </span>
+          <span className="align-top">For more details, click </span>
           <Link
             href={links.dashboard.flashcard.review.href}
             className="anchor-sm pl-1 inline-flex gap-1.5 items-center h-4"
