@@ -23,13 +23,6 @@ const useResponseConversation = () => {
     data: (
       <div className="flex flex-col gap-1">
         <p className="text-sm">{text}</p>
-        <ul className="list-disc pl-6">
-          {filteredUploads.map((item) => (
-            <li key={item.id} className="text-sm">
-              {item.title}
-            </li>
-          ))}
-        </ul>
       </div>
     ),
   });
