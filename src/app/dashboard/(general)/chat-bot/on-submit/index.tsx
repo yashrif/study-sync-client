@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 
 import { Commands } from "@/assets/data/dashboard/chatBot";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
@@ -11,6 +11,7 @@ import useQuizConversation from "./useQuizConversation";
 
 type Props = {
   text: string;
+  setText: Dispatch<SetStateAction<string>>;
 };
 
 export const useOnSubmit = () => {
@@ -32,13 +33,14 @@ export const useOnSubmit = () => {
 
   /* -------------------------------- On Submit ------------------------------- */
 
-  const onSubmit = async ({ text }: Props) => {
+  const onSubmit = async ({ text, setText }: Props) => {
     switch (true) {
       /* ---------------------------------- quiz ---------------------------------- */
 
       case text.toLowerCase().includes(Commands["create-quiz"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
+            setText("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -100,6 +102,7 @@ export const useOnSubmit = () => {
         .includes(Commands["create-flashcard"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
+            setText("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [

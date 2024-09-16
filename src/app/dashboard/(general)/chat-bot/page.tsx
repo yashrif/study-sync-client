@@ -1,7 +1,7 @@
 "use client";
 
-import { IconFileTypePdf, IconSend2, IconX } from "@tabler/icons-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { IconSend2 } from "@tabler/icons-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
@@ -10,29 +10,20 @@ import {
   commandLabels,
 } from "@/assets/data/dashboard/chatBot";
 import IconButton from "@/components/button/IconButton";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area-custom";
 import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
-import { ChatBotActionType, Status, UploadShallow } from "@/types";
+import { Status, UploadShallow } from "@/types";
 import Commands from "./Commands";
+import Conversation from "./Conversation";
 import { useOnSubmit } from "./on-submit";
-
-const BADGE_TITLE_MAX_LENGTH = 20;
 
 const ChatBotInput = () => {
   const [text, setText] = useState("");
   const textDivRef = useRef<HTMLDivElement>(null);
 
   const {
-    state: {
-      uploads,
-      selectedUploads,
-      requestStatus,
-      textareaRef,
-      conversation,
-    },
+    state: { selectedUploads, requestStatus, textareaRef },
     dispatch,
   } = useChatBotContext();
   const { onSubmit } = useOnSubmit();
@@ -41,11 +32,6 @@ const ChatBotInput = () => {
     apiCall: useCallback(() => studySyncDB.get(dbEndpoints.uploads), []),
     dispatch,
   });
-
-  const filteredUploads = useMemo(
-    () => uploads?.filter((item) => selectedUploads.includes(item.id)),
-    [selectedUploads, uploads]
-  );
 
   /* ------------------------------ Input overlay ----------------------------- */
 
@@ -77,60 +63,9 @@ const ChatBotInput = () => {
 
   return (
     <div className="m-40 max-w-[400px] h-[480px] overflow-hidden grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-md rounded-md py-4 border">
-      <ScrollArea className="h-full pb-0">
-        <div className="h-full flex flex-col justify-end px-4">
-          <div className="pb-4 flex flex-col gap-4">
-            {conversation.map((item, index) => (
-              <div
-                key={index}
-                className={`max-w-[80%] text-foreground py-2 px-4 rounded-lg ${
-                  item.type === "prompt"
-                    ? "self-end bg-accent-300"
-                    : "self-start"
-                }`}
-              >
-                {item.data}
-              </div>
-            ))}
-          </div>
-          {filteredUploads.length > 0 && (
-            <div className="sticky bottom-0 inset-0 pt-2 bg-background flex flex-wrap-reverse gap-x-2 gap-y-1.5">
-              {filteredUploads.map((upload) => (
-                <Badge
-                  key={upload.id}
-                  className="rounded-sm flex items-center gap-1.5"
-                >
-                  <IconFileTypePdf className="stroke-white size-3 stroke-[2.5px]" />
-                  <span className="whitespace-nowrap">
-                    {upload.title.length > BADGE_TITLE_MAX_LENGTH
-                      ? `${upload.title.slice(0, BADGE_TITLE_MAX_LENGTH - 3)}...`
-                      : upload.title}
-                  </span>
-                  <IconX
-                    className="stroke-white size-3 stroke-[2.5px] hover:scale-125 hover:stroke-[#ffa8a8] cursor-pointer transition-all duration-300"
-                    onClick={() => {
-                      dispatch({
-                        type: ChatBotActionType.SET_SELECTED_UPLOADS,
-                        payload: selectedUploads.filter(
-                          (id) => id !== upload.id
-                        ),
-                      });
-                    }}
-                    style={{
-                      cursor:
-                        requestStatus === Status.PENDING
-                          ? "not-allowed"
-                          : "auto",
-                      pointerEvents:
-                        requestStatus === Status.PENDING ? "none" : "auto",
-                    }}
-                  />
-                </Badge>
-              ))}
-            </div>
-          )}
-        </div>
-      </ScrollArea>
+      {/* ------------------------------ Chat history ------------------------------ */}
+
+      <Conversation />
 
       {/* -------------------------------- Text Area ------------------------------- */}
 
@@ -197,7 +132,7 @@ const ChatBotInput = () => {
           {/* ------------------------------ Submit Button ----------------------------- */}
           <IconButton
             Icon={IconSend2}
-            onClick={() => onSubmit({ text })}
+            onClick={() => onSubmit({ text, setText })}
             className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
             iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
             variant={"ghost"}
