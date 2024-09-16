@@ -1,12 +1,19 @@
 "use client";
 
+import randomColor from "randomcolor";
 import { Dispatch, SetStateAction, useMemo } from "react";
 
 import { Commands } from "@/assets/data/dashboard/chatBot";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
-import { ChatBotActionType, QuizRequestDb, QuizTypes } from "@/types";
+import {
+  ChatBotActionType,
+  PlannerRequestDBPost,
+  QuizRequestDb,
+  QuizTypes,
+} from "@/types";
 import { useHandlers } from "../useHandlers";
 import useFlashcardConversation from "./useFlashcardConversation";
+import usePlannerConversation from "./usePlannerConversation";
 import useQuizConversation from "./useQuizConversation";
 
 type Props = {
@@ -21,9 +28,12 @@ export const useOnSubmit = () => {
     quizDbRequestHandler,
     flashcardServerRequestHandler,
     flashcardDbRequestHandler,
+    plannerServerRequestHandler,
+    plannerDbRequestHandler,
   } = useHandlers();
   const quizConversations = useQuizConversation();
   const flashcardConversations = useFlashcardConversation();
+  const plannerConversations = usePlannerConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -86,14 +96,6 @@ export const useOnSubmit = () => {
           }
         }
         break;
-      case text
-        .toLowerCase()
-        .includes(Commands["create-planner"].toLowerCase()):
-        console.log("Create Planner");
-        break;
-      case text.toLowerCase().includes(Commands["create-slide"].toLowerCase()):
-        console.log("Create Slide");
-        break;
 
       /* -------------------------------- flashcard ------------------------------- */
 
@@ -149,6 +151,62 @@ export const useOnSubmit = () => {
           }
         }
         break;
+
+      /* --------------------------------- planner -------------------------------- */
+
+      case text
+        .toLowerCase()
+        .includes(Commands["create-planner"].toLowerCase()):
+        if (state.selectedUploads.length > 0) {
+          try {
+            setText("");
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                plannerConversations.plannerCreatePrompt(),
+                plannerConversations.plannerCrateStart(),
+              ],
+            });
+            const serverResponse = await plannerServerRequestHandler({
+              data: state.selectedUploads,
+              fetchType: "lazy",
+              isReset: true,
+            });
+
+            if (serverResponse) {
+              const dbRequest: PlannerRequestDBPost = {
+                title: serverResponse.name || filteredUploads[0].title,
+                topics: serverResponse.topics.map((topic) => ({
+                  ...topic,
+                  color: randomColor({ luminosity: "bright" }),
+                })),
+                uploads: filteredUploads,
+              };
+
+              const dbResponse = await plannerDbRequestHandler({
+                data: dbRequest,
+                fetchType: "lazy",
+                isReset: true,
+              });
+
+              if (dbResponse)
+                dispatch({
+                  type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+                  payload: plannerConversations.plannerCreateSuccess(
+                    dbResponse.id
+                  ),
+                });
+            }
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: plannerConversations.plannerCreateError(),
+            });
+          }
+        }
+        break;
+
       default:
         console.log("No command found");
     }
