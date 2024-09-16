@@ -116,6 +116,14 @@ const ChatBotInput = () => {
                         ),
                       });
                     }}
+                    style={{
+                      cursor:
+                        requestStatus === Status.PENDING
+                          ? "not-allowed"
+                          : "auto",
+                      pointerEvents:
+                        requestStatus === Status.PENDING ? "none" : "auto",
+                    }}
                   />
                 </Badge>
               ))}

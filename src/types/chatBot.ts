@@ -10,7 +10,7 @@ import {
 
 /* --------------------------------- ChatBot -------------------------------- */
 
-type Conversation = {
+export type Conversation = {
   type: "prompt" | "response";
   data: React.ReactNode;
 };

@@ -1,16 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 import { Commands } from "@/assets/data/dashboard/chatBot";
-import { links } from "@/assets/data/routes";
-import BouncingDots from "@/components/BouncingDots";
-import { Quiz } from "@/components/icons";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { ChatBotActionType, QuizRequestDb, QuizTypes } from "@/types";
 import { useHandlers } from "../useHandlers";
+import useQuizConversation from "./useQuizConversation";
 
 type Props = {
   text: string;
@@ -26,6 +23,7 @@ export const useOnSubmit = () => {
     flashcardServerRequestHandler,
     flashcardDbRequestHandler,
   } = useHandlers();
+  const quizConversations = useQuizConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -45,39 +43,8 @@ export const useOnSubmit = () => {
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
-                {
-                  type: "prompt",
-                  data: (
-                    <div className="flex flex-col gap-1">
-                      <p className="text-sm">
-                        <span className="text-white rounded-xs bg-primary px-0.5">
-                          {Commands["create-quiz"]}
-                        </span>{" "}
-                        from the file
-                        {state.selectedUploads.length > 1 ? "s" : ""}:
-                      </p>
-                      <ul className="list-disc pl-6">
-                        {filteredUploads.map((item) => (
-                          <li key={item.id} className="text-sm">
-                            {item.title}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  type: "response",
-                  data: (
-                    <div className="text-sm">
-                      <Quiz className="size-[14px] stroke-2 stroke-primary inline-block pb-[1px] mr-1" />
-                      Please wait while we create the quiz
-                      <span className="ml-1.5 inline-flex items-center">
-                        <BouncingDots iconClassName="size-[5px]" />
-                      </span>
-                    </div>
-                  ),
-                },
+                quizConversations.quizCreatePrompt(),
+                quizConversations.quizCrateStart(),
               ],
             });
 
@@ -106,29 +73,7 @@ export const useOnSubmit = () => {
               if (dbResponse)
                 dispatch({
                   type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-                  payload: {
-                    type: "response",
-                    data: (
-                      <div className="flex flex-col gap-2">
-                        <p className="text-sm">Quiz created successfully!</p>
-                        <div className="text-sm">
-                          <span className="align-top">
-                            To view the quiz, click{" "}
-                          </span>
-                          <Link
-                            href={
-                              links.dashboard.quiz.details(dbResponse.id).href
-                            }
-                            className="anchor-sm pl-1 inline-flex gap-1.5 items-center h-4"
-                          >
-                            <Quiz className="size-[14px] stroke-2" />
-                            <span>Here</span>
-                          </Link>
-                          .
-                        </div>
-                      </div>
-                    ),
-                  },
+                  payload: quizConversations.quizCreateSuccess(dbResponse.id),
                 });
             }
           } catch (err) {
