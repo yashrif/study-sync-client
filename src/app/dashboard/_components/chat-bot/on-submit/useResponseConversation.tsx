@@ -20,11 +20,7 @@ const useResponseConversation = () => {
 
   const responseCreatePrompt = (text: string): TConversation => ({
     type: "prompt",
-    data: (
-      <div className="flex flex-col gap-1">
-        <p className="text-sm">{text}</p>
-      </div>
-    ),
+    data: <p className="text-sm">{text}</p>,
   });
 
   const responseCrateStart = (): TConversation => ({

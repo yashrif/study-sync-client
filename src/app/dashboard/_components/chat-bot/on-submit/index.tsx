@@ -16,6 +16,7 @@ import useFlashcardConversation from "./useFlashcardConversation";
 import usePlannerConversation from "./usePlannerConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
+import useUploadConversation from "./useUploadsConversation";
 
 type Props = {
   text: string;
@@ -37,6 +38,7 @@ export const useOnSubmit = () => {
   const flashcardConversations = useFlashcardConversation();
   const plannerConversations = usePlannerConversation();
   const responseConversations = useResponseConversation();
+  const uploadConversation = useUploadConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -51,9 +53,9 @@ export const useOnSubmit = () => {
       /* ---------------------------------- quiz ---------------------------------- */
 
       case text.toLowerCase().includes(Commands["create-quiz"].toLowerCase()):
+        setText("");
         if (state.selectedUploads.length > 0) {
           try {
-            setText("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -97,7 +99,16 @@ export const useOnSubmit = () => {
               payload: quizConversations.quizCreateError(),
             });
           }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              uploadConversation.prompt(text),
+              uploadConversation.noUpload(),
+            ],
+          });
         }
+
         break;
 
       /* -------------------------------- flashcard ------------------------------- */
@@ -152,7 +163,16 @@ export const useOnSubmit = () => {
               payload: flashcardConversations.flashcardCreateError(),
             });
           }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              uploadConversation.prompt(text),
+              uploadConversation.noUpload(),
+            ],
+          });
         }
+
         break;
 
       /* --------------------------------- planner -------------------------------- */
@@ -207,7 +227,16 @@ export const useOnSubmit = () => {
               payload: plannerConversations.plannerCreateError(),
             });
           }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              uploadConversation.prompt(text),
+              uploadConversation.noUpload(),
+            ],
+          });
         }
+
         break;
 
       /* -------------------------------- Response -------------------------------- */
