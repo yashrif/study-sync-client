@@ -134,7 +134,7 @@ const ChatBotInput = () => {
             Icon={IconSend2}
             onClick={() => onSubmit({ text, setText })}
             className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
-            iconClassName="size-6 text-primary hover:text-primary/75 transition-all duration-300"
+            iconClassName="!size-6 !stroke-primary !text-primary hover:text-primary/75 transition-all duration-300"
             variant={"ghost"}
             status={requestStatus}
             disabled={text.length <= 0}
