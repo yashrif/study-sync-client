@@ -10,7 +10,7 @@ import BouncingDots from "@/components/BouncingDots";
 import { Quiz } from "@/components/icons";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { ChatBotActionType, QuizRequestDb, QuizTypes } from "@/types";
-import { useHandlers } from "./useHandlers";
+import { useHandlers } from "../useHandlers";
 
 type Props = {
   text: string;
@@ -53,7 +53,7 @@ export const useOnSubmit = () => {
                         <span className="text-white rounded-xs bg-primary px-0.5">
                           {Commands["create-quiz"]}
                         </span>{" "}
-                        using the file
+                        from the file
                         {state.selectedUploads.length > 1 ? "s" : ""}:
                       </p>
                       <ul className="list-disc pl-6">
@@ -70,9 +70,9 @@ export const useOnSubmit = () => {
                   type: "response",
                   data: (
                     <div className="text-sm">
+                      <Quiz className="size-[14px] stroke-2 stroke-primary inline-block pb-[1px] mr-1" />
                       Please wait while we create the quiz
-                      <span className="pl-1.5 inline-flex items-center">
-                        {" "}
+                      <span className="ml-1.5 inline-flex items-center">
                         <BouncingDots iconClassName="size-[5px]" />
                       </span>
                     </div>

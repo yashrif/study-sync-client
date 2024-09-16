@@ -11,13 +11,13 @@ import {
 } from "@/assets/data/dashboard/chatBot";
 import IconButton from "@/components/button/IconButton";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area-custom";
 import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
 import { ChatBotActionType, Status, UploadShallow } from "@/types";
 import Commands from "./Commands";
-import { useOnSubmit } from "./onSubmit";
+import { useOnSubmit } from "./on-submit";
 
 const BADGE_TITLE_MAX_LENGTH = 20;
 
@@ -76,51 +76,57 @@ const ChatBotInput = () => {
   );
 
   return (
-    <div className="m-40 max-w-md h-[450px] grid grid-cols-1 grid-rows-[1fr,auto] items-end gap-2 shadow-md rounded-md p-2 border">
-      <ScrollArea className="p-2 pb-0">
-        <div className="pb-4 flex flex-col gap-4">
-          {conversation.map((item, index) => (
-            <div
-              key={index}
-              className={`max-w-[75%] text-foreground py-2 px-4 rounded-lg ${
-                item.type === "prompt" ? "self-end bg-accent-300" : "self-start"
-              }`}
-            >
-              {item.data}
-            </div>
-          ))}
-        </div>
-        {filteredUploads.length > 0 && (
-          <div className="sticky bottom-0 inset-0 pt-2 bg-background flex flex-wrap-reverse gap-x-2 gap-y-1.5">
-            {filteredUploads.map((upload) => (
-              <Badge
-                key={upload.id}
-                className="rounded-sm flex items-center gap-1.5"
+    <div className="m-40 max-w-[400px] h-[480px] overflow-hidden grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-md rounded-md py-4 border">
+      <ScrollArea className="h-full pb-0">
+        <div className="h-full flex flex-col justify-end px-4">
+          <div className="pb-4 flex flex-col gap-4">
+            {conversation.map((item, index) => (
+              <div
+                key={index}
+                className={`max-w-[80%] text-foreground py-2 px-4 rounded-lg ${
+                  item.type === "prompt"
+                    ? "self-end bg-accent-300"
+                    : "self-start"
+                }`}
               >
-                <IconFileTypePdf className="stroke-white size-3 stroke-[2.5px]" />
-                <span className="whitespace-nowrap">
-                  {upload.title.length > BADGE_TITLE_MAX_LENGTH
-                    ? `${upload.title.slice(0, BADGE_TITLE_MAX_LENGTH - 3)}...`
-                    : upload.title}
-                </span>
-                <IconX
-                  className="stroke-white size-3 stroke-[2.5px] hover:scale-125 hover:stroke-[#ffa8a8] cursor-pointer transition-all duration-300"
-                  onClick={() => {
-                    dispatch({
-                      type: ChatBotActionType.SET_SELECTED_UPLOADS,
-                      payload: selectedUploads.filter((id) => id !== upload.id),
-                    });
-                  }}
-                />
-              </Badge>
+                {item.data}
+              </div>
             ))}
           </div>
-        )}
+          {filteredUploads.length > 0 && (
+            <div className="sticky bottom-0 inset-0 pt-2 bg-background flex flex-wrap-reverse gap-x-2 gap-y-1.5">
+              {filteredUploads.map((upload) => (
+                <Badge
+                  key={upload.id}
+                  className="rounded-sm flex items-center gap-1.5"
+                >
+                  <IconFileTypePdf className="stroke-white size-3 stroke-[2.5px]" />
+                  <span className="whitespace-nowrap">
+                    {upload.title.length > BADGE_TITLE_MAX_LENGTH
+                      ? `${upload.title.slice(0, BADGE_TITLE_MAX_LENGTH - 3)}...`
+                      : upload.title}
+                  </span>
+                  <IconX
+                    className="stroke-white size-3 stroke-[2.5px] hover:scale-125 hover:stroke-[#ffa8a8] cursor-pointer transition-all duration-300"
+                    onClick={() => {
+                      dispatch({
+                        type: ChatBotActionType.SET_SELECTED_UPLOADS,
+                        payload: selectedUploads.filter(
+                          (id) => id !== upload.id
+                        ),
+                      });
+                    }}
+                  />
+                </Badge>
+              ))}
+            </div>
+          )}
+        </div>
       </ScrollArea>
 
       {/* -------------------------------- Text Area ------------------------------- */}
 
-      <div className="p-2 pt-0">
+      <div className="px-4 pt-0">
         <div className="overflow-hidden relative">
           <div
             ref={textDivRef}
@@ -136,7 +142,8 @@ const ChatBotInput = () => {
                       .split(item.toLowerCase());
                     if (
                       splitText.length > 1 &&
-                      (splitText[1].trim().length <= 0 ||
+                      ((splitText[1].trim().length <= 0 &&
+                        splitText[0].trim().length <= 0) ||
                         (splitText[1].trim().length > 0 &&
                           selectedUploads.length > 0))
                     ) {

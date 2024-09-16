@@ -24,7 +24,7 @@ type CommandsProps = {
 
 const Commands: React.FC<CommandsProps> = (data) => {
   const {
-    state: { selectedUploads, uploads, textareaRef },
+    state: { selectedUploads, uploads },
     dispatch,
   } = useChatBotContext();
 
@@ -35,24 +35,14 @@ const Commands: React.FC<CommandsProps> = (data) => {
 
   /* ---------------------------------- utils --------------------------------- */
 
-  const onOpenChange = useCallback(
-    (e: boolean) => {
-      data.setText((prev) => replaceAll(prev, ECommands["select-file"], ""));
-    },
-    [data]
-  );
+  const onOpenChange = useCallback(() => {
+    data.setText((prev) => replaceAll(prev, ECommands["select-file"], ""));
+  }, [data]);
 
   const SelectFile: React.FC = () => (
     <SelectContainer
       key={generateUUID()}
       onValueChange={(e) => {
-        // data.setText(
-        //   (prev) =>
-        //     prev +
-        //     "using the books 📕 " +
-        //     _.find(uploads, ["id", e])?.title +
-        //     " "
-        // );
         dispatch({
           type: ChatBotActionType.SET_SELECTED_UPLOADS,
           payload: [...selectedUploads, e],
@@ -64,12 +54,12 @@ const Commands: React.FC<CommandsProps> = (data) => {
     </SelectContainer>
   );
 
-  switch (data.text.trim().toLowerCase()) {
+  switch (data.text.trimStart().toLowerCase()) {
     case ECommands["create-quiz"].toLowerCase():
     case ECommands["create-planner"].toLowerCase():
     case ECommands["create-slide"].toLowerCase():
     case ECommands["create-flashcard"].toLowerCase():
-      return <SelectFile />;
+      return selectedUploads.length === 0 ? <SelectFile /> : null;
     case ECommands["slash"]:
       return (
         <SelectContainer
@@ -77,7 +67,7 @@ const Commands: React.FC<CommandsProps> = (data) => {
           onValueChange={(e) => {
             data.setText(
               (prev) =>
-                prev + _.find(commandsLvl1, ["value", e])?.label.slice(1) + " "
+                prev + _.find(commandsLvl1, ["value", e])?.label.slice(1)
             );
           }}
           onOpenChange={onOpenChange}
@@ -94,9 +84,7 @@ const Commands: React.FC<CommandsProps> = (data) => {
               onValueChange={(e) => {
                 data.setText(
                   (prev) =>
-                    prev +
-                    _.find(commandsLvl2, ["value", e])?.label.slice(1) +
-                    " "
+                    prev + _.find(commandsLvl2, ["value", e])?.label.slice(1)
                 );
               }}
               onOpenChange={onOpenChange}

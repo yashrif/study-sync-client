@@ -4,20 +4,22 @@ import { sliceLabel } from "./sliceLabel";
 
 const Uploads: React.FC = () => {
   const {
-    state: { uploads },
+    state: { uploads, selectedUploads },
   } = useChatBotContext();
 
   return (
     <SelectGroup>
-      {uploads.map((item) => (
-        <SelectItem
-          key={item.id}
-          value={item.id}
-          className="text-xs text-muted-foreground px-3"
-        >
-          {sliceLabel(item.title)}
-        </SelectItem>
-      ))}
+      {uploads
+        .filter((upload) => !selectedUploads.includes(upload.id))
+        .map((item) => (
+          <SelectItem
+            key={item.id}
+            value={item.id}
+            className="text-xs text-muted-foreground px-3 cursor-pointer"
+          >
+            {sliceLabel(item.title)}
+          </SelectItem>
+        ))}
     </SelectGroup>
   );
 };

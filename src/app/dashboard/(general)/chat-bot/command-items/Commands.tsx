@@ -13,7 +13,7 @@ const Commands: React.FC<Props> = ({ commands }) => {
         <SelectItem
           key={item.value}
           value={item.value}
-          className="text-xs text-muted-foreground px-3"
+          className="text-xs text-muted-foreground px-3 cursor-pointer"
         >
           {sliceLabel(item.label)}
         </SelectItem>
