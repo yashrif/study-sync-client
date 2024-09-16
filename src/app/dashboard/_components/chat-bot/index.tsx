@@ -18,7 +18,7 @@ import Commands from "./Commands";
 import Conversation from "./Conversation";
 import { useOnSubmit } from "./on-submit";
 
-const ChatBotInput = () => {
+const ChatBot = () => {
   const [text, setText] = useState("");
   const textDivRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +62,7 @@ const ChatBotInput = () => {
   );
 
   return (
-    <div className="m-40 max-w-[400px] h-[480px] overflow-hidden grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-md rounded-md py-4 border">
+    <div className="fixed bottom-8 right-8 w-[400px] h-[480px] bg-background overflow-hidden grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-lg rounded-md py-4 border">
       {/* ------------------------------ Chat history ------------------------------ */}
 
       <Conversation />
@@ -146,4 +146,4 @@ const ChatBotInput = () => {
   );
 };
 
-export default ChatBotInput;
+export default ChatBot;
