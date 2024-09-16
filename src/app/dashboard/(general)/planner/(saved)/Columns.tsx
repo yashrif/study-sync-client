@@ -62,7 +62,7 @@ const useColumnConfig = (): {
               ? title?.length > TITLE_MAX_SIZE
                 ? `${title.slice(0, TITLE_MAX_SIZE - 3)}...`
                 : title
-              : ""
+              : title
           ) as string;
         },
         linkKey: "id",
