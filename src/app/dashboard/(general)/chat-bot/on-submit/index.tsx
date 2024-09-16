@@ -1,12 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 import { Commands } from "@/assets/data/dashboard/chatBot";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { ChatBotActionType, QuizRequestDb, QuizTypes } from "@/types";
 import { useHandlers } from "../useHandlers";
+import useFlashcardConversation from "./useFlashcardConversation";
 import useQuizConversation from "./useQuizConversation";
 
 type Props = {
@@ -14,8 +14,6 @@ type Props = {
 };
 
 export const useOnSubmit = () => {
-  const { push } = useRouter();
-
   const { state, dispatch } = useChatBotContext();
   const {
     quizServerRequestHandler,
@@ -24,6 +22,7 @@ export const useOnSubmit = () => {
     flashcardDbRequestHandler,
   } = useHandlers();
   const quizConversations = useQuizConversation();
+  const flashcardConversations = useFlashcardConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -80,14 +79,7 @@ export const useOnSubmit = () => {
             console.log(err);
             dispatch({
               type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-              payload: {
-                type: "response",
-                data: (
-                  <p className="text-sm">
-                    Failed to create quiz. Please try again.
-                  </p>
-                ),
-              },
+              payload: quizConversations.quizCreateError(),
             });
           }
         }
@@ -108,6 +100,13 @@ export const useOnSubmit = () => {
         .includes(Commands["create-flashcard"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                flashcardConversations.flashcardCreatePrompt(),
+                flashcardConversations.flashcardCrateStart(),
+              ],
+            });
             const serverResponse = await flashcardServerRequestHandler({
               data: {
                 ids: state.selectedUploads,
@@ -133,11 +132,17 @@ export const useOnSubmit = () => {
                 })
               );
 
-              // if (state.requestStatus === Status.SUCCESS)
-              //   push(links.dashboard.flashcard.review.href);
+              dispatch({
+                type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+                payload: flashcardConversations.flashcardCreateSuccess(),
+              });
             }
           } catch (err) {
             console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: flashcardConversations.flashcardCreateError(),
+            });
           }
         }
         break;
