@@ -62,84 +62,87 @@ const ChatBotInput = () => {
   );
 
   return (
-    <div className="w-[400px] h-[480px] bg-background overflow-hidden grid grid-cols-1 grid-rows-[1fr,auto] gap-2 shadow-lg rounded-md py-4 border">
-      {/* ------------------------------ Chat history ------------------------------ */}
+    <div className="relative w-[400px] h-[480px] overflow-hidden shadow-lg rounded-md border">
+      <div className="absolute inset-0 bg-auth-bg bg-cover object-cover bg-center opacity-25" />
+      <div className="relative h-full overflow-hidden grid grid-cols-1 grid-rows-[1fr,auto] gap-2 py-4 bg-white bg-opacity-[0.80] backdrop-blur-md backdrop-saturate-[180%]">
+        {/* ------------------------------ Chat history ------------------------------ */}
 
-      <Conversation />
+        <Conversation />
 
-      {/* -------------------------------- Text Area ------------------------------- */}
+        {/* -------------------------------- Text Area ------------------------------- */}
 
-      <div className="px-4 pt-0">
-        <div className="overflow-hidden relative">
-          <div
-            ref={textDivRef}
-            className="absolute top-0 left-0 p-2 pr-12 border border-transparent leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
-          >
-            {text.length > 1 ? (
-              (() => {
-                const highlightedTexts = commandLabels;
-                const styledText = highlightedTexts
-                  .map((item, index) => {
-                    const splitText = text
-                      .toLowerCase()
-                      .split(item.toLowerCase());
-                    if (
-                      splitText.length > 1 &&
-                      ((splitText[1].trim().length <= 0 &&
-                        splitText[0].trim().length <= 0) ||
-                        (splitText[1].trim().length > 0 &&
-                          selectedUploads.length > 0))
-                    ) {
-                      return (
-                        <>
-                          {text.slice(0, splitText[0].length)}
-                          <CommandBlock
-                            key={index}
-                            text={text.slice(
-                              splitText[0].length,
-                              text.length -
-                                splitText[1].length -
-                                splitText[0].length
-                            )}
-                          />
-                          {text.slice(text.length - splitText[1].length)}
-                        </>
-                      );
-                    }
-                  })
-                  .filter((item) => item);
-                return styledText.length > 0 ? styledText.pop() : text;
-              })()
-            ) : text === ECommands["slash"] ? (
-              <CommandBlock text={text} />
-            ) : (
-              text
-            )}
+        <div className="px-4 pt-0">
+          <div className="overflow-hidden relative">
+            <div
+              ref={textDivRef}
+              className="absolute top-0 left-0 p-2 pr-12 border border-transparent leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
+            >
+              {text.length > 1 ? (
+                (() => {
+                  const highlightedTexts = commandLabels;
+                  const styledText = highlightedTexts
+                    .map((item, index) => {
+                      const splitText = text
+                        .toLowerCase()
+                        .split(item.toLowerCase());
+                      if (
+                        splitText.length > 1 &&
+                        ((splitText[1].trim().length <= 0 &&
+                          splitText[0].trim().length <= 0) ||
+                          (splitText[1].trim().length > 0 &&
+                            selectedUploads.length > 0))
+                      ) {
+                        return (
+                          <>
+                            {text.slice(0, splitText[0].length)}
+                            <CommandBlock
+                              key={index}
+                              text={text.slice(
+                                splitText[0].length,
+                                text.length -
+                                  splitText[1].length -
+                                  splitText[0].length
+                              )}
+                            />
+                            {text.slice(text.length - splitText[1].length)}
+                          </>
+                        );
+                      }
+                    })
+                    .filter((item) => item);
+                  return styledText.length > 0 ? styledText.pop() : text;
+                })()
+              ) : text === ECommands["slash"] ? (
+                <CommandBlock text={text} />
+              ) : (
+                text
+              )}
+            </div>
+            <AutosizeTextarea
+              // @ts-ignore
+              ref={textareaRef}
+              minHeight={36}
+              maxHeight={120}
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+              }}
+              onScroll={handleScroll}
+              className="relative w-full h-full text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
+              disabled={requestStatus === Status.PENDING}
+            />
+            {/* ------------------------------ Submit Button ----------------------------- */}
+            <IconButton
+              Icon={IconSend2}
+              onClick={() => onSubmit({ text, setText })}
+              className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
+              iconClassName="!size-6 !stroke-primary !text-primary hover:text-primary/75 transition-all duration-300"
+              variant={"ghost"}
+              status={requestStatus}
+              disabled={text.length <= 0}
+            />
+            <Commands text={text} setText={setText} />
           </div>
-          <AutosizeTextarea
-            // @ts-ignore
-            ref={textareaRef}
-            minHeight={36}
-            maxHeight={120}
-            value={text}
-            onChange={(e) => {
-              setText(e.target.value);
-            }}
-            onScroll={handleScroll}
-            className="relative w-full h-full text-sm rounded-lg caret-primary text-transparent bg-transparent no-scrollbar z-10 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
-            disabled={requestStatus === Status.PENDING}
-          />
-          {/* ------------------------------ Submit Button ----------------------------- */}
-          <IconButton
-            Icon={IconSend2}
-            onClick={() => onSubmit({ text, setText })}
-            className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
-            iconClassName="!size-6 !stroke-primary !text-primary hover:text-primary/75 transition-all duration-300"
-            variant={"ghost"}
-            status={requestStatus}
-            disabled={text.length <= 0}
-          />
-          <Commands text={text} setText={setText} />
         </div>
       </div>
     </div>

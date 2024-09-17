@@ -21,7 +21,7 @@ const Conversation: React.FC = () => {
     <ScrollArea className="h-full pb-0">
       <div className="h-full flex flex-col justify-end px-4">
         <div
-          className="pb-4 flex flex-col gap-4"
+          className="pb-4 flex flex-col gap-6"
           style={{
             height: conversation.length > 0 ? "auto" : "100%",
           }}
