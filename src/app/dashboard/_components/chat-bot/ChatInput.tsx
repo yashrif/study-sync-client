@@ -76,7 +76,7 @@ const ChatBotInput = () => {
           <div className="overflow-hidden relative">
             <div
               ref={textDivRef}
-              className="absolute top-0 left-0 p-2 pr-12 border border-transparent leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
+              className="absolute top-0 left-0 p-2 pr-[70px] border border-transparent leading-[150%] w-full h-full text-sm overflow-hidden pointer-events-none break-words whitespace-pre-wrap"
             >
               {text.length > 1 ? (
                 (() => {
@@ -129,7 +129,7 @@ const ChatBotInput = () => {
                 setText(e.target.value);
               }}
               onScroll={handleScroll}
-              className="relative w-full h-full text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
+              className="relative w-full h-full text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-[70px] leading-[150%] whitespace-pre-wrap"
               disabled={requestStatus === Status.PENDING}
             />
 

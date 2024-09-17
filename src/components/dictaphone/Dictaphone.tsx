@@ -7,7 +7,7 @@ import {
   IconSquareFilled,
 } from "@tabler/icons-react";
 import { cva } from "class-variance-authority";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
@@ -15,12 +15,7 @@ import "regenerator-runtime/runtime";
 
 import IconButton from "@/components/button/IconButton";
 import { cn } from "@/lib/utils";
-
-type Props = {
-  className?: string;
-  iconPadding?: number;
-  setTranscript: Dispatch<SetStateAction<string>>;
-};
+import { Props } from "./type";
 
 const dictaphoneVariants = cva("size-9 p-0 rounded-full", {
   variants: {
@@ -46,7 +41,8 @@ const DictaphoneComponent: React.FC<Props> = ({
 }) => {
   const [isBrowser, setIsBrowser] = useState(false);
   const [hasMicrophoneAccess, setHasMicrophoneAccess] = useState(false);
-  const { transcript, listening } = useSpeechRecognition();
+  const [length, setLength] = useState(0);
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
 
   const startListening = () =>
     SpeechRecognition.startListening({ continuous: true });
@@ -73,8 +69,9 @@ const DictaphoneComponent: React.FC<Props> = ({
   }, [isBrowser]);
 
   useEffect(() => {
-    setTranscript(transcript);
-  }, [setTranscript, transcript]);
+    if (transcript.length > 0)
+      setTranscript((prev) => prev.slice(0, length) + transcript);
+  }, [length, setTranscript, transcript]);
 
   if (!isBrowser || !SpeechRecognition.browserSupportsSpeechRecognition()) {
     return (
@@ -114,7 +111,12 @@ const DictaphoneComponent: React.FC<Props> = ({
       onClick={() => {
         if (listening) {
           stopListening();
+          resetTranscript();
         } else {
+          setTranscript((prev) => {
+            setLength(prev.length);
+            return prev;
+          });
           startListening();
         }
       }}
