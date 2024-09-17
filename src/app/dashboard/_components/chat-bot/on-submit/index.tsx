@@ -50,7 +50,7 @@ export const useOnSubmit = () => {
       case state.prompt
         .toLowerCase()
         .includes(Commands["create-quiz"].toLowerCase()):
-        state.setText("");
+        state.setPrompt("");
         if (state.selectedUploads.length > 0) {
           try {
             dispatch({
@@ -115,7 +115,7 @@ export const useOnSubmit = () => {
         .includes(Commands["create-flashcard"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
-            state.setText("");
+            state.setPrompt("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -181,7 +181,7 @@ export const useOnSubmit = () => {
         .includes(Commands["create-planner"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
-            state.setText("");
+            state.setPrompt("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -249,7 +249,7 @@ export const useOnSubmit = () => {
             ],
           });
 
-          state.setText("");
+          state.setPrompt("");
 
           const response = await responseRequestHandler({
             data: state.prompt,

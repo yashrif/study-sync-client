@@ -49,18 +49,18 @@ export const commandsLvl2 = [
 export const additionalCommands = {
   study: [
     {
-      label: "/Explain",
       value: Commands["explain"],
+      label: "/Explain",
       instruction: "Explain the text below given context:\n\n",
     },
     {
-      label: "/Summarize",
       value: Commands["summarize"],
+      label: "/Summarize",
       instruction: "Summarize the text below given context:\n\n",
     },
     {
-      label: "/Provide Example",
       value: Commands["provide-example"],
+      label: "/Provide Example",
       instruction: "Give Example, similar to the text below given context:\n\n",
     },
   ],

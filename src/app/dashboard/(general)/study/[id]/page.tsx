@@ -19,15 +19,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchDataState, useFetchState } from "@/hooks/fetchData";
 import { useUploadsContext } from "@/hooks/useUploadsContext";
-import {
-  FetchActionType,
-  Preference,
-  Status,
-  Upload,
-  UploadsActionType,
-} from "@/types";
+import { FetchActionType, Preference, Status, Upload } from "@/types";
 import { dateFormatter } from "@/utils/dateFormatter";
 import ChatAI from "./_components/ChatAI";
 import ChatResponse from "./_components/ChatResponse";
@@ -42,9 +37,12 @@ const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showDialog, setShowDialog] = useState(false);
   const {
-    state: { showChatResponse, uploads },
+    state: { showChatResponse },
     dispatch,
   } = useUploadsContext();
+  const {
+    state: { setPrompt },
+  } = useChatBotContext();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -62,24 +60,18 @@ const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
           baseUrl: `${window.location.protocol}//${window.location.host}/`,
         });
 
-        // @ts-ignore
-        instance.addEventListener("textSelection.change", (textSelection) => {
-          if (textSelection)
-            textSelection.getText().then((text: any) => {
-              dispatch({
-                type: UploadsActionType.SET_SELECTED_TEXT,
-                payload: text,
+        instance.addEventListener(
+          "textSelection.change",
+          (textSelection: any) => {
+            if (textSelection)
+              textSelection.getText().then((text: string) => {
+                setPrompt((prev) => (prev.endsWith(text) ? prev : prev + text));
               });
-            });
-          else
-            dispatch({
-              type: UploadsActionType.SET_SELECTED_TEXT,
-              payload: "",
-            });
-        });
+          }
+        );
       });
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, setPrompt]);
 
   useFetchDataState<null, Preference>({
     apiCall: useCallback(

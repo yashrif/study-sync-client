@@ -19,12 +19,12 @@ export enum ChatBotActionType {
   SET_SELECTED_UPLOADS = "SET_SELECTED_UPLOADS",
   SET_REQUEST_STATUS = "SET_REQUEST_STATUS",
   SET_PROMPT = "SET_PROMPT",
+  SET_SET_PROMPT = "SET_SET_PROMPT",
   SET_TEXTAREA_REF = "SET_TEXTAREA_REF",
   SET_CONVERSATION = "SET_CONVERSATION",
   ADD_CONVERSATION = "ADD_CONVERSATION",
   POP_CONVERSATION = "POP_JSX_ELEMENT",
   REPLACE_LAST_CONVERSATION = "REPLACE_LAST_CONVERSATION",
-  SET_SET_TEXT = "SET_SET_TEXT",
 }
 
 export type ChatBotAction =
@@ -38,14 +38,14 @@ export type ChatBotAction =
   | Action<ChatBotActionType.ADD_CONVERSATION, Conversation[]>
   | Action<ChatBotActionType.POP_CONVERSATION>
   | Action<ChatBotActionType.REPLACE_LAST_CONVERSATION, Conversation>
-  | Action<ChatBotActionType.SET_SET_TEXT, Dispatch<SetStateAction<string>>>;
+  | Action<ChatBotActionType.SET_SET_PROMPT, Dispatch<SetStateAction<string>>>;
 
 export type ChatBotState = {
   topics: TopicShallow[];
   uploads: UploadShallow[];
   selectedUploads: string[];
   prompt: string;
-  setText: Dispatch<SetStateAction<string>>;
+  setPrompt: Dispatch<SetStateAction<string>>;
   textareaRef: RefObject<HTMLTextAreaElement>;
   conversation: Conversation[];
   status: Status;

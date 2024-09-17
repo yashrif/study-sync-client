@@ -7,19 +7,25 @@ import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
 import {
   Commands as ECommands,
+  additionalCommands,
   commandLabels,
+  commandsLvl2,
 } from "@/assets/data/dashboard/chatBot";
+import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import Dictaphone from "@/components/dictaphone";
 import { Textarea } from "@/components/ui/textarea";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
+import { usePath } from "@/hooks/usePath";
 import { ChatBotActionType, Status, UploadShallow } from "@/types";
+import { findFirstSubstring, replace } from "@/utils/string";
 import Commands from "./Commands";
 import Conversation from "./Conversation";
 import { useOnSubmit } from "./on-submit";
 
 const ChatBotInput = () => {
+  const { path } = usePath();
   const [text, setText] = useState("");
   const textDivRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +44,7 @@ const ChatBotInput = () => {
 
   useEffect(() => {
     dispatch({
-      type: ChatBotActionType.SET_SET_TEXT,
+      type: ChatBotActionType.SET_SET_PROMPT,
       payload: setText,
     });
   }, [dispatch]);
@@ -92,11 +98,25 @@ const ChatBotInput = () => {
     setText(e.target.value);
   };
 
-  /* --------------------------------- Component -------------------------------- */
+  /* -------------------------------- Variables ------------------------------- */
 
-  const CommandBlock: React.FC<{ text: string }> = ({ text }) => (
-    <span className="text-primary bg-accent rounded-xs">{text}</span>
-  );
+  const highlightedTextsLvl1 = commandLabels;
+  const commandsLvlInline = (): string[] => {
+    const commonCommands = commandsLvl2.map((item) => item.label);
+
+    switch (true) {
+      case path.includes(routes.dashboard.study.default) ||
+        selectedUploads.length > 0:
+        return [
+          ...commonCommands,
+          ...additionalCommands.study.map((item) => item.label),
+        ];
+      default:
+        return commonCommands;
+    }
+  };
+
+  /* --------------------------------- return --------------------------------- */
 
   return (
     <div className="relative w-[400px] h-[480px] overflow-hidden shadow-lg rounded-md border">
@@ -116,8 +136,15 @@ const ChatBotInput = () => {
             >
               {text.length > 1 ? (
                 (() => {
-                  const highlightedTexts = commandLabels;
-                  const styledText = highlightedTexts
+                  /* ---------------------- Replace first command string ---------------------- */
+
+                  const modifiedText = replaceLabel(commandsLvlInline(), text);
+                  if (text.localeCompare(modifiedText) !== 0)
+                    setText(modifiedText);
+
+                  /* ------------------------------ Highlight text ----------------------------- */
+
+                  const styledText = highlightedTextsLvl1
                     .map((item, index) => {
                       const splitText = text
                         .toLowerCase()
@@ -131,7 +158,12 @@ const ChatBotInput = () => {
                       ) {
                         return (
                           <>
-                            {text.slice(0, splitText[0].length)}
+                            {
+                              <HighlightBlock
+                                labels={commandsLvlInline()}
+                                text={text.slice(0, splitText[0].length)}
+                              />
+                            }
                             <CommandBlock
                               key={index}
                               text={text.slice(
@@ -141,13 +173,24 @@ const ChatBotInput = () => {
                                   splitText[0].length
                               )}
                             />
-                            {text.slice(text.length - splitText[1].length)}
+                            {
+                              <HighlightBlock
+                                labels={commandsLvlInline()}
+                                text={text.slice(
+                                  text.length - splitText[1].length
+                                )}
+                              />
+                            }
                           </>
                         );
                       }
                     })
                     .filter((item) => item);
-                  return styledText.length > 0 ? styledText.pop() : text;
+                  return styledText.length > 0 ? (
+                    styledText.pop()
+                  ) : (
+                    <HighlightBlock labels={commandsLvlInline()} text={text} />
+                  );
                 })()
               ) : text === ECommands["slash"] ? (
                 <CommandBlock text={text} />
@@ -191,3 +234,61 @@ const ChatBotInput = () => {
 };
 
 export default ChatBotInput;
+
+/* ---------------------------------- Utils --------------------------------- */
+
+const CommandBlock: React.FC<{ text: string }> = ({ text }) => (
+  <span className="text-primary bg-accent rounded-xs">{text}</span>
+);
+
+const replaceLabel = (labels: string[], text: string): string => {
+  const firstCommand = findFirstSubstring(
+    text.toLowerCase(),
+    labels.map((item) => item.toLowerCase())
+  );
+
+  if (firstCommand.substring) {
+    const label = labels.find(
+      (item) => item.toLowerCase() === firstCommand.substring
+    );
+    if (label)
+      text = replace(
+        text,
+        text.slice(
+          firstCommand.index,
+          firstCommand.index + firstCommand.substring.length
+        ),
+        label,
+        "i"
+      );
+  }
+
+  return text;
+};
+
+type Props = {
+  labels: string[];
+  text: string;
+};
+
+const HighlightBlock: React.FC<Props> = ({ labels, text }) => {
+  const command = findFirstSubstring(text, labels);
+
+  if (command.substring) {
+    const index = text.search(command.substring);
+
+    if (index !== -1) {
+      return (
+        <>
+          {text.slice(0, index)}
+          <CommandBlock
+            text={text.slice(index, command.substring.length + index)}
+          />
+          {text.slice(index + command.substring.length)}
+        </>
+      );
+    }
+  }
+
+  return <>{text}</>;
+};

@@ -15,7 +15,7 @@ import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { usePath } from "@/hooks/usePath";
 import { ChatBotActionType } from "@/types";
 import { generateUUID } from "@/utils/generateUUID";
-import { replaceAll } from "@/utils/string";
+import { replace } from "@/utils/string";
 import SelectContainer from "./SelectContainer";
 import CommandItems from "./command-items/Commands";
 import Uploads from "./command-items/Uploads";
@@ -23,20 +23,20 @@ import Uploads from "./command-items/Uploads";
 const Commands: React.FC = () => {
   const { path } = usePath();
   const {
-    state: { selectedUploads, setText, prompt },
+    state: { selectedUploads, setPrompt, prompt },
     dispatch,
   } = useChatBotContext();
 
   let textLvl1CommandStriped = prompt;
   commandLabels.forEach((item) => {
-    textLvl1CommandStriped = replaceAll(textLvl1CommandStriped, item, "");
+    textLvl1CommandStriped = replace(textLvl1CommandStriped, item, "");
   });
 
   /* ---------------------------------- utils --------------------------------- */
 
   const onOpenChange = useCallback(() => {
-    setText((prev) => replaceAll(prev, ECommands["select-file"], ""));
-  }, [setText]);
+    setPrompt((prev) => replace(prev, ECommands["select-file"], ""));
+  }, [setPrompt]);
 
   const SelectFile: React.FC = () => (
     <SelectContainer
@@ -60,49 +60,48 @@ const Commands: React.FC = () => {
     case ECommands["create-flashcard"].toLowerCase():
       return selectedUploads.length === 0 ? <SelectFile /> : null;
     case ECommands["slash"]:
+      const commands = [
+        ...commandsLvl1,
+        ...(path.includes(routes.dashboard.study.home) ||
+        selectedUploads.length > 0
+          ? additionalCommands.study
+          : []),
+      ];
       return (
         <SelectContainer
           key={generateUUID()}
           onValueChange={(e) => {
-            setText(
-              (prev) =>
-                prev + _.find(commandsLvl1, ["value", e])?.label.slice(1)
+            setPrompt(
+              (prev) => prev + _.find(commands, ["value", e])?.label.slice(1)
             );
           }}
           onOpenChange={onOpenChange}
         >
-          <CommandItems
-            commands={[
-              ...commandsLvl1,
-              ...(path.includes(routes.dashboard.study.home)
-                ? additionalCommands.study
-                : []),
-            ]}
-          />
+          <CommandItems commands={commands} />
         </SelectContainer>
       );
     default:
       switch (true) {
         case textLvl1CommandStriped.endsWith("/"):
+          const commands = [
+            ...commandsLvl2,
+            ...(path.includes(routes.dashboard.study.home) ||
+            selectedUploads.length > 0
+              ? additionalCommands.study
+              : []),
+          ];
           return (
             <SelectContainer
               key={generateUUID()}
               onValueChange={(e) => {
-                setText(
+                setPrompt(
                   (prev) =>
-                    prev + _.find(commandsLvl2, ["value", e])?.label.slice(1)
+                    prev + _.find(commands, ["value", e])?.label.slice(1)
                 );
               }}
               onOpenChange={onOpenChange}
             >
-              <CommandItems
-                commands={[
-                  ...commandsLvl2,
-                  ...(path.includes(routes.dashboard.study.home)
-                    ? additionalCommands.study
-                    : []),
-                ]}
-              />
+              <CommandItems commands={commands} />
             </SelectContainer>
           );
         case prompt
