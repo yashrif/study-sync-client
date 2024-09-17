@@ -108,17 +108,28 @@ const DictaphoneComponent: React.FC<Props> = ({
           ? `h-full w-auto fill-white ${iconPadding ? `p-[${iconPadding}px]` : "p-1.5"}`
           : "h-full w-auto stroke-primary hover:stroke-primary/75 transition-all duration-300"
       }
-      onClick={() => {
-        if (listening) {
-          stopListening();
-          resetTranscript();
-        } else {
-          setTranscript((prev) => {
-            setLength(prev.length);
-            return prev;
-          });
-          startListening();
-        }
+      // onClick={() => {
+      //   if (listening) {
+      //     stopListening();
+      //     resetTranscript();
+      //   } else {
+      //     setTranscript((prev) => {
+      //       setLength(prev.length);
+      //       return prev;
+      //     });
+      //     startListening();
+      //   }
+      // }}
+      onMouseDown={() => {
+        setTranscript((prev) => {
+          setLength(prev.length);
+          return prev;
+        });
+        startListening();
+      }}
+      onMouseUp={() => {
+        stopListening();
+        resetTranscript();
       }}
     />
   );

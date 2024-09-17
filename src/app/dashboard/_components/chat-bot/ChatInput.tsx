@@ -148,7 +148,7 @@ const ChatBotInput = () => {
               disabled={requestStatus === Status.PENDING}
             />
 
-            <div className="absolute right-2 bottom-[7.5px] z-20 flex items-center justify-center">
+            <div className="absolute right-2 bottom-[7.5px] z-20 flex gap-1 items-center justify-center">
               {/* ------------------------------- Dictaphone ------------------------------- */}
 
               <Dictaphone className="size-5" setTranscript={setText} />
