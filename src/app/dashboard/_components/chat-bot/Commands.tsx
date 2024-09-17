@@ -4,12 +4,15 @@ import _ from "lodash";
 import { Dispatch, SetStateAction, useCallback } from "react";
 
 import {
+  additionalCommands,
   commandLabels,
   commandsLvl1,
   commandsLvl2,
   Commands as ECommands,
 } from "@/assets/data/dashboard/chatBot";
+import { routes } from "@/assets/data/routes";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { usePath } from "@/hooks/usePath";
 import { ChatBotActionType } from "@/types";
 import { generateUUID } from "@/utils/generateUUID";
 import { replaceAll } from "@/utils/string";
@@ -23,6 +26,7 @@ type CommandsProps = {
 };
 
 const Commands: React.FC<CommandsProps> = (data) => {
+  const { path } = usePath();
   const {
     state: { selectedUploads, uploads },
     dispatch,
@@ -72,7 +76,14 @@ const Commands: React.FC<CommandsProps> = (data) => {
           }}
           onOpenChange={onOpenChange}
         >
-          <CommandItems commands={commandsLvl1} />
+          <CommandItems
+            commands={[
+              ...commandsLvl1,
+              ...(path.includes(routes.dashboard.study.home)
+                ? additionalCommands.study
+                : []),
+            ]}
+          />
         </SelectContainer>
       );
     default:
@@ -89,7 +100,14 @@ const Commands: React.FC<CommandsProps> = (data) => {
               }}
               onOpenChange={onOpenChange}
             >
-              <CommandItems commands={commandsLvl2} />
+              <CommandItems
+                commands={[
+                  ...commandsLvl2,
+                  ...(path.includes(routes.dashboard.study.home)
+                    ? additionalCommands.study
+                    : []),
+                ]}
+              />
             </SelectContainer>
           );
         case data.text
