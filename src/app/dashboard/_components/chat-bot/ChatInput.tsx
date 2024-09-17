@@ -11,7 +11,7 @@ import {
 } from "@/assets/data/dashboard/chatBot";
 import IconButton from "@/components/button/IconButton";
 import Dictaphone from "@/components/dictaphone";
-import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
+import { Textarea } from "@/components/ui/textarea";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
 import { Status, UploadShallow } from "@/types";
@@ -46,7 +46,7 @@ const ChatBotInput = () => {
   useEffect(() => {
     if (textareaRef.current && textDivRef.current) {
       textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
-      textDivRef.current.scrollTop = textDivRef.current.scrollHeight;
+      textDivRef.current.scrollTop = textareaRef.current.scrollHeight;
     }
   }, [text, textareaRef]);
 
@@ -54,6 +54,26 @@ const ChatBotInput = () => {
     if (textDivRef.current && textareaRef.current) {
       textDivRef.current.scrollTop = textareaRef.current.scrollTop;
     }
+  };
+
+  /* ------------------------------ Auto Resize with min and max height ----------------------------- */
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "40px";
+      if (text === "") {
+        textarea.style.height = "40px";
+      } else {
+        const scrollHeight = textarea.scrollHeight;
+        const newHeight = Math.min(Math.max(scrollHeight, 40), 120);
+        textarea.style.height = `${newHeight}px`;
+      }
+    }
+  }, [text, textareaRef]);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
   };
 
   /* --------------------------------- Component -------------------------------- */
@@ -70,7 +90,7 @@ const ChatBotInput = () => {
 
         <Conversation />
 
-        {/* -------------------------------- Text Area ------------------------------- */}
+        {/* -------------------------------- Text field ------------------------------- */}
 
         <div className="px-4 pt-0">
           <div className="overflow-hidden relative">
@@ -119,17 +139,12 @@ const ChatBotInput = () => {
                 text
               )}
             </div>
-            <AutosizeTextarea
-              // @ts-ignore
+            <Textarea
               ref={textareaRef}
-              minHeight={36}
-              maxHeight={120}
               value={text}
-              onChange={(e) => {
-                setText(e.target.value);
-              }}
+              onChange={handleTextChange}
               onScroll={handleScroll}
-              className="relative w-full h-full text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-[70px] leading-[150%] whitespace-pre-wrap"
+              className="relative resize-none w-full min-h-9 max-h-[120px] text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-[70px] leading-[150%] whitespace-pre-wrap"
               disabled={requestStatus === Status.PENDING}
             />
 
