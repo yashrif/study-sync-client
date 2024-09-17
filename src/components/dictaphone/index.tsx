@@ -9,6 +9,8 @@ const Dictaphone = dynamic(() => import("./Dictaphone"), {
 });
 
 type Props = {
+  className?: string;
+  iconPadding?: number;
   setTranscript: Dispatch<SetStateAction<string>>;
 };
 

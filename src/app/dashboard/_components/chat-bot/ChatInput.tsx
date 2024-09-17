@@ -10,6 +10,7 @@ import {
   commandLabels,
 } from "@/assets/data/dashboard/chatBot";
 import IconButton from "@/components/button/IconButton";
+import Dictaphone from "@/components/dictaphone";
 import { AutosizeTextarea } from "@/components/ui/textarea-autosize";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
@@ -131,16 +132,25 @@ const ChatBotInput = () => {
               className="relative w-full h-full text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-12 leading-[150%] whitespace-pre-wrap"
               disabled={requestStatus === Status.PENDING}
             />
-            {/* ------------------------------ Submit Button ----------------------------- */}
-            <IconButton
-              Icon={IconSend2}
-              onClick={() => onSubmit({ text, setText })}
-              className="absolute size-6 right-2 bottom-[7.5px] z-20 hover:bg-transparent"
-              iconClassName="!size-6 !stroke-primary !text-primary hover:text-primary/75 transition-all duration-300"
-              variant={"ghost"}
-              status={requestStatus}
-              disabled={text.length <= 0}
-            />
+
+            <div className="absolute right-2 bottom-[7.5px] z-20 flex items-center justify-center">
+              {/* ------------------------------- Dictaphone ------------------------------- */}
+
+              <Dictaphone className="size-5" setTranscript={setText} />
+
+              {/* ------------------------------ Submit Button ----------------------------- */}
+
+              <IconButton
+                Icon={IconSend2}
+                onClick={() => onSubmit({ text, setText })}
+                className="size-6 hover:bg-transparent"
+                iconClassName="!size-6 !stroke-primary !text-primary hover:text-primary/75 transition-all duration-300"
+                variant={"ghost"}
+                status={requestStatus}
+                disabled={text.length <= 0}
+              />
+            </div>
+
             <Commands text={text} setText={setText} />
           </div>
         </div>

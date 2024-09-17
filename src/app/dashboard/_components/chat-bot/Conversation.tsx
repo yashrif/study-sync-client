@@ -55,7 +55,7 @@ const Conversation: React.FC = () => {
           )}
         </div>
         {filteredUploads.length > 0 && (
-          <div className="sticky bottom-0 inset-0 pt-2 bg-background flex flex-wrap-reverse gap-x-2 gap-y-1.5">
+          <div className="sticky bottom-0 inset-0 pt-2 bg-inherit flex flex-wrap-reverse gap-x-2 gap-y-1.5">
             {filteredUploads.map((upload) => (
               <UploadBadge key={upload.id} upload={upload} />
             ))}
