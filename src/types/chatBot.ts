@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { Dispatch, RefObject, SetStateAction } from "react";
 
 import {
   Action,
@@ -24,6 +24,7 @@ export enum ChatBotActionType {
   ADD_CONVERSATION = "ADD_CONVERSATION",
   POP_CONVERSATION = "POP_JSX_ELEMENT",
   REPLACE_LAST_CONVERSATION = "REPLACE_LAST_CONVERSATION",
+  SET_SET_TEXT = "SET_SET_TEXT",
 }
 
 export type ChatBotAction =
@@ -36,13 +37,15 @@ export type ChatBotAction =
   | Action<ChatBotActionType.SET_CONVERSATION, Conversation[]>
   | Action<ChatBotActionType.ADD_CONVERSATION, Conversation[]>
   | Action<ChatBotActionType.POP_CONVERSATION>
-  | Action<ChatBotActionType.REPLACE_LAST_CONVERSATION, Conversation>;
+  | Action<ChatBotActionType.REPLACE_LAST_CONVERSATION, Conversation>
+  | Action<ChatBotActionType.SET_SET_TEXT, Dispatch<SetStateAction<string>>>;
 
 export type ChatBotState = {
   topics: TopicShallow[];
   uploads: UploadShallow[];
   selectedUploads: string[];
   prompt: string;
+  setText: Dispatch<SetStateAction<string>>;
   textareaRef: RefObject<HTMLTextAreaElement>;
   conversation: Conversation[];
   status: Status;

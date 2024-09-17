@@ -1,7 +1,7 @@
 "use client";
 
 import randomColor from "randomcolor";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { useMemo } from "react";
 
 import { Commands } from "@/assets/data/dashboard/chatBot";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
@@ -17,11 +17,6 @@ import usePlannerConversation from "./usePlannerConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
 import useUploadConversation from "./useUploadsConversation";
-
-type Props = {
-  text: string;
-  setText: Dispatch<SetStateAction<string>>;
-};
 
 export const useOnSubmit = () => {
   const { state, dispatch } = useChatBotContext();
@@ -48,12 +43,14 @@ export const useOnSubmit = () => {
 
   /* -------------------------------- On Submit ------------------------------- */
 
-  const onSubmit = async ({ text, setText }: Props) => {
+  const onSubmit = async () => {
     switch (true) {
       /* ---------------------------------- quiz ---------------------------------- */
 
-      case text.toLowerCase().includes(Commands["create-quiz"].toLowerCase()):
-        setText("");
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["create-quiz"].toLowerCase()):
+        state.setText("");
         if (state.selectedUploads.length > 0) {
           try {
             dispatch({
@@ -103,7 +100,7 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              uploadConversation.prompt(text),
+              uploadConversation.prompt(state.prompt),
               uploadConversation.noUpload(),
             ],
           });
@@ -113,12 +110,12 @@ export const useOnSubmit = () => {
 
       /* -------------------------------- flashcard ------------------------------- */
 
-      case text
+      case state.prompt
         .toLowerCase()
         .includes(Commands["create-flashcard"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
-            setText("");
+            state.setText("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -169,7 +166,7 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              uploadConversation.prompt(text),
+              uploadConversation.prompt(state.prompt),
               uploadConversation.noUpload(),
             ],
           });
@@ -179,12 +176,12 @@ export const useOnSubmit = () => {
 
       /* --------------------------------- planner -------------------------------- */
 
-      case text
+      case state.prompt
         .toLowerCase()
         .includes(Commands["create-planner"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
-            setText("");
+            state.setText("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -232,7 +229,7 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              uploadConversation.prompt(text),
+              uploadConversation.prompt(state.prompt),
               uploadConversation.noUpload(),
             ],
           });
@@ -247,15 +244,15 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              responseConversations.responseCreatePrompt(text),
+              responseConversations.responseCreatePrompt(state.prompt),
               responseConversations.responseCrateStart(),
             ],
           });
 
-          setText("");
+          state.setText("");
 
           const response = await responseRequestHandler({
-            data: text,
+            data: state.prompt,
             fetchType: "lazy",
             isReset: true,
           });

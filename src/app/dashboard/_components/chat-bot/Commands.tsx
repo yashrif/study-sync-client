@@ -1,7 +1,7 @@
 "use client";
 
 import _ from "lodash";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { useCallback } from "react";
 
 import {
   additionalCommands,
@@ -20,19 +20,14 @@ import SelectContainer from "./SelectContainer";
 import CommandItems from "./command-items/Commands";
 import Uploads from "./command-items/Uploads";
 
-type CommandsProps = {
-  text: string;
-  setText: Dispatch<SetStateAction<string>>;
-};
-
-const Commands: React.FC<CommandsProps> = (data) => {
+const Commands: React.FC = () => {
   const { path } = usePath();
   const {
-    state: { selectedUploads, uploads },
+    state: { selectedUploads, setText, prompt },
     dispatch,
   } = useChatBotContext();
 
-  let textLvl1CommandStriped = data.text;
+  let textLvl1CommandStriped = prompt;
   commandLabels.forEach((item) => {
     textLvl1CommandStriped = replaceAll(textLvl1CommandStriped, item, "");
   });
@@ -40,8 +35,8 @@ const Commands: React.FC<CommandsProps> = (data) => {
   /* ---------------------------------- utils --------------------------------- */
 
   const onOpenChange = useCallback(() => {
-    data.setText((prev) => replaceAll(prev, ECommands["select-file"], ""));
-  }, [data]);
+    setText((prev) => replaceAll(prev, ECommands["select-file"], ""));
+  }, [setText]);
 
   const SelectFile: React.FC = () => (
     <SelectContainer
@@ -58,7 +53,7 @@ const Commands: React.FC<CommandsProps> = (data) => {
     </SelectContainer>
   );
 
-  switch (data.text.trimStart().toLowerCase()) {
+  switch (prompt.trimStart().toLowerCase()) {
     case ECommands["create-quiz"].toLowerCase():
     case ECommands["create-planner"].toLowerCase():
     case ECommands["create-slide"].toLowerCase():
@@ -69,7 +64,7 @@ const Commands: React.FC<CommandsProps> = (data) => {
         <SelectContainer
           key={generateUUID()}
           onValueChange={(e) => {
-            data.setText(
+            setText(
               (prev) =>
                 prev + _.find(commandsLvl1, ["value", e])?.label.slice(1)
             );
@@ -93,7 +88,7 @@ const Commands: React.FC<CommandsProps> = (data) => {
             <SelectContainer
               key={generateUUID()}
               onValueChange={(e) => {
-                data.setText(
+                setText(
                   (prev) =>
                     prev + _.find(commandsLvl2, ["value", e])?.label.slice(1)
                 );
@@ -110,7 +105,7 @@ const Commands: React.FC<CommandsProps> = (data) => {
               />
             </SelectContainer>
           );
-        case data.text
+        case prompt
           .toLowerCase()
           .includes(ECommands["select-file"].toLowerCase()):
           return <SelectFile />;

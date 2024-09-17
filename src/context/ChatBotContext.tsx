@@ -22,6 +22,7 @@ const initialState: ChatBotState = {
   uploads: [],
   selectedUploads: [],
   prompt: "",
+  setText: () => {},
   textareaRef: { current: null },
   conversation: [],
   status: Status.IDLE,
@@ -117,6 +118,11 @@ const createSlideReducer = (
           ...state.conversation.slice(0, state.conversation.length - 1),
           action.payload,
         ],
+      };
+    case ChatBotActionType.SET_SET_TEXT:
+      return {
+        ...state,
+        setText: action.payload,
       };
     default:
       return state;

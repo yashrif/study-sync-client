@@ -14,7 +14,7 @@ import Dictaphone from "@/components/dictaphone";
 import { Textarea } from "@/components/ui/textarea";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
-import { Status, UploadShallow } from "@/types";
+import { ChatBotActionType, Status, UploadShallow } from "@/types";
 import Commands from "./Commands";
 import Conversation from "./Conversation";
 import { useOnSubmit } from "./on-submit";
@@ -33,6 +33,22 @@ const ChatBotInput = () => {
     apiCall: useCallback(() => studySyncDB.get(dbEndpoints.uploads), []),
     dispatch,
   });
+
+  /* ------------------------------ Update state ------------------------------ */
+
+  useEffect(() => {
+    dispatch({
+      type: ChatBotActionType.SET_SET_TEXT,
+      payload: setText,
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch({
+      type: ChatBotActionType.SET_PROMPT,
+      payload: text,
+    });
+  }, [dispatch, text]);
 
   /* ------------------------------ Input overlay ----------------------------- */
 
@@ -157,7 +173,7 @@ const ChatBotInput = () => {
 
               <IconButton
                 Icon={IconSend2}
-                onClick={() => onSubmit({ text, setText })}
+                onClick={() => onSubmit()}
                 className="size-6 hover:bg-transparent"
                 iconClassName="!size-6 !stroke-primary !text-primary hover:text-primary/75 transition-all duration-300"
                 variant={"ghost"}
@@ -166,7 +182,7 @@ const ChatBotInput = () => {
               />
             </div>
 
-            <Commands text={text} setText={setText} />
+            <Commands />
           </div>
         </div>
       </div>
