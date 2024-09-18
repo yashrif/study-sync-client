@@ -8,7 +8,7 @@ import BouncingDots from "@/components/BouncingDots";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { Conversation as TConversation } from "@/types";
 
-const useExplainConversation = () => {
+const useSummarizeConversation = () => {
   const {
     state: { selectedUploads, uploads },
   } = useChatBotContext();
@@ -23,7 +23,7 @@ const useExplainConversation = () => {
     data: (
       <div className="text-sm">
         <IconMessage className="size-[14px] stroke-2 stroke-primary inline-block pb-[1px] mr-1" />
-        Generating response based on the content of the{" "}
+        Summarizing based on the content of the{" "}
         {selectedUploads.length > 1 ? (
           <span className="text-primary font-medium">first</span>
         ) : (
@@ -50,9 +50,7 @@ const useExplainConversation = () => {
 
   const createError = (): TConversation => ({
     type: "response",
-    data: (
-      <p className="text-sm">Failed to create response. Please try again.</p>
-    ),
+    data: <p className="text-sm">Failed to summarize. Please try again.</p>,
   });
 
   return {
@@ -62,4 +60,4 @@ const useExplainConversation = () => {
   };
 };
 
-export default useExplainConversation;
+export default useSummarizeConversation;

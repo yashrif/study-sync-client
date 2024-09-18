@@ -19,6 +19,7 @@ import usePlannerConversation from "./usePlannerConversation";
 import usePromptConversation from "./usePromptConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
+import useSummarizeConversation from "./useSummarizeConversation";
 import useUploadConversation from "./useUploadsConversation";
 
 export const useOnSubmit = () => {
@@ -40,6 +41,7 @@ export const useOnSubmit = () => {
   const uploadConversation = useUploadConversation();
   const explainConversation = useExplainConversation();
   const promptConversation = usePromptConversation();
+  const summarizeConversation = useSummarizeConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -249,11 +251,14 @@ export const useOnSubmit = () => {
         .toLowerCase()
         .includes(Commands["explain"].toLowerCase()) &&
         state.selectedUploads.length > 0:
-        const stripedPrompt = state.prompt
+        const stripedExplainPrompt = state.prompt
           .replace(Commands["explain"], "")
           .trim();
 
-        if (state.selectedUploads.length > 0 && stripedPrompt.length > 0) {
+        if (
+          state.selectedUploads.length > 0 &&
+          stripedExplainPrompt.length > 0
+        ) {
           try {
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
@@ -284,7 +289,64 @@ export const useOnSubmit = () => {
               payload: explainConversation.createError(),
             });
           }
-        } else if (stripedPrompt.length === 0) {
+        } else if (stripedExplainPrompt.length === 0) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt),
+              promptConversation.noText(),
+            ],
+          });
+        }
+
+        break;
+
+      /* -------------------------------- Summarize ------------------------------- */
+
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["summarize"].toLowerCase()) &&
+        state.selectedUploads.length > 0:
+        const stripedSummarizePrompt = state.prompt
+          .replace(Commands["summarize"], "")
+          .trim();
+
+        if (
+          state.selectedUploads.length > 0 &&
+          stripedSummarizePrompt.length > 0
+        ) {
+          try {
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                promptConversation.prompt(state.prompt, Commands["summarize"]),
+                summarizeConversation.crateStart(),
+              ],
+            });
+            state.setPrompt("");
+            const response = await studyPromptResponseRequestHandler({
+              data: {
+                query:
+                  StudyCommands.summarize.instruction +
+                  replace(state.prompt, Commands["summarize"], ""),
+                fileId: state.selectedUploads[0],
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: summarizeConversation.createSuccess(response),
+            });
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: summarizeConversation.createError(),
+            });
+          }
+        } else if (stripedSummarizePrompt.length === 0) {
           state.setPrompt("");
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
