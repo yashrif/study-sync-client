@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import randomColor from "randomcolor";
 import { useMemo } from "react";
 
@@ -24,6 +25,9 @@ import useSummarizeConversation from "./useSummarizeConversation";
 import useUploadConversation from "./useUploadsConversation";
 
 export const useOnSubmit = () => {
+  const params = useParams();
+  const { id } = params;
+
   const { state, dispatch } = useChatBotContext();
   const {
     quizServerRequestHandler,
