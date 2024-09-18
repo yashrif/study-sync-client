@@ -19,6 +19,8 @@ import {
   Response,
   ResponseRequest,
   Status,
+  StudyPromptRequestServer,
+  StudyPromptResponseServer,
   TopicsResponseServer,
 } from "@/types";
 
@@ -123,6 +125,23 @@ export const useHandlers = () => {
     dispatch: responseRequestDispatch,
   });
 
+  /* --------------------------------- Explain -------------------------------- */
+
+  const {
+    state: studyPromptRequestState,
+    dispatch: studyPromptRequestDispatch,
+  } = useFetchState<StudyPromptResponseServer>();
+  const { handler: studyPromptRequestHandler } = useApiHandler<
+    StudyPromptRequestServer,
+    StudyPromptResponseServer
+  >({
+    apiCall: useCallback(
+      (data) => studySyncServer.post(serverEndpoints.queryIndexedFile, data),
+      []
+    ),
+    dispatch: studyPromptRequestDispatch,
+  });
+
   /* --------------------------------- Status --------------------------------- */
 
   useEffect(() => {
@@ -133,7 +152,8 @@ export const useHandlers = () => {
         flashcardDbRequestState.status === Status.IDLE &&
         plannerServerRequestState.status === Status.IDLE &&
         plannerDbRequestState.status === Status.IDLE &&
-        responseRequestState.status === Status.IDLE:
+        responseRequestState.status === Status.IDLE &&
+        studyPromptRequestState.status === Status.IDLE:
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.IDLE,
@@ -146,7 +166,8 @@ export const useHandlers = () => {
         flashcardDbRequestState.status === Status.PENDING ||
         plannerServerRequestState.status === Status.PENDING ||
         plannerDbRequestState.status === Status.PENDING ||
-        responseRequestState.status === Status.PENDING:
+        responseRequestState.status === Status.PENDING ||
+        studyPromptRequestState.status === Status.PENDING:
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.PENDING,
@@ -159,7 +180,8 @@ export const useHandlers = () => {
           flashcardDbRequestState.status === Status.SUCCESS) ||
         (plannerServerRequestState.status === Status.SUCCESS &&
           plannerDbRequestState.status === Status.SUCCESS) ||
-        responseRequestState.status === Status.SUCCESS:
+        responseRequestState.status === Status.SUCCESS ||
+        studyPromptRequestState.status === Status.SUCCESS:
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.SUCCESS,
@@ -172,7 +194,8 @@ export const useHandlers = () => {
         flashcardDbRequestState.status === Status.ERROR ||
         plannerServerRequestState.status === Status.ERROR ||
         plannerDbRequestState.status === Status.ERROR ||
-        responseRequestState.status === Status.ERROR:
+        responseRequestState.status === Status.ERROR ||
+        studyPromptRequestState.status === Status.ERROR:
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.ERROR,
@@ -194,6 +217,7 @@ export const useHandlers = () => {
     plannerServerRequestState.status,
     plannerDbRequestState.status,
     responseRequestState.status,
+    studyPromptRequestState.status,
   ]);
 
   return {
@@ -214,5 +238,8 @@ export const useHandlers = () => {
 
     responseRequestHandler,
     responseRequestState,
+
+    studyPromptResponseRequestHandler: studyPromptRequestHandler,
+    studyPromptRequestState,
   };
 };

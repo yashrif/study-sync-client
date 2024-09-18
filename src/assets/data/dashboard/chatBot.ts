@@ -46,24 +46,26 @@ export const commandsLvl2 = [
   },
 ];
 
+export const StudyCommands = {
+  explain: {
+    value: Commands["explain"],
+    label: "/Explain",
+    instruction: "Explain the text below given context:\n\n",
+  },
+  summarize: {
+    value: Commands["summarize"],
+    label: "/Summarize",
+    instruction: "Summarize the text below given context:\n\n",
+  },
+  provideExample: {
+    value: Commands["provide-example"],
+    label: "/Provide Example",
+    instruction: "Give Example, similar to the text below given context:\n\n",
+  },
+};
+
 export const additionalCommands = {
-  study: [
-    {
-      value: Commands["explain"],
-      label: "/Explain",
-      instruction: "Explain the text below given context:\n\n",
-    },
-    {
-      value: Commands["summarize"],
-      label: "/Summarize",
-      instruction: "Summarize the text below given context:\n\n",
-    },
-    {
-      value: Commands["provide-example"],
-      label: "/Provide Example",
-      instruction: "Give Example, similar to the text below given context:\n\n",
-    },
-  ],
+  study: Object.values(StudyCommands),
 };
 
 export const commandLabels = commandsLvl1.map((item) => item.label);

@@ -25,7 +25,7 @@ const useFlashcardConversation = () => {
     data: (
       <div className="flex flex-col gap-1">
         <p className="text-sm">
-          <span className="text-white rounded-xs bg-primary px-0.5">
+          <span className="text-white rounded-[7px] bg-primary px-0.5">
             {Commands["create-flashcard"]}
           </span>{" "}
           from the file
@@ -46,7 +46,7 @@ const useFlashcardConversation = () => {
     type: "response",
     data: (
       <div className="text-sm">
-        <IconBolt className="size-[14px] stroke-2 stroke-primary inline-block pb-[1px] mr-1" />
+        <IconBolt className="size-[15px] stroke-2 stroke-primary inline-block pb-[1px] mr-1" />
         Creating flashcards
         <span className="ml-1.5 inline-flex items-center">
           <BouncingDots iconClassName="size-[5px]" />

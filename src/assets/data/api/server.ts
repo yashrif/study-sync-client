@@ -8,7 +8,10 @@ export const uploads = `/uploads`;
 export const index = `/index`;
 export const quizzes = `/quizzes`;
 export const evaluate = `/evaluate`;
-export const response = `/response`;
 
 export const extract = `/extract`;
 export const topics = `${extract}/topics`;
+
+const generate = "/generate";
+export const response = `${generate}/response`;
+export const queryIndexedFile = `${generate}/queryIndexedFile`;

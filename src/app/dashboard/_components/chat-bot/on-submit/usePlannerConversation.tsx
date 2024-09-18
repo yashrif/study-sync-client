@@ -25,7 +25,7 @@ const usePlannerConversation = () => {
     data: (
       <div className="flex flex-col gap-1">
         <p className="text-sm">
-          <span className="text-white rounded-xs bg-primary px-0.5">
+          <span className="text-white rounded-[7px] bg-primary px-0.5">
             {Commands["create-planner"]}
           </span>{" "}
           from the file

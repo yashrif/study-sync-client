@@ -4,7 +4,7 @@ import { IconSend2, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 
 import studySyncAI from "@/api/studySyncAI";
-import { queryFile } from "@/assets/data/api/ai";
+import { queryIndexedFile } from "@/assets/data/api/ai";
 import { actions } from "@/assets/data/dashboard/study";
 import IconButton from "@/components/button/IconButton";
 import Dictaphone from "@/components/dictaphone";
@@ -27,7 +27,7 @@ const ChatAI = () => {
   const submitChat = async (instruction: string) => {
     setStatus(Status.PENDING);
     try {
-      const response = await studySyncAI.post(queryFile, {
+      const response = await studySyncAI.post(queryIndexedFile, {
         query: instruction,
         fileId: currentStudy,
       });

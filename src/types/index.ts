@@ -22,6 +22,7 @@ export * from "./select";
 export * from "./setting";
 export * from "./slide";
 export * from "./status";
+export * from "./study";
 export * from "./table";
 export * from "./topic";
 export * from "./upload";

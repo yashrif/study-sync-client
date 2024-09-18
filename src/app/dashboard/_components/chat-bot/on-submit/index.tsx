@@ -3,7 +3,7 @@
 import randomColor from "randomcolor";
 import { useMemo } from "react";
 
-import { Commands } from "@/assets/data/dashboard/chatBot";
+import { Commands, StudyCommands } from "@/assets/data/dashboard/chatBot";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
 import {
   ChatBotActionType,
@@ -11,9 +11,12 @@ import {
   QuizRequestDb,
   QuizTypes,
 } from "@/types";
+import { replace } from "@/utils/string";
 import { useHandlers } from "../useHandlers";
+import useExplainConversation from "./useExplainConversation";
 import useFlashcardConversation from "./useFlashcardConversation";
 import usePlannerConversation from "./usePlannerConversation";
+import usePromptConversation from "./usePromptConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
 import useUploadConversation from "./useUploadsConversation";
@@ -28,12 +31,15 @@ export const useOnSubmit = () => {
     plannerServerRequestHandler,
     plannerDbRequestHandler,
     responseRequestHandler,
+    studyPromptResponseRequestHandler,
   } = useHandlers();
   const quizConversations = useQuizConversation();
   const flashcardConversations = useFlashcardConversation();
   const plannerConversations = usePlannerConversation();
   const responseConversations = useResponseConversation();
   const uploadConversation = useUploadConversation();
+  const explainConversation = useExplainConversation();
+  const promptConversation = usePromptConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -100,8 +106,8 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              uploadConversation.prompt(state.prompt),
-              uploadConversation.noUpload(),
+              promptConversation.prompt(state.prompt),
+              uploadConversation.noUploads(),
             ],
           });
         }
@@ -166,8 +172,8 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              uploadConversation.prompt(state.prompt),
-              uploadConversation.noUpload(),
+              promptConversation.prompt(state.prompt),
+              uploadConversation.noUploads(),
             ],
           });
         }
@@ -229,8 +235,62 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              uploadConversation.prompt(state.prompt),
-              uploadConversation.noUpload(),
+              promptConversation.prompt(state.prompt),
+              uploadConversation.noUploads(),
+            ],
+          });
+        }
+
+        break;
+
+      /* --------------------------------- Explain -------------------------------- */
+
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["explain"].toLowerCase()) &&
+        state.selectedUploads.length > 0:
+        const stripedPrompt = state.prompt
+          .replace(Commands["explain"], "")
+          .trim();
+
+        if (state.selectedUploads.length > 0 && stripedPrompt.length > 0) {
+          try {
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                promptConversation.prompt(state.prompt, Commands["explain"]),
+                explainConversation.crateStart(),
+              ],
+            });
+            state.setPrompt("");
+            const response = await studyPromptResponseRequestHandler({
+              data: {
+                query:
+                  StudyCommands.explain.instruction +
+                  replace(state.prompt, Commands["explain"], ""),
+                fileId: state.selectedUploads[0],
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: explainConversation.createSuccess(response),
+            });
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: explainConversation.createError(),
+            });
+          }
+        } else if (stripedPrompt.length === 0) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt),
+              promptConversation.noText(),
             ],
           });
         }
@@ -244,7 +304,7 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              responseConversations.responseCreatePrompt(state.prompt),
+              promptConversation.prompt(state.prompt),
               responseConversations.responseCrateStart(),
             ],
           });
