@@ -27,6 +27,30 @@ const useUploadConversation = () => {
     ),
   });
 
+  const invalidUpload = (): TConversation => ({
+    type: "response",
+    data: (
+      <div className="flex flex-col gap-1.5">
+        <div className="text-sm">
+          <IconExclamationCircle className="size-[14px] stroke-2 stroke-destructive inline-block pb-[1px] mr-1" />
+          <span>
+            The file you have selected is invalid. Please select a valid file to
+            continue.
+          </span>
+        </div>
+        <p className="text-xs text-gray-400">
+          <IconInfoCircle className="size-[13px] stroke-blue-500 stroke-2 inline-block pb-[1px] mr-0.5" />
+          You can select file by using the{" "}
+          <span className="text-white text-[11px] rounded-[7px] bg-primary px-0.5">
+            {Commands["select-file"]}
+          </span>{" "}
+          {""}
+          command.
+        </p>
+      </div>
+    ),
+  });
+
   const noUploads = (): TConversation => ({
     type: "response",
     data: (
@@ -74,6 +98,7 @@ const useUploadConversation = () => {
 
   return {
     noUpload,
+    invalidUpload,
     noUploads,
     onlyOneUpload,
   };

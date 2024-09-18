@@ -5,7 +5,9 @@ import randomColor from "randomcolor";
 import { useMemo } from "react";
 
 import { Commands, StudyCommands } from "@/assets/data/dashboard/chatBot";
+import { routes } from "@/assets/data/routes";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { usePath } from "@/hooks/usePath";
 import {
   ChatBotActionType,
   PlannerRequestDBPost,
@@ -26,7 +28,9 @@ import useUploadConversation from "./useUploadsConversation";
 
 export const useOnSubmit = () => {
   const params = useParams();
-  const { id } = params;
+  const id = typeof params.id === "string" ? params.id : params.id[0];
+
+  const { path } = usePath();
 
   const { state, dispatch } = useChatBotContext();
   const {
@@ -256,30 +260,38 @@ export const useOnSubmit = () => {
       case state.prompt
         .toLowerCase()
         .includes(Commands["explain"].toLowerCase()) &&
-        state.selectedUploads.length > 0:
+        (state.selectedUploads.length > 0 ||
+          path.includes(routes.dashboard.study.home)):
         const stripedExplainPrompt = state.prompt
           .replace(Commands["explain"], "")
           .trim();
 
         if (
-          state.selectedUploads.length > 0 &&
-          stripedExplainPrompt.length > 0
+          (state.selectedUploads.length > 0 &&
+            stripedExplainPrompt.length > 0) ||
+          (path.includes(routes.dashboard.study.home) &&
+            state.uploads.some((upload) => upload.id === id) &&
+            stripedExplainPrompt.length > 0)
         ) {
           try {
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
                 promptConversation.prompt(state.prompt, Commands["explain"]),
-                explainConversation.crateStart(),
+                explainConversation.crateStart(
+                  state.uploads.filter((item) => item.id === id)[0]
+                ),
               ],
             });
+
             state.setPrompt("");
+
             const response = await studyPromptResponseRequestHandler({
               data: {
                 query:
                   StudyCommands.explain.instruction +
                   replace(state.prompt, Commands["explain"], ""),
-                fileId: state.selectedUploads[0],
+                fileId: id || state.selectedUploads[0],
               },
               fetchType: "lazy",
               isReset: true,
@@ -290,11 +302,24 @@ export const useOnSubmit = () => {
             });
           } catch (err) {
             console.log(err);
+            state.setPrompt("");
             dispatch({
               type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
               payload: explainConversation.createError(),
             });
           }
+        } else if (
+          path.includes(routes.dashboard.study.home) &&
+          !state.uploads.some((upload) => upload.id === id)
+        ) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt),
+              uploadConversation.invalidUpload(),
+            ],
+          });
         } else if (stripedExplainPrompt.length === 0) {
           state.setPrompt("");
           dispatch({
