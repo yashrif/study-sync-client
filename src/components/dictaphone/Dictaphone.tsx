@@ -6,22 +6,43 @@ import {
   IconMicrophoneOff,
   IconSquareFilled,
 } from "@tabler/icons-react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { cva } from "class-variance-authority";
+import { useEffect, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import "regenerator-runtime/runtime";
 
 import IconButton from "@/components/button/IconButton";
+import { cn } from "@/lib/utils";
+import { Props } from "./type";
 
-type Props = {
-  setTranscript: Dispatch<SetStateAction<string>>;
-};
+const dictaphoneVariants = cva("size-9 p-0 rounded-full", {
+  variants: {
+    type: {
+      ready: "",
+      error: " pointer-events-none",
+    },
+    variant: {
+      default: "",
+      ghost: "hover:bg-transparent",
+    },
+    defaultValues: {
+      type: "ready",
+      variant: "default",
+    },
+  },
+});
 
-const DictaphoneComponent: React.FC<Props> = ({ setTranscript }) => {
+const DictaphoneComponent: React.FC<Props> = ({
+  setTranscript,
+  className,
+  iconPadding,
+}) => {
   const [isBrowser, setIsBrowser] = useState(false);
   const [hasMicrophoneAccess, setHasMicrophoneAccess] = useState(false);
-  const { transcript, listening } = useSpeechRecognition();
+  const [length, setLength] = useState(0);
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
 
   const startListening = () =>
     SpeechRecognition.startListening({ continuous: true });
@@ -48,8 +69,9 @@ const DictaphoneComponent: React.FC<Props> = ({ setTranscript }) => {
   }, [isBrowser]);
 
   useEffect(() => {
-    setTranscript(transcript);
-  }, [setTranscript, transcript]);
+    if (transcript.length > 0)
+      setTranscript((prev) => prev.slice(0, length) + transcript);
+  }, [length, setTranscript, transcript]);
 
   if (!isBrowser || !SpeechRecognition.browserSupportsSpeechRecognition()) {
     return (
@@ -57,7 +79,7 @@ const DictaphoneComponent: React.FC<Props> = ({ setTranscript }) => {
         contentType="icon-only"
         Icon={IconMicrophoneOff}
         variant={"ghost"}
-        className="size-9 rounded-full pointer-events-none"
+        className={cn(dictaphoneVariants({ className, type: "error" }))}
         iconClassName="size-6 stroke-destructive"
       />
     );
@@ -74,14 +96,40 @@ const DictaphoneComponent: React.FC<Props> = ({ setTranscript }) => {
           : IconMicrophoneOff
       }
       variant={listening ? "default" : "ghost"}
-      className="size-9 rounded-full"
-      iconClassName={listening ? "size-4 fill-white" : "size-6 stroke-primary"}
-      onClick={() => {
-        if (listening) {
-          stopListening();
-        } else {
-          startListening();
-        }
+      className={cn(
+        dictaphoneVariants({
+          className,
+          variant: listening ? "default" : "ghost",
+        })
+      )}
+      containerClassName="h-full w-full"
+      iconClassName={
+        listening
+          ? `h-full w-auto fill-white ${iconPadding ? `p-[${iconPadding}px]` : "p-1.5"}`
+          : "h-full w-auto stroke-primary hover:stroke-primary/75 transition-all duration-300"
+      }
+      // onClick={() => {
+      //   if (listening) {
+      //     stopListening();
+      //     resetTranscript();
+      //   } else {
+      //     setTranscript((prev) => {
+      //       setLength(prev.length);
+      //       return prev;
+      //     });
+      //     startListening();
+      //   }
+      // }}
+      onMouseDown={() => {
+        setTranscript((prev) => {
+          setLength(prev.length);
+          return prev;
+        });
+        startListening();
+      }}
+      onMouseUp={() => {
+        stopListening();
+        resetTranscript();
       }}
     />
   );

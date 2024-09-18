@@ -11,7 +11,7 @@ type Props = {
   upload: UploadShallow;
 };
 
-const BADGE_TITLE_MAX_LENGTH = 20;
+const BADGE_TITLE_MAX_LENGTH = 19;
 
 const UploadBadge: React.FC<Props> = ({ upload }) => {
   const {

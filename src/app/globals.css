@@ -282,7 +282,7 @@
   }
 
   .markdown > p {
-    @apply text-small pb-2;
+    @apply text-sm pb-2;
   }
 
   .markdown > ul {
@@ -295,6 +295,10 @@
 
   .markdown > li {
     @apply text-sm pb-2;
+  }
+
+  .markdown > li > p {
+    @apply text-sm;
   }
 
   .markdown > blockquote {

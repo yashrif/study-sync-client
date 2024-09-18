@@ -1,28 +1,37 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import randomColor from "randomcolor";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { useMemo } from "react";
 
-import { Commands } from "@/assets/data/dashboard/chatBot";
+import { Commands, StudyCommands } from "@/assets/data/dashboard/chatBot";
+import { routes } from "@/assets/data/routes";
 import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { usePath } from "@/hooks/usePath";
 import {
   ChatBotActionType,
   PlannerRequestDBPost,
   QuizRequestDb,
   QuizTypes,
 } from "@/types";
+import { replace } from "@/utils/string";
 import { useHandlers } from "../useHandlers";
+import useExplainConversation from "./useExplainConversation";
 import useFlashcardConversation from "./useFlashcardConversation";
 import usePlannerConversation from "./usePlannerConversation";
+import usePromptConversation from "./usePromptConversation";
+import useProvideExampleConversation from "./useProvideExampleConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
-
-type Props = {
-  text: string;
-  setText: Dispatch<SetStateAction<string>>;
-};
+import useSummarizeConversation from "./useSummarizeConversation";
+import useUploadConversation from "./useUploadsConversation";
 
 export const useOnSubmit = () => {
+  const params = useParams();
+  const id = typeof params.id === "string" ? params.id : params.id[0];
+
+  const { path } = usePath();
+
   const { state, dispatch } = useChatBotContext();
   const {
     quizServerRequestHandler,
@@ -32,11 +41,17 @@ export const useOnSubmit = () => {
     plannerServerRequestHandler,
     plannerDbRequestHandler,
     responseRequestHandler,
+    studyPromptResponseRequestHandler,
   } = useHandlers();
   const quizConversations = useQuizConversation();
   const flashcardConversations = useFlashcardConversation();
   const plannerConversations = usePlannerConversation();
   const responseConversations = useResponseConversation();
+  const uploadConversation = useUploadConversation();
+  const explainConversation = useExplainConversation();
+  const promptConversation = usePromptConversation();
+  const summarizeConversation = useSummarizeConversation();
+  const provideExampleConversation = useProvideExampleConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -46,14 +61,16 @@ export const useOnSubmit = () => {
 
   /* -------------------------------- On Submit ------------------------------- */
 
-  const onSubmit = async ({ text, setText }: Props) => {
+  const onSubmit = async () => {
     switch (true) {
       /* ---------------------------------- quiz ---------------------------------- */
 
-      case text.toLowerCase().includes(Commands["create-quiz"].toLowerCase()):
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["create-quiz"].toLowerCase()):
+        state.setPrompt("");
         if (state.selectedUploads.length > 0) {
           try {
-            setText("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -87,7 +104,7 @@ export const useOnSubmit = () => {
               if (dbResponse)
                 dispatch({
                   type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-                  payload: quizConversations.quizCreateSuccess(dbResponse.id),
+                  payload: quizConversations.quizCreateSuccess(dbResponse),
                 });
             }
           } catch (err) {
@@ -97,17 +114,26 @@ export const useOnSubmit = () => {
               payload: quizConversations.quizCreateError(),
             });
           }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt),
+              uploadConversation.noUploads(),
+            ],
+          });
         }
+
         break;
 
       /* -------------------------------- flashcard ------------------------------- */
 
-      case text
+      case state.prompt
         .toLowerCase()
         .includes(Commands["create-flashcard"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
-            setText("");
+            state.setPrompt("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -142,7 +168,9 @@ export const useOnSubmit = () => {
 
               dispatch({
                 type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-                payload: flashcardConversations.flashcardCreateSuccess(),
+                payload: flashcardConversations.flashcardCreateSuccess(
+                  serverResponse.cqs.length
+                ),
               });
             }
           } catch (err) {
@@ -152,17 +180,26 @@ export const useOnSubmit = () => {
               payload: flashcardConversations.flashcardCreateError(),
             });
           }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt),
+              uploadConversation.noUploads(),
+            ],
+          });
         }
+
         break;
 
       /* --------------------------------- planner -------------------------------- */
 
-      case text
+      case state.prompt
         .toLowerCase()
         .includes(Commands["create-planner"].toLowerCase()):
         if (state.selectedUploads.length > 0) {
           try {
-            setText("");
+            state.setPrompt("");
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
@@ -195,9 +232,8 @@ export const useOnSubmit = () => {
               if (dbResponse)
                 dispatch({
                   type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
-                  payload: plannerConversations.plannerCreateSuccess(
-                    dbResponse.id
-                  ),
+                  payload:
+                    plannerConversations.plannerCreateSuccess(dbResponse),
                 });
             }
           } catch (err) {
@@ -207,7 +243,253 @@ export const useOnSubmit = () => {
               payload: plannerConversations.plannerCreateError(),
             });
           }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt),
+              uploadConversation.noUploads(),
+            ],
+          });
         }
+
+        break;
+
+      /* --------------------------------- Explain -------------------------------- */
+
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["explain"].toLowerCase()) &&
+        (state.selectedUploads.length > 0 ||
+          path.includes(routes.dashboard.study.home)):
+        const stripedExplainPrompt = state.prompt
+          .replace(Commands["explain"], "")
+          .trim();
+
+        if (
+          (state.selectedUploads.length > 0 &&
+            stripedExplainPrompt.length > 0) ||
+          (path.includes(routes.dashboard.study.home) &&
+            state.uploads.some((upload) => upload.id === id) &&
+            stripedExplainPrompt.length > 0)
+        ) {
+          try {
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                promptConversation.prompt(state.prompt, Commands["explain"]),
+                explainConversation.crateStart(
+                  state.uploads.filter((item) => item.id === id)[0]
+                ),
+              ],
+            });
+
+            state.setPrompt("");
+
+            const response = await studyPromptResponseRequestHandler({
+              data: {
+                query:
+                  StudyCommands.explain.instruction +
+                  replace(state.prompt, Commands["explain"], ""),
+                fileId: id || state.selectedUploads[0],
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: explainConversation.createSuccess(response),
+            });
+          } catch (err) {
+            console.log(err);
+            state.setPrompt("");
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: explainConversation.createError(),
+            });
+          }
+        } else if (
+          path.includes(routes.dashboard.study.home) &&
+          !state.uploads.some((upload) => upload.id === id)
+        ) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt, Commands["explain"]),
+              uploadConversation.invalidUpload(),
+            ],
+          });
+        } else if (stripedExplainPrompt.length === 0) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt, Commands["explain"]),
+              promptConversation.noText(),
+            ],
+          });
+        }
+
+        break;
+
+      /* -------------------------------- Summarize ------------------------------- */
+
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["summarize"].toLowerCase()) &&
+        (state.selectedUploads.length > 0 ||
+          path.includes(routes.dashboard.study.home)):
+        const stripedSummarizePrompt = state.prompt
+          .replace(Commands["summarize"], "")
+          .trim();
+
+        if (
+          (state.selectedUploads.length > 0 &&
+            stripedSummarizePrompt.length > 0) ||
+          (path.includes(routes.dashboard.study.home) &&
+            state.uploads.some((upload) => upload.id === id) &&
+            stripedSummarizePrompt.length > 0)
+        ) {
+          try {
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                promptConversation.prompt(state.prompt, Commands["summarize"]),
+                summarizeConversation.crateStart(
+                  state.uploads.filter((item) => item.id === id)[0]
+                ),
+              ],
+            });
+            state.setPrompt("");
+            const response = await studyPromptResponseRequestHandler({
+              data: {
+                query:
+                  StudyCommands.summarize.instruction +
+                  replace(state.prompt, Commands["summarize"], ""),
+                fileId: id || state.selectedUploads[0],
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: summarizeConversation.createSuccess(response),
+            });
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: summarizeConversation.createError(),
+            });
+          }
+        } else if (
+          path.includes(routes.dashboard.study.home) &&
+          !state.uploads.some((upload) => upload.id === id)
+        ) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt, Commands["summarize"]),
+              uploadConversation.invalidUpload(),
+            ],
+          });
+        } else if (stripedSummarizePrompt.length === 0) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt, Commands["summarize"]),
+              promptConversation.noText(),
+            ],
+          });
+        }
+
+        break;
+
+      /* ----------------------------- Provide Example ---------------------------- */
+
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["provide-example"].toLowerCase()) &&
+        (state.selectedUploads.length > 0 ||
+          path.includes(routes.dashboard.study.home)):
+        const stripedProvideExamplePrompt = state.prompt
+          .replace(Commands["provide-example"], "")
+          .trim();
+
+        if (
+          (state.selectedUploads.length > 0 &&
+            stripedProvideExamplePrompt.length > 0) ||
+          (path.includes(routes.dashboard.study.home) &&
+            state.uploads.some((upload) => upload.id === id) &&
+            stripedProvideExamplePrompt.length > 0)
+        ) {
+          try {
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                promptConversation.prompt(
+                  state.prompt,
+                  Commands["provide-example"]
+                ),
+                provideExampleConversation.crateStart(
+                  state.uploads.filter((item) => item.id === id)[0]
+                ),
+              ],
+            });
+            state.setPrompt("");
+            const response = await studyPromptResponseRequestHandler({
+              data: {
+                query:
+                  StudyCommands.provideExample.instruction +
+                  replace(state.prompt, Commands["provide-example"], ""),
+                fileId: id || state.selectedUploads[0],
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: provideExampleConversation.createSuccess(response),
+            });
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: provideExampleConversation.createError(),
+            });
+          }
+        } else if (
+          path.includes(routes.dashboard.study.home) &&
+          !state.uploads.some((upload) => upload.id === id)
+        ) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(
+                state.prompt,
+                Commands["provide-example"]
+              ),
+              uploadConversation.invalidUpload(),
+            ],
+          });
+        } else if (stripedProvideExamplePrompt.length === 0) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(
+                state.prompt,
+                Commands["provide-example"]
+              ),
+              promptConversation.noText(),
+            ],
+          });
+        }
+
         break;
 
       /* -------------------------------- Response -------------------------------- */
@@ -217,15 +499,15 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              responseConversations.responseCreatePrompt(text),
+              promptConversation.prompt(state.prompt),
               responseConversations.responseCrateStart(),
             ],
           });
 
-          setText("");
+          state.setPrompt("");
 
           const response = await responseRequestHandler({
-            data: text,
+            data: state.prompt,
             fetchType: "lazy",
             isReset: true,
           });

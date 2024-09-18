@@ -18,15 +18,6 @@ const useResponseConversation = () => {
     [selectedUploads, uploads]
   );
 
-  const responseCreatePrompt = (text: string): TConversation => ({
-    type: "prompt",
-    data: (
-      <div className="flex flex-col gap-1">
-        <p className="text-sm">{text}</p>
-      </div>
-    ),
-  });
-
   const responseCrateStart = (): TConversation => ({
     type: "response",
     data: (
@@ -57,7 +48,6 @@ const useResponseConversation = () => {
   });
 
   return {
-    responseCreatePrompt,
     responseCrateStart,
     responseCreateSuccess,
     responseCreateError,

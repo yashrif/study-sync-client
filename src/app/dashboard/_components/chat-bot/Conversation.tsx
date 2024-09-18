@@ -21,7 +21,7 @@ const Conversation: React.FC = () => {
     <ScrollArea className="h-full pb-0">
       <div className="h-full flex flex-col justify-end px-4">
         <div
-          className="pb-4 flex flex-col gap-4"
+          className="pb-4 flex flex-col gap-6"
           style={{
             height: conversation.length > 0 ? "auto" : "100%",
           }}
@@ -40,19 +40,22 @@ const Conversation: React.FC = () => {
               </div>
             ))
           ) : (
-            <div className="h-full flex flex-col gap-4 items-center justify-center px-8">
-              <div className="size-16 bg-accent flex items-center justify-center rounded-full">
+            <div className="h-full flex flex-col items-center justify-center px-8">
+              <div className="size-16 bg-accent flex items-center justify-center rounded-full mb-4">
                 <IconMessage className="size-8 stroke-primary stroke-2" />
               </div>
-              <span className="text-lg text-primary font-medium text-center leading-7">
+              <p className="text-lg text-primary font-medium text-center leading-6 mb-4">
                 Start a conversation with the bot by typing in the message box
                 below.
-              </span>
+              </p>
+              <p className="text-base text-center text-muted-foreground">
+                Type / to see a list of available commands.
+              </p>
             </div>
           )}
         </div>
         {filteredUploads.length > 0 && (
-          <div className="sticky bottom-0 inset-0 pt-2 bg-background flex flex-wrap-reverse gap-x-2 gap-y-1.5">
+          <div className="sticky bottom-0 inset-0 pt-2 bg-inherit flex flex-wrap-reverse gap-x-2 gap-y-1.5">
             {filteredUploads.map((upload) => (
               <UploadBadge key={upload.id} upload={upload} />
             ))}

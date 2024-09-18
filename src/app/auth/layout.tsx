@@ -16,7 +16,7 @@ const AuthLayout: React.FC<
   return (
     <div className="w-full h-screen flex justify-center items-center p-12 bg-background">
       <div className="relative max-w-[1000px] w-full rounded-lg overflow-hidden">
-        <div className="absolute inset-0 bg-auth-bg bg-cover object-cover bg-center"></div>
+        <div className="absolute inset-0 bg-auth-bg bg-cover object-cover bg-center" />
         <>
           <Link
             href={routes.home.home}

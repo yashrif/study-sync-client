@@ -11,7 +11,6 @@ import { api, downloadFile } from "@/assets/data/api/ai";
 import { indexDialog } from "@/assets/data/dashboard/study";
 import IconButton from "@/components/button/IconButton";
 import { CheckmarkAnimated } from "@/components/icons";
-import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import {
   Dialog,
   DialogContent,
@@ -19,18 +18,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchDataState, useFetchState } from "@/hooks/fetchData";
 import { useUploadsContext } from "@/hooks/useUploadsContext";
-import {
-  FetchActionType,
-  Preference,
-  Status,
-  Upload,
-  UploadsActionType,
-} from "@/types";
+import { FetchActionType, Preference, Status, Upload } from "@/types";
 import { dateFormatter } from "@/utils/dateFormatter";
-import ChatAI from "./_components/ChatAI";
-import ChatResponse from "./_components/ChatResponse";
 
 type Props = {
   params: {
@@ -42,9 +34,12 @@ const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showDialog, setShowDialog] = useState(false);
   const {
-    state: { showChatResponse, uploads },
+    state: { showChatResponse },
     dispatch,
   } = useUploadsContext();
+  const {
+    state: { setPrompt },
+  } = useChatBotContext();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -62,24 +57,18 @@ const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
           baseUrl: `${window.location.protocol}//${window.location.host}/`,
         });
 
-        // @ts-ignore
-        instance.addEventListener("textSelection.change", (textSelection) => {
-          if (textSelection)
-            textSelection.getText().then((text: any) => {
-              dispatch({
-                type: UploadsActionType.SET_SELECTED_TEXT,
-                payload: text,
+        instance.addEventListener(
+          "textSelection.change",
+          (textSelection: any) => {
+            if (textSelection)
+              textSelection.getText().then((text: string) => {
+                setPrompt((prev) => (prev.endsWith(text) ? prev : prev + text));
               });
-            });
-          else
-            dispatch({
-              type: UploadsActionType.SET_SELECTED_TEXT,
-              payload: "",
-            });
-        });
+          }
+        );
       });
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, setPrompt]);
 
   useFetchDataState<null, Preference>({
     apiCall: useCallback(
@@ -112,101 +101,91 @@ const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
         className="h-screen w-full absolute top-0 right-0"
       />
 
-      {status !== Status.PENDING && status !== Status.IDLE ? (
-        showDialog ? (
-          <>
-            <Dialog defaultOpen>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle>{indexDialog.title}</DialogTitle>
-                  <DialogDescription>
-                    {indexDialog.description}
-                  </DialogDescription>
-                </DialogHeader>
+      {showDialog && (
+        <>
+          <Dialog defaultOpen>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>{indexDialog.title}</DialogTitle>
+                <DialogDescription>{indexDialog.description}</DialogDescription>
+              </DialogHeader>
 
-                <div className="flex flex-col gap-6 mt-2">
-                  <div className="flex flex-col gap-1.5">
-                    {[
-                      { label: "id", value: upload?.id },
-                      { label: "name", value: upload?.name },
-                      {
-                        label: "Create Date",
-                        value: dateFormatter(upload?.createDate || ""),
-                      },
-                    ].map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex gap-2 items-center text-sm"
-                      >
-                        <span className="font-semibold capitalize">
-                          {item.label}:{" "}
-                        </span>
-                        <span className="line-clamp-1">{item.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <IconButton
-                    size={"sm"}
-                    status={state.status}
-                    isAlwaysIcons
-                    iconClassName="size-4"
-                    className="mr-auto"
-                    contents={{
-                      [Status.IDLE]: {
-                        type: "icon-content",
-                        Icon: IconRefresh,
-                        content: indexDialog.button,
-                      },
-                      [Status.SUCCESS]: {
-                        type: "icon-only",
-                        Icon: CheckmarkAnimated,
-                      },
-                      [Status.ERROR]: {
-                        type: "icon-only",
-                        Icon: IconXboxX,
-                      },
-                    }}
-                    onClick={async () => {
-                      try {
-                        indexDispatch({
-                          type: FetchActionType.FETCH_START,
-                        });
-                        await studySyncServer.post(
-                          serverEndpoints.index,
-                          upload?.name
-                        );
-                        await studySyncDB.patch(
-                          `${dbEndpoints.uploads}/${upload?.id}`,
-                          {
-                            isIndexed: true,
-                          }
-                        );
-                        indexDispatch({
-                          type: FetchActionType.FETCH_SUCCESS,
-                          payload: { ...upload, isIndexed: true },
-                        });
-                        setTimeout(() => {
-                          setShowDialog(false);
-                        }, 2500);
-                      } catch (err) {
-                        console.log(err);
-                        indexDispatch({
-                          type: FetchActionType.FETCH_ERROR,
-                        });
-                      }
-                    }}
-                  />
+              <div className="flex flex-col gap-6 mt-2">
+                <div className="flex flex-col gap-1.5">
+                  {[
+                    { label: "id", value: upload?.id },
+                    { label: "name", value: upload?.name },
+                    {
+                      label: "Create Date",
+                      value: dateFormatter(upload?.createDate || ""),
+                    },
+                  ].map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex gap-2 items-center text-sm"
+                    >
+                      <span className="font-semibold capitalize">
+                        {item.label}:{" "}
+                      </span>
+                      <span className="line-clamp-1">{item.value}</span>
+                    </div>
+                  ))}
                 </div>
-              </DialogContent>
-            </Dialog>
-          </>
-        ) : (
-          <div className="absolute bottom-0 left-0 right-0  z-10 flex justify-center">
-            {showChatResponse ? <ChatResponse /> : <ChatAI />}
-          </div>
-        )
-      ) : (
-        <SpinnerContainer containerClassName="absolute h-28 bottom-0 left-0 right-0  z-10 flex justify-center" />
+                <IconButton
+                  size={"sm"}
+                  status={state.status}
+                  isAlwaysIcons
+                  iconClassName="size-4"
+                  className="mr-auto"
+                  contents={{
+                    [Status.IDLE]: {
+                      type: "icon-content",
+                      Icon: IconRefresh,
+                      content: indexDialog.button,
+                    },
+                    [Status.SUCCESS]: {
+                      type: "icon-only",
+                      Icon: CheckmarkAnimated,
+                    },
+                    [Status.ERROR]: {
+                      type: "icon-only",
+                      Icon: IconXboxX,
+                    },
+                  }}
+                  onClick={async () => {
+                    try {
+                      indexDispatch({
+                        type: FetchActionType.FETCH_START,
+                      });
+                      await studySyncServer.post(
+                        serverEndpoints.index,
+                        upload?.name
+                      );
+                      await studySyncDB.patch(
+                        `${dbEndpoints.uploads}/${upload?.id}`,
+                        {
+                          isIndexed: true,
+                        }
+                      );
+                      indexDispatch({
+                        type: FetchActionType.FETCH_SUCCESS,
+                        payload: { ...upload, isIndexed: true },
+                      });
+                      setTimeout(() => {
+                        setShowDialog(false);
+                      }, 2500);
+                    } catch (err) {
+                      console.log(err);
+                      indexDispatch({
+                        type: FetchActionType.FETCH_ERROR,
+                      });
+                    }
+                  }}
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        </>
       )}
     </>
   );
