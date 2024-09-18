@@ -316,7 +316,7 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              promptConversation.prompt(state.prompt),
+              promptConversation.prompt(state.prompt, Commands["explain"]),
               uploadConversation.invalidUpload(),
             ],
           });
@@ -325,7 +325,7 @@ export const useOnSubmit = () => {
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              promptConversation.prompt(state.prompt),
+              promptConversation.prompt(state.prompt, Commands["explain"]),
               promptConversation.noText(),
             ],
           });
@@ -338,21 +338,27 @@ export const useOnSubmit = () => {
       case state.prompt
         .toLowerCase()
         .includes(Commands["summarize"].toLowerCase()) &&
-        state.selectedUploads.length > 0:
+        (state.selectedUploads.length > 0 ||
+          path.includes(routes.dashboard.study.home)):
         const stripedSummarizePrompt = state.prompt
           .replace(Commands["summarize"], "")
           .trim();
 
         if (
-          state.selectedUploads.length > 0 &&
-          stripedSummarizePrompt.length > 0
+          (state.selectedUploads.length > 0 &&
+            stripedSummarizePrompt.length > 0) ||
+          (path.includes(routes.dashboard.study.home) &&
+            state.uploads.some((upload) => upload.id === id) &&
+            stripedSummarizePrompt.length > 0)
         ) {
           try {
             dispatch({
               type: ChatBotActionType.ADD_CONVERSATION,
               payload: [
                 promptConversation.prompt(state.prompt, Commands["summarize"]),
-                summarizeConversation.crateStart(),
+                summarizeConversation.crateStart(
+                  state.uploads.filter((item) => item.id === id)[0]
+                ),
               ],
             });
             state.setPrompt("");
@@ -361,7 +367,7 @@ export const useOnSubmit = () => {
                 query:
                   StudyCommands.summarize.instruction +
                   replace(state.prompt, Commands["summarize"], ""),
-                fileId: state.selectedUploads[0],
+                fileId: id || state.selectedUploads[0],
               },
               fetchType: "lazy",
               isReset: true,
@@ -377,12 +383,24 @@ export const useOnSubmit = () => {
               payload: summarizeConversation.createError(),
             });
           }
+        } else if (
+          path.includes(routes.dashboard.study.home) &&
+          !state.uploads.some((upload) => upload.id === id)
+        ) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt, Commands["summarize"]),
+              uploadConversation.invalidUpload(),
+            ],
+          });
         } else if (stripedSummarizePrompt.length === 0) {
           state.setPrompt("");
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              promptConversation.prompt(state.prompt),
+              promptConversation.prompt(state.prompt, Commands["summarize"]),
               promptConversation.noText(),
             ],
           });
@@ -395,14 +413,18 @@ export const useOnSubmit = () => {
       case state.prompt
         .toLowerCase()
         .includes(Commands["provide-example"].toLowerCase()) &&
-        state.selectedUploads.length > 0:
+        (state.selectedUploads.length > 0 ||
+          path.includes(routes.dashboard.study.home)):
         const stripedProvideExamplePrompt = state.prompt
           .replace(Commands["provide-example"], "")
           .trim();
 
         if (
-          state.selectedUploads.length > 0 &&
-          stripedProvideExamplePrompt.length > 0
+          (state.selectedUploads.length > 0 &&
+            stripedProvideExamplePrompt.length > 0) ||
+          (path.includes(routes.dashboard.study.home) &&
+            state.uploads.some((upload) => upload.id === id) &&
+            stripedProvideExamplePrompt.length > 0)
         ) {
           try {
             dispatch({
@@ -412,7 +434,9 @@ export const useOnSubmit = () => {
                   state.prompt,
                   Commands["provide-example"]
                 ),
-                provideExampleConversation.crateStart(),
+                provideExampleConversation.crateStart(
+                  state.uploads.filter((item) => item.id === id)[0]
+                ),
               ],
             });
             state.setPrompt("");
@@ -421,7 +445,7 @@ export const useOnSubmit = () => {
                 query:
                   StudyCommands.provideExample.instruction +
                   replace(state.prompt, Commands["provide-example"], ""),
-                fileId: state.selectedUploads[0],
+                fileId: id || state.selectedUploads[0],
               },
               fetchType: "lazy",
               isReset: true,
@@ -437,12 +461,30 @@ export const useOnSubmit = () => {
               payload: provideExampleConversation.createError(),
             });
           }
+        } else if (
+          path.includes(routes.dashboard.study.home) &&
+          !state.uploads.some((upload) => upload.id === id)
+        ) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(
+                state.prompt,
+                Commands["provide-example"]
+              ),
+              uploadConversation.invalidUpload(),
+            ],
+          });
         } else if (stripedProvideExamplePrompt.length === 0) {
           state.setPrompt("");
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
             payload: [
-              promptConversation.prompt(state.prompt),
+              promptConversation.prompt(
+                state.prompt,
+                Commands["provide-example"]
+              ),
               promptConversation.noText(),
             ],
           });
