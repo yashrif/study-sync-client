@@ -17,6 +17,7 @@ import useExplainConversation from "./useExplainConversation";
 import useFlashcardConversation from "./useFlashcardConversation";
 import usePlannerConversation from "./usePlannerConversation";
 import usePromptConversation from "./usePromptConversation";
+import useProvideExampleConversation from "./useProvideExampleConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
 import useSummarizeConversation from "./useSummarizeConversation";
@@ -42,6 +43,7 @@ export const useOnSubmit = () => {
   const explainConversation = useExplainConversation();
   const promptConversation = usePromptConversation();
   const summarizeConversation = useSummarizeConversation();
+  const provideExampleConversation = useProvideExampleConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -347,6 +349,66 @@ export const useOnSubmit = () => {
             });
           }
         } else if (stripedSummarizePrompt.length === 0) {
+          state.setPrompt("");
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              promptConversation.prompt(state.prompt),
+              promptConversation.noText(),
+            ],
+          });
+        }
+
+        break;
+
+      /* ----------------------------- Provide Example ---------------------------- */
+
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["provide-example"].toLowerCase()) &&
+        state.selectedUploads.length > 0:
+        const stripedProvideExamplePrompt = state.prompt
+          .replace(Commands["provide-example"], "")
+          .trim();
+
+        if (
+          state.selectedUploads.length > 0 &&
+          stripedProvideExamplePrompt.length > 0
+        ) {
+          try {
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                promptConversation.prompt(
+                  state.prompt,
+                  Commands["provide-example"]
+                ),
+                provideExampleConversation.crateStart(),
+              ],
+            });
+            state.setPrompt("");
+            const response = await studyPromptResponseRequestHandler({
+              data: {
+                query:
+                  StudyCommands.provideExample.instruction +
+                  replace(state.prompt, Commands["provide-example"], ""),
+                fileId: state.selectedUploads[0],
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: provideExampleConversation.createSuccess(response),
+            });
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: provideExampleConversation.createError(),
+            });
+          }
+        } else if (stripedProvideExamplePrompt.length === 0) {
           state.setPrompt("");
           dispatch({
             type: ChatBotActionType.ADD_CONVERSATION,
