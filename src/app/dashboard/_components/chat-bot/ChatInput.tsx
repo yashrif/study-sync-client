@@ -1,10 +1,8 @@
 "use client";
 
 import { IconSend2 } from "@tabler/icons-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import studySyncDB from "@/api/studySyncDB";
-import { dbEndpoints } from "@/assets/data/api";
 import {
   Commands as ECommands,
   additionalCommands,
@@ -16,9 +14,8 @@ import IconButton from "@/components/button/IconButton";
 import Dictaphone from "@/components/dictaphone";
 import { Textarea } from "@/components/ui/textarea";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
-import { useFetchData } from "@/hooks/fetchData";
 import { usePath } from "@/hooks/usePath";
-import { ChatBotActionType, Status, UploadShallow } from "@/types";
+import { ChatBotActionType, Status } from "@/types";
 import { findFirstSubstring, replace } from "@/utils/string";
 import Commands from "./Commands";
 import Conversation from "./Conversation";
@@ -34,11 +31,6 @@ const ChatBotInput = () => {
     dispatch,
   } = useChatBotContext();
   const { onSubmit } = useOnSubmit();
-
-  useFetchData<null, UploadShallow[]>({
-    apiCall: useCallback(() => studySyncDB.get(dbEndpoints.uploads), []),
-    dispatch,
-  });
 
   /* ------------------------------ Update state ------------------------------ */
 

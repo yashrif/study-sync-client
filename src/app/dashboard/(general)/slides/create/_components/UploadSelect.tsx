@@ -36,9 +36,9 @@ const UploadSelect: React.FC = () => {
       setOptions(
         _.chain(uploads)
           .filter((item) => item.isIndexed)
-          .uniqBy("name")
+          .uniqBy("id")
           .map((item) => ({
-            value: item.name,
+            value: item.id,
             label: item.title,
           }))
           .value()

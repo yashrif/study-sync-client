@@ -28,9 +28,27 @@ export type SlideResponseServer = string;
 
 /* ----------------------------------- DB ----------------------------------- */
 
+export type SlideRequestDb = {
+  content: string;
+  uploads: UploadShallow[] | null;
+};
+
+export type SlideResponseDb = {
+  id: string;
+  createDate: string;
+  content: string;
+  uploads: UploadShallow[];
+};
+
+export type Slide = SlideResponseDb;
+
 /* ---------------------------------- Slide --------------------------------- */
 
-export type Slide = {};
+export type SlideShallow = {
+  id: string;
+  createDate: string;
+  content: string;
+};
 
 /* ------------------------------ Slide Create ------------------------------ */
 
