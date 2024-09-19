@@ -44,9 +44,9 @@
     "filepond-plugin-image-preview": "^4.6.12",
     "framer-motion": "^11.2.12",
     "js-cookie": "^3.0.5",
-    "jspdf": "^2.5.2",
     "lodash": "^4.17.21",
     "lucide-react": "^0.396.0",
+    "marked": "^14.1.2",
     "next": "14.2.4",
     "next-nprogress-bar": "^2.3.12",
     "pspdfkit": "^2024.5.0",
@@ -67,6 +67,7 @@
   "devDependencies": {
     "@react-pdf/renderer": "^3.4.4",
     "@types/file-saver": "^2.0.7",
+    "@types/html-to-text": "^9.0.4",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.5",
     "@types/node": "^20",
