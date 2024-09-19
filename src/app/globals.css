@@ -349,25 +349,29 @@
 
   /* ---------------------------------- large --------------------------------- */
 
+  .markdown-lg {
+    @apply max-w-[940px] mx-auto;
+  }
+
   .markdown-lg > h1 {
-    @apply !font-bold !font-secondary !text-[44px] !text-center !leading-[1.2] !-tracking-[0.5px] !text-primary;
+    @apply !font-bold !font-secondary !text-[44px] !text-center !leading-[1.2] !-tracking-[0.5px] !text-primary mb-6;
   }
 
   .markdown-lg > h2 {
-    @apply !font-bold !font-secondary !text-[30px] !leading-[1.2] !-tracking-[0.5px] !text-primary;
+    @apply !font-bold !font-secondary !text-[30px] !leading-[1.2] !-tracking-[0.5px] !text-primary mb-6;
   }
 
   .markdown-lg > h3 {
-    @apply !font-bold !font-secondary !text-2xl !leading-[1.2] !-tracking-[0.5px] !text-primary;
+    @apply !font-bold !font-secondary !text-2xl !leading-[1.2] !-tracking-[0.5px] !text-primary mb-6;
   }
 
   .markdown-lg > h4 {
-    @apply text-xl font-medium font-secondary !text-primary;
+    @apply text-xl font-medium font-secondary !text-primary mb-4;
   }
 
   .markdown-lg > h5,
   .markdown-lg > h6 {
-    @apply text-lg font-medium font-secondary !text-primary;
+    @apply text-lg font-medium font-secondary !text-primary mb-4;
   }
 
   .markdown-lg > p {

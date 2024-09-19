@@ -6,10 +6,15 @@ import {
   IconFileTypePdf,
   IconPrompt,
   IconSettings,
+  IconTextSize,
   IconWorldSearch,
 } from "@tabler/icons-react";
 
 import { IconList } from "@/types";
+
+export const defaultValues = {
+  title: "Untitled",
+};
 
 export const home: {
   create: IconList;
@@ -78,6 +83,16 @@ export enum QueryParams {
 }
 
 export const preview = {
+  fields: {
+    title: {
+      id: "title",
+      label: "Title",
+      type: "text",
+      placeholder: defaultValues.title,
+      required: true,
+      Icon: IconTextSize,
+    },
+  },
   buttons: {
     save: {
       title: "Save",
