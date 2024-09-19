@@ -1,7 +1,9 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 import Markdown from "react-markdown";
+import jsPDF from "jspdf";
+// import "jspdf-autotable";
 
 import studySyncDB from "@/api/studySyncDB";
 import PageHeading from "@/app/dashboard/_components/PageHeading";
@@ -20,12 +22,43 @@ type Props = {
 };
 
 const Slide: React.FC<Props> = ({ params: { id } }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const printRef = useRef<HTMLDivElement>(null);
+
   const { state } = useFetchDataState<null, TSlide>({
     apiCall: useCallback(
       () => studySyncDB.get(`${dbEndpoints.slides}/${id}`),
       [id]
     ),
   });
+
+  const handleExport = async () => {
+    setLoading(true);
+
+    if (printRef.current) {
+      try {
+        const doc = new jsPDF("p", "mm", "a4");
+        const element = printRef.current;
+
+        if (element) {
+          // Extract text from the HTML element
+          const text = element.innerText || "";
+
+          // Add the text to the PDF
+          doc.text(text, 10, 10);
+
+          // Save the PDF
+          doc.save("document.pdf");
+        }
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -57,8 +90,13 @@ const Slide: React.FC<Props> = ({ params: { id } }) => {
           spinnerClassName="size-10"
         />
       ) : (
-        <Markdown className="markdown-lg">{state.data?.content}</Markdown>
+        <div ref={printRef}>
+          <Markdown className="markdown-lg">{state.data?.content}</Markdown>
+        </div>
       )}
+      <button onClick={handleExport} disabled={loading}>
+        {loading ? "Generating..." : "Export to PDF"}
+      </button>
     </div>
   );
 };
