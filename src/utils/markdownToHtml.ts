@@ -1,5 +1,5 @@
-import { marked } from 'marked';
+import { marked } from "marked";
 
 export const convertMarkdownToHtml = (markdown: string): string => {
-  return marked(markdown);
+  return marked(markdown) as string;
 };

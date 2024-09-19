@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { IconFileTypePdf } from "@tabler/icons-react";
+import { useCallback } from "react";
 import Markdown from "react-markdown";
 
 import studySyncDB from "@/api/studySyncDB";
@@ -11,8 +12,7 @@ import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import { Badge } from "@/components/ui/badge";
 import { useFetchDataState } from "@/hooks/fetchData";
 import { Status, Slide as TSlide } from "@/types";
-import { IconFileTypePdf } from "@tabler/icons-react";
-import ExportToPdf from "./RenderPdf";
+import ExportToPdf from "./PdfExporter";
 
 type Props = {
   params: {
@@ -34,8 +34,15 @@ const Slide: React.FC<Props> = ({ params: { id } }) => {
         title={state.data?.name || home.saved.title}
         Icon={home.saved.Icon}
         description={state.data?.name ? "" : home.saved.description}
-        className="flex flex-col !items-start gap-2"
+        className="grid grid-cols-[auto,auto] justify-between gap-y-2"
       >
+        <div className="row-span-2 h-full flex items-end">
+          <ExportToPdf
+            content={state.data?.content || ""}
+            fileName={state.data?.name}
+            disabled={state.status === Status.PENDING}
+          />
+        </div>
         {state.data?.uploads && (
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {state.data.uploads.map((upload) => (
@@ -60,8 +67,6 @@ const Slide: React.FC<Props> = ({ params: { id } }) => {
       ) : (
         <Markdown className="markdown-lg">{state.data?.content}</Markdown>
       )}
-
-      <ExportToPdf content={state.data?.content || ""} />
     </div>
   );
 };
