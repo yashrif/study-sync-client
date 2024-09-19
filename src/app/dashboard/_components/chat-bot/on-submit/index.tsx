@@ -6,7 +6,7 @@ import { useMemo } from "react";
 
 import { Commands, StudyCommands } from "@/assets/data/dashboard/chatBot";
 import { routes } from "@/assets/data/routes";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { usePath } from "@/hooks/usePath";
 import {
   ChatBotActionType,
@@ -28,7 +28,11 @@ import useUploadConversation from "./useUploadsConversation";
 
 export const useOnSubmit = () => {
   const params = useParams();
-  const id = typeof params.id === "string" ? params.id : params?.id[0] || "";
+  const id = params?.id
+    ? typeof params.id === "string"
+      ? params.id
+      : params?.id[0]
+    : "";
 
   const { path } = usePath();
 

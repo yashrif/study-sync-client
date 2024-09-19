@@ -18,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { useFetchDataState, useFetchState } from "@/hooks/fetchData";
 import { useUploadsContext } from "@/hooks/useUploadsContext";
 import { FetchActionType, Preference, Status, Upload } from "@/types";

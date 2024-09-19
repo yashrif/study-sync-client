@@ -267,7 +267,29 @@
     @apply !ring-offset-0 !ring-0;
   }
 
-  /* -------------------------------- markdown -------------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                                  markdown                                  */
+  /* -------------------------------------------------------------------------- */
+
+  /* --------------------------------- common --------------------------------- */
+
+  .markdown > table {
+    @apply w-full table-auto;
+  }
+
+  .markdown > img {
+    @apply w-full;
+  }
+
+  .markdown > hr {
+    @apply border-t border-border my-4;
+  }
+
+  .markdown > strong {
+    @apply font-bold;
+  }
+
+  /* ---------------------------------- small --------------------------------- */
 
   .markdown > h1 {
     @apply text-4xl font-secondary mb-4 text-primary font-bold;
@@ -305,10 +327,6 @@
     @apply text-sm border-l-4 border-primary-200 pl-4 py-2;
   }
 
-  .markdown > table {
-    @apply w-full table-auto;
-  }
-
   .markdown > table th {
     @apply text-base text-primary-200 font-medium;
   }
@@ -321,14 +339,6 @@
     @apply anchor-sm;
   }
 
-  .markdown > img {
-    @apply w-full;
-  }
-
-  .markdown > hr {
-    @apply border-t border-border my-4;
-  }
-
   .markdown > pre {
     @apply text-sm bg-card p-4 rounded-lg;
   }
@@ -337,8 +347,67 @@
     @apply text-sm bg-card-foreground text-text-200 p-1 rounded-sm;
   }
 
-  .markdown > strong {
-    @apply font-bold;
+  /* ---------------------------------- large --------------------------------- */
+
+  .markdown-lg > h1 {
+    @apply !font-bold !font-secondary !text-[44px] !text-center !leading-[1.2] !-tracking-[0.5px] !text-primary;
+  }
+
+  .markdown-lg > h2 {
+    @apply !font-bold !font-secondary !text-[30px] !leading-[1.2] !-tracking-[0.5px] !text-primary;
+  }
+
+  .markdown-lg > h3 {
+    @apply !font-bold !font-secondary !text-2xl !leading-[1.2] !-tracking-[0.5px] !text-primary;
+  }
+
+  .markdown-lg > h4 {
+    @apply text-xl font-medium font-secondary !text-primary;
+  }
+
+  .markdown-lg > h5,
+  .markdown-lg > h6 {
+    @apply text-lg font-medium font-secondary !text-primary;
+  }
+
+  .markdown-lg > p {
+    @apply pb-2;
+  }
+
+  .markdown-lg > ul {
+    @apply list-disc pl-6 flex flex-col gap-1.5  mb-4;
+  }
+
+  .markdown-lg > ol {
+    @apply list-decimal pl-6 flex flex-col gap-1.5  mb-4;
+  }
+
+  .markdown-lg > li {
+    @apply pb-2;
+  }
+
+  .markdown-lg > blockquote {
+    @apply border-l-4 border-primary-200 pl-4 py-2;
+  }
+
+  .markdown-lg > table th {
+    @apply text-xl text-primary-200 font-medium;
+  }
+
+  .markdown-lg > table td {
+    @apply text-text-200;
+  }
+
+  .markdown-lg > a {
+    @apply anchor-lg;
+  }
+
+  .markdown-lg > pre {
+    @apply bg-card p-4 rounded-lg;
+  }
+
+  .markdown-lg > code {
+    @apply bg-card-foreground text-text-200 p-1 rounded-sm;
   }
 }
 

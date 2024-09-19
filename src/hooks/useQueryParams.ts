@@ -17,6 +17,27 @@ export const useQueryParams = () => {
     );
   };
 
+  const setMultipleParams = (
+    params: {
+      name: string;
+      value: string[];
+    }[],
+    path: string = pathname
+  ) => {
+    router.replace(
+      path +
+        "?" +
+        params
+          .map((param) =>
+            param.value.map((v) => setQueryString(param.name, v)).join("&")
+          )
+          .join("&"),
+      {
+        scroll: false,
+      }
+    );
+  };
+
   const getQueryString = (name: string, value: string[]) => {
     return "?" + value.map((v) => setQueryString(name, v)).join("&");
   };
@@ -48,6 +69,7 @@ export const useQueryParams = () => {
   return {
     getQueryString,
     setParams,
+    setMultipleParams,
     setQueryParams,
     updateQueryParams,
     removeAllQueryParams,

@@ -7,7 +7,7 @@ import { Commands } from "@/assets/data/dashboard/chatBot";
 import { links } from "@/assets/data/routes";
 import BouncingDots from "@/components/BouncingDots";
 import { Quiz as QuizIcon } from "@/components/icons";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { Quiz, Conversation as TConversation } from "@/types";
 
 const useQuizConversation = () => {

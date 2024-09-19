@@ -15,7 +15,7 @@ import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import Dictaphone from "@/components/dictaphone";
 import { Textarea } from "@/components/ui/textarea";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { useFetchData } from "@/hooks/fetchData";
 import { usePath } from "@/hooks/usePath";
 import { ChatBotActionType, Status, UploadShallow } from "@/types";

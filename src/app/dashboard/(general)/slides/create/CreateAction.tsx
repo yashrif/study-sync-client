@@ -1,16 +1,17 @@
 "use client";
 
 import { IconArrowRight } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
+import { QueryParams } from "@/assets/data/dashboard/slides";
 import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useCreateSlideContext } from "@/hooks/useCreateSlideContext";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import {
   CreateSlideActionType,
   FetchActionType,
@@ -20,7 +21,7 @@ import {
 } from "@/types";
 
 const CreateAction = () => {
-  const { push } = useRouter();
+  const { setMultipleParams } = useQueryParams();
 
   const {
     state: { status, data },
@@ -48,7 +49,6 @@ const CreateAction = () => {
           fileId: data?.uploads,
         },
         fetchType: "lazy",
-        isReset: true,
       });
 
       dispatch({
@@ -61,7 +61,24 @@ const CreateAction = () => {
           type: CreateSlideActionType.SET_CONTENT,
           payload: response,
         });
-        push(routes.dashboard.slides.preview);
+
+        setMultipleParams(
+          [
+            {
+              name: QueryParams.content,
+              value: [response],
+            },
+            {
+              name: QueryParams.uploads,
+              value: data?.uploads,
+            },
+            {
+              name: QueryParams.topics,
+              value: data?.topics,
+            },
+          ],
+          routes.dashboard.slides.preview
+        );
       }
     } catch (err) {
       console.error(err);
@@ -69,7 +86,14 @@ const CreateAction = () => {
         type: FetchActionType.FETCH_ERROR,
       });
     }
-  }, [contextDispatch, data?.topics, data?.uploads, dispatch, handler, push]);
+  }, [
+    contextDispatch,
+    data?.topics,
+    data?.uploads,
+    dispatch,
+    handler,
+    setMultipleParams,
+  ]);
 
   return (
     <IconButton

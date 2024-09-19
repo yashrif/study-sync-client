@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import studySyncServer from "@/api/studySyncServer";
 import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import {

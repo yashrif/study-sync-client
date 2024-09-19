@@ -1,5 +1,6 @@
 import {
   IconCategory2,
+  IconDeviceFloppy,
   IconEyeEdit,
   IconFileDelta,
   IconFileTypePdf,
@@ -67,5 +68,21 @@ export const create = {
         icon: IconWorldSearch,
       },
     ],
+  },
+};
+
+export enum QueryParams {
+  uploads = "uploads",
+  topics = "topics",
+  content = "content",
+}
+
+export const preview = {
+  buttons: {
+    save: {
+      title: "Save",
+      description: "Save the slide",
+      Icon: IconDeviceFloppy,
+    },
   },
 };
