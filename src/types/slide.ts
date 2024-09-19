@@ -43,18 +43,21 @@ export type SlideData = {
 
 export enum CreateSlideActionType {
   SET_SLIDE_DATA = "SET_SLIDE_DATA",
+  SET_CONTENT = "SET_CONTENT",
 }
 
 export type CreateSlideAction =
   | FetchAction<TopicShallow[]>
   | FetchAction<UploadShallow[]>
-  | Action<CreateSlideActionType.SET_SLIDE_DATA, SlideData>;
+  | Action<CreateSlideActionType.SET_SLIDE_DATA, SlideData>
+  | Action<CreateSlideActionType.SET_CONTENT, string>;
 
 export type CreateSlideState = {
   topics: TopicShallow[];
   uploads: UploadShallow[];
   data: SlideData;
   status: Status;
+  content: string | null;
 };
 
 export type CreateSlideContextProps = {

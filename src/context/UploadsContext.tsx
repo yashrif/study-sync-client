@@ -18,10 +18,6 @@ const UploadsContext = createContext<UploadsContextProps | undefined>(
 const initialState: UploadsState = {
   uploads: [],
   status: Status.IDLE,
-  currentStudy: "",
-  selectedText: "",
-  showChatResponse: false,
-  chatResponse: "",
 };
 
 const uploadsReducer = (
@@ -49,26 +45,6 @@ const uploadsReducer = (
       return {
         ...state,
         uploads: action.payload,
-      };
-    case UploadsActionType.SET_STUDY:
-      return {
-        ...state,
-        currentStudy: action.payload,
-      };
-    case UploadsActionType.SET_SELECTED_TEXT:
-      return {
-        ...state,
-        selectedText: action.payload,
-      };
-    case UploadsActionType.SET_CHAT_RESPONSE:
-      return {
-        ...state,
-        chatResponse: action.payload,
-      };
-    case UploadsActionType.SET_SHOW_RESPONSE:
-      return {
-        ...state,
-        showChatResponse: action.payload,
       };
     default:
       return state;

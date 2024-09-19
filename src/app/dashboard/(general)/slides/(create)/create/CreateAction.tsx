@@ -1,15 +1,18 @@
 "use client";
 
 import { IconArrowRight } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
+import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useCreateSlideContext } from "@/hooks/useCreateSlideContext";
 import {
+  CreateSlideActionType,
   FetchActionType,
   SlideRequestServer,
   SlideResponseServer,
@@ -17,8 +20,11 @@ import {
 } from "@/types";
 
 const CreateAction = () => {
+  const { push } = useRouter();
+
   const {
     state: { status, data },
+    dispatch: contextDispatch,
   } = useCreateSlideContext();
 
   const { state, dispatch } = useFetchState<SlideResponseServer>();
@@ -45,11 +51,17 @@ const CreateAction = () => {
         isReset: true,
       });
 
+      dispatch({
+        type: FetchActionType.FETCH_SUCCESS,
+        payload: response || "",
+      });
+
       if (response) {
-        dispatch({
-          type: FetchActionType.FETCH_SUCCESS,
+        contextDispatch({
+          type: CreateSlideActionType.SET_CONTENT,
           payload: response,
         });
+        push(routes.dashboard.slides.preview);
       }
     } catch (err) {
       console.error(err);
@@ -57,7 +69,7 @@ const CreateAction = () => {
         type: FetchActionType.FETCH_ERROR,
       });
     }
-  }, [data?.topics, data?.uploads, dispatch, handler]);
+  }, [contextDispatch, data?.topics, data?.uploads, dispatch, handler, push]);
 
   return (
     <IconButton

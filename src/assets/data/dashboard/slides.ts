@@ -1,15 +1,21 @@
 import {
   IconCategory2,
+  IconEyeEdit,
   IconFileDelta,
   IconFileTypePdf,
   IconPrompt,
   IconSettings,
-  IconWorldSearch
+  IconWorldSearch,
 } from "@tabler/icons-react";
 
 import { IconList } from "@/types";
 
-export const home: { create: IconList; saved: IconList; details: IconList } = {
+export const home: {
+  create: IconList;
+  saved: IconList;
+  details: IconList;
+  preview: IconList;
+} = {
   create: {
     title: "Generate Slide",
     Icon: IconFileDelta,
@@ -25,6 +31,11 @@ export const home: { create: IconList; saved: IconList; details: IconList } = {
     title: "View Slide",
     Icon: IconFileDelta,
     description: "View the details of the slide here!",
+  },
+  preview: {
+    title: "Preview Slide",
+    Icon: IconEyeEdit,
+    description: "Preview the slide here!",
   },
 };
 

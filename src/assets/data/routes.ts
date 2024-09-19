@@ -33,6 +33,7 @@ export const paths = {
   topics: "/topics",
   study: "/study",
   slides: "/slides",
+  preview: "/preview",
 };
 
 export const pathTitles = {
@@ -70,6 +71,7 @@ export const pathTitles = {
   topics: "Topics",
   study: "Study",
   slides: "Slides",
+  preview: "Preview",
 };
 
 /* ---------------------------------- Paths --------------------------------- */
@@ -152,6 +154,7 @@ export const routes = {
       default: `${dashboardPath}${paths.slides}`,
       home: `${dashboardPath}${paths.slides}`,
       create: `${dashboardPath}${paths.slides}${paths.create}`,
+      preview: `${dashboardPath}${paths.slides}${paths.preview}`,
       saved: `${dashboardPath}${paths.slides}`,
       details(id: string) {
         return `${dashboardPath}${paths.slides}/${id}`;
@@ -303,6 +306,10 @@ export const links = {
       create: {
         title: pathTitles.create,
         href: routes.dashboard.slides.create,
+      },
+      preview: {
+        title: pathTitles.preview,
+        href: routes.dashboard.slides.preview,
       },
       saved: {
         title: pathTitles.saved,
