@@ -16,3 +16,4 @@ const generate = "/generate";
 export const response = `${generate}/response`;
 export const queryIndexedFile = `${generate}/queryIndexedFile`;
 export const slides = `${generate}/slides`;
+export const pdf = `${generate}/pdf`;
