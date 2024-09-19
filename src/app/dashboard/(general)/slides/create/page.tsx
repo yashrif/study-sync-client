@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { home } from "@/assets/data/dashboard/slides";
 import SpinnerContainer from "@/components/spinner/SpinnerContainer";
-import PageHeading from "../../../../_components/PageHeading";
+import PageHeading from "../../../_components/PageHeading";
 import CustomPrompt from "./_components/CustomPrompt";
 import TopicSelect from "./_components/TopicSelect";
 import UploadSelect from "./_components/UploadSelect";
