@@ -15,3 +15,4 @@ export const topics = `${extract}/topics`;
 const generate = "/generate";
 export const response = `${generate}/response`;
 export const queryIndexedFile = `${generate}/queryIndexedFile`;
+export const slides = `${generate}/slides`;

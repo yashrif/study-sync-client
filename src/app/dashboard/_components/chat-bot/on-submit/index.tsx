@@ -28,7 +28,7 @@ import useUploadConversation from "./useUploadsConversation";
 
 export const useOnSubmit = () => {
   const params = useParams();
-  const id = typeof params.id === "string" ? params.id : params.id[0];
+  const id = typeof params.id === "string" ? params.id : params?.id[0] || "";
 
   const { path } = usePath();
 

@@ -6,6 +6,30 @@ import {
   UploadShallow,
 } from "@allTypes";
 
+/* ----------------------------------- AI ----------------------------------- */
+
+export type SlideRequestAI = {
+  topicList: string[];
+  fileId: string[];
+};
+
+export type SlideResponseAI = {
+  content: string;
+  name: string | null;
+  id: string;
+  example: boolean;
+};
+
+/* --------------------------------- Server --------------------------------- */
+
+export type SlideRequestServer = SlideRequestAI;
+
+export type SlideResponseServer = string;
+
+/* ----------------------------------- DB ----------------------------------- */
+
+/* ---------------------------------- Slide --------------------------------- */
+
 export type Slide = {};
 
 /* ------------------------------ Slide Create ------------------------------ */

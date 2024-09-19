@@ -13,6 +13,7 @@ export const indxFile = `/indexFile`;
 export const evaluate = `${generate}/compare_answer`;
 export const queryIndexedFile = `${generate}/queryIndexedFile`;
 export const response = `${generate}/response`;
+export const content = `${generate}/content`;
 
 export const extract = "/extract";
 export const topics = `${extract}/topics`;

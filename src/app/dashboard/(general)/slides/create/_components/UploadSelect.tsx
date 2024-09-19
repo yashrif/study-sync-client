@@ -19,7 +19,7 @@ import {
 
 const UploadSelect: React.FC = () => {
   const [options, setOptions] = useState<SelectElement[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedUploads, setSelectedUploads] = useState<string[]>([]);
 
   const {
     state: { status, uploads, data },
@@ -35,6 +35,7 @@ const UploadSelect: React.FC = () => {
     if (uploads)
       setOptions(
         _.chain(uploads)
+          .filter((item) => item.isIndexed)
           .uniqBy("name")
           .map((item) => ({
             value: item.name,
@@ -49,11 +50,11 @@ const UploadSelect: React.FC = () => {
       type: CreateSlideActionType.SET_SLIDE_DATA,
       payload: {
         ...data,
-        uploads: selectedOptions,
+        uploads: selectedUploads,
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, selectedOptions]);
+  }, [dispatch, selectedUploads]);
 
   return (
     <>
@@ -71,8 +72,8 @@ const UploadSelect: React.FC = () => {
             className="max-w-lg"
             options={options}
             setOptions={setOptions}
-            onValueChange={setSelectedOptions}
-            defaultValue={selectedOptions}
+            onValueChange={setSelectedUploads}
+            defaultValue={selectedUploads}
             placeholder="Select files"
             variant="inverted"
             animation={2}
