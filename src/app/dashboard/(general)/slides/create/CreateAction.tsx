@@ -5,7 +5,7 @@ import { useCallback } from "react";
 
 import studySyncServer from "@/api/studySyncServer";
 import { serverEndpoints } from "@/assets/data/api";
-import { QueryParams } from "@/assets/data/dashboard/slides";
+import { PreviewAction, QueryParams } from "@/assets/data/dashboard/slides";
 import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import { useFetchState } from "@/hooks/fetchData";
@@ -75,6 +75,14 @@ const CreateAction = () => {
             {
               name: QueryParams.topics,
               value: data?.topics,
+            },
+            {
+              name: QueryParams.name,
+              value: [data?.topics ? data?.topics[0] : ""],
+            },
+            {
+              name: QueryParams.action,
+              value: [PreviewAction.post],
             },
           ],
           routes.dashboard.slides.preview

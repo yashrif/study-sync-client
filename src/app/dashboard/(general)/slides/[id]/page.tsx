@@ -1,16 +1,23 @@
 "use client";
 
-import { IconFileTypePdf } from "@tabler/icons-react";
+import { IconEdit, IconFileTypePdf } from "@tabler/icons-react";
 import { useCallback } from "react";
 import Markdown from "react-markdown";
 
 import studySyncDB from "@/api/studySyncDB";
 import PageHeading from "@/app/dashboard/_components/PageHeading";
 import { dbEndpoints } from "@/assets/data/api";
-import { home } from "@/assets/data/dashboard/slides";
+import {
+  home,
+  PreviewAction,
+  QueryParams,
+} from "@/assets/data/dashboard/slides";
+import { routes } from "@/assets/data/routes";
+import IconButton from "@/components/button/IconButton";
 import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import { Badge } from "@/components/ui/badge";
 import { useFetchDataState } from "@/hooks/fetchData";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Status, Slide as TSlide } from "@/types";
 import ExportToPdf from "./PdfExporter";
 
@@ -21,6 +28,7 @@ type Props = {
 };
 
 const Slide: React.FC<Props> = ({ params: { id } }) => {
+  const { setMultipleParams } = useQueryParams();
   const { state } = useFetchDataState<null, TSlide>({
     apiCall: useCallback(
       () => studySyncDB.get(`${dbEndpoints.slides}/${id}`),
@@ -36,7 +44,35 @@ const Slide: React.FC<Props> = ({ params: { id } }) => {
         description={state.data?.name ? "" : home.saved.description}
         className="grid grid-cols-[auto,auto] justify-between gap-y-2"
       >
-        <div className="row-span-2 h-full flex items-end">
+        <div className="row-span-2 h-full flex gap-4 items-end">
+          <IconButton
+            title="Edit"
+            Icon={IconEdit}
+            disabled={state.status === Status.PENDING}
+            onClick={() => {
+              setMultipleParams(
+                [
+                  {
+                    name: QueryParams.content,
+                    value: [state.data?.content || ""],
+                  },
+                  {
+                    name: QueryParams.name,
+                    value: [state.data?.name || ""],
+                  },
+                  {
+                    name: QueryParams.action,
+                    value: [PreviewAction.patch],
+                  },
+                  {
+                    name: QueryParams.id,
+                    value: [id],
+                  },
+                ],
+                routes.dashboard.slides.preview
+              );
+            }}
+          />
           <ExportToPdf
             content={state.data?.content || ""}
             fileName={state.data?.name}

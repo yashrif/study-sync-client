@@ -34,7 +34,7 @@ type Props = {
 const PdfExporter: React.FC<Props> = ({ content, fileName, disabled }) => {
   return (
     <IconButton
-      title="Export PDF"
+      title="Export"
       Icon={IconFileTypePdf}
       disabled={disabled}
       onClick={() => exportPdf(content, fileName)}

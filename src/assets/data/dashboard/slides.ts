@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 
 import { IconList } from "@/types";
+import { ZodEnum } from "zod";
 
 export const defaultValues = {
   title: "Untitled",
@@ -76,10 +77,18 @@ export const create = {
   },
 };
 
+export enum PreviewAction {
+  "post" = "post",
+  "patch" = "patch",
+}
+
 export enum QueryParams {
   uploads = "uploads",
   topics = "topics",
   content = "content",
+  name = "name",
+  action = "action",
+  id = "id",
 }
 
 export const preview = {
