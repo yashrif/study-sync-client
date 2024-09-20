@@ -1,6 +1,6 @@
 import { IconList } from "@/types/list";
-import { IconPlugConnected, IconRocket } from "@tabler/icons-react";
-import { ListTodo, Rocket, Unplug } from "lucide-react";
+import { IconPlugConnected } from "@tabler/icons-react";
+import { ListTodo, Rocket } from "lucide-react";
 
 export const sectionName = "Benefits";
 export const title = "Unlock Your Full Study Potential with StudySync";
@@ -21,9 +21,9 @@ export const benefits: IconList[] = [
     Icon: ListTodo,
   },
   {
-    title: "Seamless Google Classroom Integration",
+    title: "Seamless AI Integration",
     description:
-      "StudySync seamlessly integrates with Google Classroom, automatically fetching activities and resources. This integration ensures that you have access to accurate and up-to-date study materials.",
+      "StudySync seamlessly integrates AI assistance into your study routine. Our AI-powered study plans and content recommendations help you stay on track and make the most of your study time.",
     Icon: IconPlugConnected,
   },
 ];
