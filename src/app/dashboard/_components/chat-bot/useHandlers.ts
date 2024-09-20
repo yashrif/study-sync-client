@@ -19,6 +19,7 @@ import {
   Response,
   ResponseRequest,
   SlideRequestDbPost,
+  SlideRequestServer,
   SlideResponseDb,
   SlideResponseServer,
   Status,
@@ -120,7 +121,7 @@ export const useHandlers = () => {
     dispatch: slideServerRequestDispatch,
   } = useFetchState<SlideResponseServer>();
   const { handler: slideServerRequestHandler } = useApiHandler<
-    string[],
+    SlideRequestServer,
     SlideResponseServer
   >({
     apiCall: useCallback(

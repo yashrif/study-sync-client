@@ -12,7 +12,7 @@ import { IconRoute } from "@tabler/icons-react";
 
 const useSlideConversation = () => {
   const {
-    state: { selectedUploads, uploads },
+    state: { selectedUploads, uploads, selectedTopics },
   } = useChatBotContext();
 
   const filteredUploads = useMemo(
@@ -28,13 +28,25 @@ const useSlideConversation = () => {
           <span className="text-white rounded-[7px] bg-primary px-0.5">
             {Commands["create-slide"]}
           </span>{" "}
-          from the file
-          {selectedUploads.length > 1 ? "s" : ""}:
+          from the -
+        </p>
+        <p className="text-sm font-medium text-primary mt-2 mb-1">
+          File{selectedUploads.length > 1 ? "s" : ""}:
         </p>
         <ul className="list-disc pl-6">
           {filteredUploads.map((item) => (
             <li key={item.id} className="text-sm">
               {item.title}
+            </li>
+          ))}
+        </ul>
+        <p className="text-sm font-medium text-primary mt-2 mb-1">
+          Topic{selectedTopics.length > 1 ? "s" : ""}:
+        </p>
+        <ul className="list-disc pl-6">
+          {selectedTopics.map((item, index) => (
+            <li key={index} className="text-sm">
+              {item}
             </li>
           ))}
         </ul>
@@ -71,10 +83,6 @@ const useSlideConversation = () => {
               <span className="text-muted-foreground">Title:</span>{" "}
               <span className="text-primary">{slide.name}</span>
             </li>
-            {/* <li className="text-sm">
-              <span className="text-muted-foreground">Number of topics:</span>{" "}
-              <span className="text-primary">{planner.topics.length}</span>
-            </li> */}
           </ul>
         </div>
 

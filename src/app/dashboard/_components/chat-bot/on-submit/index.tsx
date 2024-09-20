@@ -288,7 +288,10 @@ export const useOnSubmit = () => {
               ],
             });
             const serverResponse = await slideServerRequestHandler({
-              data: state.selectedUploads,
+              data: {
+                topicList: state.selectedTopics,
+                fileId: state.selectedUploads,
+              },
               fetchType: "lazy",
               isReset: true,
             });
