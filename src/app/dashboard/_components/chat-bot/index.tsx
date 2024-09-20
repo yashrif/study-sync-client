@@ -1,13 +1,25 @@
 "use client";
 
 import { IconMessageChatbot } from "@tabler/icons-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
+import studySyncDB from "@/api/studySyncDB";
+import { dbEndpoints } from "@/assets/data/api";
 import IconButton from "@/components/button/IconButton";
+import { useFetchData } from "@/hooks/fetchData";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
+import { UploadShallow } from "@/types";
 import ChatBotInput from "./ChatInput";
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { dispatch } = useChatBotContext();
+
+  useFetchData<null, UploadShallow[]>({
+    apiCall: useCallback(() => studySyncDB.get(dbEndpoints.uploads), []),
+    dispatch,
+  });
 
   return (
     <div className="fixed bottom-8 right-8 flex flex-col-reverse items-end gap-2 z-40">

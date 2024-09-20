@@ -4,9 +4,8 @@ import {
   ChevronDown,
   CircleDot,
   PlusIcon,
-  WandSparkles,
   XCircle,
-  XIcon,
+  XIcon
 } from "lucide-react";
 import randomColor from "randomcolor";
 import * as React from "react";
@@ -425,7 +424,7 @@ export const MultiSelect = React.forwardRef<
             </CommandList>
           </Command>
         </PopoverContent>
-        {animation > 0 && selectedValues.length > 0 && (
+        {/* {animation > 0 && selectedValues.length > 0 && (
           <WandSparkles
             className={cn(
               "cursor-pointer my-2 text-foreground bg-background size-3",
@@ -433,7 +432,7 @@ export const MultiSelect = React.forwardRef<
             )}
             onClick={() => setIsAnimating(!isAnimating)}
           />
-        )}
+        )} */}
       </Popover>
     );
   }

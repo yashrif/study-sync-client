@@ -4,7 +4,7 @@ import { IconMessage } from "@tabler/icons-react";
 import { useMemo } from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area-custom";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import UploadBadge from "./_components/UploadBadge";
 
 const Conversation: React.FC = () => {

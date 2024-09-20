@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { Commands } from "@/assets/data/dashboard/chatBot";
 import { links } from "@/assets/data/routes";
 import BouncingDots from "@/components/BouncingDots";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { PlannerResponseDBPost, Conversation as TConversation } from "@/types";
 import { IconRoute } from "@tabler/icons-react";
 

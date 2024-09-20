@@ -11,7 +11,7 @@ import {
   Commands as ECommands,
 } from "@/assets/data/dashboard/chatBot";
 import { routes } from "@/assets/data/routes";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { usePath } from "@/hooks/usePath";
 import { ChatBotActionType } from "@/types";
 import { generateUUID } from "@/utils/generateUUID";

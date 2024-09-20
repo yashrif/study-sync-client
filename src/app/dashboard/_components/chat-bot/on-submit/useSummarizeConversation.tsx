@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import Markdown from "react-markdown";
 
 import BouncingDots from "@/components/BouncingDots";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { Conversation as TConversation, Upload } from "@/types";
 
 const useSummarizeConversation = () => {

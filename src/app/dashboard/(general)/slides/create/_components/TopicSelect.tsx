@@ -19,7 +19,7 @@ import {
 
 const TopicSelect: React.FC = () => {
   const [options, setOptions] = useState<SelectElement[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
   const {
     state: { status, topics, data },
@@ -50,14 +50,14 @@ const TopicSelect: React.FC = () => {
       type: CreateSlideActionType.SET_SLIDE_DATA,
       payload: {
         ...data,
-        topics: selectedOptions,
+        topics: selectedTopics,
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, selectedOptions]);
+  }, [dispatch, selectedTopics]);
 
   return (
-    <>
+    <div className="grid grid-cols-[auto,1fr] gap-12 items-center">
       <div className="flex gap-1.5 items-center whitespace-nowrap">
         <create.topics.icon className="size-5 stroke-primary stroke-[2.5px]" />
         <span className="text-large font-medium text-primary">
@@ -73,8 +73,8 @@ const TopicSelect: React.FC = () => {
             options={options}
             setOptions={setOptions}
             addOption
-            onValueChange={setSelectedOptions}
-            defaultValue={selectedOptions}
+            onValueChange={setSelectedTopics}
+            defaultValue={selectedTopics}
             placeholder="Select topics"
             variant="inverted"
             animation={2}
@@ -83,7 +83,7 @@ const TopicSelect: React.FC = () => {
           />
         </div>
       )}
-    </>
+    </div>
   );
 };
 

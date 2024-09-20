@@ -23,6 +23,8 @@ const initialState: CreateSlideState = {
   uploads: [],
   data: {} as SlideData,
   status: Status.IDLE,
+  content: null,
+  indexStatus: {},
 };
 
 const createSlideReducer = (
@@ -76,6 +78,11 @@ const createSlideReducer = (
       return {
         ...state,
         data: action.payload,
+      };
+    case CreateSlideActionType.SET_CONTENT:
+      return {
+        ...state,
+        content: action.payload,
       };
     default:
       return state;

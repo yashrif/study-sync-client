@@ -27,3 +27,5 @@ export const topics = `/topics`;
 export const planners = `/planners`;
 
 export const preferences = `/preferences`;
+
+export const slides = `/slides`;

@@ -4,7 +4,7 @@ import { IconFileTypePdf, IconX } from "@tabler/icons-react";
 import React from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { ChatBotActionType, Status, UploadShallow } from "@allTypes";
 
 type Props = {

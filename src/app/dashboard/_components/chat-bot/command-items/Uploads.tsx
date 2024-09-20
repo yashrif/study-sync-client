@@ -1,5 +1,5 @@
 import { SelectGroup, SelectItem } from "@/components/ui/select";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { sliceLabel } from "./sliceLabel";
 
 const Uploads: React.FC = () => {

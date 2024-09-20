@@ -101,7 +101,7 @@ const ControlBar = <TData, TValue>({
             variant={controlsConfig.DELETE.variant || controlBar.delete.variant}
             size={controlsConfig.DELETE.size || controlBar.delete.size}
             className={`mr-auto ${table.getFilteredSelectedRowModel().rows.length > 0 ? "visible" : "invisible"}`}
-            iconClassName="stroke-[2.5]"
+            iconClassName="stroke-[2.5] !stroke-white"
             style={{
               order: controlsConfig[TableControlTypes.DELETE]?.order,
             }}

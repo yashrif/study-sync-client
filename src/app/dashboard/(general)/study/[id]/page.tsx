@@ -18,8 +18,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useChatBotContext } from "@/hooks/ChatBotContext";
 import { useFetchDataState, useFetchState } from "@/hooks/fetchData";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { useUploadsContext } from "@/hooks/useUploadsContext";
 import { FetchActionType, Preference, Status, Upload } from "@/types";
 import { dateFormatter } from "@/utils/dateFormatter";
@@ -33,10 +33,7 @@ type Props = {
 const PDFViewer: React.FC<Props> = ({ params: { id } }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showDialog, setShowDialog] = useState(false);
-  const {
-    state: { showChatResponse },
-    dispatch,
-  } = useUploadsContext();
+  const { dispatch } = useUploadsContext();
   const {
     state: { setPrompt },
   } = useChatBotContext();
