@@ -2,9 +2,13 @@
 
 import { useParams } from "next/navigation";
 import randomColor from "randomcolor";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
-import { Commands, StudyCommands } from "@/assets/data/dashboard/chatBot";
+import {
+  Commands,
+  commandsLvl1,
+  StudyCommands,
+} from "@/assets/data/dashboard/chatBot";
 import { routes } from "@/assets/data/routes";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { usePath } from "@/hooks/usePath";
@@ -70,21 +74,40 @@ export const useOnSubmit = () => {
     [state.selectedUploads, state.uploads]
   );
 
-  /* -------------------------------- On Submit ------------------------------- */
+  const getFirstLvl1Command = useCallback(() => {
+    const subString =
+      findFirstSubstring(
+        state.prompt.toLowerCase(),
+        commandsLvl1.map((item) => item.value.toLowerCase())
+      ).substring || "";
 
-  const onSubmit = async () => {
-    const firstCommand =
+    return state.prompt.trim().toLowerCase().startsWith(subString)
+      ? subString
+      : "";
+  }, [state.prompt]);
+
+  const getFirstInlineCommand = useCallback(
+    () =>
       findFirstSubstring(
         state.prompt.toLowerCase(),
         commandsLvlInline().map((item) => item.toLowerCase())
-      ).substring || "";
+      ).substring || "",
+
+    [commandsLvlInline, state.prompt]
+  );
+
+  /* -------------------------------- On Submit ------------------------------- */
+
+  const onSubmit = async () => {
+    const firstLvl1Command = getFirstLvl1Command();
+    const firstInlineCommand = getFirstInlineCommand();
 
     switch (true) {
       /* ---------------------------------- quiz ---------------------------------- */
 
-      case state.prompt
+      case Commands["create-quiz"]
         .toLowerCase()
-        .includes(Commands["create-quiz"].toLowerCase()):
+        .localeCompare(firstLvl1Command) === 0:
         state.setPrompt("");
         if (state.selectedUploads.length > 0) {
           try {
@@ -145,9 +168,9 @@ export const useOnSubmit = () => {
 
       /* -------------------------------- flashcard ------------------------------- */
 
-      case state.prompt
+      case Commands["create-flashcard"]
         .toLowerCase()
-        .includes(Commands["create-flashcard"].toLowerCase()):
+        .localeCompare(firstLvl1Command) === 0:
         if (state.selectedUploads.length > 0) {
           try {
             state.setPrompt("");
@@ -211,9 +234,9 @@ export const useOnSubmit = () => {
 
       /* --------------------------------- planner -------------------------------- */
 
-      case state.prompt
+      case Commands["create-planner"]
         .toLowerCase()
-        .includes(Commands["create-planner"].toLowerCase()):
+        .localeCompare(firstLvl1Command) === 0:
         if (state.selectedUploads.length > 0) {
           try {
             state.setPrompt("");
@@ -274,9 +297,9 @@ export const useOnSubmit = () => {
 
       /* ---------------------------------- slide --------------------------------- */
 
-      case state.prompt
+      case Commands["create-slide"]
         .toLowerCase()
-        .includes(Commands["create-slide"].toLowerCase()):
+        .localeCompare(firstLvl1Command) === 0:
         if (state.selectedTopics.length > 0) {
           try {
             state.setPrompt("");
@@ -337,8 +360,9 @@ export const useOnSubmit = () => {
 
       /* --------------------------------- Explain -------------------------------- */
 
-      case Commands["explain"].toLowerCase().localeCompare(firstCommand) ===
-        0 &&
+      case Commands["explain"]
+        .toLowerCase()
+        .localeCompare(firstInlineCommand) === 0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedExplainPrompt = state.prompt
@@ -414,8 +438,9 @@ export const useOnSubmit = () => {
 
       /* -------------------------------- Summarize ------------------------------- */
 
-      case Commands["summarize"].toLowerCase().localeCompare(firstCommand) ===
-        0 &&
+      case Commands["summarize"]
+        .toLowerCase()
+        .localeCompare(firstInlineCommand) === 0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedSummarizePrompt = state.prompt
@@ -490,7 +515,7 @@ export const useOnSubmit = () => {
 
       case Commands["provide-example"]
         .toLowerCase()
-        .localeCompare(firstCommand) === 0 &&
+        .localeCompare(firstInlineCommand) === 0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedProvideExamplePrompt = state.prompt

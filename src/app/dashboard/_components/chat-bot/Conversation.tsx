@@ -27,8 +27,6 @@ const Conversation: React.FC = () => {
     [selectedTopics, topics]
   );
 
-  console.log(filteredTopics);
-
   return (
     <ScrollArea className="h-full pb-0">
       <div className="h-full flex flex-col justify-end px-4">
