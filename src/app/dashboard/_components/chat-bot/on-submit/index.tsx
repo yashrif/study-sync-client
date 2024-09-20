@@ -14,7 +14,8 @@ import {
   QuizRequestDb,
   QuizTypes,
 } from "@/types";
-import { replace } from "@/utils/string";
+import { findFirstSubstring, replace } from "@/utils/string";
+import useCommands from "../command-items/useCommands";
 import { useHandlers } from "../useHandlers";
 import useExplainConversation from "./useExplainConversation";
 import useFlashcardConversation from "./useFlashcardConversation";
@@ -35,6 +36,7 @@ export const useOnSubmit = () => {
     : "";
 
   const { path } = usePath();
+  const { commandsLvlInline } = useCommands();
 
   const { state, dispatch } = useChatBotContext();
   const {
@@ -66,6 +68,12 @@ export const useOnSubmit = () => {
   /* -------------------------------- On Submit ------------------------------- */
 
   const onSubmit = async () => {
+    const firstCommand =
+      findFirstSubstring(
+        state.prompt.toLowerCase(),
+        commandsLvlInline().map((item) => item.toLowerCase())
+      ).substring || "";
+
     switch (true) {
       /* ---------------------------------- quiz ---------------------------------- */
 
@@ -261,9 +269,8 @@ export const useOnSubmit = () => {
 
       /* --------------------------------- Explain -------------------------------- */
 
-      case state.prompt
-        .toLowerCase()
-        .includes(Commands["explain"].toLowerCase()) &&
+      case Commands["explain"].toLowerCase().localeCompare(firstCommand) ===
+        0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedExplainPrompt = state.prompt
@@ -339,9 +346,8 @@ export const useOnSubmit = () => {
 
       /* -------------------------------- Summarize ------------------------------- */
 
-      case state.prompt
-        .toLowerCase()
-        .includes(Commands["summarize"].toLowerCase()) &&
+      case Commands["summarize"].toLowerCase().localeCompare(firstCommand) ===
+        0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedSummarizePrompt = state.prompt
@@ -414,9 +420,9 @@ export const useOnSubmit = () => {
 
       /* ----------------------------- Provide Example ---------------------------- */
 
-      case state.prompt
+      case Commands["provide-example"]
         .toLowerCase()
-        .includes(Commands["provide-example"].toLowerCase()) &&
+        .localeCompare(firstCommand) === 0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedProvideExamplePrompt = state.prompt
