@@ -1,11 +1,11 @@
 import { IconList } from "@/types/list";
 import {
+  IconAi,
   IconCubePlus,
+  IconFileDelta,
   IconHighlight,
   IconMessage2Question,
-  IconNotification,
-  IconPlugConnected,
-  IconProgressCheck,
+  IconProgressCheck
 } from "@tabler/icons-react";
 
 export const sectionName = "Unlock Your Potential";
@@ -15,34 +15,34 @@ export const description =
 
 export const features: IconList[] = [
   {
+    title: "AI Assistance",
+    description:
+      "StudySync leverages AI technology to provide personalized study plans, generate questions, and track progress.",
+    Icon: IconAi,
+  },
+  {
     title: "Create a Study Plan",
     description:
       "Users input subjects, duration, and deadlines. The system generates a personalized study plan.",
     Icon: IconCubePlus,
   },
   {
-    title: "Integrate Google Classroom",
+    title: "Generate Questions",
     description:
-      "Users input subjects, duration, and deadlines. The system generates a personalized study plan.",
-    Icon: IconPlugConnected,
-  },
-  {
-    title: "Generate Questions and Summaries",
-    description:
-      "Users link their Google Classroom account to import assignments and resources into their study plan.",
+      "StudySync generates questions based on study materials, allowing users to test their knowledge.",
     Icon: IconMessage2Question,
   },
   {
-    title: "Track Progress and Performance",
+    title: "Track Progress",
     description:
       "The system monitors study activities, tracks progress, and provides visual progress through graphs and charts.",
     Icon: IconProgressCheck,
   },
   {
-    title: "Notifications and Reminders",
+    title: "Generate Contents",
     description:
-      "The system sends notifications and reminders about tasks, deadlines, and milestones based on the study plan.",
-    Icon: IconNotification,
+      "Generate contents for your study plan based on your study materials, store, access and export anytime.",
+    Icon: IconFileDelta,
   },
   {
     title: "Annotate PDFs",

@@ -20,5 +20,5 @@ export const navLinks = [
   {
     ...links.home.features,
   },
-  { ...links.home.howItWorks },
+  // { ...links.home.cta },
 ];
