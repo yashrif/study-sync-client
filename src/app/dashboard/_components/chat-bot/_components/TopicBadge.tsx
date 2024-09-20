@@ -16,7 +16,7 @@ const BADGE_TITLE_MAX_LENGTH = 19;
 
 const TopicBadge: React.FC<Props> = ({ topic }) => {
   const {
-    state: { selectedUploads, requestStatus },
+    state: { selectedTopics, requestStatus },
     dispatch,
   } = useChatBotContext();
 
@@ -39,8 +39,8 @@ const TopicBadge: React.FC<Props> = ({ topic }) => {
         className="size-3 stroke-[2.5px] hover:scale-125 hover:stroke-[#ffa8a8] transition-all duration-300"
         onClick={() => {
           dispatch({
-            type: ChatBotActionType.SET_SELECTED_UPLOADS,
-            payload: selectedUploads.filter((id) => id !== topic.id),
+            type: ChatBotActionType.SET_SELECTED_TOPICS,
+            payload: selectedTopics.filter((name) => name !== topic.name),
           });
         }}
         style={{
