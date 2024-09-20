@@ -4,6 +4,7 @@ import {
   IconEyeEdit,
   IconFileDelta,
   IconFileTypePdf,
+  IconListDetails,
   IconPrompt,
   IconSettings,
   IconTextSize,
@@ -11,7 +12,6 @@ import {
 } from "@tabler/icons-react";
 
 import { IconList } from "@/types";
-import { ZodEnum } from "zod";
 
 export const defaultValues = {
   title: "Untitled",
@@ -74,6 +74,12 @@ export const create = {
         icon: IconWorldSearch,
       },
     ],
+  },
+  create: {
+    title: "Select Topics & Files",
+    Icon: IconListDetails,
+    description:
+      "Select the topics and files you want to include in your slide. If no file is selected, the slide will be generated from all the relevant files and web.",
   },
 };
 

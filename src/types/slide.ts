@@ -1,6 +1,8 @@
 import {
   Action,
   FetchAction,
+  IndexAction,
+  IndexStatus,
   Status,
   TopicShallow,
   UploadShallow,
@@ -72,6 +74,7 @@ export enum CreateSlideActionType {
 export type CreateSlideAction =
   | FetchAction<TopicShallow[]>
   | FetchAction<UploadShallow[]>
+  | IndexAction
   | Action<CreateSlideActionType.SET_SLIDE_DATA, SlideData>
   | Action<CreateSlideActionType.SET_CONTENT, string>;
 
@@ -81,6 +84,7 @@ export type CreateSlideState = {
   data: SlideData;
   status: Status;
   content: string | null;
+  indexStatus: IndexStatus;
 };
 
 export type CreateSlideContextProps = {

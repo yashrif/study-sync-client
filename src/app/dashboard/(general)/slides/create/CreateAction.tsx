@@ -1,6 +1,7 @@
 "use client";
 
 import { IconArrowRight } from "@tabler/icons-react";
+import { Table } from "@tanstack/react-table";
 import { useCallback } from "react";
 
 import studySyncServer from "@/api/studySyncServer";
@@ -18,13 +19,18 @@ import {
   SlideRequestServer,
   SlideResponseServer,
   Status,
+  UploadShallow,
 } from "@/types";
 
-const CreateAction = () => {
+type Props = {
+  table: Table<UploadShallow>;
+};
+
+const CreateAction: React.FC<Props> = ({ table }) => {
   const { setMultipleParams } = useQueryParams();
 
   const {
-    state: { status, data },
+    state: { data, status, indexStatus },
     dispatch: contextDispatch,
   } = useCreateSlideContext();
 
@@ -46,7 +52,9 @@ const CreateAction = () => {
       const response = await handler({
         data: {
           topicList: data?.topics,
-          fileId: data?.uploads,
+          fileId: table
+            .getFilteredSelectedRowModel()
+            .rows.map((row) => row.original.id),
         },
         fetchType: "lazy",
       });
@@ -101,6 +109,7 @@ const CreateAction = () => {
     dispatch,
     handler,
     setMultipleParams,
+    table,
   ]);
 
   return (
@@ -113,9 +122,15 @@ const CreateAction = () => {
       disabled={
         state.status === Status.PENDING ||
         status === Status.PENDING ||
-        data?.topics?.length <= 0
+        data?.topics?.length <= 0 ||
+        Object.values(indexStatus).includes(Status.PENDING)
       }
-      status={status === Status.PENDING ? Status.PENDING : state.status}
+      status={
+        Object.values(indexStatus).includes(Status.PENDING) ||
+        status === Status.PENDING
+          ? Status.PENDING
+          : state.status
+      }
       onClick={onClickHandler}
     />
   );

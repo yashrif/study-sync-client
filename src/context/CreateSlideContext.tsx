@@ -24,6 +24,7 @@ const initialState: CreateSlideState = {
   data: {} as SlideData,
   status: Status.IDLE,
   content: null,
+  indexStatus: {},
 };
 
 const createSlideReducer = (

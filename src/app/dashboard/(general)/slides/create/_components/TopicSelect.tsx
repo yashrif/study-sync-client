@@ -57,7 +57,7 @@ const TopicSelect: React.FC = () => {
   }, [dispatch, selectedTopics]);
 
   return (
-    <>
+    <div className="grid grid-cols-[auto,1fr] gap-12 items-center">
       <div className="flex gap-1.5 items-center whitespace-nowrap">
         <create.topics.icon className="size-5 stroke-primary stroke-[2.5px]" />
         <span className="text-large font-medium text-primary">
@@ -83,7 +83,7 @@ const TopicSelect: React.FC = () => {
           />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
