@@ -17,6 +17,7 @@ export type Conversation = {
 
 export enum ChatBotActionType {
   SET_SELECTED_UPLOADS = "SET_SELECTED_UPLOADS",
+  SET_SELECTED_TOPICS = "SET_SELECTED_TOPICS",
   SET_REQUEST_STATUS = "SET_REQUEST_STATUS",
   SET_PROMPT = "SET_PROMPT",
   SET_SET_PROMPT = "SET_SET_PROMPT",
@@ -31,6 +32,7 @@ export type ChatBotAction =
   | FetchAction<UploadShallow[]>
   | FetchAction<TopicShallow[]>
   | Action<ChatBotActionType.SET_SELECTED_UPLOADS, string[]>
+  | Action<ChatBotActionType.SET_SELECTED_TOPICS, string[]>
   | Action<ChatBotActionType.SET_REQUEST_STATUS, Status>
   | Action<ChatBotActionType.SET_PROMPT, string>
   | Action<ChatBotActionType.SET_TEXTAREA_REF, RefObject<HTMLTextAreaElement>>
@@ -44,6 +46,7 @@ export type ChatBotState = {
   topics: TopicShallow[];
   uploads: UploadShallow[];
   selectedUploads: string[];
+  selectedTopics: string[];
   prompt: string;
   setPrompt: Dispatch<SetStateAction<string>>;
   textareaRef: RefObject<HTMLTextAreaElement>;

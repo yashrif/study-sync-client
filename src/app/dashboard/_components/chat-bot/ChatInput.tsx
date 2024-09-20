@@ -5,26 +5,23 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   Commands as ECommands,
-  additionalCommands,
   commandLabels,
-  commandsLvl2,
 } from "@/assets/data/dashboard/chatBot";
-import { routes } from "@/assets/data/routes";
 import IconButton from "@/components/button/IconButton";
 import Dictaphone from "@/components/dictaphone";
 import { Textarea } from "@/components/ui/textarea";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
-import { usePath } from "@/hooks/usePath";
 import { ChatBotActionType, Status } from "@/types";
 import { findFirstSubstring, replace } from "@/utils/string";
+import useCommands from "./command-items/useCommands";
 import Commands from "./Commands";
 import Conversation from "./Conversation";
 import { useOnSubmit } from "./on-submit";
 
 const ChatBotInput = () => {
-  const { path } = usePath();
   const [text, setText] = useState("");
   const textDivRef = useRef<HTMLDivElement>(null);
+  const { commandsLvlInline } = useCommands();
 
   const {
     state: { selectedUploads, requestStatus, textareaRef },
@@ -93,20 +90,6 @@ const ChatBotInput = () => {
   /* -------------------------------- Variables ------------------------------- */
 
   const highlightedTextsLvl1 = commandLabels;
-  const commandsLvlInline = (): string[] => {
-    const commonCommands = commandsLvl2.map((item) => item.label);
-
-    switch (true) {
-      case path.includes(routes.dashboard.study.default) ||
-        selectedUploads.length > 0:
-        return [
-          ...commonCommands,
-          ...additionalCommands.study.map((item) => item.label),
-        ];
-      default:
-        return commonCommands;
-    }
-  };
 
   /* --------------------------------- return --------------------------------- */
 
@@ -148,6 +131,7 @@ const ChatBotInput = () => {
                           (splitText[1].trim().length > 0 &&
                             selectedUploads.length > 0))
                       ) {
+                        console.log("splitText", splitText);
                         return (
                           <>
                             {
@@ -160,9 +144,7 @@ const ChatBotInput = () => {
                               key={index}
                               text={text.slice(
                                 splitText[0].length,
-                                text.length -
-                                  splitText[1].length -
-                                  splitText[0].length
+                                item.length + splitText[0].length
                               )}
                             />
                             {

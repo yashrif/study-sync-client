@@ -1,20 +1,30 @@
 "use client";
 
 import { IconMessage } from "@tabler/icons-react";
+import _ from "lodash";
 import { useMemo } from "react";
 
 import { ScrollArea } from "@/components/ui/scroll-area-custom";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
+import TopicBadge from "./_components/TopicBadge";
 import UploadBadge from "./_components/UploadBadge";
 
 const Conversation: React.FC = () => {
   const {
-    state: { conversation, uploads, selectedUploads },
+    state: { conversation, uploads, selectedUploads, selectedTopics, topics },
   } = useChatBotContext();
 
   const filteredUploads = useMemo(
     () => uploads?.filter((item) => selectedUploads.includes(item.id)),
     [selectedUploads, uploads]
+  );
+  const filteredTopics = useMemo(
+    () =>
+      _.unionBy(
+        topics?.filter((item) => selectedTopics.includes(item.name)),
+        "name"
+      ),
+    [selectedTopics, topics]
   );
 
   return (
@@ -54,10 +64,13 @@ const Conversation: React.FC = () => {
             </div>
           )}
         </div>
-        {filteredUploads.length > 0 && (
+        {(filteredUploads.length > 0 || filteredTopics.length > 0) && (
           <div className="sticky bottom-0 inset-0 pt-2 bg-inherit flex flex-wrap-reverse gap-x-2 gap-y-1.5">
             {filteredUploads.map((upload) => (
               <UploadBadge key={upload.id} upload={upload} />
+            ))}
+            {filteredTopics.map((topic) => (
+              <TopicBadge key={topic.id} topic={topic} />
             ))}
           </div>
         )}

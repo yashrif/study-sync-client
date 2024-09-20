@@ -49,7 +49,7 @@ const QuizList = () => {
                 className="anchor text-text-400 flex gap-2 items-center"
               >
                 <IconNotes className="size-4 text-primary stroke-[2.5]" />
-                <span className="max-w-[45ch] text-ellipsis overflow-hidden">
+                <span className="max-w-[35ch] line-clamp-1">
                   {quiz.title}
                 </span>
               </Link>

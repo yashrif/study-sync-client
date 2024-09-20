@@ -308,11 +308,11 @@
   }
 
   .markdown > ul {
-    @apply list-disc pl-6 flex flex-col gap-1.5 text-sm mb-4 mt-4;
+    @apply list-disc pl-6 flex flex-col gap-1.5 text-sm mb-4 mt-2;
   }
 
   .markdown > ol {
-    @apply list-decimal pl-6 flex flex-col gap-1.5 text-sm mb-4 mt-4;
+    @apply list-decimal pl-6 flex flex-col gap-1.5 text-sm mb-4 mt-2;
   }
 
   .markdown > li {

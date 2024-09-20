@@ -18,12 +18,13 @@ import { generateUUID } from "@/utils/generateUUID";
 import { replace } from "@/utils/string";
 import SelectContainer from "./SelectContainer";
 import CommandItems from "./command-items/Commands";
+import Topics from "./command-items/Topics";
 import Uploads from "./command-items/Uploads";
 
 const Commands: React.FC = () => {
   const { path } = usePath();
   const {
-    state: { selectedUploads, setPrompt, prompt },
+    state: { selectedUploads, setPrompt, prompt, selectedTopics },
     dispatch,
   } = useChatBotContext();
 
@@ -35,7 +36,13 @@ const Commands: React.FC = () => {
   /* ---------------------------------- utils --------------------------------- */
 
   const onOpenChange = useCallback(() => {
-    setPrompt((prev) => replace(prev, ECommands["select-file"], ""));
+    setPrompt((prev) =>
+      replace(
+        replace(prev, ECommands["select-file"], ""),
+        ECommands["select-topic"],
+        " "
+      )
+    );
   }, [setPrompt]);
 
   const SelectFile: React.FC = () => (
@@ -53,12 +60,30 @@ const Commands: React.FC = () => {
     </SelectContainer>
   );
 
+  const SelectTopic: React.FC = () => (
+    <SelectContainer
+      key={generateUUID()}
+      onValueChange={(e) => {
+        dispatch({
+          type: ChatBotActionType.SET_SELECTED_TOPICS,
+          payload: [...selectedTopics, e],
+        });
+      }}
+      onOpenChange={onOpenChange}
+    >
+      <Topics />
+    </SelectContainer>
+  );
+
+  /* --------------------------------- switch --------------------------------- */
+
   switch (prompt.trimStart().toLowerCase()) {
     case ECommands["create-quiz"].toLowerCase():
     case ECommands["create-planner"].toLowerCase():
-    case ECommands["create-slide"].toLowerCase():
     case ECommands["create-flashcard"].toLowerCase():
       return selectedUploads.length === 0 ? <SelectFile /> : null;
+    case ECommands["create-slide"].toLowerCase():
+      return <SelectTopic />;
     case ECommands["slash"]:
       const commands = [
         ...commandsLvl1,
@@ -89,6 +114,11 @@ const Commands: React.FC = () => {
             selectedUploads.length > 0
               ? additionalCommands.study
               : []),
+            ...(prompt
+              .toLowerCase()
+              .includes(ECommands["create-slide"].toLowerCase())
+              ? additionalCommands.slide
+              : []),
           ];
           return (
             <SelectContainer
@@ -108,6 +138,10 @@ const Commands: React.FC = () => {
           .toLowerCase()
           .includes(ECommands["select-file"].toLowerCase()):
           return <SelectFile />;
+        case prompt
+          .toLowerCase()
+          .includes(ECommands["select-topic"].toLowerCase()):
+          return <SelectTopic />;
         default:
           return null;
       }

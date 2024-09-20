@@ -3,9 +3,9 @@ import { useCallback, useEffect } from "react";
 import studySyncDB from "@/api/studySyncDB";
 import studySyncServer from "@/api/studySyncServer";
 import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
-import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
+import { useChatBotContext } from "@/hooks/useChatBotContext";
 import {
   ChatBotActionType,
   Cq,
@@ -18,6 +18,10 @@ import {
   QuizResponseServer,
   Response,
   ResponseRequest,
+  SlideRequestDbPost,
+  SlideRequestServer,
+  SlideResponseDb,
+  SlideResponseServer,
   Status,
   StudyPromptRequestServer,
   StudyPromptResponseServer,
@@ -110,6 +114,37 @@ export const useHandlers = () => {
     dispatch: plannerDbRequestDispatch,
   });
 
+  /* ---------------------------------- Slide --------------------------------- */
+
+  const {
+    state: slideServerRequestState,
+    dispatch: slideServerRequestDispatch,
+  } = useFetchState<SlideResponseServer>();
+  const { handler: slideServerRequestHandler } = useApiHandler<
+    SlideRequestServer,
+    SlideResponseServer
+  >({
+    apiCall: useCallback(
+      (data) => studySyncServer.post(serverEndpoints.slides, data),
+      []
+    ),
+    dispatch: slideServerRequestDispatch,
+  });
+
+  const { state: slideDbRequestState, dispatch: slideDbRequestDispatch } =
+    useFetchState<SlideResponseDb>();
+  const { handler: slideDbRequestHandler } = useApiHandler<
+    SlideRequestDbPost,
+    SlideResponseDb
+  >({
+    apiCall: useCallback(
+      (data) => studySyncDB.post(dbEndpoints.slides, data),
+
+      []
+    ),
+    dispatch: slideDbRequestDispatch,
+  });
+
   /* ---------------------------- generate response --------------------------- */
 
   const { state: responseRequestState, dispatch: responseRequestDispatch } =
@@ -153,7 +188,8 @@ export const useHandlers = () => {
         plannerServerRequestState.status === Status.IDLE &&
         plannerDbRequestState.status === Status.IDLE &&
         responseRequestState.status === Status.IDLE &&
-        studyPromptRequestState.status === Status.IDLE:
+        studyPromptRequestState.status === Status.IDLE &&
+        responseRequestState.status === Status.IDLE:
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.IDLE,
@@ -167,7 +203,8 @@ export const useHandlers = () => {
         plannerServerRequestState.status === Status.PENDING ||
         plannerDbRequestState.status === Status.PENDING ||
         responseRequestState.status === Status.PENDING ||
-        studyPromptRequestState.status === Status.PENDING:
+        studyPromptRequestState.status === Status.PENDING ||
+        slideServerRequestState.status === Status.PENDING:
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.PENDING,
@@ -181,7 +218,9 @@ export const useHandlers = () => {
         (plannerServerRequestState.status === Status.SUCCESS &&
           plannerDbRequestState.status === Status.SUCCESS) ||
         responseRequestState.status === Status.SUCCESS ||
-        studyPromptRequestState.status === Status.SUCCESS:
+        studyPromptRequestState.status === Status.SUCCESS ||
+        (slideServerRequestState.status === Status.SUCCESS &&
+          slideDbRequestState.status === Status.SUCCESS):
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.SUCCESS,
@@ -195,7 +234,9 @@ export const useHandlers = () => {
         plannerServerRequestState.status === Status.ERROR ||
         plannerDbRequestState.status === Status.ERROR ||
         responseRequestState.status === Status.ERROR ||
-        studyPromptRequestState.status === Status.ERROR:
+        studyPromptRequestState.status === Status.ERROR ||
+        slideServerRequestState.status === Status.ERROR ||
+        slideDbRequestState.status === Status.ERROR:
         dispatch({
           type: ChatBotActionType.SET_REQUEST_STATUS,
           payload: Status.ERROR,
@@ -218,6 +259,8 @@ export const useHandlers = () => {
     plannerDbRequestState.status,
     responseRequestState.status,
     studyPromptRequestState.status,
+    slideServerRequestState.status,
+    slideDbRequestState.status,
   ]);
 
   return {
@@ -239,7 +282,12 @@ export const useHandlers = () => {
     responseRequestHandler,
     responseRequestState,
 
-    studyPromptResponseRequestHandler: studyPromptRequestHandler,
+    studyPromptRequestHandler,
     studyPromptRequestState,
+
+    slideServerRequestHandler,
+    slideServerRequestState,
+    slideDbRequestHandler,
+    slideDbRequestState,
   };
 };

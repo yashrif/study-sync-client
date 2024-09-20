@@ -2,9 +2,13 @@
 
 import { useParams } from "next/navigation";
 import randomColor from "randomcolor";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
-import { Commands, StudyCommands } from "@/assets/data/dashboard/chatBot";
+import {
+  Commands,
+  commandsLvl1,
+  StudyCommands,
+} from "@/assets/data/dashboard/chatBot";
 import { routes } from "@/assets/data/routes";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { usePath } from "@/hooks/usePath";
@@ -13,8 +17,10 @@ import {
   PlannerRequestDBPost,
   QuizRequestDb,
   QuizTypes,
+  SlideRequestDbPost,
 } from "@/types";
-import { replace } from "@/utils/string";
+import { findFirstSubstring, replace } from "@/utils/string";
+import useCommands from "../command-items/useCommands";
 import { useHandlers } from "../useHandlers";
 import useExplainConversation from "./useExplainConversation";
 import useFlashcardConversation from "./useFlashcardConversation";
@@ -23,6 +29,7 @@ import usePromptConversation from "./usePromptConversation";
 import useProvideExampleConversation from "./useProvideExampleConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
+import useSlideConversation from "./useSlideConversation";
 import useSummarizeConversation from "./useSummarizeConversation";
 import useUploadConversation from "./useUploadsConversation";
 
@@ -35,6 +42,7 @@ export const useOnSubmit = () => {
     : "";
 
   const { path } = usePath();
+  const { commandsLvlInline } = useCommands();
 
   const { state, dispatch } = useChatBotContext();
   const {
@@ -45,7 +53,9 @@ export const useOnSubmit = () => {
     plannerServerRequestHandler,
     plannerDbRequestHandler,
     responseRequestHandler,
-    studyPromptResponseRequestHandler,
+    studyPromptRequestHandler,
+    slideServerRequestHandler,
+    slideDbRequestHandler,
   } = useHandlers();
   const quizConversations = useQuizConversation();
   const flashcardConversations = useFlashcardConversation();
@@ -56,6 +66,7 @@ export const useOnSubmit = () => {
   const promptConversation = usePromptConversation();
   const summarizeConversation = useSummarizeConversation();
   const provideExampleConversation = useProvideExampleConversation();
+  const slideConversation = useSlideConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -63,15 +74,40 @@ export const useOnSubmit = () => {
     [state.selectedUploads, state.uploads]
   );
 
+  const getFirstLvl1Command = useCallback(() => {
+    const subString =
+      findFirstSubstring(
+        state.prompt.toLowerCase(),
+        commandsLvl1.map((item) => item.value.toLowerCase())
+      ).substring || "";
+
+    return state.prompt.trim().toLowerCase().startsWith(subString)
+      ? subString
+      : "";
+  }, [state.prompt]);
+
+  const getFirstInlineCommand = useCallback(
+    () =>
+      findFirstSubstring(
+        state.prompt.toLowerCase(),
+        commandsLvlInline().map((item) => item.toLowerCase())
+      ).substring || "",
+
+    [commandsLvlInline, state.prompt]
+  );
+
   /* -------------------------------- On Submit ------------------------------- */
 
   const onSubmit = async () => {
+    const firstLvl1Command = getFirstLvl1Command();
+    const firstInlineCommand = getFirstInlineCommand();
+
     switch (true) {
       /* ---------------------------------- quiz ---------------------------------- */
 
-      case state.prompt
+      case Commands["create-quiz"]
         .toLowerCase()
-        .includes(Commands["create-quiz"].toLowerCase()):
+        .localeCompare(firstLvl1Command) === 0:
         state.setPrompt("");
         if (state.selectedUploads.length > 0) {
           try {
@@ -132,9 +168,9 @@ export const useOnSubmit = () => {
 
       /* -------------------------------- flashcard ------------------------------- */
 
-      case state.prompt
+      case Commands["create-flashcard"]
         .toLowerCase()
-        .includes(Commands["create-flashcard"].toLowerCase()):
+        .localeCompare(firstLvl1Command) === 0:
         if (state.selectedUploads.length > 0) {
           try {
             state.setPrompt("");
@@ -198,9 +234,9 @@ export const useOnSubmit = () => {
 
       /* --------------------------------- planner -------------------------------- */
 
-      case state.prompt
+      case Commands["create-planner"]
         .toLowerCase()
-        .includes(Commands["create-planner"].toLowerCase()):
+        .localeCompare(firstLvl1Command) === 0:
         if (state.selectedUploads.length > 0) {
           try {
             state.setPrompt("");
@@ -259,11 +295,74 @@ export const useOnSubmit = () => {
 
         break;
 
+      /* ---------------------------------- slide --------------------------------- */
+
+      case Commands["create-slide"]
+        .toLowerCase()
+        .localeCompare(firstLvl1Command) === 0:
+        if (state.selectedTopics.length > 0) {
+          try {
+            state.setPrompt("");
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                slideConversation.prompt(),
+                slideConversation.crateStart(),
+              ],
+            });
+            const serverResponse = await slideServerRequestHandler({
+              data: {
+                topicList: state.selectedTopics,
+                fileId: state.selectedUploads,
+              },
+              fetchType: "lazy",
+              isReset: true,
+            });
+
+            if (serverResponse) {
+              const dbRequest: SlideRequestDbPost = {
+                name: state.selectedTopics[0],
+                topics: state.selectedTopics,
+                uploads: filteredUploads,
+                content: serverResponse,
+              };
+
+              const dbResponse = await slideDbRequestHandler({
+                data: dbRequest,
+                fetchType: "lazy",
+                isReset: true,
+              });
+
+              if (dbResponse)
+                dispatch({
+                  type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+                  payload: slideConversation.createSuccess(dbResponse),
+                });
+            }
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: slideConversation.createError(),
+            });
+          }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              slideConversation.prompt(),
+              // uploadConversation.noUploads(),
+            ],
+          });
+        }
+
+        break;
+
       /* --------------------------------- Explain -------------------------------- */
 
-      case state.prompt
+      case Commands["explain"]
         .toLowerCase()
-        .includes(Commands["explain"].toLowerCase()) &&
+        .localeCompare(firstInlineCommand) === 0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedExplainPrompt = state.prompt
@@ -290,7 +389,7 @@ export const useOnSubmit = () => {
 
             state.setPrompt("");
 
-            const response = await studyPromptResponseRequestHandler({
+            const response = await studyPromptRequestHandler({
               data: {
                 query:
                   StudyCommands.explain.instruction +
@@ -339,9 +438,9 @@ export const useOnSubmit = () => {
 
       /* -------------------------------- Summarize ------------------------------- */
 
-      case state.prompt
+      case Commands["summarize"]
         .toLowerCase()
-        .includes(Commands["summarize"].toLowerCase()) &&
+        .localeCompare(firstInlineCommand) === 0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedSummarizePrompt = state.prompt
@@ -366,7 +465,7 @@ export const useOnSubmit = () => {
               ],
             });
             state.setPrompt("");
-            const response = await studyPromptResponseRequestHandler({
+            const response = await studyPromptRequestHandler({
               data: {
                 query:
                   StudyCommands.summarize.instruction +
@@ -414,9 +513,9 @@ export const useOnSubmit = () => {
 
       /* ----------------------------- Provide Example ---------------------------- */
 
-      case state.prompt
+      case Commands["provide-example"]
         .toLowerCase()
-        .includes(Commands["provide-example"].toLowerCase()) &&
+        .localeCompare(firstInlineCommand) === 0 &&
         (state.selectedUploads.length > 0 ||
           path.includes(routes.dashboard.study.home)):
         const stripedProvideExamplePrompt = state.prompt
@@ -444,7 +543,7 @@ export const useOnSubmit = () => {
               ],
             });
             state.setPrompt("");
-            const response = await studyPromptResponseRequestHandler({
+            const response = await studyPromptRequestHandler({
               data: {
                 query:
                   StudyCommands.provideExample.instruction +
