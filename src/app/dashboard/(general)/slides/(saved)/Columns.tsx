@@ -1,164 +1,97 @@
-import { IconRefresh, IconXboxX } from "@tabler/icons-react";
+import { IconFileTypePdf } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
+import randomColor from "randomcolor";
 
 import studySyncDB from "@/api/studySyncDB";
-import studySyncServer from "@/api/studySyncServer";
-import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
-import { fileTypeIcons } from "@/assets/data/dashboard/file";
+import { dbEndpoints } from "@/assets/data/api";
 import { routes } from "@/assets/data/routes";
-import { CheckmarkAnimated } from "@/components/icons";
 import {
   Actions,
   Checkbox,
   ColumnHeader,
 } from "@/components/table/ColumnTools";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
-import { useFetchState } from "@/hooks/fetchData";
-import { useUploadsContext } from "@/hooks/useUploadsContext";
+import { useSlidesContext } from "@/hooks/useSlidesContext";
+import { shadeGenerator } from "@/utils/colorGenerator";
 import {
   Column,
-  FetchActionType,
-  Status,
+  SlidesActionType,
+  SlideShallow,
   TableAction,
-  UploadsActionType,
   UploadShallow,
 } from "@allTypes";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@components/ui/tooltip";
-import { CircleCheck } from "@icons";
-
-type IndexButtonProps = {
-  data: UploadShallow;
-};
-
-const IndexButton: React.FC<IndexButtonProps> = ({ data }) => {
-  const {
-    state: { uploads },
-    dispatch: uploadsDispatch,
-  } = useUploadsContext();
-
-  const { state, dispatch } = useFetchState<UploadShallow>();
-
-  return (
-    <div className="pl-12">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div
-              className="cursor-pointer"
-              onClick={async () => {
-                try {
-                  dispatch({
-                    type: FetchActionType.FETCH_START,
-                  });
-                  await studySyncServer.post(serverEndpoints.index, data.name);
-
-                  await studySyncDB.patch(`${dbEndpoints.uploads}/${data.id}`, {
-                    isIndexed: true,
-                  });
-
-                  dispatch({
-                    type: FetchActionType.FETCH_SUCCESS,
-                    payload: { ...data, isIndexed: true },
-                  });
-
-                  setTimeout(() => {
-                    uploadsDispatch({
-                      type: UploadsActionType.SET_UPLOADS,
-                      payload: uploads.map((upload) =>
-                        upload.id === data.id
-                          ? { ...upload, isIndexed: true }
-                          : upload
-                      ),
-                    });
-                  }, 2000);
-                } catch (err) {
-                  console.log(err);
-                  dispatch({
-                    type: FetchActionType.FETCH_ERROR,
-                  });
-                  setTimeout(() => {
-                    dispatch({
-                      type: FetchActionType.FETCH_IDLE,
-                    });
-                  }, 2000);
-                }
-              }}
-            >
-              {state.status === Status.SUCCESS ? (
-                <CheckmarkAnimated className="size-4 pointer-events-none" />
-              ) : state.status === Status.ERROR ? (
-                <IconXboxX className="size-4 text-destructive pointer-events-none" />
-              ) : state.status === Status.PENDING ? (
-                <IconRefresh className="size-4 text-primary animate-spin duration-1000" />
-              ) : data.isIndexed ? (
-                <CircleCheck className="size-4 stroke-success hover:scale-125 duration-300" />
-              ) : (
-                <IconRefresh className="size-4 text-primary hover:scale-125 duration-300" />
-              )}
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="text-small">
-              {data.isIndexed ? "Click to re-index" : "Click to start indexing"}
-            </p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
-  );
-};
 
 const useColumnConfig = (): {
-  columns: Column<UploadShallow>[];
-  actions: TableAction<UploadShallow>[];
+  columns: Column<SlideShallow>[];
+  actions: TableAction<SlideShallow>[];
 } => {
   const { push } = useRouter();
   const {
-    state: { uploads },
+    state: { slides },
     dispatch,
-  } = useUploadsContext();
+  } = useSlidesContext();
 
   return {
     columns: [
       {
         type: "link",
-        accessorKey: "title",
-        title: "Title",
+        accessorKey: "name",
+        title: "Name",
         formatter: (title) => {
           return title as string;
         },
         linkKey: "id",
-        path: routes.dashboard.study.home,
-        Icon(props) {
-          return fileTypeIcons({
-            key: "type",
-            value: props.value,
-          });
-        },
-        iconClassName() {
-          return "text-primary";
+        path: routes.dashboard.slides.home,
+      },
+      {
+        type: "no_link",
+        accessorKey: "topics",
+        title: "Topics",
+        formatter: (topics) => {
+          return (
+            <div className="flex flex-wrap gap-x-2 gap-y-2">
+              {(topics as string[])?.map((topic, index) => {
+                const color = randomColor({ luminosity: "bright" });
+
+                return (
+                  <Badge
+                    key={index}
+                    className="max-w-[20ch] line-clamp-1"
+                    style={{
+                      color: color,
+                      backgroundColor: shadeGenerator(color, 20),
+                      borderColor: color,
+                    }}
+                  >
+                    {topic}{" "}
+                  </Badge>
+                );
+              })}
+            </div>
+          );
         },
       },
       {
         type: "no_link",
-        accessorKey: "type",
-        title: "Type",
-        formatter: (type) => {
-          return type as string;
-        },
-      },
-      {
-        type: "no_link",
-        accessorKey: "isIndexed",
-        title: "Indexing Status",
-        formatter: (status, data) => {
-          return <IndexButton data={data} />;
+        accessorKey: "uploads",
+        title: "Files",
+        formatter: (uploads) => {
+          return (
+            <div className="flex flex-wrap gap-x-2 gap-y-2">
+              {(uploads as UploadShallow[]).map((upload) => (
+                <Badge key={upload.id} className="bg-primary text-white">
+                  <div className="flex gap-1 items-center">
+                    <IconFileTypePdf className="size-3 stroke-[2.5px]" />
+                    <span className="max-w-[20ch] line-clamp-1">
+                      {upload.title}
+                    </span>
+                  </div>
+                </Badge>
+              ))}
+            </div>
+          );
         },
       },
       {
@@ -174,30 +107,27 @@ const useColumnConfig = (): {
       {
         title: "View",
         onClick: (data) =>
-          data ? push(routes.dashboard.study.details(data.id)) : null,
+          data ? push(routes.dashboard.slides.details(data.id)) : null,
       },
       {
         title: "Delete",
         onClick: async (data) => {
           try {
-            await studySyncServer.delete(
-              `${serverEndpoints.uploads}/${data?.name}`
-            );
-            await studySyncDB.delete(`${dbEndpoints.uploads}/${data?.id}`);
+            await studySyncDB.delete(`${dbEndpoints.slides}/${data?.id}`);
             dispatch({
-              type: UploadsActionType.SET_UPLOADS,
-              payload: uploads?.filter((upload) => upload.id !== data?.id),
+              type: SlidesActionType.SET_SLIDES,
+              payload: slides?.filter((slide) => slide.id !== data?.id),
             });
             toast({
               title: "Deleted Successfully!",
-              description: `File with id: ${data?.id} is successfully deleted.`,
+              description: `Slide with id: ${data?.id} is successfully deleted.`,
               duration: 5000,
             });
           } catch (err) {
             console.log(err);
             toast({
               title: "Action failed!",
-              description: `Failed to delete file with the id: ${data?.id}.`,
+              description: `Failed to delete slide with the id: ${data?.id}.`,
               duration: 5000,
             });
           }
@@ -207,9 +137,9 @@ const useColumnConfig = (): {
   };
 };
 
-export const useColumns = (): ColumnDef<UploadShallow>[] => {
+export const useColumns = (): ColumnDef<SlideShallow>[] => {
   const columnHeaders = useColumnConfig().columns.map((column) =>
-    ColumnHeader<UploadShallow>({ column })
+    ColumnHeader<SlideShallow>({ column })
   );
 
   return [
@@ -218,7 +148,7 @@ export const useColumns = (): ColumnDef<UploadShallow>[] => {
     },
     ...columnHeaders,
     {
-      ...Actions<UploadShallow>({
+      ...Actions<SlideShallow>({
         actions: useColumnConfig().actions,
         copyId: true,
       }),

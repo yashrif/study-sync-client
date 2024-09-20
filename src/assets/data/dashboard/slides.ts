@@ -110,3 +110,8 @@ export const preview = {
     },
   },
 };
+
+export const search = {
+  key: "name",
+  placeholder: "Search by name",
+};

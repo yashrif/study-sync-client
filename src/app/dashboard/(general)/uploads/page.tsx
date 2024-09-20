@@ -3,7 +3,8 @@
 import { Suspense, useCallback } from "react";
 
 import studySyncDB from "@/api/studySyncDB";
-import { dbEndpoints } from "@/assets/data/api";
+import studySyncServer from "@/api/studySyncServer";
+import { dbEndpoints, serverEndpoints } from "@/assets/data/api";
 import { home, search } from "@/assets/data/dashboard/uploads";
 import Spinner from "@/components/spinner/Spinner";
 import DataTable from "@/components/table";
@@ -37,15 +38,25 @@ const Uploads: React.FC = () => {
     columns: useColumns(),
   });
 
-  const { state, dispatch: uploadDelete } = useFetchState<null>();
-  const { handler } = useApiHandler<null, null>({
+  const { state: stateServer, dispatch: uploadDeleteServer } =
+    useFetchState<null>();
+  const { handler: handlerDeleteServer } = useApiHandler<null, null>({
+    apiCall: useCallback(
+      (_, pathVariable) =>
+        studySyncServer.delete(`${serverEndpoints.uploads}/${pathVariable}`),
+      []
+    ),
+    dispatch: uploadDeleteServer,
+  });
+
+  const { state: stateDb, dispatch: uploadDeleteDB } = useFetchState<null>();
+  const { handler: handlerDeleteDb } = useApiHandler<null, null>({
     apiCall: useCallback(
       (_, pathVariable) =>
         studySyncDB.delete(`${dbEndpoints.uploads}/${pathVariable}`),
       []
     ),
-
-    dispatch: uploadDelete,
+    dispatch: uploadDeleteDB,
   });
 
   const { handler: refreshHandler } = useApiHandler({
@@ -60,10 +71,23 @@ const Uploads: React.FC = () => {
         .rows.map((row) => row.original);
 
       //TODO: Implement delete exception handling
+
       await Promise.all(
         selectedUploads.map(async (upload) => {
-          await handler({
+          await handlerDeleteServer({
+            pathVariable: upload.name,
+            isReset: true,
+            fetchType: "lazy",
+          });
+        })
+      );
+
+      await Promise.all(
+        selectedUploads.map(async (upload) => {
+          await handlerDeleteDb({
             pathVariable: upload.id,
+            isReset: true,
+            fetchType: "lazy",
           });
         })
       );
@@ -95,6 +119,22 @@ const Uploads: React.FC = () => {
     refreshHandler({});
   }, [refreshHandler]);
 
+  const deleteStatus = () => {
+    switch (true) {
+      case stateServer.status === Status.PENDING ||
+        stateDb.status === Status.PENDING:
+        return Status.PENDING;
+      case stateServer.status === Status.ERROR ||
+        stateDb.status === Status.ERROR:
+        return Status.ERROR;
+      case stateServer.status === Status.SUCCESS &&
+        stateDb.status === Status.SUCCESS:
+        return Status.SUCCESS;
+      default:
+        return Status.IDLE;
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <PageHeading
@@ -120,7 +160,7 @@ const Uploads: React.FC = () => {
             [TableControlTypes.DELETE]: {
               hidden: false,
               onClick: onDelete,
-              status: state.status,
+              status: deleteStatus(),
             },
             [TableControlTypes.SEARCH]: {
               hidden: false,

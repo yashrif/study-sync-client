@@ -12,6 +12,7 @@ import studySyncDB from "@/api/studySyncDB";
 import PageHeading from "@/app/dashboard/_components/PageHeading";
 import { dbEndpoints } from "@/assets/data/api";
 import {
+  defaultValues,
   home,
   preview,
   PreviewAction,
@@ -49,7 +50,7 @@ const Preview = () => {
   ];
 
   const [value, setValue] = useState<string | undefined>(content || "");
-  const [name, setName] = useState<string>(initName || "");
+  const [name, setName] = useState<string>(initName || defaultValues.title);
 
   if (!content || (action === PreviewAction.patch && !id)) {
     replace(routes.dashboard.slides.create);
