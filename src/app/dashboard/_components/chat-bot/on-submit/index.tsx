@@ -13,6 +13,7 @@ import {
   PlannerRequestDBPost,
   QuizRequestDb,
   QuizTypes,
+  SlideRequestDbPost,
 } from "@/types";
 import { findFirstSubstring, replace } from "@/utils/string";
 import useCommands from "../command-items/useCommands";
@@ -24,6 +25,7 @@ import usePromptConversation from "./usePromptConversation";
 import useProvideExampleConversation from "./useProvideExampleConversation";
 import useQuizConversation from "./useQuizConversation";
 import useResponseConversation from "./useResponseConversation";
+import useSlideConversation from "./useSlideConversation";
 import useSummarizeConversation from "./useSummarizeConversation";
 import useUploadConversation from "./useUploadsConversation";
 
@@ -47,7 +49,9 @@ export const useOnSubmit = () => {
     plannerServerRequestHandler,
     plannerDbRequestHandler,
     responseRequestHandler,
-    studyPromptResponseRequestHandler,
+    studyPromptRequestHandler,
+    slideServerRequestHandler,
+    slideDbRequestHandler,
   } = useHandlers();
   const quizConversations = useQuizConversation();
   const flashcardConversations = useFlashcardConversation();
@@ -58,6 +62,7 @@ export const useOnSubmit = () => {
   const promptConversation = usePromptConversation();
   const summarizeConversation = useSummarizeConversation();
   const provideExampleConversation = useProvideExampleConversation();
+  const slideConversation = useSlideConversation();
 
   const filteredUploads = useMemo(
     () =>
@@ -267,6 +272,66 @@ export const useOnSubmit = () => {
 
         break;
 
+      /* ---------------------------------- slide --------------------------------- */
+
+      case state.prompt
+        .toLowerCase()
+        .includes(Commands["create-slide"].toLowerCase()):
+        if (state.selectedTopics.length > 0) {
+          try {
+            state.setPrompt("");
+            dispatch({
+              type: ChatBotActionType.ADD_CONVERSATION,
+              payload: [
+                slideConversation.prompt(),
+                slideConversation.crateStart(),
+              ],
+            });
+            const serverResponse = await slideServerRequestHandler({
+              data: state.selectedUploads,
+              fetchType: "lazy",
+              isReset: true,
+            });
+
+            if (serverResponse) {
+              const dbRequest: SlideRequestDbPost = {
+                name: state.selectedTopics[0],
+                topics: state.selectedTopics,
+                uploads: filteredUploads,
+                content: serverResponse,
+              };
+
+              const dbResponse = await slideDbRequestHandler({
+                data: dbRequest,
+                fetchType: "lazy",
+                isReset: true,
+              });
+
+              if (dbResponse)
+                dispatch({
+                  type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+                  payload: slideConversation.createSuccess(dbResponse),
+                });
+            }
+          } catch (err) {
+            console.log(err);
+            dispatch({
+              type: ChatBotActionType.REPLACE_LAST_CONVERSATION,
+              payload: slideConversation.createError(),
+            });
+          }
+        } else {
+          dispatch({
+            type: ChatBotActionType.ADD_CONVERSATION,
+            payload: [
+              slideConversation.prompt(),
+              // uploadConversation.noUploads(),
+            ],
+          });
+        }
+
+        break;
+
       /* --------------------------------- Explain -------------------------------- */
 
       case Commands["explain"].toLowerCase().localeCompare(firstCommand) ===
@@ -297,7 +362,7 @@ export const useOnSubmit = () => {
 
             state.setPrompt("");
 
-            const response = await studyPromptResponseRequestHandler({
+            const response = await studyPromptRequestHandler({
               data: {
                 query:
                   StudyCommands.explain.instruction +
@@ -372,7 +437,7 @@ export const useOnSubmit = () => {
               ],
             });
             state.setPrompt("");
-            const response = await studyPromptResponseRequestHandler({
+            const response = await studyPromptRequestHandler({
               data: {
                 query:
                   StudyCommands.summarize.instruction +
@@ -450,7 +515,7 @@ export const useOnSubmit = () => {
               ],
             });
             state.setPrompt("");
-            const response = await studyPromptResponseRequestHandler({
+            const response = await studyPromptRequestHandler({
               data: {
                 query:
                   StudyCommands.provideExample.instruction +

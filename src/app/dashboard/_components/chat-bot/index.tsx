@@ -8,7 +8,7 @@ import { dbEndpoints } from "@/assets/data/api";
 import IconButton from "@/components/button/IconButton";
 import { useFetchData } from "@/hooks/fetchData";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
-import { UploadShallow } from "@/types";
+import { TopicShallow, UploadShallow } from "@/types";
 import ChatBotInput from "./ChatInput";
 
 const ChatBot: React.FC = () => {
@@ -18,6 +18,10 @@ const ChatBot: React.FC = () => {
 
   useFetchData<null, UploadShallow[]>({
     apiCall: useCallback(() => studySyncDB.get(dbEndpoints.uploads), []),
+    dispatch,
+  });
+  useFetchData<null, TopicShallow[]>({
+    apiCall: useCallback(() => studySyncDB.get(dbEndpoints.topics), []),
     dispatch,
   });
 

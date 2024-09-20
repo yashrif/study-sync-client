@@ -5,6 +5,7 @@ export enum Commands {
   "create-flashcard" = "/Create Flashcard",
   "create-slide" = "/Create Slide",
   "select-file" = "/Select File",
+  "select-topic" = "/Select Topic",
   "explain" = "/Explain",
   "summarize" = "/Summarize",
   "provide-example" = "/Provide Example",
@@ -64,8 +65,17 @@ export const StudyCommands = {
   },
 };
 
+export const SlideCommands = {
+  selectTopic: {
+    value: Commands["select-topic"],
+    label: "/Select Topic",
+    instruction: "",
+  },
+};
+
 export const additionalCommands = {
   study: Object.values(StudyCommands),
+  slide: Object.values(SlideCommands),
 };
 
 export const commandLabels = commandsLvl1.map((item) => item.label);
