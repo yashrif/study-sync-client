@@ -22,7 +22,8 @@ export const generatePdfFromHtml = async (
             text-align: center;
             line-height: 1.2;
             letter-spacing: -0.5px;
-            color: #6b48b7; /* hsl(267.5, 42.86%, 56.08%) */
+            color: #8B5FBF;
+            padding-top: 2.5rem;
             margin-bottom: 1.5rem; /* mb-6 */
           }
 
@@ -31,7 +32,8 @@ export const generatePdfFromHtml = async (
             font-size: 30px;
             line-height: 1.2;
             letter-spacing: -0.5px;
-            color: #6b48b7; /* hsl(267.5, 42.86%, 56.08%) */
+            color: #8B5FBF;
+            padding-top: 2.5rem;
             margin-bottom: 1.5rem; /* mb-6 */
           }
 
@@ -40,14 +42,16 @@ export const generatePdfFromHtml = async (
             font-size: 1.5rem; /* text-2xl */
             line-height: 1.2;
             letter-spacing: -0.5px;
-            color: #6b48b7; /* hsl(267.5, 42.86%, 56.08%) */
+            color: #8B5FBF;
+            padding-top: 2.5rem;
             margin-bottom: 1.5rem; /* mb-6 */
           }
 
           h4 {
             font-size: 1.25rem; /* text-xl */
             font-weight: 500; /* font-medium */
-            color: #6b48b7; /* hsl(267.5, 42.86%, 56.08%) */
+            color: #8B5FBF;
+            padding-top: 1.5rem;
             margin-bottom: 1rem; /* mb-4 */
           }
 
@@ -55,7 +59,8 @@ export const generatePdfFromHtml = async (
           h6 {
             font-size: 1.125rem; /* text-lg */
             font-weight: 500; /* font-medium */
-            color: #6b48b7; /* hsl(267.5, 42.86%, 56.08%) */
+            color: #8B5FBF;
+            padding-top: 1.5rem;
             margin-bottom: 1rem; /* mb-4 */
           }
 
@@ -71,6 +76,7 @@ export const generatePdfFromHtml = async (
             flex-direction: column;
             gap: 0.375rem; /* gap-1.5 */
             margin-bottom: 1rem; /* mb-4 */
+            font-size: 1.125rem; /* 18px */
           }
 
           ol {
@@ -80,6 +86,7 @@ export const generatePdfFromHtml = async (
             flex-direction: column;
             gap: 0.375rem; /* gap-1.5 */
             margin-bottom: 1rem; /* mb-4 */
+            font-size: 1.125rem; /* 18px */
           }
 
           li {
@@ -89,7 +96,7 @@ export const generatePdfFromHtml = async (
 
           blockquote {
             border-left-width: 4px;
-            border-left-color: #462f79; /* hsl(267.91, 43%, 39.22%) */
+            border-left-color: #8B5FBF;
             padding-left: 1rem;
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
@@ -97,7 +104,7 @@ export const generatePdfFromHtml = async (
 
           table th {
             font-size: 1.25rem; /* text-xl */
-            color: #462f79; /* hsl(267.91, 43%, 39.22%) */
+            color: #8B5FBF;
             font-weight: 500; /* font-medium */
           }
 
@@ -109,22 +116,30 @@ export const generatePdfFromHtml = async (
           a {
             font-size: 1.125rem; /* 18px */
             text-decoration: underline;
-            color: #6b48b7; /* hsl(267.5, 42.86%, 56.08%) */
+            color: #8B5FBF;
           }
 
           pre {
-            font-size: 1.125rem; /* 18px */
-            background-color: #ffffff; /* hsl(0, 0%, 100%) */
-            padding: 1rem;
-            border-radius: 0.5rem;
+            font-size: 1rem; /* 16px */
+            background-color: #e6dded !important;
+            padding: 1rem; /* p-4 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 500; /* font-medium */
+            margin-top: 0.75rem; /* my-3 */
+            margin-bottom: 0.75rem; /* my-3 */
+          }
+
+          pre > code {
+            font-weight: 500; /* font-medium */
+            letter-spacing: 0.05em; /* tracking-wider */
           }
 
           code {
-            font-size: 1.125rem; /* 18px */
-            background-color: #4a4a4a; /* hsl(0, 0%, 29.02%) */
-            color: #878787; /* hsl(0, 0%, 52.94%) */
-            padding: 0.25rem;
-            border-radius: 0.125rem;
+            background-color: #e6dded !important;
+            color: #878787; /* hsl(0, 0%, 52.94%) (assuming --text-200 refers to this value) */
+            font-weight: 500; /* font-medium */
+            padding: 0.25rem; /* p-1 */
+            border-radius: 0.375rem; /* rounded-md */
           }
 
           table {

@@ -1,5 +1,5 @@
 import { home } from "@/assets/data/dashboard/slides";
-import PageHeading from "../../_components/PageHeading";
+import PageHeading from "../../../_components/PageHeading";
 
 const CreateSlides = () => {
   return (

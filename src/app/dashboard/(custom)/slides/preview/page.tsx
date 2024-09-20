@@ -24,7 +24,12 @@ import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { useQueryString } from "@/hooks/useQueryString";
-import { FetchActionType, SlideRequestDb, SlideResponseDb } from "@/types";
+import {
+  FetchActionType,
+  SlideRequestDbPatch,
+  SlideRequestDbPost,
+  SlideResponseDb,
+} from "@/types";
 
 const Preview = () => {
   const { replace } = useRouter();
@@ -52,7 +57,7 @@ const Preview = () => {
 
   const { state, dispatch } = useFetchState<SlideResponseDb>();
   const { handler: postHandler } = useApiHandler<
-    SlideRequestDb,
+    SlideRequestDbPost,
     SlideResponseDb
   >({
     apiCall: useCallback(
@@ -62,7 +67,7 @@ const Preview = () => {
     dispatch,
   });
   const { handler: patchHandler } = useApiHandler<
-    Omit<SlideRequestDb, "uploads">,
+    Omit<SlideRequestDbPatch, "uploads">,
     SlideResponseDb
   >({
     apiCall: useCallback(
@@ -87,6 +92,7 @@ const Preview = () => {
                   (uploadId) =>
                     uploadsState.filter((item) => item.id === uploadId)[0]
                 ),
+                topics: topics,
               },
               fetchType: "lazy",
             })
@@ -120,6 +126,7 @@ const Preview = () => {
     value,
     name,
     uploads,
+    topics,
     patchHandler,
     id,
     uploadsState,

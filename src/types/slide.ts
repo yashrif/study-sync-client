@@ -28,10 +28,16 @@ export type SlideResponseServer = string;
 
 /* ----------------------------------- DB ----------------------------------- */
 
-export type SlideRequestDb = {
+export type SlideRequestDbPost = {
   name: string;
   content: string;
+  topics: string[];
   uploads: UploadShallow[] | null;
+};
+
+export type SlideRequestDbPatch = {
+  name: string;
+  content: string;
 };
 
 export type SlideResponseDb = {
@@ -39,19 +45,15 @@ export type SlideResponseDb = {
   name: string;
   createDate: string;
   content: string;
+  topics: string[];
   uploads: UploadShallow[] | null;
 };
 
 /* ---------------------------------- Slide --------------------------------- */
 
-export type SlideShallow = {
-  id: string;
-  createDate: string;
-  name: string;
-  content: string;
-};
+export type SlideShallow = SlideResponseDb;
 
-export type Slide = SlideResponseDb;
+export type Slide = SlideShallow;
 
 /* ------------------------------ Slide Create ------------------------------ */
 
@@ -84,4 +86,24 @@ export type CreateSlideState = {
 export type CreateSlideContextProps = {
   state: CreateSlideState;
   dispatch: React.Dispatch<CreateSlideAction>;
+};
+
+/* ----------------------------- Slides context ----------------------------- */
+
+export enum SlidesActionType {
+  SET_SLIDES = "SET_SLIDES",
+}
+
+export type SlidesAction =
+  | FetchAction<SlideShallow[]>
+  | Action<SlidesActionType.SET_SLIDES, SlideShallow[]>;
+
+export type SlidesState = {
+  slides: SlideShallow[];
+  status: Status;
+};
+
+export type SlidesContextProps = {
+  state: SlidesState;
+  dispatch: React.Dispatch<SlidesAction>;
 };
