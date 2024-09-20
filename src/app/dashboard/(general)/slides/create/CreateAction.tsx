@@ -49,12 +49,14 @@ const CreateAction: React.FC<Props> = ({ table }) => {
         type: FetchActionType.FETCH_START,
       });
 
+      const selectedUploads = table
+        .getFilteredSelectedRowModel()
+        .rows.map((row) => row.original.id);
+
       const response = await handler({
         data: {
           topicList: data?.topics,
-          fileId: table
-            .getFilteredSelectedRowModel()
-            .rows.map((row) => row.original.id),
+          fileId: selectedUploads,
         },
         fetchType: "lazy",
       });
@@ -78,7 +80,7 @@ const CreateAction: React.FC<Props> = ({ table }) => {
             },
             {
               name: QueryParams.uploads,
-              value: data?.uploads,
+              value: selectedUploads,
             },
             {
               name: QueryParams.topics,
@@ -105,7 +107,6 @@ const CreateAction: React.FC<Props> = ({ table }) => {
   }, [
     contextDispatch,
     data?.topics,
-    data?.uploads,
     dispatch,
     handler,
     setMultipleParams,

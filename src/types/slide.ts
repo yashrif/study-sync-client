@@ -61,7 +61,6 @@ export type Slide = SlideShallow;
 
 export type SlideData = {
   topics: string[];
-  uploads: string[];
   prompt: string;
   webSearch: boolean;
 };
