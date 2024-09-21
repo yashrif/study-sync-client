@@ -214,7 +214,7 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                 onChange={(e) => {
                   field.onChange(e.target.value);
                 }}
-                defaultValue={field?.value || ""}
+                defaultValue={""}
                 disabled={isDisabled}
               />
             </div>

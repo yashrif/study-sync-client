@@ -143,6 +143,8 @@ const List: React.FC = () => {
 
   useImperativeHandle(ref, resetOptions);
 
+  console.log("List -> mcqs", form.getValues());
+
   return (
     <Form {...form}>
       <form
