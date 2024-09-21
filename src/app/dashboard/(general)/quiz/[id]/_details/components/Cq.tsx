@@ -118,8 +118,10 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                       ? "text-destructive"
                       : result.correctness
                         ? result.correctness <= 50 && result.correctness >= 0
-                          ? "text-text-300"
-                          : "text-white"
+                          ? "text-white"
+                          : result.correctness > 50
+                            ? "text-white"
+                            : "text-primary"
                         : isShowResults && evaluateStatus === Status.SUCCESS
                           ? "text-white"
                           : "text-primary"
