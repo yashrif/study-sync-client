@@ -83,11 +83,10 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
           </FormLabel>
           <FormControl>
             <RadioGroup
-              value={field?.value || ""}
-              onValueChange={field?.onChange}
-              defaultValue={field?.value || ""}
               className="flex flex-col gap-3 !mt-0"
               disabled={isDisabled}
+              {...field}
+              value={field.value || undefined}
             >
               {mcq.choices.map((choice, index) => (
                 <FormItem

@@ -207,9 +207,11 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
               <Textarea
                 placeholder={`Write the answer of the question no. ${order}`}
                 className="resize-y text-base text-text placeholder:text-text-200"
-                {...form}
+                {...field}
                 value={field?.value || ""}
-                onChange={field?.onChange || (() => {})}
+                onChange={(e) => {
+                  field.onChange(e.target.value);
+                }}
                 defaultValue={field?.value || ""}
                 disabled={isDisabled}
               />

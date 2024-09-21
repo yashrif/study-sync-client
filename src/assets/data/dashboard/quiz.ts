@@ -186,7 +186,7 @@ export const actionButton: {
     variant: "outline",
     className: "ring-destructive hover:bg-destructive/20",
     iconClassName: "stroke-destructive",
-    contentClassName: "text-destructive",
+    contentClassName: "!text-destructive hover:text-destructive",
   },
 };
 
