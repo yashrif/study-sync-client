@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useImperativeHandle, useMemo, useRef } from "react";
+import { useCallback, useImperativeHandle, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z, ZodEnum, ZodNullable, ZodOptional, ZodString } from "zod";
 
@@ -26,11 +26,14 @@ import Cq from "./components/Cq";
 import Mcq from "./components/Mcq";
 
 const List: React.FC = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+
   const { checkQueryString } = useQueryString();
   const {
     state: { quiz, status, formRef: ref, isShowResults },
     dispatch,
   } = useQuizContext();
+
   const { mcqs, cqs } = useMemo(() => {
     return {
       mcqs: checkQueryString(queryParams.types.key, QuizTypes.MCQ)
@@ -42,30 +45,15 @@ const List: React.FC = () => {
     };
   }, [checkQueryString, quiz.cqs, quiz.mcqs]);
 
-  const formRef = useRef<HTMLFormElement>(null);
-  useImperativeHandle(ref, () => ({
-    submit: () => {
-      if (formRef.current) formRef.current.requestSubmit();
-    },
-    clear: () => {
-      if (formRef.current) formRef.current.reset();
-      dispatch({
-        type: QuizActionType.SET_IS_SHOW_RESULTS,
-        payload: false,
-      });
-
-      form.reset(initialState([]));
-      dispatch({
-        type: QuizActionType.SET_CQ_EVALUATION,
-        payload: {},
-      });
-    },
-  }));
+  /* ------------------------------- from schema ------------------------------ */
 
   const FormSchema = generateFormSchema({ mcqs: mcqs || [], cqs: cqs || [] });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: initialState([...mcqs, ...cqs]),
   });
+
+  /* -------------------------------- on submit ------------------------------- */
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     let mcqPoints = 0;
@@ -128,6 +116,35 @@ const List: React.FC = () => {
     }
   };
 
+  /* ---------------------------------- reset --------------------------------- */
+
+  const resetOptions = useCallback(
+    () => ({
+      submit: () => {
+        if (formRef.current) formRef.current.requestSubmit();
+      },
+      clear: () => {
+        if (formRef.current) formRef.current.reset();
+        form.reset(initialState([...mcqs, ...cqs]));
+
+        dispatch({
+          type: QuizActionType.SET_IS_SHOW_RESULTS,
+          payload: false,
+        });
+
+        dispatch({
+          type: QuizActionType.SET_CQ_EVALUATION,
+          payload: {},
+        });
+      },
+    }),
+    [form, mcqs, cqs, dispatch]
+  );
+
+  useImperativeHandle(ref, resetOptions);
+
+  console.log("List -> mcqs", form.getValues());
+
   return (
     <Form {...form}>
       <form
@@ -179,9 +196,12 @@ const List: React.FC = () => {
 
 export default List;
 
-const initialState = (mcqs: McqIntermediate[]) => ({
-  ...mcqs.reduce((acc: { [key: string]: any }, mcq) => {
-    acc[mcq.id] = "";
+const initialState = (data: (McqIntermediate | CqIntermediate)[]) => ({
+  ...data.reduce((acc: { [key: string]: any }, item) => {
+    acc[item.id] =
+      "choices" in item
+        ? Object.values(Choices)[item.choices.length].toString()
+        : "";
     return acc;
   }, {}),
 });

@@ -1,4 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
+import Markdown from "react-markdown";
 
 import { Checkbox, ColumnHeader } from "@/components/table/ColumnTools";
 import { ColumnConfig, CqRequest } from "@/types";
@@ -18,15 +19,17 @@ const columnConfig: ColumnConfig<CqRequest> = {
       type: "no_link",
       accessorKey: "answer",
       title: "Answer",
+      formatter: (answer) => {
+        return (
+          <Markdown className={"markdown"}>
+            {answer as string}
+          </Markdown>
+        );
+      },
       headerClassName: "invisible",
     },
   ],
-  actions: [
-    {
-      title: "Delete",
-      onClick: () => console.log("Delete"),
-    },
-  ],
+  actions: [],
 };
 
 export const cqColumns: ColumnDef<CqRequest>[] = [
@@ -37,6 +40,6 @@ export const cqColumns: ColumnDef<CqRequest>[] = [
       actions: [...columnConfig.actions],
     } as ColumnConfig<CqRequest>
   ).columns.map((column) =>
-    ColumnHeader({ column }),
+    ColumnHeader({ column })
   ) as ColumnDef<CqRequest>[]),
 ];

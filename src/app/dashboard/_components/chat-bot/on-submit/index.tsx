@@ -2,13 +2,9 @@
 
 import { useParams } from "next/navigation";
 import randomColor from "randomcolor";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
-import {
-  Commands,
-  commandsLvl1,
-  StudyCommands,
-} from "@/assets/data/dashboard/chatBot";
+import { Commands, StudyCommands } from "@/assets/data/dashboard/chatBot";
 import { routes } from "@/assets/data/routes";
 import { useChatBotContext } from "@/hooks/useChatBotContext";
 import { usePath } from "@/hooks/usePath";
@@ -19,7 +15,7 @@ import {
   QuizTypes,
   SlideRequestDbPost,
 } from "@/types";
-import { findFirstSubstring, replace } from "@/utils/string";
+import { replace } from "@/utils/string";
 import useCommands from "../command-items/useCommands";
 import { useHandlers } from "../useHandlers";
 import useExplainConversation from "./useExplainConversation";
@@ -42,7 +38,7 @@ export const useOnSubmit = () => {
     : "";
 
   const { path } = usePath();
-  const { commandsLvlInline } = useCommands();
+  const { getFirstInlineCommand, getFirstLvl1Command } = useCommands();
 
   const { state, dispatch } = useChatBotContext();
   const {
@@ -72,28 +68,6 @@ export const useOnSubmit = () => {
     () =>
       state.uploads?.filter((item) => state.selectedUploads.includes(item.id)),
     [state.selectedUploads, state.uploads]
-  );
-
-  const getFirstLvl1Command = useCallback(() => {
-    const subString =
-      findFirstSubstring(
-        state.prompt.toLowerCase(),
-        commandsLvl1.map((item) => item.value.toLowerCase())
-      ).substring || "";
-
-    return state.prompt.trim().toLowerCase().startsWith(subString)
-      ? subString
-      : "";
-  }, [state.prompt]);
-
-  const getFirstInlineCommand = useCallback(
-    () =>
-      findFirstSubstring(
-        state.prompt.toLowerCase(),
-        commandsLvlInline().map((item) => item.toLowerCase())
-      ).substring || "",
-
-    [commandsLvlInline, state.prompt]
   );
 
   /* -------------------------------- On Submit ------------------------------- */

@@ -6,6 +6,7 @@ import {
 import { useParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
+import Markdown from "react-markdown";
 
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
@@ -29,6 +30,7 @@ import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { CqIntermediate, Quiz, Status } from "@/types";
+import Divider from "@components/Divider";
 
 type Props = {
   cq: CqIntermediate;
@@ -103,7 +105,7 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                     ? result.correctness >= 50
                       ? result.correctness >= 80
                         ? "bg-success ring-success"
-                        : "bg-blue-500 ring-blue-500"
+                        : "bg-orange-500 !ring-orange-500"
                       : result.correctness >= 0
                         ? "bg-destructive"
                         : ""
@@ -118,8 +120,10 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                       ? "text-destructive"
                       : result.correctness
                         ? result.correctness <= 50 && result.correctness >= 0
-                          ? "text-text-300"
-                          : "text-primary"
+                          ? "text-white"
+                          : result.correctness > 50
+                            ? "text-white"
+                            : "text-primary"
                         : isShowResults && evaluateStatus === Status.SUCCESS
                           ? "text-white"
                           : "text-primary"
@@ -205,10 +209,12 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
               <Textarea
                 placeholder={`Write the answer of the question no. ${order}`}
                 className="resize-y text-base text-text placeholder:text-text-200"
-                {...form}
+                {...field}
                 value={field?.value || ""}
-                onChange={field?.onChange || (() => {})}
-                defaultValue={field?.value || ""}
+                onChange={(e) => {
+                  field.onChange(e.target.value);
+                }}
+                defaultValue={""}
                 disabled={isDisabled}
               />
             </div>
@@ -216,23 +222,34 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
           {isShowResults &&
             status === Status.SUCCESS &&
             evaluateStatus !== Status.ERROR && (
-              <FormDescription className="grid grid-cols-[40px_1fr] gap-10 items-center !mt-0">
+              <FormDescription className="grid grid-cols-[40px_1fr] gap-x-10 gap-y-6 items-center !mt-0">
                 <div />
-                <div className="flex flex-col gap-2">
-                  <p className="text-text-200 text-medium">
-                    <span className="text-primary font-medium">
-                      Correctness:{" "}
-                    </span>
-                    {result.correctness || 0}
-                  </p>
-                  {result?.comment?.length > 0 && (
+                <div className="flex flex-col gap-x-10 gap-y-6 rounded-md">
+                  <div className="flex flex-col gap-2">
                     <p className="text-text-200 text-medium">
                       <span className="text-primary font-medium">
-                        Comment:{" "}
+                        Correctness:{" "}
                       </span>
-                      {result.comment}
+                      {result.correctness || 0}
                     </p>
-                  )}
+                    {result?.comment?.length > 0 && (
+                      <p className="text-text-200 text-medium">
+                        <span className="text-primary font-medium">
+                          Comment:{" "}
+                        </span>
+                        {result.comment}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <p className="text-primary text-medium font-medium underline underline-offset-2">
+                      Original Answer
+                    </p>
+                    <Markdown className="markdown mx-0">{cq.answer}</Markdown>
+                  </div>
+
+                  <Divider />
                 </div>
               </FormDescription>
             )}

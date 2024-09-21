@@ -6,9 +6,11 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { useQuizContext } from "@/hooks/useQuizContext";
 import { Choices, McqIntermediate } from "@/types";
 import { RadioGroup } from "@components/ui/radio-group";
 import { getKeyByValue } from "@utils/getKeyByValue";
+import { useMemo } from "react";
 import { CustomRadioGroupItem } from "./CustomRadioGroupItem";
 
 type Props = {
@@ -25,6 +27,23 @@ type Props = {
 };
 
 const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
+  const {
+    state: { isShowResults },
+  } = useQuizContext();
+
+  const isCorrect = useMemo(
+    () =>
+      (
+        getKeyByValue(
+          Choices,
+          mcq.answers
+            .map((answer, index) => (answer ? index : null))
+            .filter((x) => x !== null)[0]
+        ) || ""
+      ).localeCompare(form.getValues(mcq.id) as string) === 0,
+    [form, mcq.answers, mcq.id]
+  );
+
   return (
     <FormField
       key={mcq.id}
@@ -34,10 +53,32 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
         <FormItem className="flex flex-col gap-6">
           <FormLabel className="grid grid-cols-[40px,1fr] gap-x-10 items-center">
             <div
-              className={`size-10 flex items-center justify-center rounded-full ${form.formState.errors[mcq.id] ? "ring-destructive" : "ring-primary"} ring-2 ring-inset`}
+              className={`size-10 flex items-center justify-center rounded-full ${
+                form.formState.errors[mcq.id]
+                  ? "ring-destructive"
+                  : isShowResults
+                    ? isCorrect
+                      ? "bg-success ring-success"
+                      : Choices[
+                            form.getValues(mcq.id) as keyof typeof Choices
+                          ] < mcq.choices.length
+                        ? "bg-destructive ring-destructive"
+                        : "ring-destructive"
+                    : "ring-primary bg-transparent"
+              } ring-2 ring-inset`}
             >
               <span
-                className={`text-large ${form.formState.errors[mcq.id] ? "text-destructive" : "text-primary"} font-secondary font-semibold`}
+                className={`text-large ${
+                  form.formState.errors[mcq.id]
+                    ? "text-destructive"
+                    : isShowResults
+                      ? Choices[
+                          form.getValues(mcq.id) as keyof typeof Choices
+                        ] < mcq.choices.length
+                        ? "text-white"
+                        : "text-destructive"
+                      : "text-primary"
+                } font-secondary font-semibold`}
               >
                 {order}
               </span>
@@ -46,16 +87,18 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
           </FormLabel>
           <FormControl>
             <RadioGroup
-              value={field?.value || ""}
-              onValueChange={field?.onChange}
-              defaultValue={field?.value || ""}
               className="flex flex-col gap-3 !mt-0"
+              value={field.value || undefined}
+              onValueChange={field.onChange}
+              defaultValue={Object.values(Choices)[
+                mcq.choices.length
+              ].toString()}
               disabled={isDisabled}
             >
-              {mcq.choices.map((choice, index) => (
+              {[...mcq.choices, "Dummy"].map((choice, index) => (
                 <FormItem
                   key={`${mcq.id}-${index}`}
-                  className="flex gap-10 items-center"
+                  className="flex gap-10 items-center last:hidden"
                 >
                   <FormControl>
                     <CustomRadioGroupItem
