@@ -67,18 +67,13 @@ const Conversation: React.FC = () => {
           )}
         </div>
         {(filteredUploads.length > 0 || filteredTopics.length > 0) && (
-          <div className="sticky bottom-0 inset-0 bg-accent/15 backdrop-blur">
-            <div className="relative max-h-32 overflow-y-scroll overflow-x-auto no-scrollbar flex flex-wrap-reverse gap-x-2 gap-y-1.5">
-              {filteredUploads.map((upload) => (
-                <UploadBadge key={upload.id} upload={upload} />
-              ))}
-              {filteredTopics.map((topic) => (
-                <TopicBadge key={topic.id} topic={topic} />
-              ))}
+          <div className="sticky bottom-0 inset-0">
+            <div className="relative">
+              <div className="absolute inset-0 bg-auth-bg bg-cover object-cover bg-center opacity-25" />
 
-              <div className="fixed w-full top-0 right-0 flex items-center justify-end z-50">
+              <div className="relative pt-2 bg-white bg-opacity-[0.75] backdrop-blur-md backdrop-saturate-[180%] shadow-none">
                 <div
-                  className="size-5 rounded-full ring-1 ring-destructive flex items-center justify-center cursor-pointer hover:scale-105 transition-all duration-300"
+                  className="fixed top-0 right-0 size-5 rounded-full ring-1 ring-destructive flex items-center justify-center cursor-pointer hover:scale-105 transition-all duration-300"
                   onClick={() => {
                     dispatch({
                       type: ChatBotActionType.SET_SELECTED_TOPICS,
@@ -91,6 +86,14 @@ const Conversation: React.FC = () => {
                   }}
                 >
                   <IconClearAll className="size-[14px] text-destructive" />
+                </div>
+                <div className="max-h-32 overflow-y-scroll no-scrollbar flex flex-wrap-reverse gap-x-2 gap-y-1.5">
+                  {filteredUploads.map((upload) => (
+                    <UploadBadge key={upload.id} upload={upload} />
+                  ))}
+                  {filteredTopics.map((topic) => (
+                    <TopicBadge key={topic.id} topic={topic} />
+                  ))}
                 </div>
               </div>
             </div>
