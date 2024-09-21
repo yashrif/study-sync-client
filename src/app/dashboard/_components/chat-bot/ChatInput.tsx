@@ -177,7 +177,7 @@ const ChatBotInput = () => {
               value={text}
               onChange={handleTextChange}
               onScroll={handleScroll}
-              className="relative resize-none w-full min-h-9 max-h-[120px] text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-[70px] leading-[150%] whitespace-pre-wrap"
+              className="focus:!ring-0 focus:!ring-offset-0 relative resize-none w-full min-h-9 max-h-[120px] text-sm rounded-lg border-primary caret-primary text-transparent bg-transparent no-scrollbar z-0 p-2 pr-[70px] leading-[150%] whitespace-pre-wrap"
               disabled={requestStatus === Status.PENDING}
             />
 

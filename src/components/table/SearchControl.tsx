@@ -33,7 +33,7 @@ function SearchControl<TData>({
       onChange={(event) =>
         table.getColumn(searchKey)?.setFilterValue(event.target.value)
       }
-      className="max-w-sm rounded-sm border-primary placeholder:text-muted-foreground/70"
+      className="focus:!ring-0 focus:!ring-offset-0 max-w-sm rounded-sm border-primary placeholder:text-muted-foreground/70"
       Icon={Icon || controlBar.search.Icon}
     />
   );

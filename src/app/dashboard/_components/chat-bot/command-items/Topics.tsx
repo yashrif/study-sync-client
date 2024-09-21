@@ -8,7 +8,7 @@ const Topics: React.FC = () => {
   } = useChatBotContext();
 
   const filteredTopics = topics.filter(
-    (topic) => !selectedTopics.includes(topic.id)
+    (topic) => !selectedTopics.includes(topic.name)
   );
 
   return (
