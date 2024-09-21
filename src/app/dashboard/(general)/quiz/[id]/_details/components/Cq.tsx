@@ -103,7 +103,7 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                     ? result.correctness >= 50
                       ? result.correctness >= 80
                         ? "bg-success ring-success"
-                        : "bg-blue-500 ring-blue-500"
+                        : "bg-orange-500 !ring-orange-500"
                       : result.correctness >= 0
                         ? "bg-destructive"
                         : ""
@@ -119,7 +119,7 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
                       : result.correctness
                         ? result.correctness <= 50 && result.correctness >= 0
                           ? "text-text-300"
-                          : "text-primary"
+                          : "text-white"
                         : isShowResults && evaluateStatus === Status.SUCCESS
                           ? "text-white"
                           : "text-primary"
