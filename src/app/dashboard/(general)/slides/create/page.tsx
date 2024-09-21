@@ -8,12 +8,12 @@ import { columns } from "@/app/dashboard/_components/uploads/Columns";
 import UploadsTable from "@/app/dashboard/_components/uploads/Table";
 import { dbEndpoints } from "@/assets/data/api";
 import { create, home } from "@/assets/data/dashboard/slides";
+import Divider from "@/components/Divider";
 import SpinnerContainer from "@/components/spinner/SpinnerContainer";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useCreateSlideContext } from "@/hooks/useCreateSlideContext";
 import { useTable } from "@/hooks/useTable";
 import { Handler, UploadShallow } from "@/types";
-import { IconSun } from "@tabler/icons-react";
 import PageHeading from "../../../_components/PageHeading";
 import TopicSelect from "./_components/TopicSelect";
 import CreateAction from "./CreateAction";
@@ -46,12 +46,7 @@ const CreateSlides = () => {
           <div className="max-w-[600px] flex flex-col space-y-6">
             <TopicSelect />
 
-            <div className="relative">
-              <div className="h-[1px] w-full rounded-full bg-border" />
-              <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 px-4 bg-background">
-                <IconSun className="stroke-accent" />
-              </div>
-            </div>
+            <Divider />
 
             <div className="grid grid-cols-1 gap-y-8">
               <UploadsTable

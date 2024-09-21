@@ -21,7 +21,7 @@ const columnConfig: ColumnConfig<CqRequest> = {
       title: "Answer",
       formatter: (answer) => {
         return (
-          <Markdown className={"markdown first:!mt-0"}>
+          <Markdown className={"markdown"}>
             {answer as string}
           </Markdown>
         );

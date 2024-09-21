@@ -6,6 +6,7 @@ import {
 import { useParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
+import Markdown from "react-markdown";
 
 import studySyncDB from "@/api/studySyncDB";
 import { dbEndpoints } from "@/assets/data/api";
@@ -29,6 +30,7 @@ import { useFetchState } from "@/hooks/fetchData";
 import { useApiHandler } from "@/hooks/useApiHandler";
 import { useQuizContext } from "@/hooks/useQuizContext";
 import { CqIntermediate, Quiz, Status } from "@/types";
+import Divider from "@components/Divider";
 
 type Props = {
   cq: CqIntermediate;
@@ -220,23 +222,34 @@ const Cq: React.FC<Props> = ({ cq, order, form, isDisabled }) => {
           {isShowResults &&
             status === Status.SUCCESS &&
             evaluateStatus !== Status.ERROR && (
-              <FormDescription className="grid grid-cols-[40px_1fr] gap-10 items-center !mt-0">
+              <FormDescription className="grid grid-cols-[40px_1fr] gap-x-10 gap-y-6 items-center !mt-0">
                 <div />
-                <div className="flex flex-col gap-2">
-                  <p className="text-text-200 text-medium">
-                    <span className="text-primary font-medium">
-                      Correctness:{" "}
-                    </span>
-                    {result.correctness || 0}
-                  </p>
-                  {result?.comment?.length > 0 && (
+                <div className="flex flex-col gap-x-10 gap-y-6 rounded-md">
+                  <div className="flex flex-col gap-2">
                     <p className="text-text-200 text-medium">
                       <span className="text-primary font-medium">
-                        Comment:{" "}
+                        Correctness:{" "}
                       </span>
-                      {result.comment}
+                      {result.correctness || 0}
                     </p>
-                  )}
+                    {result?.comment?.length > 0 && (
+                      <p className="text-text-200 text-medium">
+                        <span className="text-primary font-medium">
+                          Comment:{" "}
+                        </span>
+                        {result.comment}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <p className="text-primary text-medium font-medium underline underline-offset-2">
+                      Original Answer
+                    </p>
+                    <Markdown className="markdown mx-0">{cq.answer}</Markdown>
+                  </div>
+
+                  <Divider />
                 </div>
               </FormDescription>
             )}
