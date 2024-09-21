@@ -196,9 +196,12 @@ const List: React.FC = () => {
 
 export default List;
 
-const initialState = (data: { id: string }[]) => ({
+const initialState = (data: (McqIntermediate | CqIntermediate)[]) => ({
   ...data.reduce((acc: { [key: string]: any }, item) => {
-    acc[item.id] = undefined;
+    acc[item.id] =
+      "choices" in item
+        ? Object.values(Choices)[item.choices.length].toString()
+        : "";
     return acc;
   }, {}),
 });

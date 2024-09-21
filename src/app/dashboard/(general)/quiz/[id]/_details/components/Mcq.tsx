@@ -59,7 +59,9 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
                   : isShowResults
                     ? isCorrect
                       ? "bg-success ring-success"
-                      : form.getValues(mcq.id)
+                      : Choices[
+                            form.getValues(mcq.id) as keyof typeof Choices
+                          ] < mcq.choices.length
                         ? "bg-destructive ring-destructive"
                         : "ring-destructive"
                     : "ring-primary bg-transparent"
@@ -70,7 +72,9 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
                   form.formState.errors[mcq.id]
                     ? "text-destructive"
                     : isShowResults
-                      ? form.getValues(mcq.id)
+                      ? Choices[
+                          form.getValues(mcq.id) as keyof typeof Choices
+                        ] < mcq.choices.length
                         ? "text-white"
                         : "text-destructive"
                       : "text-primary"
@@ -84,14 +88,17 @@ const Mcq: React.FC<Props> = ({ mcq, order, form, isDisabled }) => {
           <FormControl>
             <RadioGroup
               className="flex flex-col gap-3 !mt-0"
-              disabled={isDisabled}
-              {...field}
               value={field.value || undefined}
+              onValueChange={field.onChange}
+              defaultValue={Object.values(Choices)[
+                mcq.choices.length
+              ].toString()}
+              disabled={isDisabled}
             >
-              {mcq.choices.map((choice, index) => (
+              {[...mcq.choices, "Dummy"].map((choice, index) => (
                 <FormItem
                   key={`${mcq.id}-${index}`}
-                  className="flex gap-10 items-center"
+                  className="flex gap-10 items-center last:hidden"
                 >
                   <FormControl>
                     <CustomRadioGroupItem
