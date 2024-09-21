@@ -246,7 +246,6 @@
   }
 
   /* ------------------------------ miscellaneous ----------------------------- */
-
   input.no-autofill-style:-webkit-autofill,
   input.no-autofill-style:-webkit-autofill:hover,
   input.no-autofill-style:-webkit-autofill:focus,
@@ -263,16 +262,15 @@
   }
 
   /* ---------------------------------- focus --------------------------------- */
-  *:focus {
+  /* *:focus {
     @apply !ring-offset-0 !ring-0;
-  }
+  } */
 
   /* -------------------------------------------------------------------------- */
   /*                                  markdown                                  */
   /* -------------------------------------------------------------------------- */
 
   /* --------------------------------- common --------------------------------- */
-
   .markdown > table,
   .markdown-lg > table {
     @apply w-full table-auto;
@@ -294,7 +292,6 @@
   }
 
   /* ---------------------------------- small --------------------------------- */
-
   .markdown {
     @apply max-w-[640px] mx-auto !font-primary first:!mt-0;
   }
@@ -360,7 +357,6 @@
   }
 
   /* ---------------------------------- large --------------------------------- */
-
   .markdown-lg {
     @apply max-w-[940px] mx-auto !font-primary first:!mt-0;
   }
