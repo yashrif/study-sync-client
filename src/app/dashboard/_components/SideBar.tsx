@@ -6,7 +6,7 @@ import { Suspense } from "react";
 
 import { sidebarLinks, signOut } from "@/assets/data/dashboard/sidebarLinks";
 import { routes } from "@/assets/data/routes";
-import Logo from "@/components/Logo";
+import Logo from "@/components/logo/Logo";
 import Spinner from "@/components/spinner/Spinner";
 import { ScrollArea } from "@/components/ui/scroll-area-no-scrollbar";
 import { removeTokens } from "@/lib/auth";

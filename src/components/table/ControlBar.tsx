@@ -92,6 +92,7 @@ const ControlBar = <TData, TValue>({
             iconClassName="stroke-[2.5]"
             {...controlsConfig[TableControlTypes.ADD_FOLDER]}
             status={controlsConfig.ADD_FOLDER.status}
+            disabled
           />
         )}
         {controlsConfig.DELETE && !controlsConfig?.DELETE?.hidden && (
