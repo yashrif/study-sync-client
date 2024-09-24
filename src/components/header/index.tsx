@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { home, navLinks } from "@assets/data/header";
-import Logo from "@components/Logo";
+import Logo from "@components/logo/Logo";
 import Spinner from "../spinner/Spinner";
 import ActionButton from "./ActionButton";
 

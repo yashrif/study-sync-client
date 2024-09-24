@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { greetings } from "@/assets/data/auth/auth";
 import { routes } from "@/assets/data/routes";
-import Logo from "@/components/Logo";
+import Logo from "@/components/logo/Logo";
 import AuthCurve from "./AuthCurve";
 
 const AuthLayout: React.FC<

@@ -1,6 +1,7 @@
-import { copyright, copyrightLinks, footerLinks } from "@/assets/data/footer";
 import Link from "next/link";
-import Logo from "./Logo";
+
+import { copyright, copyrightLinks, footerLinks } from "@/assets/data/footer";
+import Logo from "./logo/Logo";
 
 const Footer = () => {
   return (
