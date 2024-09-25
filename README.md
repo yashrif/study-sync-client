@@ -1,18 +1,23 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
+Copy the PSPDFKit for Web library assets to the public directory:
+```bash
+cp -R ./node_modules/pspdfkit/dist/pspdfkit-lib public/pspdfkit-lib
+
+```
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn run next dev
 ```
+or build and start 
+```bash
+yarn build
+yarn start
+```
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
